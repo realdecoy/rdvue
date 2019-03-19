@@ -1,0 +1,17 @@
+@import '@/config/variables.scss';
+
+.home-view {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 1fr;
+    grid-auto-flow: column;
+    
+    /**
+     * Add child element selectors here.
+     * For example:
+     *
+     * .my-child-element {
+     *    color: red;
+     *  }    
+     */
+}

@@ -1,0 +1,30 @@
+@import '../@base/index.scss';
+
+// ----------------------------------------------------------------------------
+// Mixins
+// ----------------------------------------------------------------------------
+// The 'apply-theme' mixin must be defined as-is for each new theme to
+// properly integrate.
+// ----------------------------------------------------------------------------
+@mixin apply-theme {
+  @include apply-base-theme();
+  @include theme-overrides();
+}
+
+// ----------------------------------------------------------------------------
+// Variable Overrides
+// ----------------------------------------------------------------------------
+$theme-background-color: #333;
+$theme-border: 0.1rem solid #ACACAC;
+$theme-link-color: blue;
+
+// ----------------------------------------------------------------------------
+// Theme Overrides: Your Custom Code Begins Here!
+// ----------------------------------------------------------------------------
+// Include selectors to provide overrides to suit your theme motif.
+// ----------------------------------------------------------------------------
+@mixin theme-overrides {
+  a {
+    color: pink;
+  }
+}
