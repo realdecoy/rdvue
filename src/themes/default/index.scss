@@ -1,8 +1,7 @@
 // ----------------------------------------------------------------------------
-// Theme: "Dark"
-// @author: Carl Clarke
+// Theme: Configuration
 // ----------------------------------------------------------------------------
-$THEME-NAME: 'dark';
+$THEME-NAME: 'default';
 
 .theme.#{$THEME-NAME} {
   // --------------------------------------------------------------------------
@@ -11,7 +10,7 @@ $THEME-NAME: 'dark';
   $font-awesome-family: 'Font Awesome 5 Free';
   $theme-font-family: 'Lato';
   $theme-font-size: 10pt;
-  $theme-font-color: #333;
+  $theme-font-color: red;
   $theme-font-weight: 100;
   $theme-gap-xs: 1rem;
   $theme-gap-sm: 2rem;
@@ -20,10 +19,10 @@ $THEME-NAME: 'dark';
   $theme-border-radius-sm: 0.4rem;
   $theme-border-radius-md: 0.8rem;
   $theme-border-radius-lg: 1.2rem;
-  $theme-background-color: red;
+  $theme-background-color: #FFF;
   $theme-border: 0.1rem solid #323232;
-  $theme-link-color: blue;
-  
+  $theme-link-color: orange;
+
   // --------------------------------------------------------------------------
   // Theme: Overrides
   // --------------------------------------------------------------------------
@@ -33,3 +32,4 @@ $THEME-NAME: 'dark';
     color: $theme-link-color;
   }
 }
+

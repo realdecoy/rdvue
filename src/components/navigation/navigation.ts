@@ -1,15 +1,12 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Watch } from 'vue-property-decorator';
-import Navigation from '@/components/navigation';
 
 @Component({
   components: {
-    navigation: Navigation,
   },
-  name: 'app',
+  name: 'navbar',
 })
-export default class AppView extends Vue {
+export default class Navigation extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
@@ -30,10 +27,6 @@ export default class AppView extends Vue {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
-  public navigateTo(path: string) {
-    // this.$router.push({ path });
-  }
-
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
   // --------------------------------------------------------------------------
@@ -48,5 +41,6 @@ export default class AppView extends Vue {
 
   private mounted() {
     // TODO: stuff to do when this component loads.
+
   }
 }

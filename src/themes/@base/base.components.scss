@@ -21,3 +21,11 @@ h5,
 h6 {
   margin: 0rem;
 }
+
+.theme {
+  background-color: $theme-background-color;
+  color: $theme-font-color;
+  a {
+    color: $theme-link-color;
+  }
+}

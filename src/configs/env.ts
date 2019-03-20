@@ -2,10 +2,16 @@ import envDev from './env.dev';
 import envProd from './env.prod';
 
 const { NODE_ENV } = process.env;
+const isProd = NODE_ENV === 'production';
 
 export default Object.assign(
   {
-    // Add non-environment specific defaults here
+    // Core environment properties.
+    isDev: !isProd,
   },
-  NODE_ENV === 'production' ? envProd : envDev,
+  {
+    // Add non-environment specific defaults here
+    theme: 'default',
+  },
+  isProd ? envProd : envDev,
 );

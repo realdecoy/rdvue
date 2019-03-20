@@ -1,0 +1,21 @@
+@import '@/themes/@base/base.variables.scss';
+
+.navigation {
+    display: grid;
+    grid-column-gap: $theme-gap-xs;
+    grid-template-columns: 1fr auto auto 1fr;
+    justify-items: center;
+    align-items: center;
+    text-transform: uppercase;
+    
+    nav {
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: $theme-gap-xs;
+        grid-column: 2;
+        padding: 0rem $theme-gap-xs;
+    }
+    select {
+        grid-column: 3;
+    }
+}

@@ -1,5 +1,6 @@
+import env from '@/configs/env';
+
 interface State {
-  navigation: string[];
   theme: string | null;
 }
 
@@ -11,8 +12,7 @@ export default new class {
   // ------------------------------------------------------------------------
 
   public state: State = {
-    navigation: [],
-    theme: null,
+    theme: env.theme,
   };
 
   // ------------------------------------------------------------------------
@@ -20,9 +20,6 @@ export default new class {
   // ------------------------------------------------------------------------
 
   public getters = {
-    navigation: (state: State) => {
-      return state.navigation;
-    },
     theme: (state: State) => {
       return state.theme;
     },
@@ -33,9 +30,6 @@ export default new class {
   // ------------------------------------------------------------------------
 
   public mutations = {
-    setNavigation(state: State, data: string[]) {
-      state.navigation = data || [];
-    },
     setTheme(state: State, data: string) {
       state.theme = data || null;
     },
@@ -48,12 +42,7 @@ export default new class {
   // ------------------------------------------------------------------------
 
   public actions = {
-    setNavigation(context: any, data: string[]) {
-      // Commit is used to invoke the mutation specified
-      // by the named first parameter.
-      context.commit('setNavigation', data);
-    },
-    setTheme(context: any, data: string) {
+    theme(context: any, data: string) {
       // Commit is used to invoke the mutation specified
       // by the named first parameter.
       context.commit('setTheme', data);

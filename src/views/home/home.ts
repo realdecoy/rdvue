@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import env from '@/configs/env';
 
 @Component({
   components: {
@@ -10,6 +11,7 @@ export default class HomeView extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
+  private env = env;
 
   // --------------------------------------------------------------------------
   // [Public] Constructor
@@ -41,5 +43,6 @@ export default class HomeView extends Vue {
 
   private mounted() {
     // TODO: stuff to do when this component loads.
+
   }
 }

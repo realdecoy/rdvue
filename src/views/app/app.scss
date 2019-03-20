@@ -1,8 +1,9 @@
-@import '@/themes/dark/index.scss';
+@import '@/themes/index.scss';
 
 .app {
 
-  @include apply-theme();
+  //@include apply-base-theme();
+  //@include apply-theme('default');
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -15,7 +16,7 @@
 
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 2.5rem auto;
+  grid-template-rows: 3.5rem auto;
   grid-template-areas:
     "navigation"
     "main-content";
@@ -23,20 +24,11 @@
   // --------------------------------------------------------------------------
   // Child Components
   // --------------------------------------------------------------------------
-
-  nav {
-    display: grid;
-    grid-area: navigation;
-    grid-auto-columns: 1fr;
-    grid-auto-rows: 1fr;
-    grid-auto-flow: row;
-  }
   
   main {
     display: grid;
     grid-area: main-content;
     grid-auto-columns: 1fr;
     grid-auto-rows: 1fr;
-    grid-auto-flow: column;
   }
 }
