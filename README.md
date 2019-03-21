@@ -1,4 +1,4 @@
-# smartnd-csr
+# vue-starter
 
 ## Project setup
 ```

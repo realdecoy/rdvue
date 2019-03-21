@@ -1,6 +1,6 @@
 {
-  "name": "smartnd-csr",
-  "short_name": "smartnd-csr",
+  "name": "vue-starter",
+  "short_name": "vue-starter",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
