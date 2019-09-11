@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "name": "page",
+  "description": "Generate a basic page.",
+  "arguments": [
+    {
+      "name": "pageName",
+      "type": "string",
+      "description": "The name for the generated page."
+    },
+    {
+      "name": "pageNameKebab",
+      "type": "string",
+      "description": "The name in Kebab-case for the generated page.",
+      "isPrivate": true
+    }
+  ],
+  "sourceDirectory": "./",
+  "installDirectory": "pages",
+  "files": [
+    {
+      "source": "index.d.ts",
+      "target": "index.d.ts",
+      "content": {
+        "matchRegex": "__PAGE__",
+        "replace": "${pageName}"
+      }
+    },
+    {
+      "source": "page.scss",
+      "target": "${pageNameKebab}.scss",
+      "content": {
+        "matchRegex": "__PAGE__",
+        "replace": "${pageName}"
+      }
+    },
+    {
+      "source": "page.ts",
+      "target": "${pageNameKebab}.ts",
+      "content": {
+        "matchRegex": "__PAGE__",
+        "replace": "${pageName}"
+      }
+    },
+    {
+      "source": "page.vue",
+      "target": "${pageNameKebab}.vue",
+      "content": {
+        "matchRegex": "__PAGE__",
+        "replace": "${pageNameKebab}"
+      }
+    }
+  ]
+}

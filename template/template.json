@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "name": "modules",
+  "sourceDirectory": "./",
+  "import": [
+    "config",
+    "component",
+    "service",
+    "store",
+    "model",
+    "page"
+  ]
+}

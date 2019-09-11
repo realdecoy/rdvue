@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "name": "service",
+  "description": "Generate a basic service.",
+  "arguments": [
+    {
+      "name": "serviceName",
+      "type": "string",
+      "description": "The name of the generated service."
+    },
+    {
+      "name": "serviceNameKebab",
+      "type": "string",
+      "description": "The name in Kebab-case for the generated service.",
+      "isPrivate": true
+    }
+  ],
+  "sourceDirectory": "./",
+  "files": [
+    {
+      "source": "service.ts",
+      "target": "${serviceNameKebab}.ts",
+      "content": {
+        "matchRegex": "__SERVICE__",
+        "replace": "${serviceName}"
+      }
+    }
+  ]
+}
