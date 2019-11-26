@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "name": "component",
+  "name": "config",
   "description": "Mandatory project configuration.",
   "singleUserPerProject": true,
   "arguments": [
@@ -12,7 +12,8 @@
     {
       "name": "projectNameKebab",
       "type": "string",
-      "description": "The name in Kebab-case for the generated project."
+      "description": "The name in Kebab-case for the generated project.",
+      "isPrivate":true
     }
   ],
   "sourceDirectory": "./",

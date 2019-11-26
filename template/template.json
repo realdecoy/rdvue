@@ -1,12 +1,16 @@
 {
   "version": 1,
   "sourceDirectory": "./",
-  "import": [
-    "config",
-    "component",
-    "service",
-    "store",
-    "model",
-    "page"
-  ]
+  "import": {
+    "required":[
+      "config",
+      "store"
+    ],
+    "optional":[
+      "component",
+      "service",
+      "model",
+      "page"
+    ]
+  }
 }

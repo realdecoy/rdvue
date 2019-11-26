@@ -16,6 +16,7 @@
     }
   ],
   "sourceDirectory": "./",
+  "installDirectory": "services",
   "files": [
     {
       "source": "service.ts",

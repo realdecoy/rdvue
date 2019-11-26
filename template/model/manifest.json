@@ -16,6 +16,7 @@
     }
   ],
   "sourceDirectory": "./",
+  "installDirectory": "entities",
   "files": [
     {
       "source": "model.ts",
