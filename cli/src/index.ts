@@ -16,24 +16,25 @@ const USAGE: any = {};
  * and generate the usage help menus as well as extract
  * info useful for generating the sub features
  */
-async function populateUsage (commands: string[], mainConfig: any) {
+async function populateUsage(commands: string[], mainConfig: any) {
   USAGE.general = {};
   USAGE.general.menu = config.USAGE_TEMPLATE();
-  USAGE.general.menu.splice( 1, 0, {
+  USAGE.general.menu.splice(1, 0, {
     header: 'Features',
     content: [],
   });
-  // add project to USAGE
+  // add project config to USAGE
   USAGE.general.menu[1].content.push({
     name: `${chalk.magenta('project')}`,
     summary: 'Generate a new project.',
   });
-  
-  for( const command of commands){
+
+  commands.push("project");
+  for (const command of commands) {
     let commandConfig: any = {};
     USAGE[command] = {};
 
-    if(command == 'project'){
+    if (command == 'project') {
       commandConfig = mainConfig
       commandConfig.name = 'project'
       commandConfig.arguments = [
@@ -49,26 +50,27 @@ async function populateUsage (commands: string[], mainConfig: any) {
           "isPrivate": true
         }
       ];
-    }else {
+      USAGE[command].config = commandConfig;
+    } else {
       commandConfig = await files.readSubConfig(command);
-    }
-    USAGE[command].config = commandConfig;
-    USAGE.general.menu[1].content.push({
-      name: `${chalk.magenta(command)}`,
-      summary: commandConfig.description,
-    });
-    USAGE[command].config = commandConfig;
-    USAGE[command].menu = config.USAGE_TEMPLATE(undefined, command, undefined);
-    if(commandConfig.arguments !== undefined && commandConfig.arguments !== []){
-      USAGE[command].menu.splice( 1, 0, {
-        header: "Arguments",
-        content: [],
+      USAGE[command].config = commandConfig;
+      USAGE.general.menu[1].content.push({
+        name: `${chalk.magenta(command)}`,
+        summary: commandConfig.description,
       });
-      for( const argument of commandConfig.arguments)
-      USAGE[command].menu[1].content.push({
-        name: `${chalk.magenta(argument.name)}`,
-        summary: argument.description,
-      })
+      USAGE[command].menu = config.USAGE_TEMPLATE(undefined, command, undefined);
+      if (commandConfig.arguments !== undefined && commandConfig.arguments !== []) {
+        USAGE[command].menu.splice(1, 0, {
+          header: "Arguments",
+          content: [],
+        });
+        for (const argument of commandConfig.arguments) {
+          USAGE[command].menu[1].content.push({
+            name: `${chalk.magenta(argument.name)}`,
+            summary: argument.description,
+          })
+        }
+      }
     }
   };
 }
@@ -78,14 +80,13 @@ const run = async () => {
   try {
     await repo.cloneRemoteRepo(config.TEMPLATE_PROJECT_URL, config.TEMPLATE_PROJECT_NAME);
     const mainConfig: any = await files.readMainConfig();
-    const commands: string[] = mainConfig.import;
+    const commands: string[] = mainConfig.import.optional;
     // populate command usage information
-    commands.push("project");
     await populateUsage(commands, mainConfig);
-    
+
     // check for user arguments
     const userArgs = process.argv.slice(2);
-    
+
     util.heading();
     if (util.hasCommand(userArgs, commands)) {
       const operation: any = {};
@@ -93,9 +94,9 @@ const run = async () => {
       operation.options = util.parseOptions(userArgs, commands);
       // console.log(USAGE[operation.command]);
       // if(operation.options.includes('--new') || operation.options.includes('--help')){
-        await MODULE_NEW.run(operation, USAGE);
+      await MODULE_NEW.run(operation, USAGE);
       // }else {
-        // console.log(util.displayHelp(USAGE.general.menu));
+      // console.log(util.displayHelp(USAGE.general.menu));
       // }
       // switch (operation.option) {
       //   case 'new':
@@ -109,6 +110,7 @@ const run = async () => {
       // }
     } else { // show help text
       console.log(util.displayHelp(USAGE.general.menu));
+      console.log(USAGE);
     }
     await files.clearTempFiles(config.TEMPLATE_PROJECT_NAME);
     process.exit();

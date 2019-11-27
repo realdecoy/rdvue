@@ -4,9 +4,8 @@ CLI Tool for Vue Front-end Development
 
 ## Setup Instructions
 
-    $ git clone <repo>
-    $ cd rd-vue-generator
     $ npm install
+    $ npm run build
     $ cd build
     $ npm link
 
