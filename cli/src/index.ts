@@ -16,7 +16,35 @@ const USAGE: any = {};
  * and generate the usage help menus as well as extract
  * info useful for generating the sub features
  */
-async function populateUsage(commands: string[], mainConfig: any) {
+
+async function populateCommand(command: string, required: boolean = false){
+  let commandConfig: any = {};
+  commandConfig = await files.readSubConfig(command);
+  USAGE[command] = {};
+  USAGE[command].config = commandConfig;
+  // dont add general help text if command is required for new project generation
+  if(!required){
+    USAGE.general.menu[1].content.push({
+      name: `${chalk.magenta(command)}`,
+      summary: commandConfig.description,
+    });
+  }
+  USAGE[command].menu = config.USAGE_TEMPLATE(undefined, command, undefined);
+  if (commandConfig.arguments !== undefined && commandConfig.arguments !== []) {
+    USAGE[command].menu.splice(1, 0, {
+      header: "Arguments",
+      content: [],
+    });
+    for (const argument of commandConfig.arguments) {
+      USAGE[command].menu[1].content.push({
+        name: `${chalk.magenta(argument.name)}`,
+        summary: argument.description,
+      })
+    }
+  }
+}
+
+async function populateUsage(commands: string[], requiredCommands: string[], mainConfig: any) {
   USAGE.general = {};
   USAGE.general.menu = config.USAGE_TEMPLATE();
   USAGE.general.menu.splice(1, 0, {
@@ -29,50 +57,32 @@ async function populateUsage(commands: string[], mainConfig: any) {
     summary: 'Generate a new project.',
   });
 
-  commands.push("project");
   for (const command of commands) {
-    let commandConfig: any = {};
-    USAGE[command] = {};
+    await populateCommand(command);
+  }
+  for (const command of requiredCommands) {
+    await populateCommand(command, true)
+  }
 
-    if (command == 'project') {
-      commandConfig = mainConfig
-      commandConfig.name = 'project'
-      commandConfig.arguments = [
-        {
-          "name": "projectName",
-          "type": "string",
-          "description": "The name for the generated project."
-        },
-        {
-          "name": "projectNameKebab",
-          "type": "string",
-          "description": "The name in Kebab-case for the generated project.",
-          "isPrivate": true
-        }
-      ];
-      USAGE[command].config = commandConfig;
-    } else {
-      commandConfig = await files.readSubConfig(command);
-      USAGE[command].config = commandConfig;
-      USAGE.general.menu[1].content.push({
-        name: `${chalk.magenta(command)}`,
-        summary: commandConfig.description,
-      });
-      USAGE[command].menu = config.USAGE_TEMPLATE(undefined, command, undefined);
-      if (commandConfig.arguments !== undefined && commandConfig.arguments !== []) {
-        USAGE[command].menu.splice(1, 0, {
-          header: "Arguments",
-          content: [],
-        });
-        for (const argument of commandConfig.arguments) {
-          USAGE[command].menu[1].content.push({
-            name: `${chalk.magenta(argument.name)}`,
-            summary: argument.description,
-          })
-        }
-      }
+  commands.push("project");
+  let commandConfig: any = {};
+  USAGE["project"] = {};
+  commandConfig = mainConfig
+  commandConfig.name = 'project'
+  commandConfig.arguments = [
+    {
+      "name": "projectName",
+      "type": "string",
+      "description": "The name for the generated project."
+    },
+    {
+      "name": "projectNameKebab",
+      "type": "string",
+      "description": "The name in Kebab-case for the generated project.",
+      "isPrivate": true
     }
-  };
+  ];
+  USAGE["project"].config = commandConfig;
 }
 
 clear();
@@ -81,8 +91,9 @@ const run = async () => {
     await repo.cloneRemoteRepo(config.TEMPLATE_PROJECT_URL, config.TEMPLATE_PROJECT_NAME);
     const mainConfig: any = await files.readMainConfig();
     const commands: string[] = mainConfig.import.optional;
+    const requiredCommands: string[] = mainConfig.import.required;
     // populate command usage information
-    await populateUsage(commands, mainConfig);
+    await populateUsage(commands, requiredCommands, mainConfig);
 
     // check for user arguments
     const userArgs = process.argv.slice(2);
@@ -92,22 +103,7 @@ const run = async () => {
       const operation: any = {};
       operation.command = util.parseCommand(userArgs, commands);
       operation.options = util.parseOptions(userArgs, commands);
-      // console.log(USAGE[operation.command]);
-      // if(operation.options.includes('--new') || operation.options.includes('--help')){
       await MODULE_NEW.run(operation, USAGE);
-      // }else {
-      // console.log(util.displayHelp(USAGE.general.menu));
-      // }
-      // switch (operation.option) {
-      //   case 'new':
-      //     await MODULE_NEW.run(operation);
-      //     break;
-      //   case 'generate':
-      //     await MODULE_GENERATE.run(operation);
-      //     break;
-      //   default:
-      //     break;
-      // }
     } else { // show help text
       console.log(util.displayHelp(USAGE.general.menu));
       console.log(USAGE);
