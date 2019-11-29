@@ -7,7 +7,7 @@ import repo from "./lib/repo";
 import files from "./lib/files";
 // import MODULE_GENERATE from "./modules/generate";
 import MODULE_NEW from "./modules/new";
-import config from "./config";
+import CONFIG from "./config";
 
 const USAGE: any = {};
 
@@ -29,7 +29,7 @@ async function populateCommand(command: string, required: boolean = false){
       summary: commandConfig.description,
     });
   }
-  USAGE[command].menu = config.USAGE_TEMPLATE(undefined, command, undefined);
+  USAGE[command].menu = CONFIG.USAGE_TEMPLATE(undefined, command, undefined);
   if (commandConfig.arguments !== undefined && commandConfig.arguments !== []) {
     USAGE[command].menu.splice(1, 0, {
       header: "Arguments",
@@ -46,7 +46,7 @@ async function populateCommand(command: string, required: boolean = false){
 
 async function populateUsage(commands: string[], requiredCommands: string[], mainConfig: any) {
   USAGE.general = {};
-  USAGE.general.menu = config.USAGE_TEMPLATE();
+  USAGE.general.menu = CONFIG.USAGE_TEMPLATE();
   USAGE.general.menu.splice(1, 0, {
     header: 'Features',
     content: [],
@@ -88,7 +88,7 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
 clear();
 const run = async () => {
   try {
-    await repo.cloneRemoteRepo(config.TEMPLATE_PROJECT_URL, config.TEMPLATE_PROJECT_NAME);
+    await repo.cloneRemoteRepo(CONFIG.TEMPLATE_PROJECT_URL, CONFIG.TEMPLATE_PROJECT_NAME);
     const mainConfig: any = await files.readMainConfig();
     const commands: string[] = mainConfig.import.optional;
     const requiredCommands: string[] = mainConfig.import.required;
@@ -108,13 +108,13 @@ const run = async () => {
       console.log(util.displayHelp(USAGE.general.menu));
       console.log(USAGE);
     }
-    await files.clearTempFiles(config.TEMPLATE_PROJECT_NAME);
+    await files.clearTempFiles(CONFIG.TEMPLATE_PROJECT_NAME);
     process.exit();
   } catch (err) {
     if (err) {
       console.log(chalk.red(`${err}`));
     }
-    await files.clearTempFiles(config.TEMPLATE_PROJECT_NAME);
+    await files.clearTempFiles(CONFIG.TEMPLATE_PROJECT_NAME);
     process.exit();
   }
 };
