@@ -3,40 +3,56 @@ import files from "../../lib/files";
 import util from "../../lib/util";
 // import repo from "../../lib/repo";
 import inquirer from "inquirer";
+import CONFIG from "./config";
+import process from "process";
 
-import config from "./config";
-
-
-  
 async function run (operation: any, USAGE: any): Promise<any> {
     try {
         const userOptions = operation.options;
         const hasHelpOption = util.hasHelpOption(userOptions);
-        const hasInvalidOption = util.hasInvalidOption(userOptions, config.OPTIONS_ALL);
-        const questions = config.parsePrompts(USAGE[operation.command].config);
+        const hasInvalidOption = util.hasInvalidOption(userOptions, CONFIG.OPTIONS_ALL);
+        const questions = CONFIG.parsePrompts(USAGE[operation.command].config);
+        const currentConfig = USAGE[operation.command].config;
+        let sourceDirectory = '';
+        let installDirectory = '';
+        let featureName = '';
+        let nameKey = '';
 
-        if(!hasHelpOption && !hasInvalidOption){
-            // console.log(hasHelpOption, hasInvalidOption);
-            
-            if(operation.command == 'project' && operation.options.includes('--new')){
+        if(!hasHelpOption && !hasInvalidOption && userOptions.includes('--new')){            
+            if(operation.command == 'project'){
+                // get required config
                 await run({options: userOptions, command:'config'}, USAGE);
-                // for (const c in USAGE[operation.command].config.import){
-
-                // }
-            }else {
+                // console.log(">>>project created");
+                await run({options: userOptions, command:'store'}, USAGE);
+                util.nextSteps("<project-name>");
+            } else {
+                const isNewProject = operation.command === 'config';
                 const answers: any = await inquirer.prompt(questions);
-                const nameKey = `${USAGE[operation.command].config.name}Name`;
-                const featureName = answers[nameKey];
-                console.log(featureName);
+                if(currentConfig.arguments){
+                    nameKey = currentConfig.arguments[0].name;
+                    featureName = answers[nameKey];
+                }
                 util.lineBreak();
                 util.sectionBreak();
-                await files.readWriteFeatureAsync(USAGE[operation.command].config.name, featureName, USAGE[operation.command].config.installDirectory, nameKey, USAGE[operation.command].config.files.filter((p: any) => {return p.source !== undefined && p.target !== undefined}), false);
-                console.log(chalk.green("\nAll done!"));
-                util.sectionBreak();
-                util.nextSteps(answers.featureName);
+                if(isNewProject){
+                    sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
+                    installDirectory = `${featureName}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
+                } else if (operation.command === 'store'){
+                    sourceDirectory = `../__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
+                } else {
+                    sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureName}`;
+                }
+                await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, {featureName});
+                if(isNewProject){
+                    process.chdir(`./${featureName}`);
+                } else {
+                    util.sectionBreak();
+                    util.lineBreak();
+                    console.log(chalk.magenta("[All Done]"));
+                }
             }
-            console.log(chalk.green("\nAll done!"));
-            util.sectionBreak();
         } else {
             console.log(util.displayHelp(USAGE[operation.command].menu)); // show help menu
         }
