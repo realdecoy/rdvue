@@ -57,6 +57,10 @@
       "target": ".gitignore"
     },
     {
+      "source": "meta/cypress.json",
+      "target": "cypress.json"
+    },
+    {
       "source": "meta/babel.config.js",
       "target": "babel.config.js"
     },
