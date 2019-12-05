@@ -5,7 +5,8 @@ import fileSystem from "fs";
 import path from "path";
 import CLI from "clui";
 import rimraf from "rimraf";
-import util from './util';
+import UTIL from './util';
+import util from "util";
 import mkdirp from "mkdirp";
 
 const Spinner = CLI.Spinner;
@@ -94,8 +95,8 @@ async function updateFile(filePath: string, file: any, placeholder: string, valu
  * through prompts
  */
 async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: any) {
-  const kebabNameKey = (Object.keys(args).filter(f => util.hasKebab(f)))[0];
-  const pascalNameKey = (Object.keys(args).filter(f => !util.hasKebab(f)))[0];
+  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
+  const pascalNameKey = (Object.keys(args).filter(f => !UTIL.hasKebab(f)))[0];
 
   for (const file of files) {
     let filePath = '';
@@ -108,11 +109,11 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: an
           if(contentBlock && contentBlock.matchRegex){
             // console.log(chalk.yellow(`...processing ${filePath}`));
             const fileContent = readFile(filePath);
-            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( util.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey]));
+            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( UTIL.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey]));
           }
         }
       }else {
-        console.log(`[INTERNAL : failed to match and replace  for :${( util.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey])} files]`);
+        console.log(`[INTERNAL : failed to match and replace  for :${( UTIL.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey])} files]`);
       }
     }
   }
@@ -155,9 +156,9 @@ function replaceTargetFileNames(files: any[], featureName: string){
  */
 async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: any, args: any): Promise<any> {
 
-  const kebabNameKey = (Object.keys(args).filter(f => util.hasKebab(f)))[0];
+  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
   const status = new Spinner("updating template files from boilerplate...", ["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"]);
-
+  console.log(args, kebabNameKey);
   status.start();
 
   replaceTargetFileNames(fileList, args[kebabNameKey]);

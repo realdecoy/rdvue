@@ -55,9 +55,11 @@ function displayHelp(sections: Section[]): string{
 function getKebabCase(str: string) {
 
   const regex = /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g;
-  const result  = str.match(regex)
-  .map(x=> x.toLowerCase())
-  .join('-');
+  const match = str.match(regex);
+  let result = '';
+  if(match){
+    result = match.map(x=> x.toLowerCase()).join('-');
+  }
 
   return result;
 }
