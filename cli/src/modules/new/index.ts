@@ -40,20 +40,17 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 util.sectionBreak();
 
                 if(isNewProject){
-
                     sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;    
                 } else if (operation.command === 'store'){
-
-
                     sourceDirectory = `../__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;                    
                 } else {
-
                     sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
-                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;
-                    
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;                    
                 }
+                
+                console.log(featureNameStore);
                 await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, featureNameStore);
                 if(isNewProject){
                     process.chdir(`./${featureNameStore[kebabNameKey]}`);

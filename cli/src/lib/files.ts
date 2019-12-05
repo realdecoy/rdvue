@@ -156,9 +156,9 @@ function replaceTargetFileNames(files: any[], featureName: string){
  */
 async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: any, args: any): Promise<any> {
 
-  const kebabNameKey = (Object.keys(args).filter(f => util.hasKebab(f)))[0];
+  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
   const status = new Spinner("updating template files from boilerplate...", ["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"]);
-
+  console.log(args, kebabNameKey);
   status.start();
 
   replaceTargetFileNames(fileList, args[kebabNameKey]);
