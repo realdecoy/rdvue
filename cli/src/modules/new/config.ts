@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import files from "../../lib/files";
+import gitUserName from "git-user-name"
 
 const DEFAULT_PROJECT_NAME = "my-vue-app";
 const REGEX_PROJECT_NAME = /^\s+$/;
@@ -34,9 +35,7 @@ function parsePrompts(config: any): any[] {
     }) : [];
 }
 
-const TEMPLATE_PROJECT_URL: string = "https://avidal_realdecoy@bitbucket.org/realdecoyteam/rd-vue-cli.git";
-// const TEMPLATE_PROJECT_URL: string = "https://OHarris23@bitbucket.org/realdecoyteam/rd-vue-cli.git";
-// const TEMPLATE_PROJECT_URL: string = "https://sheldonsmall@bitbucket.org/realdecoyteam/rd-vue-cli.git";
+const TEMPLATE_PROJECT_URL: string = `https://${gitUserName}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
 const TEMPLATE_PROJECT_NAME: string = "__template";
 const OPTIONS_ALL: string[] = ["--new"];
 
