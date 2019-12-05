@@ -15,10 +15,10 @@ async function run (operation: any, USAGE: any): Promise<any> {
         const currentConfig = USAGE[operation.command].config;
         let sourceDirectory = '';
         let installDirectory = '';
-        let featureName = '';
+        const featureNameStore: any = {};
         let nameKey = '';
 
-        if(!hasHelpOption && !hasInvalidOption && userOptions.includes('--new')){            
+        if(!hasHelpOption && !hasInvalidOption && userOptions.includes('--new')){
             if(operation.command == 'project'){
                 // get required config
                 await run({options: userOptions, command:'config'}, USAGE);
@@ -28,25 +28,38 @@ async function run (operation: any, USAGE: any): Promise<any> {
             } else {
                 const isNewProject = operation.command === 'config';
                 const answers: any = await inquirer.prompt(questions);
-                if(currentConfig.arguments){
+                if(currentConfig.arguments) {
+
                     nameKey = currentConfig.arguments[0].name;
-                    featureName = answers[nameKey];
+                    featureNameStore[nameKey] = util.hasKebab(nameKey) === true ? util.getKebabCase(answers[nameKey]) : util.getPascalCase(answers[nameKey]);
+
                 }
+
+                const kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
+                
                 util.lineBreak();
                 util.sectionBreak();
                 if(isNewProject){
+
                     sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
-                    installDirectory = `${featureName}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
+                    installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
+                    
                 } else if (operation.command === 'store'){
+
+
                     sourceDirectory = `../__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
+
+                    
                 } else {
+
                     sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
-                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureName}`;
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;
+                    
                 }
-                await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, {featureName});
+                await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, featureNameStore);
                 if(isNewProject){
-                    process.chdir(`./${featureName}`);
+                    process.chdir(`./${featureNameStore[kebabNameKey]}`);
                 } else {
                     util.sectionBreak();
                     util.lineBreak();

@@ -4,7 +4,7 @@ import files from "../../lib/files";
 const DEFAULT_PROJECT_NAME = "my-vue-app";
 const REGEX_PROJECT_NAME = /^\s+$/;
 
-async function validate (this: any, value: string): Promise<any> { 
+async function validate(this: any, value: string): Promise<any> {
   let done = this.async();
   if (value.length == 0 || value.match(REGEX_PROJECT_NAME)) {
     done(chalk.red(`You need to enter a valid project name`));
@@ -18,23 +18,25 @@ async function validate (this: any, value: string): Promise<any> {
   }
 }
 
-function parsePrompts (config: any): any[] {
+function parsePrompts(config: any): any[] {
   return config.arguments ? config.arguments
-  .filter((q: any) => {
+    .filter((q: any) => {
       return q.isPrivate === undefined;
-  })
-  .map((p: any) => {
+    })
+    .map((p: any) => {
       return {
-          type: 'input',
-          name: p.name,
-          message: `Please enter ${p.description}`,
-          default: null,
-          validate,
+        type: 'input',
+        name: p.name,
+        message: `Please enter ${p.description}`,
+        default: null,
+        validate,
       };
-  }) : [];
+    }) : [];
 }
 
-const TEMPLATE_PROJECT_URL: string = "https://OHarris23@bitbucket.org/realdecoyteam/rd-vue-cli.git";
+const TEMPLATE_PROJECT_URL: string = "https://avidal_realdecoy@bitbucket.org/realdecoyteam/rd-vue-cli.git";
+// const TEMPLATE_PROJECT_URL: string = "https://OHarris23@bitbucket.org/realdecoyteam/rd-vue-cli.git";
+// const TEMPLATE_PROJECT_URL: string = "https://sheldonsmall@bitbucket.org/realdecoyteam/rd-vue-cli.git";
 const TEMPLATE_PROJECT_NAME: string = "__template";
 const OPTIONS_ALL: string[] = ["--new"];
 
