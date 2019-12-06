@@ -21,34 +21,42 @@
     {
       "source": "index.d.ts",
       "target": "index.d.ts",
-      "content": {
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentName}"
-      }
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
     },
     {
       "source": "component.scss",
       "target": "${componentNameKebab}.scss",
-      "content": {
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentName}"
-      }
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
     },
     {
       "source": "component.ts",
       "target": "${componentNameKebab}.ts",
-      "content": {
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentName}"
-      }
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
     },
     {
       "source": "component.vue",
       "target": "${componentNameKebab}.vue",
-      "content": {
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentNameKebab}"
-      }
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentNameKebab}"
+        }
+      ]
     }
   ]
 }

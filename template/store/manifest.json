@@ -10,10 +10,12 @@
     {
       "source": "./app.ts",
       "target": "./app.ts",
-      "content": {
-        "matchRegex": "__STORE__",
-        "replace": "app"
-      }
+      "content": [
+        {
+          "matchRegex": "__STORE__",
+          "replace": "app"
+        }
+      ]
     }
   ]
 }
