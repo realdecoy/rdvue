@@ -98,10 +98,18 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: an
     let filePath = '';
     if(typeof file !== 'string'){
       filePath = path.join(destDir, file.target);
-      if(file.content && file.content.matchRegex){
-        // console.log(chalk.yellow(`...processing ${filePath}`));
-        const fileContent = readFile(filePath);
-        await updateFile(filePath, fileContent, file.content.matchRegex, args.featureName);
+
+      if (Array.isArray(file.content)) {
+        for (const contentBlock of file.content) {
+
+          if(contentBlock && contentBlock.matchRegex){
+            // console.log(chalk.yellow(`...processing ${filePath}`));
+            const fileContent = readFile(filePath);
+            await updateFile(filePath, fileContent, contentBlock.matchRegex, args.featureName);
+          }
+        }
+      }else {
+        console.log(`[INTERNAL : failed to match and replace  for :${args.featureName} files]`);
       }
     }
   }
