@@ -21,42 +21,52 @@
     {
       "source": "index.d.ts",
       "target": "index.d.ts",
-      "content": {
-        "matchRegex": "__PAGE__",
+      "content": [
+        {
+        "matchRegex":"__PAGE__",
         "replace": "${pageName}"
-      }
+        }
+      ]
     },
     {
       "source": "page.scss",
       "target": "${pageNameKebab}.scss",
-      "content": {
-        "matchRegex": "__PAGE__",
+      "content": [
+        {
+        "matchRegex":"__PAGE__",
         "replace": "${pageName}"
-      }
+        }
+      ]
     },
     {
       "source": "page.ts",
       "target": "${pageNameKebab}.ts",
-      "content": {
-        "matchRegex": "__PAGE__",
+      "content": [
+        {
+        "matchRegex":"__PAGE__",
         "replace": "${pageName}"
-      }
+        }
+      ]
     },
     {
       "source": "page.vue",
       "target": "${pageNameKebab}.vue",
-      "content": {
-        "matchRegex": "__PAGE__",
+      "content": [
+        {
+        "matchRegex":"__PAGE__",
         "replace": "${pageNameKebab}"
-      }
+        }
+      ]
     },
     {
       "source": "page.test.ts",
       "target": "${pageNameKebab}.test.ts",
-      "content": {
+      "content": [
+        {
         "matchRegex":"__PAGE__",
         "replace": "${pageNameKebab}"
-      }
+        }
+      ]
     }
   ]
 }

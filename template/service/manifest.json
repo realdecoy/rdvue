@@ -21,10 +21,12 @@
     {
       "source": "service.ts",
       "target": "${serviceNameKebab}.ts",
-      "content": {
-        "matchRegex": "__SERVICE__",
-        "replace": "${serviceName}"
-      }
+      "content": [
+        {
+          "matchRegex": "__SERVICE__",
+          "replace": "${serviceName}"
+        }
+      ]
     }
   ]
 }

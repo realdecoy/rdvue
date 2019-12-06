@@ -21,10 +21,12 @@
     {
       "source": "model.ts",
       "target": "${modelNameKebab}.ts",
-      "content": {
-        "matchRegex": "__MODEL__",
-        "replace": "${modelName}"
-      }
+      "content": [
+        {
+          "matchRegex": "__MODEL__",
+          "replace": "${modelName}"
+        }
+      ]
     }
   ]
 }
