@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-import chalk from "chalk";
-import clear from "clear";
-import util from "./lib/util";
-import repo from "./lib/repo";
-import files from "./lib/files";
-// import MODULE_GENERATE from "./modules/generate";
-import MODULE_NEW from "./modules/new";
-import CONFIG from "./config";
+import chalk from 'chalk';
+import clear from 'clear';
+import CONFIG from './config';
+import files from './lib/files';
+import repo from './lib/repo';
+import util from './lib/util';
+import MODULE_NEW from './modules/new';
 
 const USAGE: any = {};
 
@@ -17,12 +16,12 @@ const USAGE: any = {};
  * info useful for generating the sub features
  */
 
-async function populateCommand(command: string, required: boolean = false){
+async function populateCommand(command: string, required = false){
   let commandConfig: any = {};
   commandConfig = await files.readSubConfig(command);
   USAGE[command] = {};
   USAGE[command].config = commandConfig;
-  // dont add general help text if command is required for new project generation
+  // Dont add general help text if command is required for new project generation
   if(!required){
     USAGE.general.menu[1].content.push({
       name: `${chalk.magenta(command)}`,
@@ -32,14 +31,14 @@ async function populateCommand(command: string, required: boolean = false){
   USAGE[command].menu = CONFIG.USAGE_TEMPLATE(undefined, command, undefined);
   if (commandConfig.arguments !== undefined && commandConfig.arguments !== []) {
     USAGE[command].menu.splice(1, 0, {
-      header: "Arguments",
+      header: 'Arguments',
       content: [],
     });
     for (const argument of commandConfig.arguments) {
       USAGE[command].menu[1].content.push({
         name: `${chalk.magenta(argument.name)}`,
         summary: argument.description,
-      })
+      });
     }
   }
 }
@@ -51,7 +50,7 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
     header: 'Features',
     content: [],
   });
-  // add project config to USAGE
+  // Add project config to USAGE
   USAGE.general.menu[1].content.push({
     name: `${chalk.magenta('project')}`,
     summary: 'Generate a new project.',
@@ -61,41 +60,42 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
     await populateCommand(command);
   }
   for (const command of requiredCommands) {
-    await populateCommand(command, true)
+    await populateCommand(command, true);
   }
 
-  commands.push("project");
+  commands.push('project');
   let commandConfig: any = {};
-  USAGE["project"] = {};
-  commandConfig = mainConfig
-  commandConfig.name = 'project'
+  USAGE.project = {};
+  commandConfig = mainConfig;
+  commandConfig.name = 'project';
   commandConfig.arguments = [
     {
-      "name": "projectName",
-      "type": "string",
-      "description": "The name for the generated project."
+      'name': 'projectName',
+      'type': 'string',
+      'description': 'The name for the generated project.'
     },
     {
-      "name": "projectNameKebab",
-      "type": "string",
-      "description": "The name in Kebab-case for the generated project.",
-      "isPrivate": true
+      'name': 'projectNameKebab',
+      'type': 'string',
+      'description': 'The name in Kebab-case for the generated project.',
+      'isPrivate': true
     }
   ];
-  USAGE["project"].config = commandConfig;
+  USAGE.project.config = commandConfig;
 }
 
 clear();
+
 const run = async () => {
   try {
     await repo.cloneRemoteRepo(CONFIG.TEMPLATE_PROJECT_URL, CONFIG.TEMPLATE_PROJECT_NAME);
     const mainConfig: any = await files.readMainConfig();
     const commands: string[] = mainConfig.import.optional;
     const requiredCommands: string[] = mainConfig.import.required;
-    // populate command usage information
+    // Populate command usage information
     await populateUsage(commands, requiredCommands, mainConfig);
 
-    // check for user arguments
+    // Check for user arguments
     const userArgs = process.argv.slice(2);
 
     util.heading();
@@ -104,7 +104,7 @@ const run = async () => {
       operation.command = util.parseCommand(userArgs, commands);
       operation.options = util.parseOptions(userArgs, commands);
       await MODULE_NEW.run(operation, USAGE);
-    } else { // show help text
+    } else { // Show help text
       console.log(util.displayHelp(USAGE.general.menu));
     }
     await files.clearTempFiles(CONFIG.TEMPLATE_PROJECT_NAME);
