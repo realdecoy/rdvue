@@ -49,6 +49,14 @@
         "matchRegex": "__PAGE__",
         "replace": "${pageNameKebab}"
       }
+    },
+    {
+      "source": "page.test.ts",
+      "target": "${pageNameKebab}.test.ts",
+      "content": {
+        "matchRegex":"__PAGE__",
+        "replace": "${pageNameKebab}"
+      }
     }
   ]
 }

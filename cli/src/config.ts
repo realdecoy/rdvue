@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-const TEMPLATE_PROJECT_URL: string = "https://avidal_realdecoy@bitbucket.org/realdecoyteam/rd-vue-cli.git";
+const TEMPLATE_PROJECT_URL: string = "https://OHarris23@bitbucket.org/realdecoyteam/rd-vue-cli.git";
 const TEMPLATE_PROJECT_NAME: string = "__template";
 
 function USAGE_TEMPLATE(action: string = 'rdvue', command: string = '<feature>', options: string = '[options]'): any[] {

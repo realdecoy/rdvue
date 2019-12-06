@@ -6,7 +6,7 @@ const DEFAULT_PROJECT_DESCRIPTION = 'This is a vue application';
 const REGEX_PROJECT_NAME = /^\s+$/;
 
 module.exports = {
-  TEMPLATE_PROJECT_URL: "https://avidal_realdecoy@bitbucket.org/realdecoyteam/rd-vue-starter.git",
+  TEMPLATE_PROJECT_URL: "https://OHarris23@bitbucket.org/realdecoyteam/rd-vue-cli.git",
   TEMPLATE_PROJECT_NAME: 'vue-starter',
   OPTIONS_ALL: ['--test'],
   USAGE: [
