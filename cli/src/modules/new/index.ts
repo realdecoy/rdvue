@@ -32,7 +32,15 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 
                 if(currentConfig.arguments) {
                     nameKey = currentConfig.arguments[0].name;
-                    featureNameStore[nameKey] = util.hasKebab(nameKey) === true ? util.getKebabCase(answers[nameKey]) : util.getPascalCase(answers[nameKey]);
+
+                    if (util.hasKebab(nameKey) === true) {
+                        featureNameStore[nameKey] = util.getKebabCase(answers[nameKey])
+                        featureNameStore[`${nameKey.split('Kebab')[0]}`] = util.getPascalCase(answers[nameKey]);
+                    }else{
+                        featureNameStore[nameKey] = util.getPascalCase(answers[nameKey]);
+                        featureNameStore[`${nameKey}Kebab`] = util.getKebabCase(answers[nameKey]);
+                    }
+       
                     kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
                 }
 
