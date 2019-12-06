@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import path from 'path';
+import gitUserName from "git-user-name";
 
 const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
 const PROJECT_ROOT: string = __dirname;
