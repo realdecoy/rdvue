@@ -3,9 +3,7 @@ import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
 
 @Component({
-  components: {
-    
-  },
+  components: {},
   name: 'app',
 })
 export default class AppView extends Vue {

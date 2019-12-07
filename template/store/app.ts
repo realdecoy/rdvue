@@ -2,14 +2,14 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 
 @Module({ namespaced: true })
 class Store {
-  private fooBar: string = '';
+  private fooBarVal: string = '';
 
   // ------------------------------------------------------------------------
   // Getters retrieve properties from the Store.
   // ------------------------------------------------------------------------
 
   public get fooBar() {
-    return this.fooBar;
+    return this.fooBarVal;
   }
 
   // ------------------------------------------------------------------------
@@ -43,7 +43,7 @@ class Store {
 
   @Mutation
   private setFooBar(value: string) {
-    this.fooBar = value;
+    this.fooBarVal = value;
   }
 }
 

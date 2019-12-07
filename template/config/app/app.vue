@@ -2,6 +2,7 @@
 <script lang="ts" src="./app.ts"></script>
 <template>
   <div id="app">
+    <h1>Hello World</h1>
     <main>
       <transition :duration="500" name="fade" mode="out-in">
         <!--  
