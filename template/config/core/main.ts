@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import App from '@/views/app/app.vue';
-import router from '@/configs/router';
+import App from '@/page/app/app.vue';
+import router from '@/config/router';
 import store from '@/store';
 import '@/configs/register-service-worker';
 

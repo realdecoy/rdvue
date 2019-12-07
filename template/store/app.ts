@@ -1,15 +1,15 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 
 @Module({ namespaced: true })
-class __STORE__ {
-  private _fooBar: string = null;
+class Store {
+  private fooBar: string = '';
 
   // ------------------------------------------------------------------------
   // Getters retrieve properties from the Store.
   // ------------------------------------------------------------------------
 
   public get fooBar() {
-    return this._fooBar;
+    return this.fooBar;
   }
 
   // ------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class __STORE__ {
 
   @Action({ commit: 'setFooBar' })
   public initializeFooBar() {
-    return "Hello World";
+    return 'Hello World';
   }
 
   @Action({ commit: 'setFooBar' })
@@ -38,16 +38,16 @@ class __STORE__ {
 
   // ------------------------------------------------------------------------
   // Mutations update the properties in the Store.
-  // They are internal 
+  // They are internal
   // ------------------------------------------------------------------------
 
   @Mutation
   private setFooBar(value: string) {
     this.fooBar = value;
   }
-};
+}
 
 export {
-  __STORE__ as default,
-  __STORE__
-}
+  Store as default,
+  Store,
+};
