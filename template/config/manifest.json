@@ -19,38 +19,57 @@
   "sourceDirectory": "./",
   "installDirectory": "./",
   "files": [
-    "package.json",
+    {
+      "source": "core/package.json",
+      "target": "package.json"
+    },
     {
       "source": "core/main.ts",
-      "target": "main.ts"
+      "target": "src/main.ts"
     },
     {
       "source": "env/env.ts",
-      "target": "config/env.ts"
+      "target": "src/config/env.ts"
     },
     {
       "source": "env/env.dev.ts",
-      "target": "config/env.dev.ts"
+      "target": "src/config/env.dev.ts"
     },
     {
       "source": "env/env.prod.ts",
-      "target": "config/env.prod.ts"
+      "target": "src/config/env.prod.ts"
     },
     {
       "source": "core/register-service-worker.ts",
-      "target": "config/register-service-worker.ts"
+      "target": "src/config/register-service-worker.ts"
     },
     {
       "source": "core/router.ts",
-      "target": "config/router.ts"
+      "target": "src/config/router.ts"
     },
     {
       "source": "core/shims-tsx.d.ts",
-      "target": "config/shims-tsx.d.ts"
+      "target": "src/config/shims-tsx.d.ts"
     },
     {
       "source": "core/shims-vue.d.ts",
-      "target": "config/shims-vue.d.ts"
+      "target": "src/config/shims-vue.d.ts"
+    },
+    {
+      "source": "app/app.scss",
+      "target": "src/page/app/app.scss"
+    },
+    {
+      "source": "app/app.ts",
+      "target": "src/page/app/app.ts"
+    },
+    {
+      "source": "app/app.vue",
+      "target": "src/page/app/app.vue"
+    },
+    {
+      "source": "app/index.ts",
+      "target": "src/page/app/index.ts"
     },
     {
       "source": "meta/.gitignore",
