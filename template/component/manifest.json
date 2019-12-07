@@ -49,6 +49,20 @@
       ]
     },
     {
+      "source": "component.spec.ts",
+      "target": "${componentNameKebab}.spec.ts",
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        },
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
+    },
+    {
       "source": "component.vue",
       "target": "${componentNameKebab}.vue",
       "content": [
