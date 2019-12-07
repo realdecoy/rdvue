@@ -8,6 +8,7 @@ import rimraf from 'rimraf';
 import util from 'util';
 import mkdirp from 'mkdirp';
 import configs from '../config';
+import localUtils from './util';
 
 
 const Spinner = CLI.Spinner;
@@ -95,8 +96,8 @@ async function updateFile(filePath: string, file: any, placeholder: string, valu
  * through prompts
  */
 async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: any) {
-  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
-  const pascalNameKey = (Object.keys(args).filter(f => !UTIL.hasKebab(f)))[0];
+  const kebabNameKey = (Object.keys(args).filter(f => localUtils.hasKebab(f)))[0];
+  const pascalNameKey = (Object.keys(args).filter(f => !localUtils.hasKebab(f)))[0];
 
   for (const file of files) {
     let filePath = '';
@@ -107,7 +108,7 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: an
 
           if(contentBlock && contentBlock.matchRegex){
             const fileContent = readFile(filePath);
-            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( UTIL.hasKebab(contentBlock.replace) === true ? args[kebabNameKey] : (contentBlock.replace.includes('${')) ? args[pascalNameKey] : contentBlock.replace));
+            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( localUtils.hasKebab(contentBlock.replace) === true ? args[kebabNameKey] : (contentBlock.replace.includes('${')) ? args[pascalNameKey] : contentBlock.replace));
           }
         }
       }else if(file.content){
@@ -153,7 +154,7 @@ function replaceTargetFileNames(files: any[], featureName: string){
  * Copy and update files
  */
 async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: any, args: any): Promise<any> {
-  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
+  const kebabNameKey = (Object.keys(args).filter(f => localUtils.hasKebab(f)))[0];
   const status = new Spinner('updating template files from boilerplate...', ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷']);
   status.start();
 
