@@ -4,7 +4,6 @@ import chalk from 'chalk';
 import clear from 'clear';
 import CONFIG from './config';
 import files from './lib/files';
-import repo from './lib/repo';
 import util from './lib/util';
 import MODULE_NEW from './modules/new';
 
@@ -88,8 +87,7 @@ clear();
 
 const run = async () => {
   try {
-    await repo.cloneRemoteRepo(CONFIG.TEMPLATE_PROJECT_URL, CONFIG.TEMPLATE_PROJECT_NAME);
-    const mainConfig: any = await files.readMainConfig();
+    const mainConfig = await files.readMainConfig();
     const commands: string[] = mainConfig.import.optional;
     const requiredCommands: string[] = mainConfig.import.required;
     // Populate command usage information

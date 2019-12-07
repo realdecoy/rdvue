@@ -1,13 +1,14 @@
-import _ from "lodash";
-import chalk from "chalk";
-import bluebirdPromise from "bluebird";
-import fileSystem from "fs";
-import path from "path";
-import CLI from "clui";
-import rimraf from "rimraf";
-import UTIL from './util';
-import util from "util";
-import mkdirp from "mkdirp";
+import _ from 'lodash';
+import chalk from 'chalk';
+import bluebirdPromise from 'bluebird';
+import fileSystem from 'fs';
+import path from 'path';
+import CLI from 'clui';
+import rimraf from 'rimraf';
+import util from 'util';
+import mkdirp from 'mkdirp';
+import configs from '../config';
+
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -15,7 +16,7 @@ const copyFilePromise = util.promisify(fs.copyFile);
 const getDirName = path.dirname;
 
 function readFile(filePath: string) {
-  return fs.readFileSync(filePath, "utf-8");
+  return fs.readFileSync(filePath, 'utf-8');
 }
 
 function directoryExists(filePath: string) {
@@ -42,12 +43,12 @@ function getCurrentDirectoryBase(): string {
  *  Read main config file to determine options the tool can take
  */
 function readMainConfig(): any {
-  const filePath = `./__template/template/template.json`;
+  const filePath = path.join(configs.TEMPLATE_ROOT, '/template.json');
   return JSON.parse(readFile(filePath));
 }
 
 /**
- *  Read sub config for features to determine details about the individual 
+ *  Read sub config for features to determine details about the individual
  * features and what they are capable of
  */
 function readSubConfig(command: string): any {
@@ -71,7 +72,7 @@ async function clearTempFiles(folderPath: string) {
  * Replace filename 
  */
 function replaceFileName(fileName: string, placeholder: RegExp, value: string): string {
-  const r = new RegExp(placeholder, "g");
+  const r = new RegExp(placeholder, 'g');
   const response = fileName.replace(r, value);
   return response;
 }
@@ -80,11 +81,11 @@ function replaceFileName(fileName: string, placeholder: RegExp, value: string): 
  * Write files 
  */
 async function updateFile(filePath: string, file: any, placeholder: string, value: string) {
-  const r = new RegExp(placeholder, "g");
+  const r = new RegExp(placeholder, 'g');
   if(value){
     var newValue = file.replace(r, value);
     console.log(chalk.yellow(` >> processing ${filePath}`));
-    fs.writeFileSync(filePath, newValue, "utf-8");
+    fs.writeFileSync(filePath, newValue, 'utf-8');
   }
 }
 
@@ -149,13 +150,11 @@ function replaceTargetFileNames(files: any[], featureName: string){
 }
 
 /**
- * Copy and update files 
+ * Copy and update files
  */
 async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: any, args: any): Promise<any> {
-
   const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
-  const status = new Spinner("updating template files from boilerplate...", ["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"]);
-  
+  const status = new Spinner('updating template files from boilerplate...', ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷']);
   status.start();
 
   replaceTargetFileNames(fileList, args[kebabNameKey]);
