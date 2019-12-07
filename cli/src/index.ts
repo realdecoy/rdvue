@@ -106,7 +106,6 @@ const run = async () => {
       await MODULE_NEW.run(operation, USAGE);
     } else { // show help text
       console.log(util.displayHelp(USAGE.general.menu));
-      // console.log(USAGE);
     }
     await files.clearTempFiles(CONFIG.TEMPLATE_PROJECT_NAME);
     process.exit();
