@@ -52,8 +52,8 @@ function readMainConfig(): any {
  * features and what they are capable of
  */
 function readSubConfig(command: string): any {
-  const filePath = `./__template/template/${command}/manifest.json`;
-  const otherFilePath = `./__template/template/${command}/metadata.json`;
+  const filePath = path.join(configs.TEMPLATE_ROOT, `/${command}`, '/metadata.json');
+  const otherFilePath = path.join(configs.TEMPLATE_ROOT, `/${command}`, '/metadata.json');
   if(fileExists(filePath)){
     return JSON.parse(readFile(filePath));
   }

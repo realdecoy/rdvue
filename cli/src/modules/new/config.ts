@@ -1,8 +1,8 @@
-import chalk from "chalk";
-import files from "../../lib/files";
-import gitUserName from "git-user-name"
+import gitUserName from 'git-user-name'
+import chalk from 'chalk';
+import files from '../../lib/files';
 
-const DEFAULT_PROJECT_NAME = "my-vue-app";
+const DEFAULT_PROJECT_NAME = 'my-vue-app';
 const REGEX_PROJECT_NAME = /^\s+$/;
 
 async function validate(this: any, value: string): Promise<any> {
@@ -10,7 +10,7 @@ async function validate(this: any, value: string): Promise<any> {
   if (value.length == 0 || value.match(REGEX_PROJECT_NAME)) {
     done(chalk.red(`You need to enter a valid project name`));
     return;
-  } // directory with specified name already exists
+  } //  Directory with specified name already exists
   else if (files.directoryExists(value)) {
     done(chalk.red(`Project with the name ${value} already exists`));
     return;
@@ -36,29 +36,27 @@ function parsePrompts(config: any): any[] {
 }
 
 const TEMPLATE_PROJECT_URL: string = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
-const TEMPLATE_PROJECT_NAME: string = "__template";
-const OPTIONS_ALL: string[] = ["--new"];
+const OPTIONS_ALL: string[] = ['--new'];
 
 const QUESTIONS: any[] = [
   {
-    type: "input",
-    name: "projectName",
-    message: "Enter a name for the project:",
+    type: 'input',
+    name: 'projectName',
+    message: 'Enter a name for the project:',
     default: DEFAULT_PROJECT_NAME,
     validate,
   },
   {
-    type: "input",
-    name: "description",
+    type: 'input',
+    name: 'description',
     default: null,
-    message: "Enter a description of the project (optional):"
+    message: 'Enter a description of the project (optional):'
   }
 ];
 
 export default {
   TEMPLATE_PROJECT_URL,
-  TEMPLATE_PROJECT_NAME,
   OPTIONS_ALL,
   QUESTIONS,
   parsePrompts,
-}
+};

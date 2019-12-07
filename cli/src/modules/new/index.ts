@@ -4,6 +4,7 @@ import util from "../../lib/util";
 // import repo from "../../lib/repo";
 import inquirer from "inquirer";
 import CONFIG from "./config";
+import ROOT_CONFIG from "../../config";
 import process from "process";
 
 async function run (operation: any, USAGE: any): Promise<any> {
@@ -15,9 +16,7 @@ async function run (operation: any, USAGE: any): Promise<any> {
         const currentConfig = USAGE[operation.command].config;
         let sourceDirectory = '';
         let installDirectory = '';
-        let projectName = '<project-name>';
-        const featureNameStore: any = {};
-        let kebabNameKey = '';
+        let featureName = '';
         let nameKey = '';
 
         if(!hasHelpOption && !hasInvalidOption && userOptions.includes('--new')){
@@ -26,45 +25,35 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 await run({options: userOptions, command:'config'}, USAGE);
                 // console.log(">>>project created");
                 await run({options: userOptions, command:'store'}, USAGE);
-                console.log(projectName);
-                util.nextSteps(projectName);
+                util.nextSteps("<project-name>");
             } else {
                 const isNewProject = operation.command === 'config';
                 const answers: any = await inquirer.prompt(questions);
-                
-                if(currentConfig.arguments) {
+                if(currentConfig.arguments){
                     nameKey = currentConfig.arguments[0].name;
-
-                    if (util.hasKebab(nameKey) === true) {
-                        featureNameStore[nameKey] = util.getKebabCase(answers[nameKey])
-                        featureNameStore[`${nameKey.split('Kebab')[0]}`] = util.getPascalCase(answers[nameKey]);
-                    }else{
-                        featureNameStore[nameKey] = util.getPascalCase(answers[nameKey]);
-                        featureNameStore[`${nameKey}Kebab`] = util.getKebabCase(answers[nameKey]);
-                    }
-       
-                    kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
+                    featureName = answers[nameKey];
                 }
-
+                util.lineBreak();
                 util.sectionBreak();
-
                 if(isNewProject){
-                    projectName = featureNameStore[kebabNameKey];
-                    sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
-                    installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;    
+                    sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
+                    installDirectory = `${featureName}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else if (operation.command === 'store'){
-                    sourceDirectory = `../__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
-                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;                    
+                    sourceDirectory = `../${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else {
-                    sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
-                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;                    
+                    sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureName}`;
                 }
 
-                await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, featureNameStore);
+                console.log(`sourceDirectory ${sourceDirectory} :: installDirectory ${installDirectory} :: currentConfig.files ${currentConfig} :: featureName: ${featureName}`);
+                
+                await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, {featureName});
                 if(isNewProject){
-                    process.chdir(`./${featureNameStore[kebabNameKey]}`);
+                    process.chdir(`./${featureName}`);
                 } else {
                     util.sectionBreak();
+                    util.lineBreak();
                     console.log(chalk.magenta("[All Done]"));
                 }
             }

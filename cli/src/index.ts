@@ -105,13 +105,11 @@ const run = async () => {
     } else { // Show help text
       console.log(util.displayHelp(USAGE.general.menu));
     }
-    await files.clearTempFiles(CONFIG.TEMPLATE_PROJECT_NAME);
     process.exit();
   } catch (err) {
     if (err) {
       console.log(chalk.red(`${err}`));
     }
-    await files.clearTempFiles(CONFIG.TEMPLATE_PROJECT_NAME);
     process.exit();
   }
 };
