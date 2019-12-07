@@ -2,8 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 
 @Component({
-  components: {
-  },
+  components: {},
   name: 'page',
 })
 class __PAGE__ extends Vue {
