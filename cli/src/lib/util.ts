@@ -48,9 +48,31 @@ function parseCommand(args: string[], commands: string[]): string {
 }
 function parseOptions(args: string[], commands: string[]): string[] { 
   return args.filter(x => !commands.includes(x));
-}  
+}
 function displayHelp(sections: Section[]): string{
   return commandLineUsage(sections);
+}
+function getKebabCase(str: string) {
+
+  const regex = /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g;
+  const match = str.match(regex);
+  let result = '';
+  if(match){
+    result = match.map(x=> x.toLowerCase()).join('-');
+  }
+
+  return result;
+}
+function getPascalCase(str:string) {
+  return (str.replace(/\w\S*/g, m => `${m.charAt(0).toLocaleUpperCase()}${m.substr(1).toLocaleLowerCase()}`))
+}
+function hasKebab(str = '') {
+  let result = false;
+  if (str.match(/kebab/gi) !== null) {
+    result = true;
+  }
+
+  return result;
 }
 
 export default {
@@ -64,5 +86,8 @@ export default {
   hasInvalidOption,
   parseCommand,
   parseOptions,
-  displayHelp
+  displayHelp,
+  hasKebab,
+  getKebabCase,
+  getPascalCase
 };

@@ -5,6 +5,7 @@ import fileSystem from "fs";
 import path from "path";
 import CLI from "clui";
 import rimraf from "rimraf";
+import UTIL from './util';
 import util from "util";
 import mkdirp from "mkdirp";
 
@@ -94,6 +95,9 @@ async function updateFile(filePath: string, file: any, placeholder: string, valu
  * through prompts
  */
 async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: any) {
+  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
+  const pascalNameKey = (Object.keys(args).filter(f => !UTIL.hasKebab(f)))[0];
+
   for (const file of files) {
     let filePath = '';
     if(typeof file !== 'string'){
@@ -105,11 +109,11 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: an
           if(contentBlock && contentBlock.matchRegex){
             // console.log(chalk.yellow(`...processing ${filePath}`));
             const fileContent = readFile(filePath);
-            await updateFile(filePath, fileContent, contentBlock.matchRegex, args.featureName);
+            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( UTIL.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey]));
           }
         }
       }else {
-        console.log(`[INTERNAL : failed to match and replace  for :${args.featureName} files]`);
+        console.log(`[INTERNAL : failed to match and replace  for :${( UTIL.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey])} files]`);
       }
     }
   }
@@ -151,21 +155,24 @@ function replaceTargetFileNames(files: any[], featureName: string){
  * Copy and update files 
  */
 async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: any, args: any): Promise<any> {
-  const status = new Spinner("updating template files from boilerplate...", ["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"]);
-  status.start();  
 
-  replaceTargetFileNames(fileList, args.featureName);
+  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
+  const status = new Spinner("updating template files from boilerplate...", ["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"]);
+  console.log(args, kebabNameKey);
+  status.start();
+
+  replaceTargetFileNames(fileList, args[kebabNameKey]);
 
   // copy files from template and place in target destination
   await copyFiles(sourceDirectory, installDirectory, fileList).then(() => {
-      console.log(`[Processing ${args.featureName} files]`);
+      console.log(`[Processing ${args[kebabNameKey]} files]`);
   }).catch((err: any) => {
       console.log(err);
   });
 
   // apply changes to generated files
   await readAndUpdateFeatureFiles(installDirectory, fileList, args);
-  console.log(`[Processed ${args.featureName} files]`);
+  console.log(`[Processed ${args[kebabNameKey]} files]`);
   status.stop();
 }
 
