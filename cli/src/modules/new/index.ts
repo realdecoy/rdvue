@@ -15,6 +15,7 @@ async function run (operation: any, USAGE: any): Promise<any> {
         const currentConfig = USAGE[operation.command].config;
         let sourceDirectory = '';
         let installDirectory = '';
+        let projectName = '<project-name>';
         const featureNameStore: any = {};
         let kebabNameKey = '';
         let nameKey = '';
@@ -25,7 +26,8 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 await run({options: userOptions, command:'config'}, USAGE);
                 // console.log(">>>project created");
                 await run({options: userOptions, command:'store'}, USAGE);
-                util.nextSteps("<project-name>");
+                console.log(projectName);
+                util.nextSteps(projectName);
             } else {
                 const isNewProject = operation.command === 'config';
                 const answers: any = await inquirer.prompt(questions);
@@ -44,10 +46,10 @@ async function run (operation: any, USAGE: any): Promise<any> {
                     kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
                 }
 
-                util.lineBreak();
                 util.sectionBreak();
 
                 if(isNewProject){
+                    projectName = featureNameStore[kebabNameKey];
                     sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;    
                 } else if (operation.command === 'store'){
@@ -57,14 +59,12 @@ async function run (operation: any, USAGE: any): Promise<any> {
                     sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;                    
                 }
-                
-                console.log(featureNameStore);
+
                 await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, featureNameStore);
                 if(isNewProject){
                     process.chdir(`./${featureNameStore[kebabNameKey]}`);
                 } else {
                     util.sectionBreak();
-                    util.lineBreak();
                     console.log(chalk.magenta("[All Done]"));
                 }
             }

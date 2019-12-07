@@ -72,7 +72,6 @@ async function clearTempFiles(folderPath: string) {
  */
 function replaceFileName(fileName: string, placeholder: RegExp, value: string): string {
   const r = new RegExp(placeholder, "g");
-  // console.log(`filename: ${fileName}`);
   const response = fileName.replace(r, value);
   return response;
 }
@@ -102,18 +101,16 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: an
     let filePath = '';
     if(typeof file !== 'string'){
       filePath = path.join(destDir, file.target);
-
-      if (Array.isArray(file.content)) {
+      if (file.content && Array.isArray(file.content)) {
         for (const contentBlock of file.content) {
 
           if(contentBlock && contentBlock.matchRegex){
-            // console.log(chalk.yellow(`...processing ${filePath}`));
             const fileContent = readFile(filePath);
-            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( UTIL.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey]));
+            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( UTIL.hasKebab(contentBlock.replace) === true ? args[kebabNameKey] : (contentBlock.replace.includes('${')) ? args[pascalNameKey] : contentBlock.replace));
           }
         }
-      }else {
-        console.log(`[INTERNAL : failed to match and replace  for :${( UTIL.hasKebab(file.content.replace) === true ? args[kebabNameKey] : args[pascalNameKey])} files]`);
+      }else if(file.content){
+        console.log(`[INTERNAL : failed to match and replace  for :${args[kebabNameKey]} files]`);
       }
     }
   }
@@ -158,7 +155,7 @@ async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: str
 
   const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
   const status = new Spinner("updating template files from boilerplate...", ["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"]);
-  console.log(args, kebabNameKey);
+  
   status.start();
 
   replaceTargetFileNames(fileList, args[kebabNameKey]);
