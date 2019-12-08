@@ -6,6 +6,7 @@ import inquirer from "inquirer";
 import CONFIG from "./config";
 import ROOT_CONFIG from "../../config";
 import process from "process";
+import path from 'path';
 
 async function run (operation: any, USAGE: any): Promise<any> {
     try {
@@ -35,21 +36,39 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 }
                 util.lineBreak();
                 util.sectionBreak();
+
+                const projectRoot = util.getProjectRoot();
+
                 if(isNewProject){
                     sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}/${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `${featureName}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else if (operation.command === 'store'){
-                    sourceDirectory = `../${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}/${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
+                    sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}/${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else {
                     sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}/${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureName}`;
                 }
 
-                console.log(`sourceDirectory ${sourceDirectory} :: installDirectory ${installDirectory} :: currentConfig.files ${currentConfig} :: featureName: ${featureName}`);
-                
-                await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, {featureName});
+                if (projectRoot !== null && !isNewProject) {
+                    installDirectory = `${projectRoot}/${installDirectory}`;
+                }
+
+                await files.copyAndUpdateFiles(
+                    sourceDirectory, installDirectory,
+                    currentConfig.files, {featureName});
+
                 if(isNewProject){
+                    const absProjectRoot = path.resolve(installDirectory);
+                    const configFile = path.join(absProjectRoot, '.rdvue');
+                    const projectRootConfig = {
+                        projectRoot: absProjectRoot
+                    };
+                    const strProjectRootConfig = JSON.stringify(projectRootConfig);
+
+                    // Writing the project root path to the .rdvue file
+                    files.writeFile(configFile, strProjectRootConfig);
+
                     process.chdir(`./${featureName}`);
                 } else {
                     util.sectionBreak();

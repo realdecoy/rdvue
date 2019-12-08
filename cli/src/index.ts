@@ -101,7 +101,13 @@ const run = async () => {
       const operation: any = {};
       operation.command = util.parseCommand(userArgs, commands);
       operation.options = util.parseOptions(userArgs, commands);
-      await MODULE_NEW.run(operation, USAGE);
+
+      const project = util.checkProjectValidity(operation);
+      if (project.isValid) {
+        await MODULE_NEW.run(operation, USAGE);
+      } else {
+        throw Error(`'${process.cwd()}' is not a valid Vue project.`);
+      }
     } else { // Show help text
       console.log(util.displayHelp(USAGE.general.menu));
     }
