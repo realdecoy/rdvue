@@ -1,10 +1,15 @@
-import chalk from "chalk";
-import gitUserName from "git-user-name"
+import chalk from 'chalk';
+import path from 'path';
+import gitUserName from "git-user-name";
 
-const TEMPLATE_PROJECT_URL: string = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
-const TEMPLATE_PROJECT_NAME: string = "__template";
+const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
+const CLI_PROJECT_ROOT: string = __dirname;
+const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../../template');
 
-function USAGE_TEMPLATE(action: string = 'rdvue', command: string = '<feature>', options: string = '[options]'): any[] {
+function USAGE_TEMPLATE(
+    action = 'rdvue',
+    command = '<feature>',
+    options = '[options]'): any[] {
     return [
         {
             header: 'Usage:',
@@ -28,6 +33,7 @@ function USAGE_TEMPLATE(action: string = 'rdvue', command: string = '<feature>',
 
 export default {
     TEMPLATE_PROJECT_URL,
-    TEMPLATE_PROJECT_NAME,
-    USAGE_TEMPLATE
-}
+    USAGE_TEMPLATE,
+    CLI_PROJECT_ROOT,
+    TEMPLATE_ROOT,
+};

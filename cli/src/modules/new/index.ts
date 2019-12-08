@@ -1,9 +1,10 @@
 import chalk from "chalk";
 import files from "../../lib/files";
 import util from "../../lib/util";
-// import repo from "../../lib/repo";
+import path from 'path';
 import inquirer from "inquirer";
 import CONFIG from "./config";
+import ROOT_CONFIG from "../../config";
 import process from "process";
 
 async function run (operation: any, USAGE: any): Promise<any> {
@@ -26,15 +27,13 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 await run({options: userOptions, command:'config'}, USAGE);
                 // console.log(">>>project created");
                 await run({options: userOptions, command:'store'}, USAGE);
-                console.log(projectName);
+                
                 util.nextSteps(projectName);
             } else {
                 const isNewProject = operation.command === 'config';
                 const answers: any = await inquirer.prompt(questions);
-                
-                if(currentConfig.arguments) {
+                if(currentConfig.arguments){
                     nameKey = currentConfig.arguments[0].name;
-
                     if (util.hasKebab(nameKey) === true) {
                         featureNameStore[nameKey] = util.getKebabCase(answers[nameKey])
                         featureNameStore[`${nameKey.split('Kebab')[0]}`] = util.getPascalCase(answers[nameKey]);
@@ -42,26 +41,42 @@ async function run (operation: any, USAGE: any): Promise<any> {
                         featureNameStore[nameKey] = util.getPascalCase(answers[nameKey]);
                         featureNameStore[`${nameKey}Kebab`] = util.getKebabCase(answers[nameKey]);
                     }
-       
                     kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
                 }
-
                 util.sectionBreak();
 
+                const projectRoot = util.getProjectRoot();
+
                 if(isNewProject){
-                    projectName = featureNameStore[kebabNameKey];
-                    sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
-                    installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;    
+                    sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
+                    installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else if (operation.command === 'store'){
-                    sourceDirectory = `../__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
-                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;                    
+                    sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else {
-                    sourceDirectory = `__template/template/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
-                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;                    
+                    sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
+                    installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;
                 }
 
-                await files.copyAndUpdateFiles(sourceDirectory, installDirectory, currentConfig.files, featureNameStore);
+                if (projectRoot !== null && !isNewProject) {
+                    installDirectory = `${projectRoot}/${installDirectory}`;
+                }
+
+                await files.copyAndUpdateFiles(
+                    sourceDirectory, installDirectory,
+                    currentConfig.files, featureNameStore);
+
                 if(isNewProject){
+                    const absProjectRoot = path.resolve(installDirectory);
+                    const configFile = path.join(absProjectRoot, '.rdvue');
+                    const projectRootConfig = {
+                        projectRoot: absProjectRoot
+                    };
+                    const strProjectRootConfig = JSON.stringify(projectRootConfig);
+
+                    // Writing the project root path to the .rdvue file
+                    files.writeFile(configFile, strProjectRootConfig);
+
                     process.chdir(`./${featureNameStore[kebabNameKey]}`);
                 } else {
                     util.sectionBreak();

@@ -1,13 +1,15 @@
-import _ from "lodash";
-import chalk from "chalk";
-import bluebirdPromise from "bluebird";
-import fileSystem from "fs";
-import path from "path";
-import CLI from "clui";
-import rimraf from "rimraf";
-import UTIL from './util';
-import util from "util";
-import mkdirp from "mkdirp";
+import _ from 'lodash';
+import chalk from 'chalk';
+import bluebirdPromise from 'bluebird';
+import fileSystem from 'fs';
+import path from 'path';
+import CLI from 'clui';
+import rimraf from 'rimraf';
+import util from 'util';
+import mkdirp from 'mkdirp';
+import configs from '../config';
+import localUtils from './util';
+
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -15,7 +17,7 @@ const copyFilePromise = util.promisify(fs.copyFile);
 const getDirName = path.dirname;
 
 function readFile(filePath: string) {
-  return fs.readFileSync(filePath, "utf-8");
+  return fs.readFileSync(filePath, 'utf-8');
 }
 
 function directoryExists(filePath: string) {
@@ -42,36 +44,29 @@ function getCurrentDirectoryBase(): string {
  *  Read main config file to determine options the tool can take
  */
 function readMainConfig(): any {
-  const filePath = `./__template/template/template.json`;
+  const filePath = path.join(configs.TEMPLATE_ROOT, '/template.json');
   return JSON.parse(readFile(filePath));
 }
 
 /**
- *  Read sub config for features to determine details about the individual 
+ *  Read sub config for features to determine details about the individual
  * features and what they are capable of
  */
 function readSubConfig(command: string): any {
-  const filePath = `./__template/template/${command}/manifest.json`;
-  const otherFilePath = `./__template/template/${command}/metadata.json`;
-  if(fileExists(filePath)){
-    return JSON.parse(readFile(filePath));
-  }
-  else if(fileExists(otherFilePath)) {
-    return JSON.parse(readFile(otherFilePath));
-  }
-  return {};
+  const filePath = path.join(configs.TEMPLATE_ROOT, `/${command}`, '/manifest.json');
+  
+  return JSON.parse(readFile(filePath));
 }
 
 async function clearTempFiles(folderPath: string) {
   await rimraf.sync(folderPath);
 }
 
-
 /**
  * Replace filename 
  */
 function replaceFileName(fileName: string, placeholder: RegExp, value: string): string {
-  const r = new RegExp(placeholder, "g");
+  const r = new RegExp(placeholder, 'g');
   const response = fileName.replace(r, value);
   return response;
 }
@@ -79,12 +74,24 @@ function replaceFileName(fileName: string, placeholder: RegExp, value: string): 
 /**
  * Write files 
  */
+
+function writeFile(filePath: string, data: string): boolean {
+  let success = true;
+  try {
+    fs.writeFileSync(filePath, data);
+  } catch (error) {
+    console.warn('Failed to write to file');
+    success = false;
+  }
+  return success;
+}
+
 async function updateFile(filePath: string, file: any, placeholder: string, value: string) {
-  const r = new RegExp(placeholder, "g");
+  const r = new RegExp(placeholder, 'g');
   if(value){
     var newValue = file.replace(r, value);
     console.log(chalk.yellow(` >> processing ${filePath}`));
-    fs.writeFileSync(filePath, newValue, "utf-8");
+    fs.writeFileSync(filePath, newValue, 'utf-8');
   }
 }
 
@@ -94,8 +101,8 @@ async function updateFile(filePath: string, file: any, placeholder: string, valu
  * through prompts
  */
 async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: any) {
-  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
-  const pascalNameKey = (Object.keys(args).filter(f => !UTIL.hasKebab(f)))[0];
+  const kebabNameKey = (Object.keys(args).filter(f => localUtils.hasKebab(f)))[0];
+  const pascalNameKey = (Object.keys(args).filter(f => !localUtils.hasKebab(f)))[0];
 
   for (const file of files) {
     let filePath = '';
@@ -106,7 +113,7 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: an
 
           if(contentBlock && contentBlock.matchRegex){
             const fileContent = readFile(filePath);
-            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( UTIL.hasKebab(contentBlock.replace) === true ? args[kebabNameKey] : (contentBlock.replace.includes('${')) ? args[pascalNameKey] : contentBlock.replace));
+            await updateFile(filePath, fileContent, contentBlock.matchRegex, ( localUtils.hasKebab(contentBlock.replace) === true ? args[kebabNameKey] : (contentBlock.replace.includes('${')) ? args[pascalNameKey] : contentBlock.replace));
           }
         }
       }else if(file.content){
@@ -131,6 +138,7 @@ async function copyFiles(srcDir: string, destDir: string, files: []) {
       source = path.join(srcDir, `${srcDir.includes('config') ? 'core' : ''}`, f);
       dest = path.join(destDir, f);
     }
+    
     // create all the necessary directories if they dont exist
     const dirName = getDirName(dest);
     mkdirp.sync(dirName);
@@ -149,27 +157,25 @@ function replaceTargetFileNames(files: any[], featureName: string){
 }
 
 /**
- * Copy and update files 
+ * Copy and update files
  */
 async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: any, args: any): Promise<any> {
-
-  const kebabNameKey = (Object.keys(args).filter(f => UTIL.hasKebab(f)))[0];
-  const status = new Spinner("updating template files from boilerplate...", ["⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷"]);
-  
+  const kebabNameKey = (Object.keys(args).filter(f => localUtils.hasKebab(f)))[0];
+  const status = new Spinner('updating template files from boilerplate...', ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷']);
   status.start();
 
   replaceTargetFileNames(fileList, args[kebabNameKey]);
 
   // copy files from template and place in target destination
   await copyFiles(sourceDirectory, installDirectory, fileList).then(() => {
-      console.log(`[Processing ${args[kebabNameKey]} files]`);
+      console.log(`[Processing ${args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''} files]`);
   }).catch((err: any) => {
       console.log(err);
   });
 
   // apply changes to generated files
   await readAndUpdateFeatureFiles(installDirectory, fileList, args);
-  console.log(`[Processed ${args[kebabNameKey]} files]`);
+  console.log(`[Processed ${args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''} files]`);
   status.stop();
 }
 
@@ -182,4 +188,6 @@ export default {
   copyAndUpdateFiles,
   readMainConfig,
   readSubConfig,
-}
+  writeFile,
+};
+
