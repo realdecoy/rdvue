@@ -77,7 +77,7 @@ async function run (operation: any, USAGE: any): Promise<any> {
                     // Writing the project root path to the .rdvue file
                     files.writeFile(configFile, strProjectRootConfig);
 
-                    process.chdir(`./${featureNameStore}`);
+                    process.chdir(`./${featureNameStore[kebabNameKey]}`);
                 } else {
                     util.sectionBreak();
                     console.log(chalk.magenta("[All Done]"));
