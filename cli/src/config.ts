@@ -3,8 +3,8 @@ import path from 'path';
 import gitUserName from "git-user-name";
 
 const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
-const PROJECT_ROOT: string = __dirname;
-const TEMPLATE_ROOT: string = path.join(PROJECT_ROOT, '/../../../template');
+const CLI_PROJECT_ROOT: string = __dirname;
+const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../../template');
 
 function USAGE_TEMPLATE(
     action = 'rdvue',
@@ -34,6 +34,6 @@ function USAGE_TEMPLATE(
 export default {
     TEMPLATE_PROJECT_URL,
     USAGE_TEMPLATE,
-    PROJECT_ROOT,
-    TEMPLATE_ROOT
+    CLI_PROJECT_ROOT,
+    TEMPLATE_ROOT,
 };
