@@ -36,13 +36,13 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 util.lineBreak();
                 util.sectionBreak();
                 if(isNewProject){
-                    sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
+                    sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}/${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `${featureName}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else if (operation.command === 'store'){
-                    sourceDirectory = `../${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
+                    sourceDirectory = `../${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}/${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`;
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else {
-                    sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
+                    sourceDirectory = `${ROOT_CONFIG.TEMPLATE_ROOT}/${operation.command}/${currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''}`
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureName}`;
                 }
 
