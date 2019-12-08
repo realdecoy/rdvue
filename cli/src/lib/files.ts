@@ -54,21 +54,13 @@ function readMainConfig(): any {
  */
 function readSubConfig(command: string): any {
   const filePath = path.join(configs.TEMPLATE_ROOT, `/${command}`, '/manifest.json');
-  const otherFilePath = path.join(configs.TEMPLATE_ROOT, `/${command}`, '/manifest.json');
-
-  if(fileExists(filePath)){
-    return JSON.parse(readFile(filePath));
-  }
-  else if(fileExists(otherFilePath)) {
-    return JSON.parse(readFile(otherFilePath));
-  }
-  return {};
+  
+  return JSON.parse(readFile(filePath));
 }
 
 async function clearTempFiles(folderPath: string) {
   await rimraf.sync(folderPath);
 }
-
 
 /**
  * Replace filename 
@@ -146,6 +138,7 @@ async function copyFiles(srcDir: string, destDir: string, files: []) {
       source = path.join(srcDir, `${srcDir.includes('config') ? 'core' : ''}`, f);
       dest = path.join(destDir, f);
     }
+    
     // create all the necessary directories if they dont exist
     const dirName = getDirName(dest);
     mkdirp.sync(dirName);
@@ -175,14 +168,14 @@ async function copyAndUpdateFiles(sourceDirectory: string, installDirectory: str
 
   // copy files from template and place in target destination
   await copyFiles(sourceDirectory, installDirectory, fileList).then(() => {
-      console.log(`[Processing ${args[kebabNameKey]} files]`);
+      console.log(`[Processing ${args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''} files]`);
   }).catch((err: any) => {
       console.log(err);
   });
 
   // apply changes to generated files
   await readAndUpdateFeatureFiles(installDirectory, fileList, args);
-  console.log(`[Processed ${args[kebabNameKey]} files]`);
+  console.log(`[Processed ${args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''} files]`);
   status.stop();
 }
 
