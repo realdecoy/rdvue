@@ -54,6 +54,7 @@ function readMainConfig(): any {
  */
 function readSubConfig(command: string): any {
   const filePath = path.join(configs.TEMPLATE_ROOT, `/${command}`, '/manifest.json');
+  
   return JSON.parse(readFile(filePath));
 }
 
