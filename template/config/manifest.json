@@ -20,6 +20,10 @@
   "installDirectory": "./",
   "files": [
     {
+      "source": "meta/.rdvue",
+      "target": ".rdvue"
+    },
+    {
       "source": "core/package.json",
       "target": "package.json"
     },
