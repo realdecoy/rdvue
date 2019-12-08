@@ -82,6 +82,18 @@ function replaceFileName(fileName: string, placeholder: RegExp, value: string): 
 /**
  * Write files 
  */
+
+function writeFile(filePath: string, data: string): boolean {
+  let success = true;
+  try {
+    fs.writeFileSync(filePath, data);
+  } catch (error) {
+    console.warn('Failed to write to file');
+    success = false;
+  }
+  return success;
+}
+
 async function updateFile(filePath: string, file: any, placeholder: string, value: string) {
   const r = new RegExp(placeholder, 'g');
   if(value){
@@ -183,4 +195,6 @@ export default {
   copyAndUpdateFiles,
   readMainConfig,
   readSubConfig,
-}
+  writeFile,
+};
+
