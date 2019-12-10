@@ -1,10 +1,10 @@
-# rd-vue-cli
+# rdvue
 
 CLI Tool for Vue Front-end Development
 
 ## Setup Instructions
 
-    $ npm install rd-vue-cli
+    $ npm install rdvue
 
 ## Usage
 
