@@ -1,5 +1,6 @@
 {
   "name": "rd-vue-cli",
+  "version": "0.0.1",
   "description": "command line tool for generating and managing vue projects",
   "author": "avidal_realdecoy",
   "main": "build/main/index.js",
