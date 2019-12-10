@@ -1,4 +1,4 @@
-# rd-vue-cli
+# rdvue
 
 CLI Tool for Vue Front-end Development
 
