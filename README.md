@@ -1,13 +1,10 @@
-# rd-vue-generator
+# rd-vue-cli
 
 CLI Tool for Vue Front-end Development
 
 ## Setup Instructions
 
-    $ npm install
-    $ npm run build
-    $ cd build
-    $ npm link
+    $ npm install rd-vue-cli
 
 ## Usage
 

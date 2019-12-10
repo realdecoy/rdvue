@@ -4,7 +4,7 @@ import gitUserName from "git-user-name";
 
 const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
 const CLI_PROJECT_ROOT: string = __dirname;
-const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../../template');
+const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../template');
 
 function USAGE_TEMPLATE(
     action = 'rdvue',

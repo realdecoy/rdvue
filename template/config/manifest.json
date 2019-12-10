@@ -76,7 +76,7 @@
       "target": "src/page/app/index.ts"
     },
     {
-      "source": "meta/.gitignore",
+      "source": "meta/gitignore.txt",
       "target": ".gitignore"
     },
     {

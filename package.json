@@ -1,12 +1,16 @@
 {
-  "name": "rdvue",
-  "version": "0.0.1",
-  "description": "vue cli tool for creating and managing vue projects",
+  "name": "rd-vue-cli",
+  "description": "command line tool for generating and managing vue projects",
+  "author": "avidal_realdecoy",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/YOUR_GITHUB_USER_NAME/real-time",
-  "license": "MIT",
+  "homepage": "https://bitbucket.org/realdecoyteam/rd-vue-cli#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://avidal_realdecoy@bitbucket.org/realdecoyteam/rd-vue-cli.git"
+  },
   "bin": {
     "rdvue": "./build/main/index.js"
   },
@@ -19,7 +23,6 @@
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
-    "test": "run-s build test:*",
     "test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
     "test:unit": "nyc --silent ava",
     "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
@@ -63,7 +66,7 @@
     "@types/git-user-name": "^2.0.0",
     "@types/inquirer": "^6.5.0",
     "@types/mkdirp": "^0.5.2",
-    "@types/rimraf": "^2.0.2",
+    "@types/rimraf": "^2.0.3",
     "arg": "^4.1.0",
     "bluebird": "^3.5.5",
     "chalk": "^2.4.2",
