@@ -1,5 +1,6 @@
 {
   "name": "rd-vue-cli",
+  "version": "0.0.1",
   "description": "command line tool for generating and managing vue projects",
   "author": "avidal_realdecoy",
   "main": "build/main/index.js",
@@ -23,6 +24,7 @@
     "fix": "run-s fix:*",
     "fix:prettier": "prettier \"src/**/*.ts\" --write",
     "fix:tslint": "tslint --fix --project .",
+    "test": "run-s build test:*",
     "test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
     "test:unit": "nyc --silent ava",
     "watch": "run-s clean build:main && run-p \"build:main -- -w\" \"test:unit -- --watch\"",
