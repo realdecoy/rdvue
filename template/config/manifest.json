@@ -61,6 +61,10 @@
       "target": "cypress.json"
     },
     {
+      "source": "cypress/tsconfig.json",
+      "target": "tsconfig.json"
+    },
+    {
       "source": "cypress/test.spec.js",
       "target": "cypress/integration/specs/test.spec.js"
     },

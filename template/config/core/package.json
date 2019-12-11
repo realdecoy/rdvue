@@ -20,6 +20,9 @@
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
+    "@types/jquery": "^3.3.30",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.14.8",
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-e2e-nightwatch": "^3.4.0",
     "@vue/cli-plugin-pwa": "^3.4.0",
