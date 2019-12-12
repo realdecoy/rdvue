@@ -62,7 +62,7 @@
     },
     {
       "source": "cypress/tsconfig.json",
-      "target": "tsconfig.json"
+      "target": "cypress/tsconfig.json"
     },
     {
       "source": "cypress/test.spec.js",
