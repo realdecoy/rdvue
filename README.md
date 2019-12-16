@@ -1,23 +1,28 @@
 # rdvue cli [[![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
 
-The [Sequelize](https://sequelize.org) Command Line Interface (CLI)
+The [rdvue](https://bitbucket.org/realdecoyteam/rd-vue-cli/src/master/) Command Line Interface (CLI)
+
 
 ## Table of Contents
 - [Installation](#installation)
+- [Usage](#usage)
 - [Contributing](#contributing)
 - [Documentation](#documentation)
+
 
 ## Installation
 
 ```bash
-$ npm install rd-vue-cli -g
+$ npm install rdvue -g
+$ npm install rdvue
 ```
 
 And then you should be able to run the CLI with
 
 ```bash
-$ rdvue cli --help
+$ rdvue --help
 ```
+
 
 ### Usage
 
@@ -29,12 +34,15 @@ rdvue [command]
 Commands:
   rdvue <feature> --new                        
 
+
+rdvue [features]
+
 Features:
-  project
-  component
-  page
-  service
-  model
+  project       Generates a new Vue.js Typescript Single Page Application(SPA)    
+  component     Generates shell for a basic component with all its base boilerplate code
+  page          Generates shell for a basic page with all its base boilerplate code
+  service       Generates shell for a basic service with all its base boilerplate code
+  model         Generates shell for a basic model/interface
 
 
 Options:
@@ -42,11 +50,13 @@ Options:
   --help        Show help                                                   [boolean]
 ```
 
+
 ## Contributing
 
-RD VUE CLI is always looking for contributions. You can help us by fixing bugs, reporting bugs or improving documentation.
+RD VUE CLI is a part of the FP Frontend Practice area, where contributions are welcomed, You can help us by fixing bugs, reporting bugs or improving documentation.
 
 Please read the [contributing guidelines](CONTRIBUTING.md).
+
 
 ## Documentation
 
