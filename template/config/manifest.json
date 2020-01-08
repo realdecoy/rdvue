@@ -88,8 +88,8 @@
       "target": "cypress/tsconfig.json"
     },
     {
-      "source": "cypress/test.spec.js",
-      "target": "cypress/integration/specs/test.spec.js"
+      "source": "cypress/integration/specs/test.spec.ts",
+      "target": "cypress/integration/specs/test.spec.ts"
     },
     {
       "source": "meta/babel.config.js",
