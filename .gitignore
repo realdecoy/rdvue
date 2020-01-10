@@ -1,5 +1,5 @@
 node_modules
-test
+cli
 src/**.js
 .idea/*
 package-lock.json
