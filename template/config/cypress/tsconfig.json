@@ -4,9 +4,10 @@
       "baseUrl": "../node_modules",
       "target": "es5",
       "lib": ["es5", "dom"],
-      "types": ["cypress","jquery","node","mocha"]
+      "types": ["jquery","node","mocha"]
     },
     "include": [
-      "**/*.ts"
+      "**/*.ts",
+      "../node_modules/cypress"
     ]
   }
