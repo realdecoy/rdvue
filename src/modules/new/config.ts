@@ -4,6 +4,9 @@ import files from '../../lib/files';
 
 const DEFAULT_PROJECT_NAME = 'my-vue-app';
 const REGEX_PROJECT_NAME = /^\s+$/;
+const NEW_OPTION = '--new';
+const TEMPLATE_PROJECT_URL: string = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
+const OPTIONS_ALL: string[] = [NEW_OPTION];
 
 async function validate(this: any, value: string): Promise<any> {
   let done = this.async();
@@ -34,9 +37,6 @@ function parsePrompts(config: any): any[] {
       };
     }) : [];
 }
-
-const TEMPLATE_PROJECT_URL: string = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
-const OPTIONS_ALL: string[] = ['--new'];
 
 const QUESTIONS: any[] = [
   {
