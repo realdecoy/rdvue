@@ -7,6 +7,8 @@ import CONFIG from "./config";
 import ROOT_CONFIG from "../../config";
 import process from "process";
 
+const NEW_OPTION = '--new';
+
 async function run (operation: any, USAGE: any): Promise<any> {
     try {
         const userOptions = operation.options;
@@ -14,43 +16,56 @@ async function run (operation: any, USAGE: any): Promise<any> {
         const hasInvalidOption = util.hasInvalidOption(userOptions, CONFIG.OPTIONS_ALL);
         const questions = CONFIG.parsePrompts(USAGE[operation.command].config);
         const currentConfig = USAGE[operation.command].config;
+        const isConfig = operation.command === 'config';
+        const isStore = operation.command === 'store';
+        const isProject = operation.command == 'project'
+        const featureNameStore: any = {};
         let sourceDirectory = '';
         let installDirectory = '';
         let projectName = '<project-name>';
-        const featureNameStore: any = {};
+        let answers: any; 
         let kebabNameKey = '';
         let nameKey = '';
-
-        if(!hasHelpOption && !hasInvalidOption && userOptions.includes('--new')){
-            if(operation.command == 'project'){
-                // get required config
+        let projectRoot: string | null; 
+        let absProjectRoot: string;
+        let configFile: string = '';
+        let projectRootConfig: object;
+        let strProjectRootConfig: string = '';
+        
+        
+        if (!hasHelpOption && !hasInvalidOption && userOptions.includes(NEW_OPTION)) {
+            if (isProject) {
+                // Get required config
                 await run({options: userOptions, command:'config'}, USAGE);
+
                 // console.log(">>>project created");
                 await run({options: userOptions, command:'store'}, USAGE);
                 
                 util.nextSteps(projectName);
             } else {
-                const isNewProject = operation.command === 'config';
-                const answers: any = await inquirer.prompt(questions);
-                if(currentConfig.arguments){
+
+                answers = await inquirer.prompt(questions);
+
+                if (currentConfig.arguments){
                     nameKey = currentConfig.arguments[0].name;
                     if (util.hasKebab(nameKey) === true) {
                         featureNameStore[nameKey] = util.getKebabCase(answers[nameKey])
                         featureNameStore[`${nameKey.split('Kebab')[0]}`] = util.getPascalCase(answers[nameKey]);
-                    }else{
+                    } else {
                         featureNameStore[nameKey] = util.getPascalCase(answers[nameKey]);
                         featureNameStore[`${nameKey}Kebab`] = util.getKebabCase(answers[nameKey]);
                     }
                     kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
                 }
+
                 util.sectionBreak();
 
-                const projectRoot = util.getProjectRoot();
+                projectRoot = util.getProjectRoot();
 
-                if(isNewProject){
+                if (isConfig) {
                     sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
                     installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
-                } else if (operation.command === 'store'){
+                } else if (isStore){
                     sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else {
@@ -58,7 +73,7 @@ async function run (operation: any, USAGE: any): Promise<any> {
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;
                 }
 
-                if (projectRoot !== null && !isNewProject) {
+                if (projectRoot !== null && !isConfig) {
                     installDirectory = `${projectRoot}/${installDirectory}`;
                 }
 
@@ -66,13 +81,13 @@ async function run (operation: any, USAGE: any): Promise<any> {
                     sourceDirectory, installDirectory,
                     currentConfig.files, featureNameStore);
 
-                if(isNewProject){
-                    const absProjectRoot = path.resolve(installDirectory);
-                    const configFile = path.join(absProjectRoot, '.rdvue');
-                    const projectRootConfig = {
+                if (isConfig) {
+                    absProjectRoot = path.resolve(installDirectory);
+                    configFile = path.join(absProjectRoot, '.rdvue');
+                    projectRootConfig = {
                         projectRoot: absProjectRoot
                     };
-                    const strProjectRootConfig = JSON.stringify(projectRootConfig);
+                    strProjectRootConfig = JSON.stringify(projectRootConfig);
 
                     // Writing the project root path to the .rdvue file
                     files.writeFile(configFile, strProjectRootConfig);
@@ -84,7 +99,8 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 }
             }
         } else {
-            console.log(util.displayHelp(USAGE[operation.command].menu)); // show help menu
+            // Show Help Menu
+            console.log(util.displayHelp(USAGE[operation.command].menu)); 
         }
         return true;
     } catch (err) {
