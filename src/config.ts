@@ -9,7 +9,7 @@ const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../template');
 function USAGE_TEMPLATE(
     action = 'rdvue',
     command = '<feature>',
-    options = '[options]'): any[] {
+    options = '[options]'): object[] {
     return [
         {
             header: 'Usage:',
