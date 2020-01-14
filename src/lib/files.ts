@@ -9,7 +9,8 @@ import util from 'util';
 
 import _ from 'lodash';
 
-import configs from '../config';
+import { TEMPLATE_ROOT } from '../config';
+import { Files, Manifest, Template } from '../types/index';
 import { hasKebab } from './util';
 
 const Spinner = CLI.Spinner;
@@ -17,7 +18,7 @@ const fs = bluebirdPromise.promisifyAll(fileSystem);
 const copyFilePromise = util.promisify(fs.copyFile);
 const getDirName = path.dirname;
 
-function readFile(filePath: string) {
+function readFile(filePath: string): string {
   return fs.readFileSync(filePath, 'utf-8');
 }
 
@@ -45,20 +46,20 @@ function getCurrentDirectoryBase(): string {
 /**
  *  Read main config file to determine options the tool can take
  */
-function readMainConfig(): any {
-  const filePath = path.join(configs.TEMPLATE_ROOT, '/template.json');
+function readMainConfig(): Template {
+  const filePath = path.join(TEMPLATE_ROOT, '/template.json');
 
-  return JSON.parse(readFile(filePath));
+  return JSON.parse(readFile(filePath)) as Template;
 }
 
 /**
  *  Read sub config for features to determine details about the individual
  * features and what they are capable of
  */
-function readSubConfig(command: string): any {
-  const filePath = path.join(configs.TEMPLATE_ROOT, `/${command}`, '/manifest.json');
+function readSubConfig(command: string): Manifest {
+  const filePath = path.join(TEMPLATE_ROOT, `/${command}`, '/manifest.json');
 
-  return JSON.parse(readFile(filePath));
+  return JSON.parse(readFile(filePath)) as Manifest;
 }
 
 async function clearTempFiles(folderPath: string) {
@@ -92,7 +93,7 @@ function writeFile(filePath: string, data: string): boolean {
   return success;
 }
 
-async function updateFile(filePath: string, file: any, placeholder: string, value: string) {
+async function updateFile(filePath: string, file: string, placeholder: string, value: string) {
   const r = new RegExp(placeholder, 'g');
   if(value !== ''){
     const newValue = file.replace(r, value);
@@ -107,7 +108,7 @@ async function updateFile(filePath: string, file: any, placeholder: string, valu
  * and replace template values with input recieved form user
  * through prompts
  */
-async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: any) {
+async function readAndUpdateFeatureFiles(destDir: string, files: Array<>, args: any) {
   const kebabNameKey = (Object.keys(args)
   .filter(f => hasKebab(f)))[0];
 
@@ -141,7 +142,8 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any[], args: an
  * Copy files
  */
 async function copyFiles(srcDir: string, destDir: string, files: []) {
-  return Promise.all(files.map((f: any) => {
+  return Promise.all(files.map(
+    async (f: any) => {
     let source = '';
     let dest = '';
     // Get source and destination paths
@@ -161,9 +163,9 @@ async function copyFiles(srcDir: string, destDir: string, files: []) {
   }));
 }
 
-function replaceTargetFileNames(files: any[], featureName: string){
+function replaceTargetFileNames(files: Files[], featureName: string){
   if(featureName !== ''){
-    files.forEach((file:any)=>{
+    files.forEach((file:Files)=>{
       if(file.target !== file.source){
         file.target = replaceFileName(file.target, /(\${.*?\})/, featureName);
       }
@@ -189,9 +191,10 @@ async function copyAndUpdateFiles(
   // Copy files from template and place in target destination
   await copyFiles(sourceDirectory, installDirectory, fileList)
   .then(() => {
+    const kebabName = args[kebabNameKey] !== undefined ? args[kebabNameKey] : '';
+
     // tslint:disable-next-line:no-console
-      console.log(`[Processing
-        ${args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''} files]`);
+    console.log(`[Processing ${kebabName} files]`);
   })
   .catch((err: any) => {
     // tslint:disable-next-line:no-console

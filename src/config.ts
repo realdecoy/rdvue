@@ -31,7 +31,7 @@ function USAGE_TEMPLATE(
     ];
 }
 
-export default {
+export {
     TEMPLATE_PROJECT_URL,
     USAGE_TEMPLATE,
     CLI_PROJECT_ROOT,
