@@ -1,48 +1,57 @@
-import figlet from "figlet";
-import chalk from "chalk";
+import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
+import figlet from 'figlet';
 import path from 'path';
-import files from './files';
+import { fileExists } from './files';
 
 const helpOptions = ['--help', '-h'];
 
 function heading(): void {
+  // tslint:disable-next-line:no-console
   console.log(
     chalk.yellow(
-      figlet.textSync("rdvue", {
-        horizontalLayout: "full"
+      figlet.textSync('rdvue', {
+        horizontalLayout: 'full'
       })
     )
   );
 }
 function sectionBreak(): void {
-  console.log(chalk.gray("********************************"));
+  // tslint:disable-next-line:no-console
+  console.log(chalk.gray('********************************'));
 }
 function lineBreak(): void {
+  // tslint:disable-next-line:no-console
   console.log('\n');
 }
 function nextSteps(featureName: string): void {
+  // tslint:disable-next-line:no-console
   console.log(chalk.magenta('\nNext Steps:'));
+  // tslint:disable-next-line:no-console
   console.log(` - cd ${featureName}\n - npm install\n - npm run-script serve`);
 }
 function hasCommand(args: string[], commands: string[]): boolean {
-  // console.log(`hasCommand: ${commands}`);
+  // Console.log(`hasCommand: ${commands}`);
   const found = commands.some((r) => args.includes(r));
+
   return found;
 }
 function hasOptions(args: string[], options: string[]): boolean {
-  // console.log(`hasOptions: ${options}`);
+  // Console.log(`hasOptions: ${options}`);
   const found = options.some((r) => args.includes(r));
+
   return found;
 }
 function hasHelpOption(args: string[]): boolean {
-  // console.log(`hasHelpOptions: ${helpOptions}`);
+  // Console.log(`hasHelpOptions: ${helpOptions}`);
   const found = helpOptions.some((r) => args.includes(r));
+
   return found;
 }
 function hasInvalidOption(args: string[], options: string[]): boolean {
-  // console.log(`hasInvalidOption: ${args}`);
+  // Console.log(`hasInvalidOption: ${args}`);
   const found = args.some((r) => !options.includes(r) && !helpOptions.includes(r));
+
   return found;
 }
 function parseCommand(args: string[], commands: string[]): string {
@@ -59,14 +68,17 @@ function getKebabCase(str: string) {
   const regex = /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g;
   const match = str.match(regex);
   let result = '';
-  if (match) {
-    result = match.map(x => x.toLowerCase()).join('-');
+  if (match !== null) {
+    result = match.map(x => x.toLowerCase())
+    .join('-');
   }
 
   return result;
 }
 function getPascalCase(str: string) {
-  return (str.replace(/\w\S*/g, m => `${m.charAt(0).toLocaleUpperCase()}${m.substr(1).toLocaleLowerCase()}`))
+  return (str.replace(/\w\S*/g, m => `${m.charAt(0)
+    .toLocaleUpperCase()}${m.substr(1)
+    .toLocaleLowerCase()}`));
 }
 function hasKebab(str = '') {
   let result = false;
@@ -88,11 +100,12 @@ function isRootDirectory(location: string | null = null): boolean {
 
     if (testLocation !== null) {
       paths = testLocation.split(path.sep);
-      if (paths && paths.length > 0 && paths[1] === '') {
+      if (paths.length > 0 && paths[1] === '') {
         isRoot = true;
       }
     }
   } catch (e) {
+  // tslint:disable-next-line:no-console
     console.warn('Error checking root directory');
     isRoot = true;
   }
@@ -115,7 +128,7 @@ function getProjectRoot() {
     back = path.join(back, '../');
     currentTraverse += 1;
 
-    if (files.fileExists(path.join(currentPath, configFileName))) {
+    if (fileExists(path.join(currentPath, configFileName))) {
       projectRoot = currentPath;
       break;
     } else if (isRootDirectory(currentPath)) {
@@ -149,11 +162,12 @@ function checkProjectValidity(operation: any) {
     }
 
   }
+
   return results;
 }
 
 
-export default {
+export {
   heading,
   sectionBreak,
   lineBreak,
