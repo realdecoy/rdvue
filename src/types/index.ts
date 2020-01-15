@@ -43,7 +43,7 @@ interface TemplateImport{
 interface Files{
     source: string;
     target: string;
-    content: [FilesContent]
+    content: [FilesContent];
 }
 
 interface FilesContent{
@@ -51,34 +51,8 @@ interface FilesContent{
     replace: string;
 }
 
-// Usage interface
-interface USAGE{
-    menu: [Menu];
-}
-
-interface Menu{
-    header: string;
-    optionList: [List];
-    content?: string | [Content];
-}
-
-interface Content{
-    header: string;
-    content: [ContentObj]
-}
-
-interface ContentObj{
-    name: string;
-    summary: string;
-}
-
-interface List{
-    name: string;
-    description: string;
-}
 
 export{
-    USAGE,
     Manifest,
     Template,
     Files
