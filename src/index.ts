@@ -102,12 +102,13 @@ const run = async () => {
     const operation: any = {};
     let project;
 
-    // Declare project here
-
     // Populate command usage information
     await populateUsage(commands, requiredCommands, mainConfig);
 
+    // Display "rdvue" heading
     util.heading();
+
+    // Check to see if user arguments include any valid commands
     if (util.hasCommand(userArgs, commands)) {
       operation.command = util.parseCommand(userArgs, commands);
       operation.options = util.parseOptions(userArgs, commands);
