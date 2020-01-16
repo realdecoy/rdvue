@@ -4,56 +4,37 @@
 */
 
 // SubConfig return Obj
-interface Manifest{
+export interface Manifest{
     version: number;
     name: string;
     description: string;
-    singleUserPerProject: boolean;
-    arguments: [ManifestArguments];
-    sourceDirectory: string;
     installDirectory: string;
-    files: [ManifestFiles];
+    sourceDirectory: string;
+    files: ManifestFiles[];
+    singleUserPerProject?: boolean;
+    arguments?: ManifestArguments[];
 }
 
-interface ManifestArguments{
+export interface ManifestArguments{
     name: string;
     type: string;
     description: string;
     isPrivate?: boolean;
 }
 
-interface ManifestFiles{
+export interface ManifestFiles{
     source: string;
     target: string;
-}
-
-// MainConfig return object
-interface Template{
-    version: number;
-    sourceDirectory: string;
-    import: TemplateImport;
-}
-
-interface TemplateImport{
-    required: [string, string];
-    optional: [string, string, string, string];
 }
 
 // Model interface
-interface Files{
+export interface Files{
     source: string;
     target: string;
-    content: [FilesContent];
+    content: FilesContent[];
 }
 
-interface FilesContent{
+export interface FilesContent{
     matchRegex: string;
     replace: string;
 }
-
-
-export{
-    Manifest,
-    Template,
-    Files
-};

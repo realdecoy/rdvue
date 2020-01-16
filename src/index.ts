@@ -2,12 +2,16 @@
 
 import chalk from 'chalk';
 import clear from 'clear';
-import CONFIG from './config';
-import files from './lib/files';
+import { USAGE_TEMPLATE, } from './config';
+import { readMainConfig, readSubConfig } from './lib/files';
 import util from './lib/util';
-import MODULE_NEW from './modules/new';
 
-const USAGE: any = {};
+import MODULE_NEW from './modules/new';
+import { Manifest } from './types/index';
+import { Config, USAGE } from './types/usage';
+
+let USAGE: USAGE;
+const isContentDefined = USAGE.general.menu[1].content !== undefined;
 
 /**
  * Parse commands provided by template manifest files
@@ -16,18 +20,19 @@ const USAGE: any = {};
  */
 
 async function populateCommand(command: string, required = false){
-  let commandConfig: any = {};
-  commandConfig = await files.readSubConfig(command);
-  USAGE[command] = {};
+  let commandConfig: Manifest;
+  commandConfig = readSubConfig(command);
   USAGE[command].config = commandConfig;
+
   // Dont add general help text if command is required for new project generation
-  if(!required){
+  if(!required && isContentDefined){
     USAGE.general.menu[1].content.push({
       name: `${chalk.magenta(command)}`,
       summary: commandConfig.description,
     });
   }
-  USAGE[command].menu = CONFIG.USAGE_TEMPLATE(undefined, command, undefined);
+
+  USAGE[command].menu = USAGE_TEMPLATE(undefined, command, undefined);
   if (commandConfig.arguments !== undefined && commandConfig.arguments !== []) {
     USAGE[command].menu.splice(1, 0, {
       header: 'Arguments',
@@ -42,18 +47,20 @@ async function populateCommand(command: string, required = false){
   }
 }
 
-async function populateUsage(commands: string[], requiredCommands: string[], mainConfig: any) {
-  USAGE.general = {};
-  USAGE.general.menu = CONFIG.USAGE_TEMPLATE();
+async function populateUsage(commands: string[], requiredCommands: string[], mainConfig: Config) {
+  // USAGE.general = {};
+  USAGE.general.menu = USAGE_TEMPLATE();
   USAGE.general.menu.splice(1, 0, {
     header: 'Features',
     content: [],
   });
   // Add project config to USAGE
-  USAGE.general.menu[1].content.push({
-    name: `${chalk.magenta('project')}`,
-    summary: 'Generate a new project.',
-  });
+  if(isContentDefined){
+    USAGE.general.menu[1].content.push({
+      name: `${chalk.magenta('project')}`,
+      summary: 'Generate a new project.',
+    });
+  }
 
   for (const command of commands) {
     await populateCommand(command);
@@ -63,8 +70,7 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
   }
 
   commands.push('project');
-  let commandConfig: any = {};
-  USAGE.project = {};
+  let commandConfig: Config;
   commandConfig = mainConfig;
   commandConfig.name = 'project';
   commandConfig.arguments = [
@@ -87,12 +93,11 @@ clear();
 
 const run = async () => {
   try {
-    const mainConfig = await files.readMainConfig();
+    const mainConfig = readMainConfig();
     const commands: string[] = mainConfig.import.optional;
     const requiredCommands: string[] = mainConfig.import.required;
     // Populate command usage information
     await populateUsage(commands, requiredCommands, mainConfig);
-
     // Check for user arguments
     const userArgs = process.argv.slice(2);
 
@@ -105,6 +110,9 @@ const run = async () => {
       const project = util.checkProjectValidity(operation);
       if (project.isValid) {
         await MODULE_NEW.run(operation, USAGE);
+
+        console.log(operation);
+        console.log(project);
       } else {
         throw Error(`'${process.cwd()}' is not a valid Vue project.`);
       }

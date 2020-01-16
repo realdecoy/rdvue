@@ -167,7 +167,7 @@ function checkProjectValidity(operation: any) {
 }
 
 
-export {
+export default {
   heading,
   sectionBreak,
   lineBreak,

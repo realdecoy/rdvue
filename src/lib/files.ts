@@ -6,12 +6,13 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 import util from 'util';
+import utils from './util';
 
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import { Files, Manifest, Template } from '../types/index';
-import { hasKebab } from './util';
+import { Files, Manifest } from '../types/index';
+import { Template } from '../types/template';
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -108,12 +109,12 @@ async function updateFile(filePath: string, file: string, placeholder: string, v
  * and replace template values with input recieved form user
  * through prompts
  */
-async function readAndUpdateFeatureFiles(destDir: string, files: Array<>, args: any) {
+async function readAndUpdateFeatureFiles(destDir: string, files: any, args: any) {
   const kebabNameKey = (Object.keys(args)
-  .filter(f => hasKebab(f)))[0];
+  .filter(f => utils.hasKebab(f)))[0];
 
   const pascalNameKey = (Object.keys(args)
-  .filter(f => !hasKebab(f)))[0];
+  .filter(f => !utils.hasKebab(f)))[0];
 
   for (const file of files) {
     let filePath = '';
@@ -125,7 +126,7 @@ async function readAndUpdateFeatureFiles(destDir: string, files: Array<>, args: 
           if(contentBlock && contentBlock.matchRegex){
             const fileContent = readFile(filePath);
             await updateFile(filePath, fileContent, contentBlock.matchRegex,
-              ( hasKebab(contentBlock.replace) === true ?
+              ( utils.hasKebab(contentBlock.replace) === true ?
               args[kebabNameKey] : (contentBlock.replace.includes('${')) ?
               args[pascalNameKey] : contentBlock.replace));
           }
@@ -180,7 +181,7 @@ async function copyAndUpdateFiles(
   sourceDirectory: string, installDirectory: string, fileList: any, args: any
   ): Promise<any> {
   const kebabNameKey = (Object.keys(args)
-  .filter(f => hasKebab(f)))[0];
+  .filter(f => utils.hasKebab(f)))[0];
   // Spinner animation
   const status = new Spinner('updating template files from boilerplate...',
   ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷']);

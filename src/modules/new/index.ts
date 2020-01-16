@@ -1,18 +1,24 @@
-import chalk from "chalk";
-import files from "../../lib/files";
-import util from "../../lib/util";
+import chalk from 'chalk';
 import path from 'path';
-import inquirer from "inquirer";
-import CONFIG from "./config";
-import ROOT_CONFIG from "../../config";
-import process from "process";
+import process from 'process';
+
+import { copyAndUpdateFiles, writeFile } from '../../lib/files';
+import util from '../../lib/util';
+
+import { OPTIONS_ALL, parsePrompts } from './config';
+
+import inquirer from 'inquirer';
+import { TEMPLATE_ROOT } from '../../config';
+
+
+
 
 async function run (operation: any, USAGE: any): Promise<any> {
     try {
         const userOptions = operation.options;
         const hasHelpOption = util.hasHelpOption(userOptions);
-        const hasInvalidOption = util.hasInvalidOption(userOptions, CONFIG.OPTIONS_ALL);
-        const questions = CONFIG.parsePrompts(USAGE[operation.command].config);
+        const hasInvalidOption = util.hasInvalidOption(userOptions, OPTIONS_ALL);
+        const questions = parsePrompts(USAGE[operation.command].config);
         const currentConfig = USAGE[operation.command].config;
         let sourceDirectory = '';
         let installDirectory = '';
@@ -48,13 +54,13 @@ async function run (operation: any, USAGE: any): Promise<any> {
                 const projectRoot = util.getProjectRoot();
 
                 if(isNewProject){
-                    sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
+                    sourceDirectory = path.join(TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
                     installDirectory = `${featureNameStore[kebabNameKey]}${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else if (operation.command === 'store'){
-                    sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
+                    sourceDirectory = path.join(TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}`;
                 } else {
-                    sourceDirectory = path.join(ROOT_CONFIG.TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
+                    sourceDirectory = path.join(TEMPLATE_ROOT,operation.command,(currentConfig.sourceDirectory !== './' ? currentConfig.sourceDirectory: ''));
                     installDirectory = `src/${currentConfig.installDirectory !== './' ? currentConfig.installDirectory: ''}/${featureNameStore[kebabNameKey]}`;
                 }
 
@@ -62,7 +68,7 @@ async function run (operation: any, USAGE: any): Promise<any> {
                     installDirectory = `${projectRoot}/${installDirectory}`;
                 }
 
-                await files.copyAndUpdateFiles(
+                await copyAndUpdateFiles(
                     sourceDirectory, installDirectory,
                     currentConfig.files, featureNameStore);
 
@@ -75,7 +81,7 @@ async function run (operation: any, USAGE: any): Promise<any> {
                     const strProjectRootConfig = JSON.stringify(projectRootConfig);
 
                     // Writing the project root path to the .rdvue file
-                    files.writeFile(configFile, strProjectRootConfig);
+                    writeFile(configFile, strProjectRootConfig);
 
                     process.chdir(`./${featureNameStore[kebabNameKey]}`);
                 } else {

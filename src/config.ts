@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import gitUserName from 'git-user-name';
 import path from 'path';
+import { Menu } from './types/usage';
 
 const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
 const CLI_PROJECT_ROOT: string = __dirname;
@@ -9,7 +10,7 @@ const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../template');
 function USAGE_TEMPLATE(
     action = 'rdvue',
     command = '<feature>',
-    options = '[options]'): object[] {
+    options = '[options]'): Menu[] {
     return [
         {
             header: 'Usage:',
