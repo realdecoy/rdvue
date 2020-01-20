@@ -4,7 +4,7 @@
 */
 
 // Usage interface
-export interface USAGE{
+export interface Usage{
     general: Coalation;
     component: Coalation;
     service: Coalation;
@@ -16,18 +16,20 @@ export interface USAGE{
 }
 
 export interface Coalation{
-    config: Config;
-    menu: Menu[];
+    config: Config | ProjConf;
+    menu?: Menu[];
 }
 export interface Config{
     version: number;
-    name: string;
-    description: string;
-    arguments: Argu[];
+    name?: string;
+    description?: string;
+    arguments?: Argu[];
     sourceDirectory: string;
-    installDirectory: string;
-    files: ConfFiles[];
-    import: Import;
+    installDirectory?: string;
+    files?: ConfFiles[] | [string, ConfFiles];
+    import?: Import;
+    singleUserPerProject?: boolean;
+    menu?: Menu[];
 }
 
 // Import interface
@@ -61,7 +63,7 @@ export interface Menu{
 }
 
 
-interface ContentObj{
+export interface ContentObj{
     name: string;
     summary: string;
 }
@@ -69,4 +71,16 @@ interface ContentObj{
 interface List{
     name: string;
     description: string;
+}
+
+export interface ProjConf{
+    config: ProjConfContinued;
+}
+
+export interface ProjConfContinued{
+    version: number;
+    sourceDirectory: string;
+    import: Import;
+    name: string;
+    arguments: Argu;
 }
