@@ -6,13 +6,13 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 import util from 'util';
-import utils from './util';
+import * as utils from './util';
 
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import { Files, Manifest } from '../types/index';
-import { Template } from '../types/template';
+import { Files } from '../types/index';
+import { Config } from '../types/usage';
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -47,20 +47,20 @@ function getCurrentDirectoryBase(): string {
 /**
  *  Read main config file to determine options the tool can take
  */
-function readMainConfig(): Template {
+function readMainConfig(): Config {
   const filePath = path.join(TEMPLATE_ROOT, '/template.json');
 
-  return JSON.parse(readFile(filePath)) as Template;
+  return JSON.parse(readFile(filePath)) as Config;
 }
 
 /**
  *  Read sub config for features to determine details about the individual
  * features and what they are capable of
  */
-function readSubConfig(command: string): Manifest {
+function readSubConfig(command: string): Config {
   const filePath = path.join(TEMPLATE_ROOT, `/${command}`, '/manifest.json');
 
-  return JSON.parse(readFile(filePath)) as Manifest;
+  return JSON.parse(readFile(filePath)) as Config;
 }
 
 async function clearTempFiles(folderPath: string) {

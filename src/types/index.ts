@@ -38,3 +38,8 @@ export interface FilesContent{
     matchRegex: string;
     replace: string;
 }
+
+export interface Command{
+    command: string;
+    options: string[];
+}
