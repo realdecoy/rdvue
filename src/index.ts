@@ -5,7 +5,7 @@ import clear from 'clear';
 import CONFIG from './config';
 import files from './lib/files';
 import util from './lib/util';
-import MODULE_NEW from './modules/new';
+import * as MODULE_NEW from './modules/new';
 
 const USAGE: any = {};
 
@@ -68,7 +68,7 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
   }
 
   commands.push('project');
-   
+
   USAGE.project = {};
 
   commandConfig = mainConfig;
@@ -98,7 +98,7 @@ const run = async () => {
     const commands: string[] = mainConfig.import.optional;
     const requiredCommands: string[] = mainConfig.import.required;
     // Check for user arguments
-    const userArgs = process.argv.slice(2);                         
+    const userArgs = process.argv.slice(2);
     const operation: any = {};
     let project;
 
