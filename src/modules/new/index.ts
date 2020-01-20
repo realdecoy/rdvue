@@ -10,18 +10,18 @@ import process from "process";
 // TO DO: MOVE THESE DECLARATIONS TO NEW FILE
 const NEW_OPTION = '--new';
 interface Directories {
-    sourceDir: string,
-    installDir: string,
+    sourceDir: string;
+    installDir: string;
 }
 
 interface getDirectoryInput {
-    featureNameStore: any,
-    currentConfig: any,
-    kebabNameKey: any,
-    isConfig: boolean,
-    isStore: boolean,
-    projectRoot: string | null,
-    userCommand: string,
+    featureNameStore: any;
+    currentConfig: any;
+    kebabNameKey: any;
+    isConfig: boolean;
+    isStore: boolean;
+    projectRoot: string | null;
+    userCommand: string;
 }
 
 enum command {
@@ -31,9 +31,11 @@ enum command {
 }
 
 /**
- * Description: Transforms user input into Kebab and or Pascal case updating nameKey prop on object 'featureNameStore'
- * @param currentConfig 
- * @param answers 
+ * Description: Transforms user input into Kebab and or Pascal case updating
+ * nameKey prop on object 'featureNameStore'
+ * @param currentConfig - current configuration for the project in use.
+ * @param answers - user arguments that is returned in response to inquirer questions.
+ * see: https://www.npmjs.com/package/inquirer
  */
 function updateNameProp (currentConfig: any, answers: any) {
     const featureName: any = {};
@@ -42,8 +44,8 @@ function updateNameProp (currentConfig: any, answers: any) {
     let pascalCase = '';
 
     if (currentConfig.arguments) {
-        // nameKey is the variable which holds the name of the argument to be retrieved from user
-        // example of nameKey: "pageName" or "pageNameKebab"
+        // NameKey is the variable which holds the name of the argument to be retrieved from user
+        // Example of nameKey: "pageName" or "pageNameKebab"
         nameKey = currentConfig.arguments[0].name;
 
         if (util.hasKebab(nameKey) === true) {
@@ -65,8 +67,10 @@ function updateNameProp (currentConfig: any, answers: any) {
 }
 
 /**
- * Description: Finding the path of the source and install directories for the feature being processed
- * @param dirInput 
+ * Description: Finding the path of the source and install directories for the
+ * feature being processed
+ * @param dirInput - necessessary input required to obtain install and source directory 
+ * for given project
  */
 function getDirectories( dirInput: getDirectoryInput ) : Directories
 {
@@ -107,9 +111,9 @@ function getDirectories( dirInput: getDirectoryInput ) : Directories
 
 /**
  * Description: Updating the configuration to hace correct directory place for .rdvue file
- * @param featureNameStore 
- * @param directories 
- * @param kebabNameKey 
+ * @param featureNameStore - object holding both Kebab and Pascal cases of the feature name
+ * @param directories - install and source directory
+ * @param kebabNameKey - the kebab case of the feature name
  */
 function updateConfig (featureNameStore: any, directories: any, kebabNameKey = '') // void function
 {
@@ -144,9 +148,9 @@ async function run (operation: any, USAGE: any): Promise<any> {
         const isProject = userCommand === command.project;
         const currentConfig = USAGE[userCommand].config; 
         const questions = CONFIG.parsePrompts(USAGE[userCommand].config);
+        const projectName = '<project-name>';
 
-        let featureNameStore: any = {};
-        let projectName = '<project-name>';
+        let featureNameStore: any = {}; 
         let answers: any; 
         let kebabNameKey = '';
         let projectRoot: string | null; 
@@ -166,10 +170,10 @@ async function run (operation: any, USAGE: any): Promise<any> {
 
             // console.log(">>>project created");
             await run({options: userOptions, command:'store'}, USAGE);
-            
+
             util.nextSteps(projectName);
-            return true; 
-        } 
+            return true;
+        }
 
         answers = await inquirer.prompt(questions);
 
@@ -179,7 +183,8 @@ async function run (operation: any, USAGE: any): Promise<any> {
         // Obtaining the path of the project root
         projectRoot = util.getProjectRoot();
 
-        // Obtaining the Kebab and Pascal case of the feature name input by user and placing it in object "featureNameStore"
+        // Obtaining the Kebab and Pascal case of the feature name input by user and
+        // placing it in object "featureNameStore"
         featureNameStore = updateNameProp(currentConfig, answers);
         // Retrieving the Kebab case from the featureNameStore object
         kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
@@ -216,9 +221,9 @@ async function run (operation: any, USAGE: any): Promise<any> {
         // TO DO: Implement more contextual errors
         if (err) {
             throw new Error(err);
-        }    
+        }
     }
 }
-export default {
+export {
     run,
 }
