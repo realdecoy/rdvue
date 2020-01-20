@@ -66,6 +66,7 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
     header: 'Features',
     content: [],
   });
+
   // Add project config to USAGE
   if(USAGE.general.menu[1].content !== undefined){
     contentPopulate(
@@ -99,6 +100,7 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
       'isPrivate': true
     }
   ];
+
   USAGE.project.config = commandConfig;
 }
 
@@ -118,8 +120,16 @@ const run = async () => {
     await populateUsage(commands, requiredCommands, mainConfig);
     // Check for user arguments
     const userArgs = process.argv.slice(2);
+    const operation: any = {};
+    let project;
 
+    // Populate command usage information
+    await populateUsage(commands, requiredCommands, mainConfig);
+
+    // Display "rdvue" heading
     util.heading();
+
+    // Check to see if user arguments include any valid commands
     if (util.hasCommand(userArgs, commands)) {
       // Operation.command = util.parseCommand(userArgs, commands);
       // Operation.options = util.parseOptions(userArgs, commands);
@@ -128,14 +138,15 @@ const run = async () => {
         options: util.parseOptions(userArgs, commands)
       };
 
-      const project = util.checkProjectValidity(operation);
+      project = util.checkProjectValidity(operation);
       if (project.isValid) {
         await MODULE_NEW.run(operation, USAGE);
       } else {
         throw Error(`'${process.cwd()}' is not a valid Vue project.`);
       }
-    } else { // Show help text
-      console.log(util.displayHelp(USAGE.general.menu as Section[]));
+    } else { 
+      // Show Help Text
+      console.log(util.displayHelp(USAGE.general.menu));
     }
     process.exit();
   } catch (err) {
