@@ -21,6 +21,7 @@ async function cloneRemoteRepo (
       })
       .catch((err: Error) => {
         status.stop();
+        // TODO: Ensure errors at this point are comprehensible 
         throw new Error(err.toString());
       });
   }
