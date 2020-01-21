@@ -60,6 +60,12 @@ async function populateCommand(command: string, required = false){
   }
 }
 
+/**
+ * Description: Adding the necessary information to the Usage object to be used in command execution
+ * @param commands - acceptable commands that can be used with rdvue
+ * @param requiredCommands - commands that cant be user requested but are required to create a project (eg. config and store)
+ * @param mainConfig - config data populated from template.json. Describes options the tool can take.
+ */
 async function populateUsage(commands: string[], requiredCommands: string[], mainConfig: Config) {
   USAGE.general.menu = USAGE_TEMPLATE();
   USAGE.general.menu.splice(1, 0, {
@@ -108,21 +114,21 @@ clear();
 
 const run = async () => {
   try {
+
     // Assign config to object return from JSON parse
     const mainConfig = readMainConfig();
-
+     // Return value if true and empty array if false
     const commands: string[] = (mainConfig.import !== undefined) ? mainConfig.import.optional : [];
     const requiredCommands: string[] = (mainConfig.import !== undefined) ?
-    // Return value if true and empty array if false
-    mainConfig.import.required : [];
+                                        mainConfig.import.required : [];
+    // Check for user arguments
+    const userArgs = process.argv.slice(2);
+
+    let project;
 
     // Populate command usage information
     await populateUsage(commands, requiredCommands, mainConfig);
-    // Check for user arguments
-    const userArgs = process.argv.slice(2);
-    const operation: any = {};
-    let project;
-
+  
     // Populate command usage information
     await populateUsage(commands, requiredCommands, mainConfig);
 
@@ -138,6 +144,8 @@ const run = async () => {
         options: util.parseOptions(userArgs, commands)
       };
 
+      // TODO: Error checking: ensure that user has only input one command
+
       project = util.checkProjectValidity(operation);
       if (project.isValid) {
         await MODULE_NEW.run(operation, USAGE);
@@ -146,10 +154,12 @@ const run = async () => {
       }
     } else { 
       // Show Help Text
+      // TODO: Throw and error for invalid command
       console.log(util.displayHelp(USAGE.general.menu));
     }
     process.exit();
   } catch (err) {
+    // TODO: Implement more contextual errors
     if (err) {
       console.log(chalk.red(`${err}`));
     }
@@ -162,5 +172,6 @@ run()
   console.info('info');
 })
 .catch((err: Error) => {
+  // TODO: Implement more contextual errors
   console.error(err);
 });
