@@ -1,4 +1,4 @@
-export const USAGE = {
+export const USAGEDEFAULT = {
     general: {
         menu: [
             {

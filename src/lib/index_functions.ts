@@ -1,5 +1,5 @@
 import {USAGE} from '../index';
-import { Coalation, Config, ContentObj, Menu, ProjConf } from '../types/usage';
+import { Coalation, Config, ContentObj, Menu } from '../types/usage';
 
 export function commandAssignment(
     com: string,

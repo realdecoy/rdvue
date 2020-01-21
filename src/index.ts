@@ -6,20 +6,19 @@ import { USAGE_TEMPLATE } from './config';
 import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
-import { Section } from 'command-line-usage';
 import { commandAssignment, contentPopulate } from './lib/index_functions';
 import * as MODULE_NEW from './modules/new';
+import { USAGEDEFAULT } from './object/usage';
 import { Command } from './types/index';
 import { Config, Usage } from './types/usage';
 
-export let USAGE: Usage;
+export let USAGE: Usage = USAGEDEFAULT;
 
 /**
  * Parse commands provided by template manifest files
  * and generate the usage help menus as well as extract
  * info useful for generating the sub features
  */
-
 async function populateCommand(command: string, required = false){
   let commandConfig: Config;
   commandConfig = readSubConfig(command);
@@ -116,11 +115,12 @@ const run = async () => {
     // Return value if true and empty array if false
     mainConfig.import.required : [];
 
+    console.log(USAGE);
     // Populate command usage information
     await populateUsage(commands, requiredCommands, mainConfig);
+    const sliceNumber = 2;
     // Check for user arguments
-    const userArgs = process.argv.slice(2);
-    const operation: any = {};
+    const userArgs = process.argv.slice(sliceNumber);
     let project;
 
     // Populate command usage information
@@ -144,9 +144,10 @@ const run = async () => {
       } else {
         throw Error(`'${process.cwd()}' is not a valid Vue project.`);
       }
-    } else { 
+    } else {
       // Show Help Text
-      console.log(util.displayHelp(USAGE.general.menu));
+      // TODO: Fix and enable
+      // console.log(util.displayHelp(USAGE.general.menu));
     }
     process.exit();
   } catch (err) {
@@ -162,5 +163,5 @@ run()
   console.info('info');
 })
 .catch((err: Error) => {
-  console.error(err);
+  console.error(`Error at run: ${err}`);
 });
