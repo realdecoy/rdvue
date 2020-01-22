@@ -157,7 +157,7 @@ async function readAndUpdateFeatureFiles(
     let filePath = '';
     if(typeof file !== 'string'){
       filePath = path.join(destDir, file.target);
-      if (file.content !== undefined && Array.isArray(file.content)) {
+      if (file.content !==undefined && Array.isArray(file.content)) {
         for (const contentBlock of file.content) {
 
           if(contentBlock && contentBlock.matchRegex){
@@ -168,7 +168,7 @@ async function readAndUpdateFeatureFiles(
               args[pascalNameKey] : contentBlock.replace));
           }
         }
-      } else {
+      }else if(file.content){
         // tslint:disable-next-line:no-console
         console.log(`[INTERNAL : failed to match and replace  for :${args[kebabNameKey]} files]`);
       }

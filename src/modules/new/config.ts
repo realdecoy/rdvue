@@ -9,14 +9,16 @@ const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyte
 const OPTIONS_ALL: string[] = [NEW_OPTION];
 
 async function validate(this: any, value: string): Promise<any> {
-  let done = this.async();
-  if (value.length === 0 || value.match(REGEX_PROJECT_NAME)) {
+  const done = this.async();
+  if (value.length === 0 || value.match(REGEX_PROJECT_NAME) !== null) {
     done(chalk.red(`You need to enter a valid project name`));
-    return;
+
+    return undefined;
   } //  Directory with specified name already exists
   else if (files.directoryExists(value)) {
     done(chalk.red(`Project with the name ${value} already exists`));
-    return;
+
+    return undefined;
   } else {
     done(null, true);
   }

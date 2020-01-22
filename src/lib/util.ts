@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
+import { Command } from '../types/index';
 import { fileExists } from './files';
 
 const helpOptions = ['--help', '-h'];
@@ -155,7 +156,7 @@ function getProjectRoot() {
   return projectRoot;
 }
 
-function checkProjectValidity(operation: any) {
+function checkProjectValidity(operation: Command) {
   const results = {
     isValid: false,
     projectRoot: null as any,
