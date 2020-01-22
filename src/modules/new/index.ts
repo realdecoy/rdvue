@@ -6,7 +6,7 @@ import CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
 import * as files from '../../lib/files';
-import { commandAssignment, commandAssignmentModule } from '../../lib/index_functions';
+import { commandAssignmentModule } from '../../lib/index_functions';
 import * as util from '../../lib/util';
 import { Command } from '../../types/index';
 import { Usage } from '../../types/usage';
@@ -175,11 +175,12 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
         let projectRoot: string | null;
         let directories: Directories;
         let dirInput: GetDirectoryInput;
-        
+
         // If the user did not use the '--new' option or had an invalid command or option
         if (!isValidCreateRequest) {
              // Show Help Menu
-             console.log(util.displayHelp(commandAssignment(operation.command,).menu));
+             // TODO: Re Enable and Fix
+             // console.log(util.displayHelp(USAGE[operation.command].menu));
 
              return true;
         }
@@ -235,7 +236,7 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
         } else {
             // Create a section break
             util.sectionBreak();
-            console.log(chalk.magenta("[All Done]"));
+            console.log(chalk.magenta('[All Done]'));
         }
 
         return true;

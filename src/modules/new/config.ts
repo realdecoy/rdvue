@@ -5,7 +5,7 @@ import * as files from '../../lib/files';
 const DEFAULT_PROJECT_NAME = 'my-vue-app';
 const REGEX_PROJECT_NAME = /^\s+$/;
 const NEW_OPTION = '--new';
-const TEMPLATE_PROJECT_URL: string = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
+const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
 const OPTIONS_ALL: string[] = [NEW_OPTION];
 
 async function validate(this: any, value: string): Promise<any> {
