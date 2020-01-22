@@ -17,7 +17,6 @@ interface Directories {
     sourceDir: string;
     installDir: string;
 }
-
 interface GetDirectoryInput {
     featureNameStore: any;
     currentConfig: any;
@@ -56,7 +55,7 @@ function updateNameProp (currentConfig: any, answers: any) {
             kebabCase = nameKey;
             pascalCase = `${nameKey.split('Kebab')[0]}`;
 
-            featureName[kebabCase] = util.getKebabCase(answers[nameKey])
+            featureName[kebabCase] = util.getKebabCase(answers[nameKey]);
             featureName[pascalCase] = util.getPascalCase(answers[nameKey]);
         } else {
             kebabCase = `${nameKey}Kebab`;
@@ -73,7 +72,7 @@ function updateNameProp (currentConfig: any, answers: any) {
 /**
  * Description: Finding the path of the source and install directories for the
  * feature being processed
- * @param dirInput - necessessary input required to obtain install and source directory 
+ * @param dirInput - necessessary input required to obtain install and source directory
  * for given project
  */
 function getDirectories( dirInput: GetDirectoryInput ) : Directories
@@ -121,7 +120,7 @@ function getDirectories( dirInput: GetDirectoryInput ) : Directories
     return {
         installDir: installDirectory,
         sourceDir: sourceDirectory,
-    }
+    };
 
 }
 
@@ -131,11 +130,11 @@ function getDirectories( dirInput: GetDirectoryInput ) : Directories
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
  */
-function updateConfig (featureNameStore: any, directories: any, kebabNameKey = '') // void function
+function updateConfig (featureNameStore: any, directories: Directories, kebabNameKey = '')
 {
     let absProjectRoot = '';
     let configFile = '';
-    let projectRootConfig: object; 
+    let projectRootConfig: object;
     let strProjectRootConfig = '';
 
     absProjectRoot = path.resolve(directories.installDir);
@@ -148,7 +147,7 @@ function updateConfig (featureNameStore: any, directories: any, kebabNameKey = '
     // Writing the project root path to the .rdvue file
     files.writeFile(configFile, strProjectRootConfig);
 
-    // Changes the current working directory to 
+    // Changes the current working directory to the specific feature folder
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
@@ -209,7 +208,8 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
         // placing it in object "featureNameStore"
         featureNameStore = updateNameProp(currentConfig, answers);
         // Retrieving the Kebab case from the featureNameStore object
-        kebabNameKey = (Object.keys(featureNameStore).filter(f => util.hasKebab(f)))[0];
+        kebabNameKey = (Object.keys(featureNameStore)
+                                .filter(f => util.hasKebab(f)))[0];
 
         // Input object for getDirectories() function
         dirInput = {
