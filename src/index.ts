@@ -8,6 +8,7 @@ import * as util from './lib/util';
 
 import { commandAssignment, contentPopulate } from './lib/index_functions';
 import * as MODULE_NEW from './modules/new';
+
 import { USAGEDEFAULT } from './object/usage';
 import { Command } from './types/index';
 import { Config, Usage } from './types/usage';
@@ -28,13 +29,11 @@ async function populateCommand(command: string, required = false){
 
   // Dont add general help text if command is required for new project generation
   if(!required){
-    if(USAGE.general.menu !== undefined){
-      contentPopulate(
-        USAGE.general.menu,
-        `${chalk.magenta(command)}`,
-        `${commandConfig.description}`
-        );
-    }
+    contentPopulate(
+      USAGE.general.menu,
+      `${chalk.magenta(command)}`,
+      `${commandConfig.description}`
+      );
   }
 
   // Assign the command for the usage object to a variable to reuse
@@ -146,8 +145,7 @@ const run = async () => {
       }
     } else {
       // Show Help Text
-      // TODO: Fix and enable
-      // console.log(util.displayHelp(USAGE.general.menu));
+      console.log(util.displayHelp(USAGE.general.menu));
     }
     process.exit();
   } catch (err) {

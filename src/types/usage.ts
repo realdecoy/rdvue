@@ -5,8 +5,8 @@
 
 // Usage interface
 export interface Usage{
-    general: Coalation;
-    component: Coalation;
+    general: GenContinued;
+    component: CompContinued;
     service: Coalation;
     model: Coalation;
     page: Coalation;
@@ -15,14 +15,33 @@ export interface Usage{
     project: Coalation;
 }
 
-// interface GenContinued{
-//     menu: GenMenu[];
-// }
-// interface GenMenu{}
+// Reused types
+interface GenMenu{
+    header: string;
+    content?: string | ContentObj[];
+    optionList?: List[];
+}
+
+
+// General types
+export interface GenContinued{
+    menu: GenMenu[];
+}
+
 export interface Coalation{
     config?: Config | ProjConf;
     menu?: Menu[];
 }
+// General Types ended
+
+
+// Component Types
+export interface CompContinued{
+    config: Config;
+    menu: GenMenu[];
+}
+
+// Config types
 export interface Config{
     version: number;
     name?: string;
@@ -52,7 +71,7 @@ export interface Argu{
 export interface ConfFiles{
     source: string;
     target: string;
-    content: Info[];
+    content?: Info[];
 }
 
 export interface Info{
@@ -62,7 +81,7 @@ export interface Info{
 // Also used in config.ts in src directory
 export interface Menu{
     header: string;
-    optionList: List[];
+    optionList?: List[];
     content?: string | ContentObj[];
 }
 
