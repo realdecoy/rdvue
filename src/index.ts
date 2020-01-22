@@ -61,8 +61,10 @@ async function populateCommand(command: string, required = false){
 /**
  * Description: Adding the necessary information to the Usage object to be used in command execution
  * @param commands - acceptable commands that can be used with rdvue
- * @param requiredCommands - commands that cant be user requested but are required to create a project (eg. config and store)
- * @param mainConfig - config data populated from template.json. Describes options the tool can take.
+ * @param requiredCommands - commands that cant be user requested
+ * but are required to create a project (eg. config and store)
+ * @param mainConfig - config data populated from template.json.
+ * Describes options the tool can take.
  */
 async function populateUsage(commands: string[], requiredCommands: string[], mainConfig: Config) {
   USAGE.general.menu = USAGE_TEMPLATE();
@@ -121,17 +123,11 @@ const run = async () => {
     // Return value if true and empty array if false
     mainConfig.import.required : [];
 
-    console.log(USAGE);
-    // Populate command usage information
-    await populateUsage(commands, requiredCommands, mainConfig);
     const sliceNumber = 2;
     // Check for user arguments
     const userArgs = process.argv.slice(sliceNumber);
     let project;
 
-    // Populate command usage information
-    await populateUsage(commands, requiredCommands, mainConfig);
-  
     // Populate command usage information
     await populateUsage(commands, requiredCommands, mainConfig);
 

@@ -9,7 +9,7 @@ export function commandAssignment(
     {
     switch(com){
       case 'general':
-        return (hasAsign) ? USAGE.general.config = asignee : USAGE.general;
+        return USAGE.general;
       case 'component':
         return (hasAsign) ? USAGE.component.config = asignee : USAGE.component;
       case 'service':
@@ -25,7 +25,7 @@ export function commandAssignment(
       case 'project':
         return (hasAsign) ? USAGE.project.config = asignee : USAGE.project;
     default:
-        return (hasAsign) ? USAGE.general.config = asignee : USAGE.general;
+        return USAGE.general;
     }
   }
 
@@ -43,10 +43,8 @@ export function contentPopulate(obj: Menu[], name: string, summary: string){
 export function commandAssignmentModule(com: string): Config
   {
   switch(com){
-    case 'general':
-      return USAGE.general.config as Config;
     case 'component':
-      return USAGE.component.config as Config;
+      return USAGE.component.config;
     case 'service':
       return USAGE.service.config as Config;
     case 'model':
@@ -60,6 +58,6 @@ export function commandAssignmentModule(com: string): Config
     case 'project':
       return USAGE.project.config as Config;
   default:
-      return USAGE.general.config as Config;
+    return USAGE.project.config as Config;
   }
 }
