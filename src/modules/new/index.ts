@@ -11,7 +11,7 @@ import * as util from '../../lib/util';
 import { Command } from '../../types/index';
 import { Usage } from '../../types/usage';
 
-// TO DO: MOVE THESE DECLARATIONS TO NEW FILE
+// TODO: MOVE THESE DECLARATIONS TO NEW FILE
 const NEW_OPTION = '--new';
 interface Directories {
     sourceDir: string;
@@ -241,7 +241,7 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
 
         return true;
     } catch (err) {
-        // TO DO: Implement more contextual errors
+        // TODO: Implement more contextual errors
         if (err) {
             throw new Error(err);
         }

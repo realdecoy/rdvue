@@ -19,33 +19,52 @@ const fs = bluebirdPromise.promisifyAll(fileSystem);
 const copyFilePromise = util.promisify(fs.copyFile);
 const getDirName = path.dirname;
 
+/**
+ * Description: Read file located at specified filePath
+ * @param filePath - a path to a file
+ */
 function readFile(filePath: string): string {
   return fs.readFileSync(filePath, 'utf-8');
 }
 
+/**
+ * Description: Determine whether or not the given file path is a 
+ *              directory which exists
+ * @param filePath - a path to a file
+ */
 function directoryExists(filePath: string) {
   try {
     return fs.statSync(filePath)
               .isDirectory();
   } catch (err) {
+    // TODO: log error here
     return false;
   }
 }
 
+/**
+ * Description: Determine whether or not the given file exists
+ * @param filePath - a path to a file
+ */
 function fileExists(filePath: string) {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
+    // TODO: log error here
     return false;
   }
 }
 
+/**
+ * Description: Get the base of the directory you are currently in.
+ * Returns the last portion of the current path
+ */
 function getCurrentDirectoryBase(): string {
   return path.basename(process.cwd());
 }
 
 /**
- *  Read main config file to determine options the tool can take
+ *  Description: Read main config file to determine options the tool can take
  */
 function readMainConfig(): Config {
   const filePath = path.join(TEMPLATE_ROOT, '/template.json');
@@ -54,8 +73,9 @@ function readMainConfig(): Config {
 }
 
 /**
- *  Read sub config for features to determine details about the individual
- * features and what they are capable of
+ * Description: Read sub config for features to determine details about 
+ *              the individual features and what they are capable of
+ * @param command - the command used to retrieve associated configuration
  */
 function readSubConfig(command: string): Config {
   const filePath = path.join(TEMPLATE_ROOT, `/${command}`, '/manifest.json');
@@ -63,12 +83,20 @@ function readSubConfig(command: string): Config {
   return JSON.parse(readFile(filePath)) as Config;
 }
 
+/**
+ * Description: Clear temporary files at a given path
+ * @param folderPath - the folder path for which you would like to clear temporary files
+ */
 async function clearTempFiles(folderPath: string) {
    rimraf.sync(folderPath);
 }
 
 /**
- * Replace filename
+ * Description: Replace filename with a given value
+ * @param fileName - filename to be replaced
+ * @param placeholder - pattern used with specified flag in order 
+ *                      to created new RegExp (old file name)
+ * @param value - value to replace old filename
  */
 function replaceFileName(fileName: string, placeholder: RegExp, value: string): string {
   const r = new RegExp(placeholder, 'g');
@@ -78,9 +106,10 @@ function replaceFileName(fileName: string, placeholder: RegExp, value: string): 
 }
 
 /**
- * Write files
+ * Description: Writes given data to a file
+ * @param filePath - path of file which will be created or modified to include given data
+ * @param data - data written to file
  */
-
 function writeFile(filePath: string, data: string): boolean {
   let success = true;
   try {
@@ -108,6 +137,9 @@ async function updateFile(filePath: string, file: string, placeholder: string, v
  * Read files that have been copied to target destination
  * and replace template values with input recieved form user
  * through prompts
+ * @param destDir - target destination
+ * @param files - files to read 
+ * @param args - input received from user
  */
 async function readAndUpdateFeatureFiles(destDir: string, files: any, args: any) {
   const kebabNameKey = (Object.keys(args)
@@ -140,7 +172,10 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any, args: any)
 }
 
 /**
- * Copy files
+ * Description: Copy files from a source directory to a destination directory
+ * @param srcDir - directory from which files will be copied
+ * @param destDir - directory to which files will be copied
+ * @param files - files to be copied
  */
 async function copyFiles(srcDir: string, destDir: string, files: []) {
   return Promise.all(files.map(
@@ -164,6 +199,11 @@ async function copyFiles(srcDir: string, destDir: string, files: []) {
   }));
 }
 
+/**
+ * Description: Update target filenames to include feature name
+ * @param files - filenames which need to be updated
+ * @param featureName - the string used to update the name of the files
+ */
 function replaceTargetFileNames(files: Files[], featureName: string){
   if(featureName !== ''){
     files.forEach((file:Files)=>{
@@ -175,7 +215,12 @@ function replaceTargetFileNames(files: Files[], featureName: string){
 }
 
 /**
- * Copy and update files
+ * Description: Copy and update files from a source directory to a destination 
+ *              (install) directory
+ * @param sourceDirectory - directory in which files are stored
+ * @param installDirectory - destination directory or directory in which
+ *                           has generated files
+ * @param fileList - files to be copied and updated
  */
 async function copyAndUpdateFiles(
   sourceDirectory: string, installDirectory: string, fileList: any, args: any
@@ -199,6 +244,7 @@ async function copyAndUpdateFiles(
   })
   .catch((err: any) => {
     // tslint:disable-next-line:no-console
+    // TODO: Implement more contextual errors
     console.log(err);
   });
 
