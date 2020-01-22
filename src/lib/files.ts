@@ -28,7 +28,7 @@ function readFile(filePath: string): string {
 }
 
 /**
- * Description: Determine whether or not the given file path is a 
+ * Description: Determine whether or not the given file path is a
  *              directory which exists
  * @param filePath - a path to a file
  */
@@ -73,7 +73,7 @@ function readMainConfig(): Config {
 }
 
 /**
- * Description: Read sub config for features to determine details about 
+ * Description: Read sub config for features to determine details about
  *              the individual features and what they are capable of
  * @param command - the command used to retrieve associated configuration
  */
@@ -94,7 +94,7 @@ async function clearTempFiles(folderPath: string) {
 /**
  * Description: Replace filename with a given value
  * @param fileName - filename to be replaced
- * @param placeholder - pattern used with specified flag in order 
+ * @param placeholder - pattern used with specified flag in order
  *                      to created new RegExp (old file name)
  * @param value - value to replace old filename
  */
@@ -138,7 +138,7 @@ async function updateFile(filePath: string, file: string, placeholder: string, v
  * and replace template values with input recieved form user
  * through prompts
  * @param destDir - target destination
- * @param files - files to read 
+ * @param files - files to read
  * @param args - input received from user
  */
 async function readAndUpdateFeatureFiles(
@@ -157,7 +157,7 @@ async function readAndUpdateFeatureFiles(
     let filePath = '';
     if(typeof file !== 'string'){
       filePath = path.join(destDir, file.target);
-      if (file.content !==undefined && Array.isArray(file.content)) {
+      if (file.content !== undefined && Array.isArray(file.content)) {
         for (const contentBlock of file.content) {
 
           if(contentBlock && contentBlock.matchRegex){
@@ -168,7 +168,7 @@ async function readAndUpdateFeatureFiles(
               args[pascalNameKey] : contentBlock.replace));
           }
         }
-      }else if(file.content){
+      } else {
         // tslint:disable-next-line:no-console
         console.log(`[INTERNAL : failed to match and replace  for :${args[kebabNameKey]} files]`);
       }
