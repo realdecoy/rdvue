@@ -15,8 +15,12 @@ export interface Usage{
     project: Coalation;
 }
 
+// interface GenContinued{
+//     menu: GenMenu[];
+// }
+// interface GenMenu{}
 export interface Coalation{
-    config: Config | ProjConf;
+    config?: Config | ProjConf;
     menu?: Menu[];
 }
 export interface Config{
@@ -58,7 +62,7 @@ export interface Info{
 // Also used in config.ts in src directory
 export interface Menu{
     header: string;
-    optionList?: List[];
+    optionList: List[];
     content?: string | ContentObj[];
 }
 
