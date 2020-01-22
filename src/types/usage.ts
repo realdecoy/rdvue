@@ -1,3 +1,4 @@
+import { Files } from './index';
 /*
  Please note:
  Linked interfaces have the parent interface followed by there name
@@ -49,10 +50,15 @@ export interface Config{
     arguments?: Argu[];
     sourceDirectory: string;
     installDirectory?: string;
-    files?: ConfFiles[] | [string, ConfFiles];
+    files?: Array<string|Files>;
     import?: Import;
     singleUserPerProject?: boolean;
     menu?: Menu[];
+}
+
+export interface test {
+    elem1:number;
+    elem2: Array<string|Files>;
 }
 
 // Import interface
@@ -68,11 +74,6 @@ export interface Argu{
     isPrivate?: boolean;
 }
 
-export interface ConfFiles{
-    source: string;
-    target: string;
-    content?: Info[];
-}
 
 export interface Info{
     matchRegex: string;

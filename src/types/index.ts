@@ -31,7 +31,7 @@ export interface ManifestFiles{
 export interface Files{
     source: string;
     target: string;
-    content: FilesContent[];
+    content?: FilesContent[];
 }
 
 export interface FilesContent{

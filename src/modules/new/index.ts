@@ -9,7 +9,7 @@ import * as files from '../../lib/files';
 import { commandAssignmentModule } from '../../lib/index_functions';
 import * as util from '../../lib/util';
 import { Command } from '../../types/index';
-import { Usage } from '../../types/usage';
+import { Config, Usage } from '../../types/usage';
 
 // TODO: MOVE THESE DECLARATIONS TO NEW FILE
 const NEW_OPTION = '--new';
@@ -19,8 +19,8 @@ interface Directories {
 }
 interface GetDirectoryInput {
     featureNameStore: any;
-    currentConfig: any;
-    kebabNameKey: any;
+    currentConfig: Config;
+    kebabNameKey: string;
     isConfig: boolean;
     isStore: boolean;
     projectRoot: string | null;
@@ -40,13 +40,13 @@ enum command {
  * @param answers - user arguments that is returned in response to inquirer questions.
  * see: https://www.npmjs.com/package/inquirer
  */
-function updateNameProp (currentConfig: any, answers: any) {
+function updateNameProp (currentConfig: Config, answers: any) {
     const featureName: any = {};
     let nameKey = '';
     let kebabCase = '';
     let pascalCase = '';
 
-    if (currentConfig.arguments) {
+    if (currentConfig.arguments !== undefined) {
         // NameKey is the variable which holds the name of the argument to be retrieved from user
         // Example of nameKey: "pageName" or "pageNameKebab"
         nameKey = currentConfig.arguments[0].name;
@@ -224,9 +224,11 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
 
         // Determine the directories in which the project files are to be stored
         directories = getDirectories( dirInput );
-        await files.copyAndUpdateFiles(
-            directories.sourceDir, directories.installDir,
-            currentConfig.files, featureNameStore);
+        if(currentConfig.files !== undefined){
+            await files.copyAndUpdateFiles(
+                directories.sourceDir, directories.installDir,
+                currentConfig.files, featureNameStore);
+        }
 
         // If executing the 'config' command
         if (isConfig) {

@@ -141,7 +141,12 @@ async function updateFile(filePath: string, file: string, placeholder: string, v
  * @param files - files to read 
  * @param args - input received from user
  */
-async function readAndUpdateFeatureFiles(destDir: string, files: any, args: any) {
+async function readAndUpdateFeatureFiles(
+    destDir: string,
+    files: Files[] | Array<string|Files>,
+    args: any
+    )
+{
   const kebabNameKey = (Object.keys(args)
   .filter(f => utils.hasKebab(f)))[0];
 
@@ -152,7 +157,7 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any, args: any)
     let filePath = '';
     if(typeof file !== 'string'){
       filePath = path.join(destDir, file.target);
-      if (file.content && Array.isArray(file.content)) {
+      if (file.content !==undefined && Array.isArray(file.content)) {
         for (const contentBlock of file.content) {
 
           if(contentBlock && contentBlock.matchRegex){
@@ -177,9 +182,9 @@ async function readAndUpdateFeatureFiles(destDir: string, files: any, args: any)
  * @param destDir - directory to which files will be copied
  * @param files - files to be copied
  */
-async function copyFiles(srcDir: string, destDir: string, files: []) {
+async function copyFiles(srcDir: string, destDir: string, files:Array<string|Files>) {
   return Promise.all(files.map(
-    async (f: any) => {
+    async (f: Files | string) => {
     let source = '';
     let dest = '';
     // Get source and destination paths
@@ -204,12 +209,14 @@ async function copyFiles(srcDir: string, destDir: string, files: []) {
  * @param files - filenames which need to be updated
  * @param featureName - the string used to update the name of the files
  */
-function replaceTargetFileNames(files: Files[], featureName: string){
-  if(featureName !== ''){
-    files.forEach((file:Files)=>{
+function replaceTargetFileNames(files: Array<string|Files>, featureName: string){
+   if(featureName !== ''){
+    files.forEach((file:string | Files)=>{
+     if(typeof file !== 'string'){
       if(file.target !== file.source){
         file.target = replaceFileName(file.target, /(\${.*?\})/, featureName);
       }
+     }
     });
   }
 }
@@ -223,7 +230,10 @@ function replaceTargetFileNames(files: Files[], featureName: string){
  * @param fileList - files to be copied and updated
  */
 async function copyAndUpdateFiles(
-  sourceDirectory: string, installDirectory: string, fileList: any, args: any
+    sourceDirectory: string,
+    installDirectory: string,
+    fileList: Files[] | Array<string|Files>,
+    args: any
   ): Promise<any> {
   const kebabNameKey = (Object.keys(args)
   .filter(f => utils.hasKebab(f)))[0];
