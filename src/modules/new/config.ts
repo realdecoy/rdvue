@@ -1,12 +1,14 @@
 import chalk from 'chalk';
-import gitUserName from 'git-user-name';
+import {
+  DEFAULT_PROJECT_NAME,
+  OPTIONS_ALL,
+  REGEX_PROJECT_NAME,
+  TEMPLATE_PROJECT_URL
+} from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
+import { Config } from '../../types/usage';
 
-const DEFAULT_PROJECT_NAME = 'my-vue-app';
-const REGEX_PROJECT_NAME = /^\s+$/;
-const NEW_OPTION = '--new';
-const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
-const OPTIONS_ALL: string[] = [NEW_OPTION];
+
 
 async function validate(this: any, value: string): Promise<any> {
   const done = this.async();
@@ -24,7 +26,7 @@ async function validate(this: any, value: string): Promise<any> {
   }
 }
 
-function parsePrompts(config: any): any[] {
+function parsePrompts(config: Config): any[] {
   return config.arguments ? config.arguments
     .filter((q: any) => {
       return q.isPrivate === undefined;
