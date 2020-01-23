@@ -1,3 +1,9 @@
+/**
+ * After parsing commands and options and ensuring that they are valid
+ * this module gets called and processes the input given and creates the necessary
+ * configuration and files depending on the specific feature that the user requested.
+ */
+
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import path from 'path';
@@ -5,33 +11,14 @@ import process from 'process';
 import CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
+import { command, NEW_OPTION  } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
 import { commandAssignmentModule } from '../../lib/index_functions';
 import * as util from '../../lib/util';
-import { Command } from '../../types/index';
+import { Command, Directories, featureNameObject, GetDirectoryInput } from '../../types/index';
 import { Config, Usage } from '../../types/usage';
 
-// TODO: MOVE THESE DECLARATIONS TO NEW FILE
-const NEW_OPTION = '--new';
-interface Directories {
-    sourceDir: string;
-    installDir: string;
-}
-interface GetDirectoryInput {
-    featureNameStore: any;
-    currentConfig: Config;
-    kebabNameKey: string;
-    isConfig: boolean;
-    isStore: boolean;
-    projectRoot: string | null;
-    userCommand: string;
-}
 
-enum command {
-    config = 'config',
-    store = 'store',
-    project = 'project'
-}
 
 /**
  * Description: Transforms user input into Kebab and or Pascal case updating
@@ -41,29 +28,31 @@ enum command {
  * see: https://www.npmjs.com/package/inquirer
  */
 function updateNameProp (currentConfig: Config, answers: any) {
-    const featureName: any = {};
+    const featureName: featureNameObject = {};
     let nameKey = '';
-    let kebabCase = '';
-    let pascalCase = '';
+    let kebabCaseKey = '';
+    let pascalCaseKey = '';
 
     if (currentConfig.arguments !== undefined) {
-        // NameKey is the variable which holds the name of the argument to be retrieved from user
+        // NameKey is the variable which holds the name of the key
+        // for the argument to be retrieved from user
         // Example of nameKey: "pageName" or "pageNameKebab"
         nameKey = currentConfig.arguments[0].name;
 
-        if (util.hasKebab(nameKey) === true) {
-            kebabCase = nameKey;
-            pascalCase = `${nameKey.split('Kebab')[0]}`;
+        if (nameKey !== undefined)
+        {
+            if (util.hasKebab(nameKey) === true) {
+                kebabCaseKey = nameKey;
+                pascalCaseKey = `${nameKey.split('Kebab')[0]}`;
 
-            featureName[kebabCase] = util.getKebabCase(answers[nameKey]);
-            featureName[pascalCase] = util.getPascalCase(answers[nameKey]);
-        } else {
-            kebabCase = `${nameKey}Kebab`;
-            pascalCase = nameKey;
-
-            featureName[pascalCase] = util.getPascalCase(answers[nameKey]);
-            featureName[kebabCase] = util.getKebabCase(answers[nameKey]);
+            } else {
+                kebabCaseKey = `${nameKey}Kebab`;
+                pascalCaseKey = nameKey;
+            }
+            featureName[kebabCaseKey] = util.getKebabCase(answers[nameKey]);
+            featureName[pascalCaseKey] = util.getPascalCase(answers[nameKey]);
         }
+
     }
 
     return featureName;
@@ -72,45 +61,34 @@ function updateNameProp (currentConfig: Config, answers: any) {
 /**
  * Description: Finding the path of the source and install directories for the
  * feature being processed
- * @param dirInput - necessessary input required to obtain install and source directory
+ * @param directoryInput - necessessary input required to obtain install and source directory
  * for given project
  */
-function getDirectories( dirInput: GetDirectoryInput ) : Directories
+function getDirectories( directoryInput: GetDirectoryInput ) : Directories
 {
-    const featureNameStore = dirInput.featureNameStore;
-    const currentConfig = dirInput.currentConfig;
-    const kebabNameKey = dirInput.kebabNameKey;
-    const isConfig = dirInput.isConfig;
-    const isStore = dirInput.isStore;
-    const projectRoot = dirInput.projectRoot;
-    const command = dirInput.userCommand;
-    const currSourceDir = currentConfig.sourceDirectory;
-    const currInstallDir = currentConfig.installDirectory;
-    const featName = featureNameStore[kebabNameKey];
+    const kebabNameKey = directoryInput.kebabNameKey;
+    const isConfig = directoryInput.isConfig;
+    const isStore = directoryInput.isStore;
+    const projectRoot = directoryInput.projectRoot;
+    const userCommand = directoryInput.userCommand;
+    const currSourceDir = directoryInput.currentConfig.sourceDirectory;
+    const currInstallDir = directoryInput.currentConfig.installDirectory;
+    const featureName = directoryInput.featureNameStore[kebabNameKey];
     let sourceDirectory = '';
     let installDirectory = '';
 
+    sourceDirectory = path.join(
+        ROOT_CONFIG.TEMPLATE_ROOT,
+        userCommand,
+        (currSourceDir !== './' ? currSourceDir: '')
+    );
+
     if (isConfig) {
-        sourceDirectory = path.join(
-            ROOT_CONFIG.TEMPLATE_ROOT,
-            command,
-            (currSourceDir !== './' ? currSourceDir: '')
-        );
-        installDirectory = `${featName}${currInstallDir !== './' ? currInstallDir: ''}`;
+        installDirectory = `${featureName}${currInstallDir !== './' ? currInstallDir: ''}`;
     } else if (isStore) {
-        sourceDirectory = path.join(
-            ROOT_CONFIG.TEMPLATE_ROOT,
-            command,
-            (currSourceDir !== './' ? currSourceDir: '')
-        );
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir: ''}`;
     } else {
-        sourceDirectory = path.join(
-            ROOT_CONFIG.TEMPLATE_ROOT,
-            command,
-            (currSourceDir !== './' ? currSourceDir: '')
-        );
-        installDirectory = `src/${currInstallDir !== './' ? currInstallDir: ''}/${featName}`;
+        installDirectory = `src/${currInstallDir !== './' ? currInstallDir: ''}/${featureName}`;
     }
 
     if (projectRoot !== null && !isConfig) {
@@ -130,7 +108,7 @@ function getDirectories( dirInput: GetDirectoryInput ) : Directories
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
  */
-function updateConfig (featureNameStore: any, directories: Directories, kebabNameKey = '')
+function updateConfig (featureNameStore: featureNameObject, directories: Directories, kebabNameKey = '')
 {
     let absProjectRoot = '';
     let configFile = '';
@@ -168,14 +146,13 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
         const questions = CONFIG.parsePrompts(commandAssignmentModule(userCommand));
         const projectName = '<project-name>';
 
-        let featureNameStore: any = {};
+        let featureNameStore: featureNameObject = {};
         let answers: any;
         let kebabNameKey = '';
         let projectRoot: string | null;
         let directories: Directories;
-        let dirInput: GetDirectoryInput;
 
-        // If the user did not use the '--new' option or had an invalid command or option
+        // [1] Check if the user did not use the '--new' option or had an invalid command or option
         if (!isValidCreateRequest) {
              // Show Help Menu
              // TODO: Re Enable and Fix
@@ -183,12 +160,15 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
 
              return true;
         }
-        // If the user used the '--new' option with a valid command and option
+        // [1]b If the user used the '--new' option with a valid command and option
+
+        // [2] Check if the user requested a new project
         if (isProject) {
-            // Get required config
+            // [2]b Get required config
             await run({options: userOptions, command:'config'}, USAGE);
 
             // Console.log(">>>project created");
+            // [2]c Create required storage for project
             await run({options: userOptions, command:'store'}, USAGE);
 
             util.nextSteps(projectName);
@@ -196,47 +176,51 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
             return true;
         }
 
+        // [3] Retrieve user response to *questions* asked.
+        // *question* eg: "Please enter the name for the generated project"
         answers = await inquirer.prompt(questions);
 
-        // Create a section break
+        // [4] Create a section break
         util.sectionBreak();
 
-        // Obtaining the path of the project root
+        // [5] Obtaining the path of the project root
         projectRoot = util.getProjectRoot();
 
-        // Obtaining the Kebab and Pascal case of the feature name input by user and
+        // [6] Obtaining the Kebab and Pascal case of the feature (eg. page) name input by user and
         // placing it in object "featureNameStore"
         featureNameStore = updateNameProp(currentConfig, answers);
-        // Retrieving the Kebab case from the featureNameStore object
+
+        // [6]b Retrieving the Kebab case from the featureNameStore object
         kebabNameKey = (Object.keys(featureNameStore)
                                 .filter(f => util.hasKebab(f)))[0];
 
-        // Input object for getDirectories() function
-        dirInput = {
-            featureNameStore,
-            currentConfig,
-            kebabNameKey,
-            isConfig,
-            isStore,
-            projectRoot,
-            userCommand,
-        };
+        // [7] Determine the directories in which the project files are to be stored
+        directories = getDirectories( {featureNameStore,
+                                        currentConfig,
+                                        kebabNameKey,
+                                        isConfig,
+                                        isStore,
+                                        projectRoot,
+                                        userCommand,
+                                    } );
 
-        // Determine the directories in which the project files are to be stored
-        directories = getDirectories( dirInput );
+        // [8] Copy and update files from a source directory to a destination directory
         if(currentConfig.files !== undefined){
             await files.copyAndUpdateFiles(
                 directories.sourceDir, directories.installDir,
                 currentConfig.files, featureNameStore);
         }
 
-        // If executing the 'config' command
+        // [9] If executing the 'config' command
         if (isConfig) {
-            // Updating the '.rdvue' config file to include the project root path
-            updateConfig(featureNameStore, directories, kebabNameKey);
+            // [9]b Updating the '.rdvue' config file to include the project root path
+            if (kebabNameKey !== undefined)
+            {
+                updateConfig(featureNameStore, directories, kebabNameKey);
+            }
 
         } else {
-            // Create a section break
+            // [9]b Create a section break
             util.sectionBreak();
             console.log(chalk.magenta('[All Done]'));
         }
