@@ -19,7 +19,7 @@ import { Coalation, Config, ContentObj, Menu } from '../types/cli';
 /*
  Command given would be a property of the  cli object.
  Based of that command the switch would return the property along with
- the configeration of that file updated to the configeration passed in.
+ the configuration of that file updated to the configuration passed in.
 
  hasAssign determines if the file should be assigned a configuration file
  or if only the property being requested to be returned
