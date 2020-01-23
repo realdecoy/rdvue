@@ -12,7 +12,7 @@ import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
 import { Files } from '../types/index';
-import { Config } from '../types/usage';
+import { Config } from '../types/cli';
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);

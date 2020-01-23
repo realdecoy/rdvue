@@ -1,4 +1,4 @@
-import { Config } from '../types/usage';
+import { Config } from './cli';
 
 /*
  Please note:

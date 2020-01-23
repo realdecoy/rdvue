@@ -6,7 +6,7 @@ import {
   TEMPLATE_PROJECT_URL
 } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
-import { Config } from '../../types/usage';
+import { Config } from '../../types/cli';
 
 
 

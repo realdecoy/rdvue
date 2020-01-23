@@ -1,10 +1,17 @@
+// Default values for the CLI object from the source/index.ts file
+
+// Types that determines what should be present in each default object imported
 import {
     Coalation,
     CompContinued,
     GenContinued
-} from '../types/usage';
+} from '../types/cli';
 
-export const GENERALDEFAULT: GenContinued = {
+/*
+    Naming convention for each property follows as
+    <Property name>_DEFAULT
+*/
+export const GENERAL_DEFAULT: GenContinued = {
     menu: [
         {
             header: '',
@@ -51,7 +58,7 @@ export const GENERALDEFAULT: GenContinued = {
     ]
 };
 
-export const COMPONENTDEFAULT: CompContinued = {
+export const COMPONENT_DEFAULT: CompContinued = {
     config: {
         version: 1,
         name: '',
@@ -158,7 +165,7 @@ export const COMPONENTDEFAULT: CompContinued = {
     ]
 };
 
-export const SERVICEDEFAULT: Coalation =  {
+export const SERVICE_DEFAULT: Coalation =  {
     config: {
         version: 1,
         name: '',
@@ -225,7 +232,7 @@ export const SERVICEDEFAULT: Coalation =  {
     ]
 };
 
-export const MODELDEFAULT: Coalation = {
+export const MODEL_DEFAULT: Coalation = {
     config: {
         version: 1,
         name: '',
@@ -292,7 +299,7 @@ export const MODELDEFAULT: Coalation = {
     ]
 };
 
-export const PAGEDEFUALT: Coalation = {
+export const PAGE_DEFUALT: Coalation = {
     config: {
         version: 1,
         name: '',
@@ -399,7 +406,7 @@ export const PAGEDEFUALT: Coalation = {
     ]
 };
 
-export const CONFIGDEFAULT: Coalation = {
+export const CONFIG_DEFAULT: Coalation = {
     config: {
         version: 1,
         name: '',
@@ -545,7 +552,7 @@ export const CONFIGDEFAULT: Coalation = {
     ]
 };
 
-export const STOREDEFAULT: Coalation = {
+export const STORE_DEFAULT: Coalation = {
     config: {
         version: 1,
         name: '',
@@ -588,7 +595,7 @@ export const STOREDEFAULT: Coalation = {
     ]
 };
 
-export const PROJECTDEFAULT: Coalation = {
+export const PROJECT_DEFAULT: Coalation = {
     config: {
         version: 1,
         sourceDirectory: '',
@@ -613,13 +620,13 @@ export const PROJECTDEFAULT: Coalation = {
     }
 };
 
-export const USAGEDEFAULT = {
-    general: GENERALDEFAULT,
-    component: COMPONENTDEFAULT,
-    service: SERVICEDEFAULT,
-    model: MODELDEFAULT,
-    page: PAGEDEFUALT,
-    config: CONFIGDEFAULT,
-    store: STOREDEFAULT,
-    project: PROJECTDEFAULT
+export const CLI_DEFAULT = {
+    general: GENERAL_DEFAULT,
+    component: COMPONENT_DEFAULT,
+    service: SERVICE_DEFAULT,
+    model: MODEL_DEFAULT,
+    page: PAGE_DEFUALT,
+    config: CONFIG_DEFAULT,
+    store: STORE_DEFAULT,
+    project: PROJECT_DEFAULT
 };

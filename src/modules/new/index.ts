@@ -13,10 +13,10 @@ import CONFIG from './config';
 import * as ROOT_CONFIG from '../../config';
 import { command, NEW_OPTION  } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
-import { commandAssignmentModule } from '../../lib/index_functions';
+import { commandAssignmentModule } from '../../lib/index-functions';
 import * as util from '../../lib/util';
 import { Command, Directories, featureNameObject, GetDirectoryInput } from '../../types/index';
-import { Config, Usage } from '../../types/usage';
+import { Config, Usage } from '../../types/cli';
 
 
 
