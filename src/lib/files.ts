@@ -131,7 +131,7 @@ function writeFile(filePath: string, data: string): boolean {
 
 async function updateFile(filePath: string, file: string, placeholder: string, value: string) {
   const r = new RegExp(placeholder, 'g');
-  if(value !== ''){
+  if (value !== '') {
     const newValue = file.replace(r, value);
     // tslint:disable-next-line:no-console
     console.log(chalk.yellow(` >> processing ${filePath}`));
@@ -153,31 +153,46 @@ async function readAndUpdateFeatureFiles(
     args: any
     )
 {
+
+  // [1] Get the kebab name key from arugments
   const kebabNameKey = (Object.keys(args)
   .filter(f => utils.hasKebab(f)))[0];
 
+  // [2] Get the pascal name key from arguments
   const pascalNameKey = (Object.keys(args)
   .filter(f => !utils.hasKebab(f)))[0];
 
+  // [3] For each file in the list
   for (const file of files) {
     let filePath = '';
-    if(typeof file !== 'string'){
-      filePath = path.join(destDir, file.target);
-      if (file.content !==undefined && Array.isArray(file.content)) {
-        for (const contentBlock of file.content) {
+    if (typeof file === 'string') {
+      continue;
+    }
 
-          if(contentBlock && contentBlock.matchRegex){
-            const fileContent = readFile(filePath);
-            await updateFile(filePath, fileContent, contentBlock.matchRegex,
-              ( utils.hasKebab(contentBlock.replace) === true ?
-              args[kebabNameKey] : (contentBlock.replace.includes('${')) ?
-              args[pascalNameKey] : contentBlock.replace));
-          }
+    // [3b] Add the target file to the path of the desired destination directory
+    filePath = path.join(destDir, file.target);
+
+    // [3c] Check if the contents of the file is defined
+    if (file.content !== undefined && Array.isArray(file.content)) {
+
+      // [3d] For each content block in the file contnet array
+      for (const contentBlock of file.content) {
+
+        if (contentBlock && contentBlock.matchRegex) {
+
+          // [4] Get the content at the desired file path
+          const fileContent = readFile(filePath);
+
+          // [5] Update the contents of the file at given filePath
+          await updateFile(filePath, fileContent, contentBlock.matchRegex,
+            ( utils.hasKebab(contentBlock.replace) === true ?
+            args[kebabNameKey] : (contentBlock.replace.includes('${')) ?
+            args[pascalNameKey] : contentBlock.replace));
         }
-      }else if(file.content){
-        // tslint:disable-next-line:no-console
-        console.log(`[INTERNAL : failed to match and replace  for :${args[kebabNameKey]} files]`);
       }
+    } else if (file.content) {
+      // tslint:disable-next-line:no-console
+      console.log(`[INTERNAL : failed to match and replace  for :${args[kebabNameKey]} files]`);
     }
   }
 }
@@ -194,7 +209,7 @@ async function copyFiles(srcDir: string, destDir: string, files:Array<string|Fil
     let source = '';
     let dest = '';
     // Get source and destination paths
-    if(typeof f !== 'string'){
+    if (typeof f !== 'string') {
       source = path.join(srcDir, f.source);
       dest = path.join(destDir, f.target);
     } else {
@@ -216,10 +231,10 @@ async function copyFiles(srcDir: string, destDir: string, files:Array<string|Fil
  * @param featureName - the string used to update the name of the files
  */
 function replaceTargetFileNames(files: Array<string|Files>, featureName: string){
-   if(featureName !== ''){
-    files.forEach((file:string | Files)=>{
-     if(typeof file !== 'string'){
-      if(file.target !== file.source){
+   if (featureName !== '') {
+    files.forEach((file:string | Files) => {
+     if (typeof file !== 'string') {
+      if (file.target !== file.source) {
         file.target = replaceFileName(file.target, /(\${.*?\})/, featureName);
       }
      }
