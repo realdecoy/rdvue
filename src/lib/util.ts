@@ -159,7 +159,7 @@ function getProjectRoot() {
 function checkProjectValidity(operation: Command) {
   const results = {
     isValid: false,
-    projectRoot: null as any,
+    projectRoot: '',
   };
   let projectRoot: string | null;
 
@@ -168,7 +168,7 @@ function checkProjectValidity(operation: Command) {
   } else {
 
     projectRoot = getProjectRoot();
-    if (projectRoot !== null) {
+    if (projectRoot !== null && projectRoot !== '') {
       results.isValid = true;
       results.projectRoot = projectRoot;
     } else {
