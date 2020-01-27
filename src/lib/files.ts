@@ -1,3 +1,7 @@
+/**
+ * Includes helper functions that associated with files (example: copy files, update files)
+ */
+
 import bluebirdPromise from 'bluebird';
 import chalk from 'chalk';
 import CLI from 'clui';
@@ -11,8 +15,10 @@ import * as utils from './util';
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import { Files } from '../types/index';
+import { commandType, CORE, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/reusable-constants';
 import { Config } from '../types/cli';
+import { Files } from '../types/index';
+
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -24,7 +30,7 @@ const getDirName = path.dirname;
  * @param filePath - a path to a file
  */
 function readFile(filePath: string): string {
-  return fs.readFileSync(filePath, 'utf-8');
+  return fs.readFileSync(filePath, UTF8);
 }
 
 /**
@@ -32,7 +38,7 @@ function readFile(filePath: string): string {
  *              directory which exists
  * @param filePath - a path to a file
  */
-function directoryExists(filePath: string) {
+function directoryExists(filePath: string): boolean {
   try {
     return fs.statSync(filePath)
               .isDirectory();
@@ -46,7 +52,7 @@ function directoryExists(filePath: string) {
  * Description: Determine whether or not the given file exists
  * @param filePath - a path to a file
  */
-function fileExists(filePath: string) {
+function fileExists(filePath: string): boolean {
   try {
     return fs.existsSync(filePath);
   } catch (err) {
@@ -67,7 +73,7 @@ function getCurrentDirectoryBase(): string {
  *  Description: Read main config file to determine options the tool can take
  */
 function readMainConfig(): Config {
-  const filePath = path.join(TEMPLATE_ROOT, '/template.json');
+  const filePath = path.join(TEMPLATE_ROOT, TEMPLATE_FILE);
 
   return JSON.parse(readFile(filePath)) as Config;
 }
@@ -78,7 +84,7 @@ function readMainConfig(): Config {
  * @param command - the command used to retrieve associated configuration
  */
 function readSubConfig(command: string): Config {
-  const filePath = path.join(TEMPLATE_ROOT, `/${command}`, '/manifest.json');
+  const filePath = path.join(TEMPLATE_ROOT, `/${command}`, MANIFEST_FILE);
 
   return JSON.parse(readFile(filePath)) as Config;
 }
@@ -129,7 +135,7 @@ async function updateFile(filePath: string, file: string, placeholder: string, v
     const newValue = file.replace(r, value);
     // tslint:disable-next-line:no-console
     console.log(chalk.yellow(` >> processing ${filePath}`));
-    fs.writeFileSync(filePath, newValue, 'utf-8');
+    fs.writeFileSync(filePath, newValue, UTF8);
   }
 }
 
@@ -192,7 +198,7 @@ async function copyFiles(srcDir: string, destDir: string, files:Array<string|Fil
       source = path.join(srcDir, f.source);
       dest = path.join(destDir, f.target);
     } else {
-      source = path.join(srcDir, `${srcDir.includes('config') ? 'core' : ''}`, f);
+      source = path.join(srcDir, `${srcDir.includes(commandType.config) ? CORE : ''}`, f);
       dest = path.join(destDir, f);
     }
 
@@ -222,7 +228,7 @@ function replaceTargetFileNames(files: Array<string|Files>, featureName: string)
 }
 
 /**
- * Description: Copy and update files from a source directory to a destination 
+ * Description: Copy and update files from a source directory to a destination
  *              (install) directory
  * @param sourceDirectory - directory in which files are stored
  * @param installDirectory - destination directory or directory in which
@@ -238,8 +244,7 @@ async function copyAndUpdateFiles(
   const kebabNameKey = (Object.keys(args)
   .filter(f => utils.hasKebab(f)))[0];
   // Spinner animation
-  const status = new Spinner('updating template files from boilerplate...',
-  ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷']);
+  const status = new Spinner('updating template files from boilerplate...', spinnerIcons);
   status.start();
 
   replaceTargetFileNames(fileList, args[kebabNameKey]);
