@@ -14,8 +14,9 @@ import { commandAssignment, contentPopulate } from './lib/index-functions';
 import * as MODULE_NEW from './modules/new';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
-import { Command } from './types/index';
 import { Config, Usage } from './types/cli';
+import { Command } from './types/index';
+
 
 // Assign CLI object a default value
 export let CLI_DESCRIPTION: Usage = CLI_DEFAULT;
@@ -205,7 +206,7 @@ async function run (){
     }
     process.exit();
   }
-};
+}
 
 run()
 .then(() => {

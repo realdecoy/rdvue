@@ -1,5 +1,6 @@
 // Import chalk from "chalk";
 import CLI from 'clui';
+import { spinnerIcons } from '../constants/reusable-constants';
 const Spinner = CLI.Spinner;
 const git = require('simple-git/promise')();
 
@@ -7,8 +8,7 @@ async function cloneRemoteRepo (
   url: string | null = null, projectName: string | null = null
   ): Promise<any> {
   if (url !== null && projectName !== null) {
-    const status = new Spinner('cloning boilerplate files from remote repo...',
-    ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷']);
+    const status = new Spinner('cloning boilerplate files from remote repo...', spinnerIcons);
     status.start();
 
     return git.silent(true)
@@ -21,7 +21,7 @@ async function cloneRemoteRepo (
       })
       .catch((err: Error) => {
         status.stop();
-        // TODO: Ensure errors at this point are comprehensible 
+        // TODO: Ensure errors at this point are comprehensible
         throw new Error(err.toString());
       });
   }

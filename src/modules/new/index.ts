@@ -11,12 +11,12 @@ import process from 'process';
 import CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { command, NEW_OPTION  } from '../../constants/reusable-constants';
+import { commandType, NEW_OPTION  } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
 import { commandAssignmentModule } from '../../lib/index-functions';
 import * as util from '../../lib/util';
-import { Command, Directories, featureNameObject, GetDirectoryInput } from '../../types/index';
 import { Config, Usage } from '../../types/cli';
+import { Command, Directories, featureNameObject, GetDirectoryInput } from '../../types/index';
 
 
 
@@ -139,9 +139,9 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
                 !hasHelpOption &&
                 !hasInvalidOption &&
                 userOptions.includes(NEW_OPTION);
-        const isConfig = userCommand === command.config;
-        const isStore = userCommand === command.store;
-        const isProject = userCommand === command.project;
+        const isConfig = userCommand === commandType.config;
+        const isStore = userCommand === commandType.store;
+        const isProject = userCommand === commandType.project;
         const currentConfig = commandAssignmentModule(userCommand);
         const questions = CONFIG.parsePrompts(commandAssignmentModule(userCommand));
         const projectName = '<project-name>';
@@ -165,11 +165,11 @@ async function run (operation: Command, USAGE: Usage): Promise<any> {
         // [2] Check if the user requested a new project
         if (isProject) {
             // [2]b Get required config
-            await run({options: userOptions, command:'config'}, USAGE);
+            await run({options: userOptions, command: commandType.config}, USAGE);
 
             // Console.log(">>>project created");
             // [2]c Create required storage for project
-            await run({options: userOptions, command:'store'}, USAGE);
+            await run({options: userOptions, command: commandType.store}, USAGE);
 
             util.nextSteps(projectName);
 
