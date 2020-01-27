@@ -80,7 +80,7 @@
       "target": ".gitignore"
     },
     {
-      "source": "cypress/cypress.json",
+      "source": "cypress.json",
       "target": "cypress.json"
     },
     {

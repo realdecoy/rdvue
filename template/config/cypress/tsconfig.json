@@ -7,6 +7,6 @@
     "types": ["cypress"]
   },
   "include": [
-    "cypress/specs/*.ts"
+    "**/*.ts"
   ]
 }
