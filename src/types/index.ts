@@ -5,7 +5,7 @@ import { Config } from './cli';
  Linked interfaces have the parent interface followed by there name
 */
 
-// SubConfig return Obj
+// Type based of the manifest.json file in the templates folder
 export interface Manifest{
     version: number;
     name: string;
@@ -29,18 +29,23 @@ export interface ManifestFiles{
     target: string;
 }
 
-// Model interface
+// Files based of the model.json files
 export interface Files{
     source: string;
     target: string;
     content?: FilesContent[];
 }
 
+// Content for the files type
 export interface FilesContent{
     matchRegex: string;
     replace: string;
 }
 
+/*
+    Command type for the commands being input and required
+    used in the src/lib/util.ts & src/index.ts
+*/
 export interface Command{
     command: string;
     options: string[];
@@ -61,7 +66,7 @@ export interface Directories {
  * Used to store both the pascal and kebab cases of the feature name
  * specified by the user arguments
  */
-export interface featureNameObject {
+export interface FeatureNameObject {
     [key: string]: string;
 }
 
@@ -70,7 +75,7 @@ export interface featureNameObject {
  * to be utilized for the specific feature requested by user.
  */
 export interface GetDirectoryInput {
-    featureNameStore: featureNameObject;
+    featureNameStore: FeatureNameObject;
     currentConfig: Config;
     kebabNameKey: string;
     isConfig: boolean;
