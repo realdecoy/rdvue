@@ -5,41 +5,41 @@ import { Files } from './index';
 */
 
 // Usage interface
-export interface Usage{
-    general: GenContinued;
-    component: CompContinued;
-    service: Coalation;
-    model: Coalation;
-    page: Coalation;
-    config: Coalation;
-    store: Coalation;
-    project: Coalation;
+export interface CLI{
+    general: General;
+    component: Component;
+    service: MenuAndConfiguration;
+    model: MenuAndConfiguration;
+    page: MenuAndConfiguration;
+    config: MenuAndConfiguration;
+    store: MenuAndConfiguration;
+    project: MenuAndConfiguration;
 }
 
 // Reused types
-interface GenMenu{
+interface GenralMenu{
     header: string;
-    content?: string | ContentObj[];
+    content?: string | Content[];
     optionList?: List[];
 }
 
 
 // General types
-export interface GenContinued{
-    menu: GenMenu[];
+export interface General{
+    menu: GenralMenu[];
 }
 
-export interface Coalation{
-    config?: Config | ProjConf;
+export interface MenuAndConfiguration{
+    config?: Config | ProjectConfiguration;
     menu?: Menu[];
 }
 // General Types ended
 
 
 // Component Types
-export interface CompContinued{
+export interface Component{
     config: Config;
-    menu: GenMenu[];
+    menu: GenralMenu[];
 }
 
 // Config types
@@ -47,7 +47,7 @@ export interface Config{
     version: number;
     name?: string;
     description?: string;
-    arguments?: Argu[];
+    arguments?: Arguments[];
     sourceDirectory: string;
     installDirectory?: string;
     files?: Array<string|Files>;
@@ -56,38 +56,30 @@ export interface Config{
     menu?: Menu[];
 }
 
-export interface test {
-    elem1:number;
-    elem2: Array<string|Files>;
-}
-
 // Import interface
 export interface Import{
     required: string[];
     optional: string[];
 }
 
-export interface Argu{
+export interface Arguments{
     name: string;
     type: string;
     description: string;
     isPrivate?: boolean;
+    message?: string;
+    default?: null | string;
 }
 
-
-export interface Info{
-    matchRegex: string;
-    replace: string;
-}
 // Also used in config.ts in src directory
 export interface Menu{
     header: string;
     optionList?: List[];
-    content?: string | ContentObj[];
+    content?: string | Content[];
 }
 
 
-export interface ContentObj{
+export interface Content{
     name: string;
     summary: string;
 }
@@ -97,14 +89,14 @@ interface List{
     description: string;
 }
 
-export interface ProjConf{
-    config: ProjConfContinued;
+export interface ProjectConfiguration{
+    config: ProjectConfigurationContinued;
 }
 
-export interface ProjConfContinued{
+export interface ProjectConfigurationContinued{
     version: number;
     sourceDirectory: string;
     import: Import;
     name: string;
-    arguments: Argu;
+    arguments: Arguments;
 }

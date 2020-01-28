@@ -6,29 +6,23 @@ import {
   TEMPLATE_PROJECT_URL
 } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
-import { Config } from '../../types/cli';
-
-
+import { Arguments, Config } from '../../types/cli';
 
 async function validate(this: any, value: string): Promise<any> {
   const done = this.async();
   if (value.length === 0 || value.match(REGEX_PROJECT_NAME) !== null) {
     done(chalk.red(`You need to enter a valid project name`));
-
-    return undefined;
   } //  Directory with specified name already exists
   else if (files.directoryExists(value)) {
     done(chalk.red(`Project with the name ${value} already exists`));
-
-    return undefined;
   } else {
     done(null, true);
   }
 }
 
 function parsePrompts(config: Config): any[] {
-  return config.arguments ? config.arguments
-    .filter((q: any) => {
+  return config.arguments !== undefined ? config.arguments
+    .filter((q: Arguments) => {
       return q.isPrivate === undefined;
     })
     .map((p: any) => {
@@ -58,7 +52,7 @@ const QUESTIONS: any[] = [
   }
 ];
 
-export default {
+export {
   TEMPLATE_PROJECT_URL,
   OPTIONS_ALL,
   QUESTIONS,

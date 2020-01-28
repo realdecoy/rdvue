@@ -14,7 +14,7 @@ import {
   CLI_DESCRIPTION_STORE,
 } from '../constants/cli-properties';
 import { CLI_DESCRIPTION } from '../index';
-import { Coalation, Config, ContentObj, Menu } from '../types/cli';
+import { Config, Content, Menu, MenuAndConfiguration } from '../types/cli';
 
 /*
  Command given would be a property of the  cli object.
@@ -28,7 +28,7 @@ export function commandAssignment(
   command: string,
   configuration: Config,
   hasAssign: boolean
-): Coalation | Config {
+): MenuAndConfiguration | Config {
   switch (command) {
     case CLI_DESCRIPTION_GENERAL:
       return CLI_DESCRIPTION.general;
@@ -74,8 +74,8 @@ export function commandAssignment(
 */
 export function contentPopulate(objectToBePopulated: Menu[], name: string, summary: string) {
   if (objectToBePopulated[1].content !== undefined) {
-    let menuContent: ContentObj[];
-    menuContent = objectToBePopulated[1].content as ContentObj[];
+    let menuContent: Content[];
+    menuContent = objectToBePopulated[1].content as Content[];
 
     menuContent.push({ name, summary });
   }

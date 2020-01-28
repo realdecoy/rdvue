@@ -2,16 +2,16 @@
 
 // Types that determines what should be present in each default object imported
 import {
-    Coalation,
-    CompContinued,
-    GenContinued
+    Component,
+    General,
+    MenuAndConfiguration
 } from '../types/cli';
 
 /*
     Naming convention for each property follows as
     <Property name>_DEFAULT
 */
-export const GENERAL_DEFAULT: GenContinued = {
+export const GENERAL_DEFAULT: General = {
     menu: [
         {
             header: '',
@@ -58,7 +58,7 @@ export const GENERAL_DEFAULT: GenContinued = {
     ]
 };
 
-export const COMPONENT_DEFAULT: CompContinued = {
+export const COMPONENT_DEFAULT: Component = {
     config: {
         version: 1,
         name: '',
@@ -165,7 +165,7 @@ export const COMPONENT_DEFAULT: CompContinued = {
     ]
 };
 
-export const SERVICE_DEFAULT: Coalation =  {
+export const SERVICE_DEFAULT: MenuAndConfiguration =  {
     config: {
         version: 1,
         name: '',
@@ -232,7 +232,7 @@ export const SERVICE_DEFAULT: Coalation =  {
     ]
 };
 
-export const MODEL_DEFAULT: Coalation = {
+export const MODEL_DEFAULT: MenuAndConfiguration = {
     config: {
         version: 1,
         name: '',
@@ -299,7 +299,7 @@ export const MODEL_DEFAULT: Coalation = {
     ]
 };
 
-export const PAGE_DEFUALT: Coalation = {
+export const PAGE_DEFUALT: MenuAndConfiguration = {
     config: {
         version: 1,
         name: '',
@@ -406,7 +406,7 @@ export const PAGE_DEFUALT: Coalation = {
     ]
 };
 
-export const CONFIG_DEFAULT: Coalation = {
+export const CONFIG_DEFAULT: MenuAndConfiguration = {
     config: {
         version: 1,
         name: '',
@@ -552,7 +552,7 @@ export const CONFIG_DEFAULT: Coalation = {
     ]
 };
 
-export const STORE_DEFAULT: Coalation = {
+export const STORE_DEFAULT: MenuAndConfiguration = {
     config: {
         version: 1,
         name: '',
@@ -595,7 +595,7 @@ export const STORE_DEFAULT: Coalation = {
     ]
 };
 
-export const PROJECT_DEFAULT: Coalation = {
+export const PROJECT_DEFAULT: MenuAndConfiguration = {
     config: {
         version: 1,
         sourceDirectory: '',

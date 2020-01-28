@@ -8,14 +8,14 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import path from 'path';
 import process from 'process';
-import CONFIG from './config';
+import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
 import { commandType, NEW_OPTION  } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
-import { commandAssignmentModule } from '../../lib/index-functions';
+import { commandAssignmentModule } from '../../lib/helper functions';
 import * as util from '../../lib/util';
-import { Config, Usage } from '../../types/cli';
+import { CLI, Config } from '../../types/cli';
 import { Command, Directories, featureNameObject, GetDirectoryInput } from '../../types/index';
 
 
@@ -129,7 +129,7 @@ function updateConfig (featureNameStore: featureNameObject, directories: Directo
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
-async function run (operation: Command, USAGE: Usage): Promise<any> {
+async function run (operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userOptions = operation.options;
         const userCommand = operation.command;

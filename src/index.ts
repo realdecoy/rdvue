@@ -10,16 +10,16 @@ import { USAGE_TEMPLATE } from './config';
 import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
-import { commandAssignment, contentPopulate } from './lib/index-functions';
+import { commandAssignment, contentPopulate } from './lib/helper functions';
 import * as MODULE_NEW from './modules/new';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
-import { Config, Usage } from './types/cli';
+import { CLI, Config } from './types/cli';
 import { Command } from './types/index';
 
 
 // Assign CLI object a default value
-export let CLI_DESCRIPTION: Usage = CLI_DEFAULT;
+export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
 
 /**
  * Parse commands provided by template manifest files
