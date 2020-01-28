@@ -1,5 +1,8 @@
 /*
     Types for the config.ts file in the module/new folder
+    for the answer and question object
+
+    not used at the moment
 */
 
 export interface Question{

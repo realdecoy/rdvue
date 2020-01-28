@@ -14,7 +14,7 @@ import {
   CLI_DESCRIPTION_STORE,
 } from '../constants/cli-properties';
 import { CLI_DESCRIPTION } from '../index';
-import { Config, Content, Menu, MenuAndConfiguration } from '../types/cli';
+import { Config, Content, Menu, ModuleDescriptor } from '../types/cli';
 
 /*
  Command given would be a property of the  cli object.
@@ -28,7 +28,7 @@ export function commandAssignment(
   command: string,
   configuration: Config,
   hasAssign: boolean
-): MenuAndConfiguration | Config {
+): ModuleDescriptor | Config {
   switch (command) {
     case CLI_DESCRIPTION_GENERAL:
       return CLI_DESCRIPTION.general;

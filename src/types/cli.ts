@@ -4,20 +4,20 @@ import { Files } from './index';
  Linked interfaces have the parent interface followed by there name
 */
 
-// Usage interface
+// CLI Description interface used in the main index.ts in src folder
 export interface CLI{
     general: General;
     component: Component;
-    service: MenuAndConfiguration;
-    model: MenuAndConfiguration;
-    page: MenuAndConfiguration;
-    config: MenuAndConfiguration;
-    store: MenuAndConfiguration;
-    project: MenuAndConfiguration;
+    service: ModuleDescriptor;
+    model: ModuleDescriptor;
+    page: ModuleDescriptor;
+    config: ModuleDescriptor;
+    store: ModuleDescriptor;
+    project: ModuleDescriptor;
 }
 
-// Reused types
-interface GenralMenu{
+// Menu type for General type
+interface GeneralMenu{
     header: string;
     content?: string | Content[];
     optionList?: List[];
@@ -26,11 +26,11 @@ interface GenralMenu{
 
 // General types
 export interface General{
-    menu: GenralMenu[];
+    menu: GeneralMenu[];
 }
 
-export interface MenuAndConfiguration{
-    config?: Config | ProjectConfiguration;
+export interface ModuleDescriptor{
+    config?: Config | Project;
     menu?: Menu[];
 }
 // General Types ended
@@ -39,10 +39,10 @@ export interface MenuAndConfiguration{
 // Component Types
 export interface Component{
     config: Config;
-    menu: GenralMenu[];
+    menu: GeneralMenu[];
 }
 
-// Config types
+// Config types for each property that has configuration settings
 export interface Config{
     version: number;
     name?: string;
@@ -56,12 +56,13 @@ export interface Config{
     menu?: Menu[];
 }
 
-// Import interface
+// Import interface for the files being imported
 export interface Import{
     required: string[];
     optional: string[];
 }
 
+// Arguments content type
 export interface Arguments{
     name: string;
     type: string;
@@ -78,22 +79,26 @@ export interface Menu{
     content?: string | Content[];
 }
 
-
+// Interface fot the content type
 export interface Content{
     name: string;
     summary: string;
 }
 
+// List type for the optionList
 interface List{
     name: string;
     description: string;
 }
 
-export interface ProjectConfiguration{
-    config: ProjectConfigurationContinued;
+// TODO: Refactor along with the option change for the cli description
+// Project propery of the CLI description object
+export interface Project{
+    config: ProjectConfiguration;
 }
 
-export interface ProjectConfigurationContinued{
+// Configuration type for the project property
+export interface ProjectConfiguration{
     version: number;
     sourceDirectory: string;
     import: Import;

@@ -4,7 +4,7 @@
 import {
     Component,
     General,
-    MenuAndConfiguration
+    ModuleDescriptor
 } from '../types/cli';
 
 /*
@@ -165,7 +165,7 @@ export const COMPONENT_DEFAULT: Component = {
     ]
 };
 
-export const SERVICE_DEFAULT: MenuAndConfiguration =  {
+export const SERVICE_DEFAULT: ModuleDescriptor =  {
     config: {
         version: 1,
         name: '',
@@ -232,7 +232,7 @@ export const SERVICE_DEFAULT: MenuAndConfiguration =  {
     ]
 };
 
-export const MODEL_DEFAULT: MenuAndConfiguration = {
+export const MODEL_DEFAULT: ModuleDescriptor = {
     config: {
         version: 1,
         name: '',
@@ -299,7 +299,7 @@ export const MODEL_DEFAULT: MenuAndConfiguration = {
     ]
 };
 
-export const PAGE_DEFUALT: MenuAndConfiguration = {
+export const PAGE_DEFUALT: ModuleDescriptor = {
     config: {
         version: 1,
         name: '',
@@ -406,7 +406,7 @@ export const PAGE_DEFUALT: MenuAndConfiguration = {
     ]
 };
 
-export const CONFIG_DEFAULT: MenuAndConfiguration = {
+export const CONFIG_DEFAULT: ModuleDescriptor = {
     config: {
         version: 1,
         name: '',
@@ -552,7 +552,7 @@ export const CONFIG_DEFAULT: MenuAndConfiguration = {
     ]
 };
 
-export const STORE_DEFAULT: MenuAndConfiguration = {
+export const STORE_DEFAULT: ModuleDescriptor = {
     config: {
         version: 1,
         name: '',
@@ -595,7 +595,7 @@ export const STORE_DEFAULT: MenuAndConfiguration = {
     ]
 };
 
-export const PROJECT_DEFAULT: MenuAndConfiguration = {
+export const PROJECT_DEFAULT: ModuleDescriptor = {
     config: {
         version: 1,
         sourceDirectory: '',

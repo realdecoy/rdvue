@@ -16,7 +16,7 @@ import * as files from '../../lib/files';
 import { commandAssignmentModule } from '../../lib/helper functions';
 import * as util from '../../lib/util';
 import { CLI, Config } from '../../types/cli';
-import { Command, Directories, featureNameObject, GetDirectoryInput } from '../../types/index';
+import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
 
 
 
@@ -28,7 +28,7 @@ import { Command, Directories, featureNameObject, GetDirectoryInput } from '../.
  * see: https://www.npmjs.com/package/inquirer
  */
 function updateNameProp (currentConfig: Config, answers: any) {
-    const featureName: featureNameObject = {};
+    const featureName: FeatureNameObject = {};
     let nameKey = '';
     let kebabCaseKey = '';
     let pascalCaseKey = '';
@@ -108,7 +108,7 @@ function getDirectories( directoryInput: GetDirectoryInput ) : Directories
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
  */
-function updateConfig (featureNameStore: featureNameObject, directories: Directories, kebabNameKey = '')
+function updateConfig (featureNameStore: FeatureNameObject, directories: Directories, kebabNameKey = '')
 {
     let absProjectRoot = '';
     let configFile = '';
@@ -146,7 +146,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         const questions = CONFIG.parsePrompts(commandAssignmentModule(userCommand));
         const projectName = '<project-name>';
 
-        let featureNameStore: featureNameObject = {};
+        let featureNameStore: FeatureNameObject = {};
         let answers: any;
         let kebabNameKey = '';
         let projectRoot: string | null;
