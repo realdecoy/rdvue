@@ -27,7 +27,7 @@ import { Config, Content, Menu, ModuleDescriptor } from '../types/cli';
 export function commandAssignment(
   command: string,
   configuration: Config,
-  hasAssign: boolean
+  hasAssign: boolean,
 ): ModuleDescriptor | Config {
   switch (command) {
     case CLI_DESCRIPTION_GENERAL:
@@ -110,5 +110,42 @@ export function commandAssignmentModule(command: string): Config {
 
     default:
       return CLI_DESCRIPTION.project.config as Config;
+  }
+}
+
+/*
+  Helper function for module/new/index.ts for indexing the string given
+  and return the corresponding object property
+
+  if input is unrecognized then it will return the general object
+*/
+export function menuAssignment(propertyName: string): ModuleDescriptor{
+  switch(propertyName){
+    case CLI_DESCRIPTION_GENERAL:
+      return CLI_DESCRIPTION.general;
+
+      case CLI_DESCRIPTION_COMPONENT:
+        return CLI_DESCRIPTION.component;
+
+      case CLI_DESCRIPTION_SERVICE:
+        return CLI_DESCRIPTION.service;
+
+      case CLI_DESCRIPTION_MODEL:
+        return CLI_DESCRIPTION.model;
+
+      case CLI_DESCRIPTION_PAGE:
+        return CLI_DESCRIPTION.page;
+
+      case CLI_DESCRIPTION_CONFIG:
+        return CLI_DESCRIPTION.config;
+
+      case CLI_DESCRIPTION_STORE:
+        return CLI_DESCRIPTION.store;
+
+      case CLI_DESCRIPTION_PROJECT:
+        return CLI_DESCRIPTION.project;
+
+    default:
+      return CLI_DESCRIPTION.general;
   }
 }

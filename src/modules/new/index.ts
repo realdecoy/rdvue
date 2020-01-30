@@ -5,6 +5,7 @@
  */
 
 import chalk from 'chalk';
+import { Section } from 'command-line-usage';
 import inquirer from 'inquirer';
 import path from 'path';
 import process from 'process';
@@ -13,7 +14,7 @@ import * as CONFIG from './config';
 import * as ROOT_CONFIG from '../../config';
 import { commandType, NEW_OPTION  } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
-import { commandAssignmentModule } from '../../lib/helper functions';
+import { commandAssignmentModule, menuAssignment } from '../../lib/helper functions';
 import * as util from '../../lib/util';
 import { CLI, Config } from '../../types/cli';
 import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
@@ -156,7 +157,8 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         if (!isValidCreateRequest) {
              // Show Help Menu
              // TODO: Re Enable and Fix
-             // console.log(util.displayHelp(USAGE[operation.command].menu));
+             const CLIPROPERTY = menuAssignment(operation.command);
+             console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
 
              return true;
         }
