@@ -28,10 +28,10 @@ function USAGE_TEMPLATE(
                 }
             ]
         },
-        {
-            header: 'Features:',
-            content: []
-        },
+        // {
+        //     header: 'Features:',
+        //     content: []
+        // },
         {
             header: 'Options:',
             optionList: [
