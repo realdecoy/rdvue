@@ -36,7 +36,6 @@ function updateNameProp (currentConfig: Config, answers: Answers) {
     let kebabCaseKey = '';
     let pascalCaseKey = '';
 
-    console.log(answers)
     if (currentConfig.arguments !== undefined) {
         // NameKey is the variable which holds the name of the key
         // for the argument to be retrieved from user
@@ -166,28 +165,20 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
 
              return true;
         }
-        console.log(userFeatureName);
+
         // [1]b If the user used the '--new' option with a valid command and option
 
         // [2] Check if the user requested a new project
         if (isProject) {
-            if ( userFeatureName !== '' ) {
-                if (currentConfig.arguments !== undefined) {
-                    const nameKey = currentConfig.arguments[0].name;
-                    answers[nameKey] = userFeatureName;
-                    console.log("2:",userFeatureName);
-                }
-                console.log("1:",answers);
-            }
+
             // [2]b Get required config
             await run({options: userOptions, feature: featureType.config,
-                        action: userAction}, USAGE);
+                        action: userAction, featureName: userFeatureName}, USAGE);
 
             // Console.log(">>>project created");
             // [2]c Create required storage for project
             await run({options: userOptions, feature: featureType.store,
-                         action: userAction}, USAGE);
-            projectName = userFeatureName as string;
+                         action: userAction, featureName: userFeatureName}, USAGE);
             util.nextSteps(projectName);
 
             return true;
@@ -195,15 +186,13 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
 
         // [3] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
-        // if ( userFeatureName !== '' ) {
-        //     if (currentConfig.arguments !== undefined) {
-        //         const nameKey = currentConfig.arguments[0].name;
-        //         answers[nameKey] = userFeatureName;
-        //         console.log("2:",userFeatureName);
-        //     }
-        //     console.log("1:",answers);
-        // }
-        if ( userFeatureName === '' )  {
+        if ( userFeatureName !== '' ) {
+            if (currentConfig.arguments !== undefined) {
+                const nameKey = currentConfig.arguments[0].name;
+                answers[nameKey] = userFeatureName;
+            }
+        }
+        else {
             answers = await inquirer.prompt(questions);
         }
 
@@ -216,7 +205,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         // [6] Obtaining the Kebab and Pascal case of the feature (eg. page) name input by user and
         // placing it in object "featureNameStore"
         featureNameStore = updateNameProp(currentConfig, answers);
-        console.log("6");
+
         // [6]b Retrieving the Kebab case from the featureNameStore object
         kebabNameKey = (Object.keys(featureNameStore)
                                 .filter(f => util.hasKebab(f)))[0];
@@ -230,7 +219,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
                                         projectRoot,
                                         userFeature,
                                     } );
-        console.log("4");
+
         // [8] Copy and update files from a source directory to a destination directory
         if(currentConfig.files !== undefined){
             await files.copyAndUpdateFiles(
