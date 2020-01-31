@@ -2,4 +2,4 @@
  * List of actions that can be used with rdvue cli
  */
 
-export const actions = ['generate'];
+export const actions = ['generate','g'];

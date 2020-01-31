@@ -12,7 +12,7 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureType, GENERATE_ACTION } from '../../constants/reusable-constants';
+import { featureType, GENERATE_ACTION, GENERATE_ACTION_SHORTCUT } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
 import { commandAssignmentModule, menuAssignment } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
@@ -142,7 +142,8 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         const isValidCreateRequest =
                 !hasHelpOption &&
                 !hasInvalidOption &&
-                userAction.includes(GENERATE_ACTION);
+                ( userAction.includes(GENERATE_ACTION) ||
+                userAction.includes(GENERATE_ACTION_SHORTCUT) );
         const isConfig = userFeature === featureType.config;
         const isStore = userFeature === featureType.store;
         const isProject = userFeature === featureType.project;
@@ -157,7 +158,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         let projectRoot: string | null;
         let directories: Directories;
 
-        // [1] Check if the user did not use the '--new' option or had an invalid command or option
+        // [1] Check if the user did not use the generate command or had an invalid command
         if (!isValidCreateRequest) {
              // Show Help Menu
              const CLIPROPERTY = menuAssignment(operation.feature);
@@ -166,7 +167,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
              return true;
         }
 
-        // [1]b If the user used the '--new' option with a valid command and option
+        // [1]b If the user used the generate actionwith a valid command and option
 
         // [2] Check if the user requested a new project
         if (isProject) {

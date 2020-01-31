@@ -179,14 +179,13 @@ async function run () {
       // [6] Puts the user arguments into an object that seperates them into action,
       // feature, option and feature name from format
       // rdvue <action> <feature> <feature name> [options]
+      // TODO: TRY CATCH???
       const operation: Command = {
         action: util.parseUserInput(userArgs, features).action,
         feature: `${util.parseUserInput(userArgs, features).feature}`,
         options: util.parseUserInput(userArgs, features).options,
         featureName: util.parseUserInput(userArgs, features).featureName,
       };
-
-      // TODO: Error checking: ensure that user has only input one feaure/action
 
       // [6b] Check to see if the project is valid
       project = util.checkProjectValidity(operation);

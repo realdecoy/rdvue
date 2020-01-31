@@ -2,7 +2,8 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
-import  { actions } from '../modules/actions';
+import { CLI_DESCRIPTION } from '../index';
+import { actions } from '../modules/actions';
 import { Command } from '../types/index';
 import { fileExists } from './files';
 
@@ -91,28 +92,40 @@ function parseUserInput(args: string[], features: string[])
     featureName: '',
     options: [''],
   };
+  let remainingArgs = [];
 
   // [1] Checking first argument <action> to see if it includes a valid actions
   // (eg. generate)
-  
-  if ( actions.includes( args[0]) ) {
-    
+
+  if ( args[0] !== undefined && actions.includes(args[0]) ) {
+
     returnObject.action = args[0];
-    
+
     // [2] Checking second argument <feature>
     // to see if it includes a valid feature (eg. project or page)
-    if ( features.includes( args[1]) ) {
+    if ( args[1] !== undefined && features.includes(args[1]) ) {
 
       returnObject.feature = args[1];
-      
+
       // [3] Checking third argument <feature name> eg. "test_project"
       // If the feature name entered contains '--' at the beggining of the word
       // it is assumed that they are entering an option instead and therefore, no feature name
       // has been inputed/proccessed.
-      if ( args[2].substring(0, 2) !== '--') {
+      if ( args[2] !== undefined && args[2].substring(0, 2) !== '--' ) {
         returnObject.featureName = args[2];
       }
-      
+
+      // Remove the first <action> and second <feature> argument from array
+      remainingArgs = args.slice(2);
+      remainingArgs.filter( userinput => userinput.substring(0, 2) !== '--');
+      if ( remainingArgs.length > 1 )
+      {
+        console.log(chalk.red(`Please enter a valid project name; See help menu for instructions`));
+        // TODO: Display help menu & exit
+        // commandLineUsage(CLI_DESCRIPTION.general.menu);
+        // process.exit();
+      }
+
       // [4] Checking all arguments to see if they contain any options
       returnObject.options = args.filter(option => option.substring(0, 2) === '--');
 
