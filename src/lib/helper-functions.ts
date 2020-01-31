@@ -66,16 +66,22 @@ export function commandAssignment(
   }
 }
 
+
 /*
   The content of the object being passed in will be populated
   CLI_DESCRIPTION.general.menu would be passed in for instance
 
   Used in the src/index folder
 */
-export function contentPopulate(objectToBePopulated: Menu[], name: string, summary: string) {
-  if (objectToBePopulated[1].content !== undefined) {
+export function contentPopulate(
+  objectToBePopulated: Menu[],
+  name: string,
+  summary: string,
+  index: number
+  ) {
+  if (objectToBePopulated[index].content !== undefined) {
     let menuContent: Content[];
-    menuContent = objectToBePopulated[1].content as Content[];
+    menuContent = objectToBePopulated[index].content as Content[];
 
     menuContent.push({ name, summary });
   }
@@ -149,3 +155,4 @@ export function menuAssignment(propertyName: string): ModuleDescriptor{
       return CLI_DESCRIPTION.general;
   }
 }
+
