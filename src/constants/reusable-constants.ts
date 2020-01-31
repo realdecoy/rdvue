@@ -15,7 +15,7 @@ export const TEMPLATE_FILE = '/template.json';
 export const MANIFEST_FILE = '/manifest.json';
 export const CORE = 'core';
 
-export enum commandType {
+export enum featureType {
     config = 'config',
     store = 'store',
     project = 'project'
