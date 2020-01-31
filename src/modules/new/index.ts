@@ -12,14 +12,16 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { commandType, GENERATE_ACTION  } from '../../constants/reusable-constants';
+import { featureType, GENERATE_ACTION } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
-import { commandAssignmentModule, menuAssignment } from '../../lib/helper functions';
+import { commandAssignmentModule, menuAssignment } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
 import { CLI, Config } from '../../types/cli';
 import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
 
-
+interface Answers{
+    [key: string]: any;
+}
 
 /**
  * Description: Transforms user input into Kebab and or Pascal case updating
@@ -28,18 +30,18 @@ import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../.
  * @param answers - user arguments that is returned in response to inquirer questions.
  * see: https://www.npmjs.com/package/inquirer
  */
-function updateNameProp (currentConfig: Config, answers: any) {
+function updateNameProp (currentConfig: Config, answers: Answers) {
     const featureName: FeatureNameObject = {};
     let nameKey = '';
     let kebabCaseKey = '';
     let pascalCaseKey = '';
 
+    console.log(answers)
     if (currentConfig.arguments !== undefined) {
         // NameKey is the variable which holds the name of the key
         // for the argument to be retrieved from user
         // Example of nameKey: "pageName" or "pageNameKebab"
         nameKey = currentConfig.arguments[0].name;
-
         if (nameKey !== undefined)
         {
             if (util.hasKebab(nameKey) === true) {
@@ -71,7 +73,7 @@ function getDirectories( directoryInput: GetDirectoryInput ) : Directories
     const isConfig = directoryInput.isConfig;
     const isStore = directoryInput.isStore;
     const projectRoot = directoryInput.projectRoot;
-    const userCommand = directoryInput.userCommand;
+    const userFeature = directoryInput.userFeature;
     const currSourceDir = directoryInput.currentConfig.sourceDirectory;
     const currInstallDir = directoryInput.currentConfig.installDirectory;
     const featureName = directoryInput.featureNameStore[kebabNameKey];
@@ -80,7 +82,7 @@ function getDirectories( directoryInput: GetDirectoryInput ) : Directories
 
     sourceDirectory = path.join(
         ROOT_CONFIG.TEMPLATE_ROOT,
-        userCommand,
+        userFeature,
         (currSourceDir !== './' ? currSourceDir: '')
     );
 
@@ -132,23 +134,26 @@ function updateConfig (featureNameStore: FeatureNameObject, directories: Directo
 
 async function run (operation: Command, USAGE: CLI): Promise<any> {
     try {
+        const userAction = operation.action;
+        const userFeature = operation.feature;
         const userOptions = operation.options;
-        const userCommand = operation.command;
+        const userFeatureName = operation.featureName;
         const hasHelpOption = util.hasHelpOption(userOptions);
         const hasInvalidOption = util.hasInvalidOption(userOptions, CONFIG.OPTIONS_ALL);
         const isValidCreateRequest =
                 !hasHelpOption &&
                 !hasInvalidOption &&
-                userOptions.includes(GENERATE_ACTION);
-        const isConfig = userCommand === commandType.config;
-        const isStore = userCommand === commandType.store;
-        const isProject = userCommand === commandType.project;
-        const currentConfig = commandAssignmentModule(userCommand);
-        const questions = CONFIG.parsePrompts(commandAssignmentModule(userCommand));
-        const projectName = '<project-name>';
+                userAction.includes(GENERATE_ACTION);
+        const isConfig = userFeature === featureType.config;
+        const isStore = userFeature === featureType.store;
+        const isProject = userFeature === featureType.project;
+        const currentConfig = commandAssignmentModule(userFeature);
+        const questions = CONFIG.parsePrompts(commandAssignmentModule(userFeature));
+        let projectName = '<project-name>';
 
         let featureNameStore: FeatureNameObject = {};
-        let answers: any;
+
+        let answers: Answers = {};
         let kebabNameKey = '';
         let projectRoot: string | null;
         let directories: Directories;
@@ -156,23 +161,33 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         // [1] Check if the user did not use the '--new' option or had an invalid command or option
         if (!isValidCreateRequest) {
              // Show Help Menu
-             // TODO: Re Enable and Fix
-             const CLIPROPERTY = menuAssignment(operation.command);
+             const CLIPROPERTY = menuAssignment(operation.feature);
              console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
 
              return true;
         }
+        console.log(userFeatureName);
         // [1]b If the user used the '--new' option with a valid command and option
 
         // [2] Check if the user requested a new project
         if (isProject) {
+            if ( userFeatureName !== '' ) {
+                if (currentConfig.arguments !== undefined) {
+                    const nameKey = currentConfig.arguments[0].name;
+                    answers[nameKey] = userFeatureName;
+                    console.log("2:",userFeatureName);
+                }
+                console.log("1:",answers);
+            }
             // [2]b Get required config
-            await run({options: userOptions, command: commandType.config}, USAGE);
+            await run({options: userOptions, feature: featureType.config,
+                        action: userAction}, USAGE);
 
             // Console.log(">>>project created");
             // [2]c Create required storage for project
-            await run({options: userOptions, command: commandType.store}, USAGE);
-
+            await run({options: userOptions, feature: featureType.store,
+                         action: userAction}, USAGE);
+            projectName = userFeatureName as string;
             util.nextSteps(projectName);
 
             return true;
@@ -180,7 +195,17 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
 
         // [3] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
-        answers = await inquirer.prompt(questions);
+        // if ( userFeatureName !== '' ) {
+        //     if (currentConfig.arguments !== undefined) {
+        //         const nameKey = currentConfig.arguments[0].name;
+        //         answers[nameKey] = userFeatureName;
+        //         console.log("2:",userFeatureName);
+        //     }
+        //     console.log("1:",answers);
+        // }
+        if ( userFeatureName === '' )  {
+            answers = await inquirer.prompt(questions);
+        }
 
         // [4] Create a section break
         util.sectionBreak();
@@ -191,7 +216,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         // [6] Obtaining the Kebab and Pascal case of the feature (eg. page) name input by user and
         // placing it in object "featureNameStore"
         featureNameStore = updateNameProp(currentConfig, answers);
-
+        console.log("6");
         // [6]b Retrieving the Kebab case from the featureNameStore object
         kebabNameKey = (Object.keys(featureNameStore)
                                 .filter(f => util.hasKebab(f)))[0];
@@ -203,9 +228,9 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
                                         isConfig,
                                         isStore,
                                         projectRoot,
-                                        userCommand,
+                                        userFeature,
                                     } );
-
+        console.log("4");
         // [8] Copy and update files from a source directory to a destination directory
         if(currentConfig.files !== undefined){
             await files.copyAndUpdateFiles(
@@ -213,7 +238,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
                 currentConfig.files, featureNameStore);
         }
 
-        // [9] If executing the 'config' command
+        // [9] If executing the 'config' feature
         if (isConfig) {
             // [9]b Updating the '.rdvue' config file to include the project root path
             if (kebabNameKey !== undefined)
