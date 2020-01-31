@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
+import  { actions } from '../modules/actions';
 import { Command } from '../types/index';
 import { fileExists } from './files';
 
@@ -35,9 +36,9 @@ function nextSteps(featureName: string): void {
   console.log(` - cd ${featureName}\n - npm install\n - npm run-script serve`);
 }
 
-function hasCommand(args: string[], commands: string[]): boolean {
+function hasCommand(args: string[], features: string[]): boolean {
   // Console.log(`hasCommand: ${commands}`);
-  const found = commands.some((r) => args.includes(r));
+  const found = features.some((r) => args.includes(r));
 
   return found;
 }
@@ -63,26 +64,66 @@ function hasInvalidOption(args: string[], options: string[]): boolean {
   return found;
 }
 
-function parseCommand(args: string[], commands: string[]): string {
-  return args.filter(x => commands.includes(x))[0];
+function parseFeature(args: string[], features: string[]): string {
+  return args.filter(x => features.includes(x))[0];
 }
 
 /**
  * Get the options that have been input by the user
  */
-function parseOptions(args: string[], commands: string[]): string[] {
-  return args.filter(x => !commands.includes(x))
-              .filter(option => option.includes('--'));
+function parseOptions(args: string[]): string[] {
+  return args.filter(option => option.includes('--'));
 }
 
 /**
- * Gets the feature name input by user
- * NB: This could include more than one name, should ensure there is only 
- * one feature name given
+ * Description - seperates the user input into <service> <action> <feature>
+ * <featureName> [options]
+ * @param args - the arguments that the user provided in the command line
+ * @param features - the predefined features that can be created with rdvue
  */
-function parseFeatureName(args: string[], commands: string[]): string[] {
-  return args.filter(x => !commands.includes(x))
-              .filter(featureName => !featureName.includes('--'));
+function parseUserInput(args: string[], features: string[])
+{
+  // The user input should be in the form:
+  // <action> <feature> <feature name> [options]
+  const returnObject = {
+    action: '',
+    feature: '',
+    featureName: '',
+    options: [''],
+  };
+
+  // [1] Checking first argument <action> to see if it includes a valid actions
+  // (eg. generate)
+  
+  if ( actions.includes( args[0]) ) {
+    
+    returnObject.action = args[0];
+    
+    // [2] Checking second argument <feature>
+    // to see if it includes a valid feature (eg. project or page)
+    if ( features.includes( args[1]) ) {
+
+      returnObject.feature = args[1];
+      
+      // [3] Checking third argument <feature name> eg. "test_project"
+      // If the feature name entered contains '--' at the beggining of the word
+      // it is assumed that they are entering an option instead and therefore, no feature name
+      // has been inputed/proccessed.
+      if ( args[2].substring(0, 2) !== '--') {
+        returnObject.featureName = args[2];
+      }
+      
+      // [4] Checking all arguments to see if they contain any options
+      returnObject.options = args.filter(option => option.substring(0, 2) === '--');
+
+    }
+  } else {
+    // [1b] If there is no action in the user input then search for a predefined feature.
+    // If found, return the feature found in the input
+    returnObject.feature = parseFeature(args, features);
+  }
+
+  return returnObject;
 }
 
 function displayHelp(sections: Section[]): string {
@@ -177,7 +218,7 @@ function checkProjectValidity(operation: Command) {
   };
   let projectRoot: string | null;
 
-  if (operation.command === 'project') {
+  if (operation.feature === 'project') {
     results.isValid = true;
   } else {
 
@@ -204,9 +245,9 @@ export {
   hasOptions,
   hasHelpOption,
   hasInvalidOption,
-  parseCommand,
+  parseFeature,
   parseOptions,
-  parseFeatureName,
+  parseUserInput,
   displayHelp,
   hasKebab,
   getKebabCase,
