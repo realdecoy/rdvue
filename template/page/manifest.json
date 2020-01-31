@@ -6,7 +6,7 @@
     {
       "name": "pageName",
       "type": "string",
-      "description": "The name for the generated page."
+      "description": "the name for the generated page."
     },
     {
       "name": "pageNameKebab",
