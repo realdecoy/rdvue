@@ -15,7 +15,7 @@ import * as utils from './util';
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import { commandType, CORE, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/reusable-constants';
+import {  CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/reusable-constants';
 import { Config } from '../types/cli';
 import { Files } from '../types/index';
 
@@ -213,7 +213,7 @@ async function copyFiles(srcDir: string, destDir: string, files:Array<string|Fil
       source = path.join(srcDir, f.source);
       dest = path.join(destDir, f.target);
     } else {
-      source = path.join(srcDir, `${srcDir.includes(commandType.config) ? CORE : ''}`, f);
+      source = path.join(srcDir, `${srcDir.includes(featureType.config) ? CORE : ''}`, f);
       dest = path.join(destDir, f);
     }
 
