@@ -47,9 +47,10 @@ export interface FilesContent{
     used in the src/lib/util.ts & src/index.ts
 */
 export interface Command{
-    command: string;
+    action: string;
+    feature: string;
     options: string[];
-    featureName?: string[];
+    featureName?: string;
 }
 
 // The interfaces below are being used in ./modules/new/index.ts
@@ -82,5 +83,5 @@ export interface GetDirectoryInput {
     isConfig: boolean;
     isStore: boolean;
     projectRoot: string | null;
-    userCommand: string;
+    userFeature: string;
 }
