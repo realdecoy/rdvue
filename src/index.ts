@@ -11,7 +11,6 @@ import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
 import { commandAssignment, contentPopulate } from './lib/helper-functions';
-//import { actions } from './modules/actions';
 import * as MODULE_NEW from './modules/new';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
