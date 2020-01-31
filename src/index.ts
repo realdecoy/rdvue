@@ -26,46 +26,46 @@ export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
  * Parse commands provided by template manifest files
  * and generate the CLI help menus as well as extract
  * info useful for generating the sub features
- * @param command - Command that the user entered (eg. project, page, component)
+ * @param feature - Command that the user entered (eg. project, page, component)
  * @param required - Boolean value which tells you if the command is required or not.
  *                   Required commands include 'config' and 'store'
  */
-async function populateCommand(command: string, required = false) {
+async function populateCommand(feature: string, required = false) {
   const index = 2;
-  let commandConfig: Config;
-  commandConfig = readSubConfig(command);
+  let featureConfig: Config;
+  featureConfig = readSubConfig(feature);
 
   // [1] Based of the command of the user the configuration property is populated
-  commandAssignment(command, commandConfig, true);
+  commandAssignment(feature, featureConfig, true);
 
   // [2] Add command to general help text if not required for new project generation
   if(!required){
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
-      `${chalk.magenta(command)}`,
-      `${commandConfig.description}`,
+      `${chalk.magenta(feature)}`,
+      `${featureConfig.description}`,
       index
       );
   }
 
   // [3] Assign the command for the CLI object to a variable for re-use
-  const cliCommand = commandAssignment(command, commandConfig, false);
+  const cliCommand = commandAssignment(feature, featureConfig, false);
 
   // [4] Access menu for specific command and add it to cliCommand object
-  cliCommand.menu = USAGE_TEMPLATE(undefined, command, undefined);
+  cliCommand.menu = USAGE_TEMPLATE(undefined, feature, undefined);
 
   // [5] Once the user input arguments
-  if (commandConfig.arguments !== undefined && commandConfig.arguments !== []) {
+  if (featureConfig.arguments !== undefined && featureConfig.arguments !== []) {
 
     // [6] Replace the second index in the cli command
     // menu with the header "arguments" and empty conent array
-    cliCommand.menu.splice(2, 0, {
-      header: 'Arguments',
+    cliCommand.menu.splice(index, 0, {
+      header: 'Arguments:',
       content: [],
     });
 
     // [7] For every argument if the menu is defined
-    for (const argument of commandConfig.arguments) {
+    for (const argument of featureConfig.arguments) {
 
       if (cliCommand.menu[index].content !== undefined) {
 
@@ -83,44 +83,51 @@ async function populateCommand(command: string, required = false) {
 
 /**
  * Description: Adding the necessary information to the Usage object to be used in command execution
- * @param commands - acceptable commands that can be used with rdvue
- * @param requiredCommands - commands that cant be user requested
+ * @param features - acceptable features that can be created with rdvue
+ * @param requiredFeatures - features that can't be user requested
  * but are required to create a project (eg. config and store)
  * @param mainConfig - config data populated from template.json.
  * Describes options the tool can take.
  */
-async function populateUsage(commands: string[], requiredCommands: string[], mainConfig: Config) {
+async function populateCLIMenu(features: string[], requiredFeatures: string[], mainConfig: Config) {
 
-  let commandConfig: Config;
+  const index = 2;
+
+  let featureConfig: Config;
 
   // [1] Intialize the CLI menu with the USAGE_TEMPLATE (./config.ts)
   CLI_DESCRIPTION.general.menu = USAGE_TEMPLATE();
 
+  CLI_DESCRIPTION.general.menu.splice(index, 0, {
+    header: 'Features:',
+    content: [],
+  });
+
   // [3] Add project config to CLI_DESCRIPTION
-  if(CLI_DESCRIPTION.general.menu[2].content !== undefined){
+  if(CLI_DESCRIPTION.general.menu[index].content !== undefined){
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
       `${chalk.magenta('project')}`,
-      'Generate a new project.', 2
+      'Generate a new project.', index
       );
   }
 
-  // [4] Parse commands provided by template manifest files and generate the CLI help menus
-  // for both required and non required commands depending on user input
-  for (const command of commands) {
-    await populateCommand(command);
+  // [4] Parse features provided by template manifest files and generate the CLI help menus
+  // for both required and non required features depending on user input
+  for (const feature of features) {
+    await populateCommand(feature);
   }
-  for (const command of requiredCommands) {
-    await populateCommand(command, true);
+  for (const feature of requiredFeatures) {
+    await populateCommand(feature, true);
   }
 
-  // [5] Add 'project' to list of commands input by user
-  commands.push('project');
+  // [5] Add 'project' to list of features input by user
+  features.push('project');
 
-  // [6] Creating 'project' command configuration
-  commandConfig = mainConfig;
-  commandConfig.name = 'project';
-  commandConfig.arguments = [
+  // [6] Creating 'project' features configuration
+  featureConfig = mainConfig;
+  featureConfig.name = 'project';
+  featureConfig.arguments = [
     {
       'name': 'projectName',
       'type': 'string',
@@ -135,21 +142,21 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
   ];
 
   // [7] Setting the project config to the newly created commandConfig
-  CLI_DESCRIPTION.project.config = commandConfig;
+  CLI_DESCRIPTION.project.config = featureConfig;
 }
 
 
-async function run (){
+async function run () {
   try {
 
     // [1a] Assign config to object return from JSON parse
     const mainConfig = readMainConfig();
 
-    // [1b] Return value if true and empty array if false
-    const commands: string[] = (mainConfig.import !== undefined) ? mainConfig.import.optional : [];
+    // [1b] Return list of features if true and empty array if false
+    const features: string[] = (mainConfig.import !== undefined) ? mainConfig.import.optional : [];
 
     // [1c] Return value if true and empty array if false
-    const requiredCommands: string[] = (mainConfig.import !== undefined) ?
+    const requiredFeatures: string[] = (mainConfig.import !== undefined) ?
     mainConfig.import.required : [];
 
     const sliceNumber = 2;
@@ -161,39 +168,40 @@ async function run (){
     // [2] Clear the console
     clear();
 
-    // [3] Populate command usage information
-    await populateUsage(commands, requiredCommands, mainConfig);
+    // [3] Populate feature usage information
+    await populateCLIMenu(features, requiredFeatures, mainConfig);
 
     // [4] Display "rdvue" heading
     util.heading();
 
-    // [5] Check to see if user arguments include any valid commands
-    if (util.hasCommand(userArgs, commands)) {
+    // [5] Check to see if user arguments include any valid features
+    if (util.hasCommand(userArgs, features)) {
 
-      // [5] Puts the user arguments into an object that seperates the commands, 
-      // input and feature name
+      // [6] Puts the user arguments into an object that seperates them into action,
+      // feature, option and feature name from format
+      // rdvue <action> <feature> <feature name> [options]
       const operation: Command = {
-        command: util.parseCommand(userArgs, commands),
-        options: util.parseOptions(userArgs, commands),
-        featureName: util.parseFeatureName(userArgs, commands),
+        action: util.parseUserInput(userArgs, features).action,
+        feature: `${util.parseUserInput(userArgs, features).feature}`,
+        options: util.parseUserInput(userArgs, features).options,
+        featureName: util.parseUserInput(userArgs, features).featureName,
       };
 
-      // TODO: Error checking: ensure that user has only input one command
+      // TODO: Error checking: ensure that user has only input one feaure/action
 
-      // [5b] Check to see if the project is valid
+      // [6b] Check to see if the project is valid
       project = util.checkProjectValidity(operation);
       if (project.isValid) {
-
-        // [6a] Call the run function in modules/new/index.ts
+        // [7a] Call the run function in modules/new/index.ts
         await MODULE_NEW.run(operation, CLI_DESCRIPTION);
       } else {
 
-        // [6b] Throw an error if this is not a valid project
+        // [7b] Throw an error if this is not a valid project
         throw Error(`'${process.cwd()}' is not a valid Vue project.`);
       }
     } else {
 
-      // [5] Show Help Text if no valid commands have been inputted
+      // [6c] Show Help Text if no valid feature/action have been inputted
       // TODO: Throw and error for invalid command
       console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
     }
