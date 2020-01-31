@@ -67,8 +67,22 @@ function parseCommand(args: string[], commands: string[]): string {
   return args.filter(x => commands.includes(x))[0];
 }
 
+/**
+ * Get the options that have been input by the user
+ */
 function parseOptions(args: string[], commands: string[]): string[] {
-  return args.filter(x => !commands.includes(x));
+  return args.filter(x => !commands.includes(x))
+              .filter(option => option.includes('--'));
+}
+
+/**
+ * Gets the feature name input by user
+ * NB: This could include more than one name, should ensure there is only 
+ * one feature name given
+ */
+function parseFeatureName(args: string[], commands: string[]): string[] {
+  return args.filter(x => !commands.includes(x))
+              .filter(featureName => !featureName.includes('--'));
 }
 
 function displayHelp(sections: Section[]): string {
@@ -192,6 +206,7 @@ export {
   hasInvalidOption,
   parseCommand,
   parseOptions,
+  parseFeatureName,
   displayHelp,
   hasKebab,
   getKebabCase,

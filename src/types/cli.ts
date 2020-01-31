@@ -83,6 +83,7 @@ export interface Menu{
 export interface Content{
     name: string;
     summary: string;
+    shortcut?: string;
 }
 
 // List type for the optionList

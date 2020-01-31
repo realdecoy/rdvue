@@ -10,7 +10,8 @@ import { USAGE_TEMPLATE } from './config';
 import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
-import { commandAssignment, contentPopulate } from './lib/helper functions';
+import { commandAssignment, contentPopulate } from './lib/helper-functions';
+//import { actions } from './modules/actions';
 import * as MODULE_NEW from './modules/new';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
@@ -29,19 +30,21 @@ export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
  * @param required - Boolean value which tells you if the command is required or not.
  *                   Required commands include 'config' and 'store'
  */
-async function populateCommand(command: string, required = false){
+async function populateCommand(command: string, required = false) {
+  const index = 2;
   let commandConfig: Config;
   commandConfig = readSubConfig(command);
 
   // [1] Based of the command of the user the configuration property is populated
   commandAssignment(command, commandConfig, true);
 
-  // [2] Add general help text if command is required for new project generation
+  // [2] Add command to general help text if not required for new project generation
   if(!required){
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
       `${chalk.magenta(command)}`,
-      `${commandConfig.description}`
+      `${commandConfig.description}`,
+      index
       );
   }
 
@@ -56,7 +59,7 @@ async function populateCommand(command: string, required = false){
 
     // [6] Replace the second index in the cli command
     // menu with the header "arguments" and empty conent array
-    cliCommand.menu.splice(1, 0, {
+    cliCommand.menu.splice(2, 0, {
       header: 'Arguments',
       content: [],
     });
@@ -64,13 +67,14 @@ async function populateCommand(command: string, required = false){
     // [7] For every argument if the menu is defined
     for (const argument of commandConfig.arguments) {
 
-      if (cliCommand.menu[1].content !== undefined) {
+      if (cliCommand.menu[index].content !== undefined) {
 
         // [7a] Populate command menu
         contentPopulate(
           cliCommand.menu,
           `${chalk.magenta(argument.name)}`,
-          `${argument.description}`
+          `${argument.description}`,
+          index
           );
       }
     }
@@ -92,18 +96,12 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
   // [1] Intialize the CLI menu with the USAGE_TEMPLATE (./config.ts)
   CLI_DESCRIPTION.general.menu = USAGE_TEMPLATE();
 
-  // [2] Replace the second index of the menu with header: 'Features' and empty content array
-  CLI_DESCRIPTION.general.menu.splice(1, 0, {
-    header: 'Features',
-    content: [],
-  });
-
   // [3] Add project config to CLI_DESCRIPTION
-  if(CLI_DESCRIPTION.general.menu[1].content !== undefined){
+  if(CLI_DESCRIPTION.general.menu[2].content !== undefined){
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
       `${chalk.magenta('project')}`,
-      'Generate a new project.'
+      'Generate a new project.', 2
       );
   }
 
@@ -126,12 +124,12 @@ async function populateUsage(commands: string[], requiredCommands: string[], mai
     {
       'name': 'projectName',
       'type': 'string',
-      'description': 'The name for the generated project.'
+      'description': 'the name for the generated project.'
     },
     {
       'name': 'projectNameKebab',
       'type': 'string',
-      'description': 'The name in Kebab-case for the generated project.',
+      'description': 'the name in Kebab-case for the generated project.',
       'isPrivate': true
     }
   ];
@@ -171,9 +169,13 @@ async function run (){
 
     // [5] Check to see if user arguments include any valid commands
     if (util.hasCommand(userArgs, commands)) {
+
+      // [5] Puts the user arguments into an object that seperates the commands, 
+      // input and feature name
       const operation: Command = {
         command: util.parseCommand(userArgs, commands),
-        options: util.parseOptions(userArgs, commands)
+        options: util.parseOptions(userArgs, commands),
+        featureName: util.parseFeatureName(userArgs, commands),
       };
 
       // TODO: Error checking: ensure that user has only input one command

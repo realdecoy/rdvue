@@ -6,9 +6,9 @@ import gitUserName from 'git-user-name';
 
 export const DEFAULT_PROJECT_NAME = 'my-vue-app';
 export const REGEX_PROJECT_NAME = /^\s+$/;
-export const NEW_OPTION = '--new';
+export const GENERATE_ACTION = 'generate';
 export const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
-export const OPTIONS_ALL: string[] = [NEW_OPTION];
+export const OPTIONS_ALL: string[] = [GENERATE_ACTION];
 export const spinnerIcons = ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'];
 export const UTF8 = 'utf-8';
 export const TEMPLATE_FILE = '/template.json';

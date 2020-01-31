@@ -49,6 +49,7 @@ export interface FilesContent{
 export interface Command{
     command: string;
     options: string[];
+    featureName?: string[];
 }
 
 // The interfaces below are being used in ./modules/new/index.ts
