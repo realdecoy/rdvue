@@ -90,7 +90,7 @@ function parseUserInput(args: string[], features: string[])
     action: '',
     feature: '',
     featureName: '',
-    options: [''],
+    options: ['']
   };
   let remainingArgs = [];
 
@@ -120,10 +120,9 @@ function parseUserInput(args: string[], features: string[])
       remainingArgs.filter( userinput => userinput.substring(0, 2) !== '--');
       if ( remainingArgs.length > 1 )
       {
-        console.log(chalk.red(`Please enter a valid project name; See help menu for instructions`));
         // TODO: Display help menu & exit
-        // commandLineUsage(CLI_DESCRIPTION.general.menu);
-        // process.exit();
+        console.log(commandLineUsage(CLI_DESCRIPTION.general.menu));
+        throw new Error(chalk.red(`Please enter a valid project name; See help menu above for instructions.`));
       }
 
       // [4] Checking all arguments to see if they contain any options
