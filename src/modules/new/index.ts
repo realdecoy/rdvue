@@ -149,7 +149,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         const isProject = userFeature === featureType.project;
         const currentConfig = commandAssignmentModule(userFeature);
         const questions = CONFIG.parsePrompts(commandAssignmentModule(userFeature));
-        let projectName = '<project-name>';
+        const projectName = '<project-name>';
 
         let featureNameStore: FeatureNameObject = {};
 
@@ -180,6 +180,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             // [2]c Create required storage for project
             await run({options: userOptions, feature: featureType.store,
                          action: userAction, featureName: userFeatureName}, USAGE);
+
             util.nextSteps(projectName);
 
             return true;
