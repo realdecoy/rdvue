@@ -51,7 +51,7 @@ async function populateCommand(feature: string, required = false) {
   const cliCommand = commandAssignment(feature, featureConfig, false);
 
   // [4] Access menu for specific command and add it to cliCommand object
-  cliCommand.menu = USAGE_TEMPLATE(undefined, feature, undefined);
+  cliCommand.menu = USAGE_TEMPLATE(undefined, undefined, feature, undefined, undefined);
 
   // [5] Once the user input arguments
   if (featureConfig.arguments !== undefined && featureConfig.arguments !== []) {
