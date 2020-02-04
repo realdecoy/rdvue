@@ -16,17 +16,10 @@ export interface CLI{
     project: ModuleDescriptor;
 }
 
-// Menu type for General type
-interface GeneralMenu{
-    header: string;
-    content?: string | Content[];
-    optionList?: List[];
-}
-
 
 // General types
 export interface General{
-    menu: GeneralMenu[];
+    menu: Menu[];
 }
 
 export interface ModuleDescriptor{
@@ -39,7 +32,7 @@ export interface ModuleDescriptor{
 // Component Types
 export interface Component{
     config: Config;
-    menu: GeneralMenu[];
+    menu: Menu[];
 }
 
 // Config types for each property that has configuration settings
@@ -75,8 +68,7 @@ export interface Arguments{
 // Also used in config.ts in src directory
 export interface Menu{
     header: string;
-    optionList?: List[];
-    content?: string | Content[];
+    content: string | Content[];
 }
 
 // Interface fot the content type
@@ -84,12 +76,6 @@ export interface Content{
     name: string;
     summary: string;
     shortcut?: string;
-}
-
-// List type for the optionList
-interface List{
-    name: string;
-    description: string;
 }
 
 // TODO: Refactor along with the option change for the cli description
