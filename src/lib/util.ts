@@ -257,7 +257,6 @@ function actionBeingRequested(enteredAction: string): string {
 
   // Assign the properties of the action object to an array to be iterated through
   const actionProperties = Object.keys(ACTIONS);
-  const popped = actionProperties.pop();
 
   /**
    * @param elem property on the actions object being checked currently
@@ -266,7 +265,7 @@ function actionBeingRequested(enteredAction: string): string {
   actionProperties.forEach((elem, index) => {
     // If the action keyword the user entered in found inside the array
     // the action is assigned to the variable to be returned
-      if(ACTIONS[elem].includes(enteredAction) && popped !== undefined){
+      if(ACTIONS[elem].includes(enteredAction)){
           actionReturn = actionProperties[index];
       }
   });

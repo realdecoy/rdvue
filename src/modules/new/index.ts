@@ -12,7 +12,7 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureType } from '../../constants/reusable-constants';
+import { featureType, GENERATE_ACTION } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
 import { commandAssignmentModule, menuAssignment } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
@@ -142,7 +142,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         const isValidCreateRequest =
                 !hasHelpOption &&
                 !hasInvalidOption &&
-                ( userAction.includes(util.actionBeingRequested(userAction)) );
+                ( util.actionBeingRequested(userAction) === GENERATE_ACTION );
         const isConfig = userFeature === featureType.config;
         const isStore = userFeature === featureType.store;
         const isProject = userFeature === featureType.project;
