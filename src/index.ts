@@ -50,34 +50,10 @@ async function populateCommand(feature: string, required = false) {
   // [3] Assign the command for the CLI object to a variable for re-use
   const cliCommand = commandAssignment(feature, featureConfig, false);
 
-  // [4] Access menu for specific command and add it to cliCommand object
+  // [4] Create menu specific to a feature entered by user
+  // The USAGE_TEMPLATE in ./config.ts is used as base.
   cliCommand.menu = USAGE_TEMPLATE(undefined, undefined, feature, undefined, undefined);
 
-  // [5] Once the user input arguments
-  if (featureConfig.arguments !== undefined && featureConfig.arguments !== []) {
-
-    // [6] Replace the second index in the cli command
-    // menu with the header "arguments" and empty conent array
-    cliCommand.menu.splice(index, 0, {
-      header: 'Arguments:',
-      content: [],
-    });
-
-    // [7] For every argument if the menu is defined
-    for (const argument of featureConfig.arguments) {
-
-      if (cliCommand.menu[index].content !== undefined) {
-
-        // [7a] Populate command menu
-        contentPopulate(
-          cliCommand.menu,
-          `${chalk.magenta(argument.name)}`,
-          `${argument.description}`,
-          index
-          );
-      }
-    }
-  }
 }
 
 /**
