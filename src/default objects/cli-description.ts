@@ -16,44 +16,6 @@ export const GENERAL_DEFAULT: General = {
         {
             header: '',
             content: ''
-        },
-        {
-            header: '',
-            content: [
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                }
-            ]
-        },
-        {
-            header: '',
-            optionList: [
-                {
-                    name: '',
-                    description: ''
-                },
-                {
-                    name: '',
-                    description: ''
-                }
-            ]
         }
     ]
 };
@@ -68,57 +30,11 @@ export const COMPONENT_DEFAULT: Component = {
                 name: '',
                 type: '',
                 description: ''
-            },
-            {
-                name: '',
-                type: '',
-                description: '',
-                isPrivate: true
             }
         ],
         sourceDirectory: '',
         installDirectory: '',
         files: [
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
             {
                 source: '',
                 target: '',
@@ -135,32 +51,6 @@ export const COMPONENT_DEFAULT: Component = {
         {
             header: '',
             content: ''
-        },
-        {
-            header: '',
-            content: [
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                }
-            ]
-        },
-        {
-            header: '',
-            optionList: [
-                {
-                    name: '',
-                    description: ''
-                },
-                {
-                    name: '',
-                    description: ''
-                }
-            ]
         }
     ]
 };
@@ -175,12 +65,6 @@ export const SERVICE_DEFAULT: ModuleDescriptor =  {
                 name: '',
                 type: '',
                 description: ''
-            },
-            {
-                name: '',
-                type: '',
-                description: '',
-                isPrivate: true
             }
         ],
         sourceDirectory: '',
@@ -202,32 +86,6 @@ export const SERVICE_DEFAULT: ModuleDescriptor =  {
         {
             header: '',
             content: ''
-        },
-        {
-            header: '',
-            content: [
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                }
-            ]
-        },
-        {
-            header: '',
-            optionList: [
-                {
-                    name: '',
-                    description: ''
-                },
-                {
-                    name: '',
-                    description: ''
-                }
-            ]
         }
     ]
 };
@@ -242,12 +100,6 @@ export const MODEL_DEFAULT: ModuleDescriptor = {
                 name: '',
                 type: '',
                 description: ''
-            },
-            {
-                name: '',
-                type: '',
-                description: '',
-                isPrivate: true
             }
         ],
         sourceDirectory: '',
@@ -269,32 +121,6 @@ export const MODEL_DEFAULT: ModuleDescriptor = {
         {
             header: '',
             content: ''
-        },
-        {
-            header: '',
-            content: [
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                }
-            ]
-        },
-        {
-            header: '',
-            optionList: [
-                {
-                    name: '',
-                    description: ''
-                },
-                {
-                    name: '',
-                    description: ''
-                }
-            ]
         }
     ]
 };
@@ -309,57 +135,11 @@ export const PAGE_DEFUALT: ModuleDescriptor = {
                 name: '',
                 type: '',
                 description: ''
-            },
-            {
-                name: '',
-                type: '',
-                description: '',
-                isPrivate: true
             }
         ],
         sourceDirectory: '',
         installDirectory: '',
         files: [
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
-            {
-                source: '',
-                target: '',
-                content: [
-                    {
-                        matchRegex: '',
-                        replace: ''
-                    }
-                ]
-            },
             {
                 source: '',
                 target: '',
@@ -376,32 +156,6 @@ export const PAGE_DEFUALT: ModuleDescriptor = {
         {
             header: '',
             content: ''
-        },
-        {
-            header: '',
-            content: [
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                }
-            ]
-        },
-        {
-            header: '',
-            optionList: [
-                {
-                    name: '',
-                    description: ''
-                },
-                {
-                    name: '',
-                    description: ''
-                }
-            ]
         }
     ]
 };
@@ -417,101 +171,11 @@ export const CONFIG_DEFAULT: ModuleDescriptor = {
                 name: '',
                 type: '',
                 description: ''
-            },
-            {
-                name: '',
-                type: '',
-                description: '',
-                isPrivate: true
             }
         ],
         sourceDirectory: '',
         installDirectory: '',
         files: [
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
-            {
-                source: '',
-                target: ''
-            },
             {
                 source: '',
                 target: ''
@@ -522,32 +186,6 @@ export const CONFIG_DEFAULT: ModuleDescriptor = {
         {
             header: '',
             content: ''
-        },
-        {
-            header: '',
-            content: [
-                {
-                    name: '',
-                    summary: ''
-                },
-                {
-                    name: '',
-                    summary: ''
-                }
-            ]
-        },
-        {
-            header: '',
-            optionList: [
-                {
-                    name: '',
-                    description: ''
-                },
-                {
-                    name: '',
-                    description: ''
-                }
-            ]
         }
     ]
 };
@@ -578,19 +216,6 @@ export const STORE_DEFAULT: ModuleDescriptor = {
         {
             header: '',
             content: ''
-        },
-        {
-            header: '',
-            optionList: [
-                {
-                    name: '',
-                    description: ''
-                },
-                {
-                    name: '',
-                    description: ''
-                }
-            ]
         }
     ]
 };
@@ -600,8 +225,8 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
         version: 1,
         sourceDirectory: '',
         import: {
-            required: ['', ''],
-            optional: ['', '', '', '']
+            required: [''],
+            optional: ['']
         },
         name: '',
         arguments: [
@@ -609,12 +234,6 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
                 name: '',
                 type: '',
                 description: ''
-            },
-            {
-                name: '',
-                type: '',
-                description: '',
-                isPrivate: true
             }
         ]
     }
