@@ -18,7 +18,8 @@ export const CORE = 'core';
 export enum featureType {
     config = 'config',
     store = 'store',
-    project = 'project'
+    project = 'project',
+    services= 'services'
 }
 
 interface Actions{

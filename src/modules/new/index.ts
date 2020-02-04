@@ -87,7 +87,7 @@ function getDirectories( directoryInput: GetDirectoryInput ) : Directories
 
     if (isConfig) {
         installDirectory = `${featureName}${currInstallDir !== './' ? currInstallDir: ''}`;
-    } else if (isStore) {
+    } else if (isStore || currInstallDir === featureType.services) {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir: ''}`;
     } else {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir: ''}/${featureName}`;
