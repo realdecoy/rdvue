@@ -1,5 +1,5 @@
 /**
- * After parsing commands and options and ensuring that they are valid
+ * After parsing commands and ensuring that they are valid
  * this module gets called and processes the input given and creates the necessary
  * configuration and files depending on the specific feature that the user requested.
  */
@@ -14,7 +14,7 @@ import * as CONFIG from './config';
 import * as ROOT_CONFIG from '../../config';
 import { featureType, GENERATE_ACTION } from '../../constants/reusable-constants';
 import * as files from '../../lib/files';
-import { commandAssignmentModule, menuAssignment } from '../../lib/helper-functions';
+import { getFeatureConfiguration, getFeatureMenu } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
 import { CLI, Config } from '../../types/cli';
 import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
@@ -146,8 +146,8 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         const isConfig = userFeature === featureType.config;
         const isStore = userFeature === featureType.store;
         const isProject = userFeature === featureType.project;
-        const currentConfig = commandAssignmentModule(userFeature);
-        const questions = CONFIG.parsePrompts(commandAssignmentModule(userFeature));
+        const currentConfig = getFeatureConfiguration(userFeature);
+        const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
         const projectName = '<project-name>';
 
         let featureNameStore: FeatureNameObject = {};
@@ -157,10 +157,10 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         let projectRoot: string | null;
         let directories: Directories;
 
-        // [1] Check if the user did not use the generate command or had an invalid command
+        // [1] Check if the user did not use the generate action or had an overall invalid command
         if (!isValidCreateRequest) {
              // Show Help Menu
-             const CLIPROPERTY = menuAssignment(operation.feature);
+             const CLIPROPERTY = getFeatureMenu(operation.feature);
              console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
 
              return true;

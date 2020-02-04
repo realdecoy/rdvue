@@ -16,20 +16,21 @@ import {
 import { CLI_DESCRIPTION } from '../index';
 import { Config, Content, Menu, ModuleDescriptor } from '../types/cli';
 
-/*
- Command given would be a property of the  cli object.
- Based of that command the switch would return the property along with
- the configuration of that file updated to the configuration passed in.
-
- hasAssign determines if the file should be assigned a configuration file
- or if only the property being requested to be returned
-*/
-export function commandAssignment(
-  command: string,
+/**
+ * Descripton: Based on the feature inputed the switch would return the property along with
+ * the required configuration of that file.
+ * @param feature - the feature which the user would like the configuration of.
+ * example: model, service, page, project etc.
+ * @param configration - configuration of the feature
+ * @param hasAssign - determines if the file should be assigned a configuration file
+ * or if only the property being requested to be returned
+ */
+export function featureConfigurationAssignment(
+  feature: string,
   configuration: Config,
   hasAssign: boolean,
 ): ModuleDescriptor | Config {
-  switch (command) {
+  switch (feature) {
     case CLI_DESCRIPTION_GENERAL:
       return CLI_DESCRIPTION.general;
 
@@ -87,12 +88,13 @@ export function contentPopulate(
   }
 }
 
-/*
-  * Used in the inndex for the module/new folder
-  * Returns the configration information for based of the current property being passed in
-*/
-export function commandAssignmentModule(command: string): Config {
-  switch (command) {
+/**
+ * Description - Used in the index.ts for the module/new folder
+ * Returns the configration information for based of the current property being passed in
+ * @param feature - feature which youd like to get the configuration of
+ */
+export function getFeatureConfiguration(feature: string): Config {
+  switch (feature) {
     case CLI_DESCRIPTION_COMPONENT:
       return CLI_DESCRIPTION.component.config;
 
@@ -119,14 +121,15 @@ export function commandAssignmentModule(command: string): Config {
   }
 }
 
-/*
-  Helper function for module/new/index.ts for indexing the string given
-  and return the corresponding object property
 
-  if input is unrecognized then it will return the general object
-*/
-export function menuAssignment(propertyName: string): ModuleDescriptor{
-  switch(propertyName){
+/**
+ * Description: Helper function for module/new/index.ts for indexing the string given
+ * and return the corresponding object property
+ * if input is unrecognized then it will return the general object
+ * @param feature - The feature of which you would like the menu for
+ */
+export function getFeatureMenu(feature: string): ModuleDescriptor{
+  switch(feature){
     case CLI_DESCRIPTION_GENERAL:
       return CLI_DESCRIPTION.general;
 

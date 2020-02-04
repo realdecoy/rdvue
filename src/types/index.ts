@@ -42,10 +42,9 @@ export interface FilesContent{
     replace: string;
 }
 
-/*
-    Command type for the commands being input and required
-    used in the src/lib/util.ts & src/index.ts
-*/
+
+// Command type for the commands being input
+// used in the src/lib/util.ts & src/index.ts
 export interface Command{
     action: string;
     feature: string;

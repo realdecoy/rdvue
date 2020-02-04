@@ -38,7 +38,7 @@ function nextSteps(featureName: string): void {
   console.log(` - cd ${featureName}\n - npm install\n - npm run-script serve`);
 }
 
-function hasCommand(args: string[], features: string[]): boolean {
+function hasFeature(args: string[], features: string[]): boolean {
   // Console.log(`hasCommand: ${commands}`);
   const found = features.some((r) => args.includes(r));
 
@@ -278,7 +278,7 @@ export {
   sectionBreak,
   lineBreak,
   nextSteps,
-  hasCommand,
+  hasFeature,
   hasOptions,
   hasHelpOption,
   hasInvalidOption,

@@ -10,11 +10,11 @@ import { USAGE_TEMPLATE } from './config';
 import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
-import { commandAssignment, contentPopulate } from './lib/helper-functions';
+import { contentPopulate, featureConfigurationAssignment } from './lib/helper-functions';
 import * as MODULE_NEW from './modules/new';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
-import { CLI, Config } from './types/cli';
+import { CLI, Config, ModuleDescriptor } from './types/cli';
 import { Command } from './types/index';
 
 
@@ -25,19 +25,21 @@ export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
  * Parse commands provided by template manifest files
  * and generate the CLI help menus as well as extract
  * info useful for generating the sub features
- * @param feature - Command that the user entered (eg. project, page, component)
- * @param required - Boolean value which tells you if the command is required or not.
- *                   Required commands include 'config' and 'store'
+ * @param feature - Feature that the user inputed (eg. project, page, component)
+ * @param required - Boolean value which tells you if the feature is required or not.
+ *                   Required features include 'config' and 'store'
  */
-async function populateCommand(feature: string, required = false) {
+async function populateFeatureMenu(feature: string, required = false) {
   const index = 2;
   let featureConfig: Config;
+  let cliFeature: ModuleDescriptor | Config;
   featureConfig = readSubConfig(feature);
 
-  // [1] Based of the command of the user the configuration property is populated
-  commandAssignment(feature, featureConfig, true);
+  // [1] Based of the feature that the user inputs, the configuration property is populated
+  featureConfigurationAssignment(feature, featureConfig, true);
 
-  // [2] Add command to general help text if not required for new project generation
+  // [2] Add feature, under the "Features: " header,
+  // to general help text if not required for new project generation
   if(!required){
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
@@ -47,12 +49,12 @@ async function populateCommand(feature: string, required = false) {
       );
   }
 
-  // [3] Assign the command for the CLI object to a variable for re-use
-  const cliCommand = commandAssignment(feature, featureConfig, false);
+  // [3] Assign the configuration for the specified feature
+  cliFeature = featureConfigurationAssignment(feature, featureConfig, false);
 
   // [4] Create menu specific to a feature entered by user
   // The USAGE_TEMPLATE in ./config.ts is used as base.
-  cliCommand.menu = USAGE_TEMPLATE(undefined, undefined, feature, undefined, undefined);
+  cliFeature.menu = USAGE_TEMPLATE(undefined, undefined, feature, undefined, undefined);
 
 }
 
@@ -90,10 +92,10 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
   // [4] Parse features provided by template manifest files and generate the CLI help menus
   // for both required and non required features depending on user input
   for (const feature of features) {
-    await populateCommand(feature);
+    await populateFeatureMenu(feature);
   }
   for (const feature of requiredFeatures) {
-    await populateCommand(feature, true);
+    await populateFeatureMenu(feature, true);
   }
 
   // [5] Add 'project' to list of features input by user
@@ -116,7 +118,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
     }
   ];
 
-  // [7] Setting the project config to the newly created commandConfig
+  // [7] Setting the project config to the newly created featureConfig
   CLI_DESCRIPTION.project.config = featureConfig;
 }
 
@@ -150,7 +152,7 @@ async function run () {
     util.heading();
 
     // [5] Check to see if user arguments include any valid features
-    if (util.hasCommand(userArgs, features)) {
+    if (util.hasFeature(userArgs, features)) {
 
       // [6] Puts the user arguments into an object that seperates them into action,
       // feature, option and feature name from format
