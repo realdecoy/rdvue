@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
+import { ACTIONS } from '../constants/reusable-constants';
 import { CLI_DESCRIPTION } from '../index';
 import { actions } from '../modules/actions';
 import { Command } from '../types/index';
@@ -247,6 +248,31 @@ function checkProjectValidity(operation: Command) {
   return results;
 }
 
+// Function to iterate through the actions object
+// and check for the matching action to the users input
+function actionBeingRequested(enteredAction: string): string {
+
+  // To be returned after finding the action
+  let actionReturn = '';
+
+  // Assign the properties of the action object to an array to be iterated through
+  const actionProperties = Object.keys(ACTIONS);
+  const popped = actionProperties.pop();
+
+  /**
+   * @param elem property on the actions object being checked currently
+   * @param index the index of the object being checked
+   */
+  actionProperties.forEach((elem, index) => {
+    // If the action keyword the user entered in found inside the array
+    // the action is assigned to the variable to be returned
+      if(ACTIONS[elem].includes(enteredAction) && popped !== undefined){
+          actionReturn = actionProperties[index];
+      }
+  });
+
+  return actionReturn;
+}
 
 export {
   heading,
@@ -267,4 +293,5 @@ export {
   checkProjectValidity,
   isRootDirectory,
   getProjectRoot,
+  actionBeingRequested
 };

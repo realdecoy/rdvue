@@ -22,3 +22,10 @@ export enum featureType {
     project = 'project'
 }
 
+interface Actions{
+    [key: string ]: string[];
+}
+
+export const ACTIONS: Actions = {
+    generate:['generate', 'g'],
+};
