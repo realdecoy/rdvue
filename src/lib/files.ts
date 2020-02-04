@@ -131,10 +131,14 @@ function writeFile(filePath: string, data: string): boolean {
 
 async function updateFile(filePath: string, file: string, placeholder: string, value: string) {
   const r = new RegExp(placeholder, 'g');
+  let filename = '';
   if (value !== '') {
     const newValue = file.replace(r, value);
     // tslint:disable-next-line:no-console
-    console.log(chalk.yellow(` >> processing ${filePath}`));
+
+    // Obtaining the file name from the file path
+    filename = filePath.replace(/^.*[\\\/]/, '');
+    console.log(chalk.yellow(` >> processing ${filename}`));
     fs.writeFileSync(filePath, newValue, UTF8);
   }
 }
