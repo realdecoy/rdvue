@@ -131,14 +131,11 @@ function writeFile(filePath: string, data: string): boolean {
 
 async function updateFile(filePath: string, file: string, placeholder: string, value: string) {
   const r = new RegExp(placeholder, 'g');
-  let filename = '';
+
   if (value !== '') {
     const newValue = file.replace(r, value);
     // tslint:disable-next-line:no-console
 
-    // Obtaining the file name from the file path
-    filename = filePath.replace(/^.*[\\\/]/, '');
-    console.log(chalk.yellow(` >> processing ${filename}`));
     fs.writeFileSync(filePath, newValue, UTF8);
   }
 }
@@ -157,6 +154,8 @@ async function readAndUpdateFeatureFiles(
     args: any
     )
 {
+  let filename = '';
+  let filePath = '';
 
   // [1] Get the kebab name key from arugments
   const kebabNameKey = (Object.keys(args)
@@ -168,13 +167,17 @@ async function readAndUpdateFeatureFiles(
 
   // [3] For each file in the list
   for (const file of files) {
-    let filePath = '';
+    
     if (typeof file === 'string') {
       continue;
     }
 
     // [3b] Add the target file to the path of the desired destination directory
     filePath = path.join(destDir, file.target);
+
+    // Obtaining the file name from the file path
+    filename = filePath.replace(/^.*[\\\/]/, '');
+    console.log(chalk.yellow(` >> processing ${filename}`));
 
     // [3c] Check if the contents of the file is defined
     if (file.content !== undefined && Array.isArray(file.content)) {
