@@ -151,7 +151,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         const projectName = '<project-name>';
 
         let featureNameStore: FeatureNameObject = {};
-
+        let nameKey = '';
         let answers: Answers = {};
         let kebabNameKey = '';
         let projectRoot: string | null;
@@ -185,33 +185,36 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             return true;
         }
 
-        // [3] Retrieve user response to *questions* asked.
+
+        // [3] Getting the name key used. ex: "projectName" or "componentName"
+        if (currentConfig.arguments !== undefined) {
+            nameKey = currentConfig.arguments[0].name;
+        }
+
+        // [4] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
         if ( userFeatureName !== '' ) {
-            if (currentConfig.arguments !== undefined) {
-                const nameKey = currentConfig.arguments[0].name;
-                answers[nameKey] = userFeatureName;
-            }
+            answers[nameKey] = userFeatureName;
         }
         else {
             answers = await inquirer.prompt(questions);
         }
 
-        // [4] Create a section break
+        // [5] Create a section break
         util.sectionBreak();
 
-        // [5] Obtaining the path of the project root
+        // [6] Obtaining the path of the project root
         projectRoot = util.getProjectRoot();
 
-        // [6] Obtaining the Kebab and Pascal case of the feature (eg. page) name input by user and
+        // [7] Obtaining the Kebab and Pascal case of the feature (eg. page) name input by user and
         // placing it in object "featureNameStore"
         featureNameStore = updateNameProp(currentConfig, answers);
 
-        // [6]b Retrieving the Kebab case from the featureNameStore object
+        // [7]b Retrieving the Kebab case from the featureNameStore object
         kebabNameKey = (Object.keys(featureNameStore)
                                 .filter(f => util.hasKebab(f)))[0];
 
-        // [7] Determine the directories in which the project files are to be stored
+        // [8] Determine the directories in which the project files are to be stored
         directories = getDirectories( {featureNameStore,
                                         currentConfig,
                                         kebabNameKey,
@@ -221,25 +224,26 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
                                         userFeature,
                                     } );
 
-        // [8] Copy and update files from a source directory to a destination directory
+        // [9] Copy and update files from a source directory to a destination directory
         if(currentConfig.files !== undefined){
             await files.copyAndUpdateFiles(
                 directories.sourceDir, directories.installDir,
                 currentConfig.files, featureNameStore);
         }
 
-        // [9] If executing the 'config' feature
+        // [10] If executing the 'config' feature
         if (isConfig) {
-            // [9]b Updating the '.rdvue' config file to include the project root path
+            // [10]b Updating the '.rdvue' config file to include the project root path
             if (kebabNameKey !== undefined)
             {
                 updateConfig(featureNameStore, directories, kebabNameKey);
             }
 
         } else {
-            // [9]b Create a section break
+            // [10]c Create a section break
             util.sectionBreak();
-            console.log(chalk.magenta('[All Done]'));
+            console.log(chalk.magenta
+                        (`The ${userFeature} "${answers[nameKey]}" has been generated.`));
         }
 
         return true;
