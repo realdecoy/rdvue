@@ -23,21 +23,18 @@ function USAGE_TEMPLATE(
             content: [
                 {
                     name: `${chalk.green('generate')}`,
-                    shortcut: `${chalk.blue('g')}`,
+                    shortcut: `${chalk.green('g')}`,
                     summary: 'Used to create a new module',
                 }
             ]
         },
-        // {
-        //     header: 'Features:',
-        //     content: []
-        // },
         {
             header: 'Options:',
-            optionList: [
+            content: [
                 {
-                    name: `${chalk.cyan('help')}`,
-                    description: 'Show this usage guide.'
+                    name: `${chalk.cyan('--help')}`,
+                    shortcut: `${chalk.cyan('-h')}`,
+                    summary: 'Used to create a new module',
                 }
             ]
         }
