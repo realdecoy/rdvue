@@ -6,7 +6,7 @@
     {
       "name": "componentName",
       "type": "string",
-      "description": "The name for the generated component."
+      "description": "the name for the generated component."
     },
     {
       "name": "componentNameKebab",

@@ -3,7 +3,7 @@ import Component from 'vue-class-component';
 
 @Component({
   components: {},
-  name: 'page',
+  name: __PAGE__,
 })
 class __PAGE__ extends Vue {
   // --------------------------------------------------------------------------

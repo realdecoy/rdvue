@@ -15,7 +15,7 @@ import * as utils from './util';
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import { commandType, CORE, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/reusable-constants';
+import {  CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/reusable-constants';
 import { Config } from '../types/cli';
 import { Files } from '../types/index';
 
@@ -131,10 +131,11 @@ function writeFile(filePath: string, data: string): boolean {
 
 async function updateFile(filePath: string, file: string, placeholder: string, value: string) {
   const r = new RegExp(placeholder, 'g');
+
   if (value !== '') {
     const newValue = file.replace(r, value);
     // tslint:disable-next-line:no-console
-    console.log(chalk.yellow(` >> processing ${filePath}`));
+
     fs.writeFileSync(filePath, newValue, UTF8);
   }
 }
@@ -153,6 +154,8 @@ async function readAndUpdateFeatureFiles(
     args: any
     )
 {
+  let filename = '';
+  let filePath = '';
 
   // [1] Get the kebab name key from arugments
   const kebabNameKey = (Object.keys(args)
@@ -164,13 +167,17 @@ async function readAndUpdateFeatureFiles(
 
   // [3] For each file in the list
   for (const file of files) {
-    let filePath = '';
+    
     if (typeof file === 'string') {
       continue;
     }
 
     // [3b] Add the target file to the path of the desired destination directory
     filePath = path.join(destDir, file.target);
+
+    // Obtaining the file name from the file path
+    filename = filePath.replace(/^.*[\\\/]/, '');
+    console.log(chalk.yellow(` >> processing ${filename}`));
 
     // [3c] Check if the contents of the file is defined
     if (file.content !== undefined && Array.isArray(file.content)) {
@@ -213,7 +220,7 @@ async function copyFiles(srcDir: string, destDir: string, files:Array<string|Fil
       source = path.join(srcDir, f.source);
       dest = path.join(destDir, f.target);
     } else {
-      source = path.join(srcDir, `${srcDir.includes(commandType.config) ? CORE : ''}`, f);
+      source = path.join(srcDir, `${srcDir.includes(featureType.config) ? CORE : ''}`, f);
       dest = path.join(destDir, f);
     }
 

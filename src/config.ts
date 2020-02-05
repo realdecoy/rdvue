@@ -8,24 +8,33 @@ const CLI_PROJECT_ROOT: string = __dirname;
 const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../template');
 
 function USAGE_TEMPLATE(
-    action = 'rdvue',
-    command = '<feature>',
+    service = 'rdvue',
+    action = '<action>',
+    feature = '<feature>',
+    featureName = '<feature name>',
     options = '[options]'): Menu[] {
     return [
         {
             header: 'Usage:',
-            content: `$ ${chalk.yellow(action)} ${chalk.magenta(command)} ${chalk.cyan(options)}`,
+            content: `$ ${chalk.yellow(service)} ${chalk.green(action)} ${chalk.magenta(feature)} ${chalk.grey(featureName)} ${chalk.cyan(options)}`
+        },
+        {
+            header: 'Actions:',
+            content: [
+                {
+                    name: `${chalk.green('generate')}`,
+                    shortcut: `${chalk.green('g')}`,
+                    summary: 'Used to create a new module',
+                }
+            ]
         },
         {
             header: 'Options:',
-            optionList: [
+            content: [
                 {
-                    name: `${chalk.cyan('new')}`,
-                    description: 'explicitly create a new feature (optional).'
-                },
-                {
-                    name: `${chalk.cyan('help')}`,
-                    description: 'Show this usage guide.'
+                    name: `${chalk.cyan('--help')}`,
+                    shortcut: `${chalk.cyan('-h')}`,
+                    summary: 'Used to create a new module',
                 }
             ]
         }
