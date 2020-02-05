@@ -7,7 +7,7 @@
     {
       "name": "projectName",
       "type": "string",
-      "description": "The name for the generated project."
+      "description": "the name for the generated project."
     },
     {
       "name": "projectNameKebab",
@@ -61,19 +61,19 @@
     },
     {
       "source": "app/app.scss",
-      "target": "src/page/app/app.scss"
+      "target": "src/pages/app/app.scss"
     },
     {
       "source": "app/app.ts",
-      "target": "src/page/app/app.ts"
+      "target": "src/pages/app/app.ts"
     },
     {
       "source": "app/app.vue",
-      "target": "src/page/app/app.vue"
+      "target": "src/pages/app/app.vue"
     },
     {
       "source": "app/index.ts",
-      "target": "src/page/app/index.ts"
+      "target": "src/pages/app/index.ts"
     },
     {
       "source": "meta/gitignore.txt",

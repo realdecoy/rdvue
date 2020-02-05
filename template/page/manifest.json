@@ -6,7 +6,7 @@
     {
       "name": "pageName",
       "type": "string",
-      "description": "The name for the generated page."
+      "description": "the name for the generated page."
     },
     {
       "name": "pageNameKebab",
@@ -51,16 +51,6 @@
     {
       "source": "page.vue",
       "target": "${pageNameKebab}.vue",
-      "content": [
-        {
-        "matchRegex":"__PAGE__",
-        "replace": "${pageNameKebab}"
-        }
-      ]
-    },
-    {
-      "source": "page.test.ts",
-      "target": "${pageNameKebab}.test.ts",
       "content": [
         {
         "matchRegex":"__PAGE__",

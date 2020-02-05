@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^16.28.2",
+    "@types/chalk": "^2.2.0",
     "@types/clear": "^0.1.0",
     "@types/clui": "^0.3.0",
     "@types/command-line-usage": "^5.0.1",
