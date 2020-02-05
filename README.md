@@ -2,27 +2,25 @@
 
 The [rdvue](https://bitbucket.org/realdecoyteam/rd-vue-cli/src/master/) Command Line Interface (CLI)
 
-
 ## Table of Contents
+
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [Documentation](#documentation)
 
-
 ## Installation
 
 ```bash
-$ npm install rdvue -g
-$ npm install rdvue
+npm install rdvue -g
+npm install rdvue
 ```
 
 And then you should be able to run the CLI with
 
 ```bash
-$ rdvue --help
+rdvue --help
 ```
-
 
 ### Usage
 
@@ -35,30 +33,31 @@ Commands:
   rdvue <action> <feature> <feature name> [options]
 
 
+rdvue [actions]
+
+Actions:
+  generate  g    Creates new feature
+
+
 rdvue [features]
 
 Features:
-  project       Generates a new Vue.js Typescript Single Page Application(SPA)    
+  project       Generates a new Vue.js Typescript Single Page Application(SPA)
   component     Generates shell for a basic component with all its base boilerplate code
   page          Generates shell for a basic page with all its base boilerplate code
   service       Generates shell for a basic service with all its base boilerplate code
   model         Generates shell for a basic model/interface
 
 
-Actions:
-  generate  g    Creates new feature
-
 Options:
   --help        Show help                                                   [boolean]
 ```
-
 
 ## Contributing
 
 RD VUE CLI is a part of the FP Frontend Practice area, where contributions are welcomed, You can help us by fixing bugs, reporting bugs or improving documentation.
 
 Please read the [contributing guidelines](CONTRIBUTING.md).
-
 
 ## Documentation
 
