@@ -1,8 +1,6 @@
-declare function USAGE_TEMPLATE(action?: string, command?: string, options?: string): any[];
-declare const _default: {
-    TEMPLATE_PROJECT_URL: string;
-    USAGE_TEMPLATE: typeof USAGE_TEMPLATE;
-    CLI_PROJECT_ROOT: string;
-    TEMPLATE_ROOT: string;
-};
-export default _default;
+import { Menu } from './types/cli';
+declare const TEMPLATE_PROJECT_URL: string;
+declare const CLI_PROJECT_ROOT: string;
+declare const TEMPLATE_ROOT: string;
+declare function USAGE_TEMPLATE(service?: string, action?: string, feature?: string, featureName?: string, options?: string): Menu[];
+export { TEMPLATE_PROJECT_URL, USAGE_TEMPLATE, CLI_PROJECT_ROOT, TEMPLATE_ROOT, };

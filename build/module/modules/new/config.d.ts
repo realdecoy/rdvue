@@ -1,8 +1,5 @@
-declare function parsePrompts(config: any): any[];
-declare const _default: {
-    TEMPLATE_PROJECT_URL: string;
-    OPTIONS_ALL: string[];
-    QUESTIONS: any[];
-    parsePrompts: typeof parsePrompts;
-};
-export default _default;
+import { OPTIONS_ALL, TEMPLATE_PROJECT_URL } from '../../constants/reusable-constants';
+import { Config } from '../../types/cli';
+declare function parsePrompts(config: Config): any[];
+declare const QUESTIONS: any[];
+export { TEMPLATE_PROJECT_URL, OPTIONS_ALL, QUESTIONS, parsePrompts, };
