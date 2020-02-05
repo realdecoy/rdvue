@@ -32,7 +32,7 @@ RDVUE CLI [Node: 12.13. 1, CLI: 0.0.6]
 rdvue [command]
 
 Commands:
-  rdvue <feature> --new                        
+  rdvue <action> <feature> <feature name> [options]
 
 
 rdvue [features]
@@ -45,8 +45,10 @@ Features:
   model         Generates shell for a basic model/interface
 
 
+Actions:
+  generate  g    Creates new feature
+
 Options:
-  --new         creates new feature                                         [boolean]
   --help        Show help                                                   [boolean]
 ```
 
