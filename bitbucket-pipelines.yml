@@ -3,7 +3,7 @@ image: node:10.15.3
 
 pipelines: 
   branches:
-    master:
+    feature/FP-49-cli---create-a-bitbucket-piepline-:
       - step:
           name: Run TS Lint
           caches: 
