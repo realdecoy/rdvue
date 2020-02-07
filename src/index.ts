@@ -6,11 +6,12 @@
 
 import chalk from 'chalk';
 import clear from 'clear';
+import { Section } from 'command-line-usage';
 import { USAGE_TEMPLATE } from './config';
 import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
-import { contentPopulate, featureConfigurationAssignment } from './lib/helper-functions';
+import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
 import * as MODULE_NEW from './modules/new';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
@@ -39,7 +40,7 @@ async function populateFeatureMenu(feature: string, required = false) {
   featureConfigurationAssignment(feature, featureConfig, true);
 
   // [2] Add feature, under the "Features: " header,
-  // to general help text if not required for new project generation
+  // to general help menu if not required for new project generation
   if(!required){
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
@@ -55,6 +56,22 @@ async function populateFeatureMenu(feature: string, required = false) {
   // [4] Create menu specific to a feature entered by user
   // The USAGE_TEMPLATE in ./config.ts is used as base.
   cliFeature.menu = USAGE_TEMPLATE(undefined, undefined, feature, undefined, undefined);
+
+  cliFeature.menu.splice(index, 0, {
+    header: 'Feature:',
+    content: [],
+  });
+
+  // [5] Add feature, under the "Features: " header,
+  // to feature specific help menu
+  if(!required) {
+    contentPopulate(
+      cliFeature.menu,
+      `${chalk.magenta(feature)}`,
+      `${featureConfig.description}`,
+      index
+    );
+  }
 
 }
 
@@ -81,12 +98,12 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
   });
 
   // [3] Add project config to CLI_DESCRIPTION
-  if(CLI_DESCRIPTION.general.menu[index].content !== undefined){
+  if (CLI_DESCRIPTION.general.menu[index].content !== undefined) {
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
       `${chalk.magenta('project')}`,
       'Generate a new project.', index
-      );
+    );
   }
 
   // [4] Parse features provided by template manifest files and generate the CLI help menus
@@ -141,6 +158,7 @@ async function run () {
     const userArgs = process.argv.slice(sliceNumber);
 
     let project;
+    let operation: Command;
 
     // [2] Clear the console
     clear();
@@ -151,35 +169,46 @@ async function run () {
     // [4] Display "rdvue" heading
     util.heading();
 
-    // [5] Check to see if user arguments include any valid features
-    if (util.hasFeature(userArgs, features)) {
+    // [5] Puts the user arguments into an object that seperates them into action,
+    // feature, option and feature name from format
+    // rdvue <action> <feature> <feature name> [options]
+    operation = {
+      action: util.parseUserInput(userArgs, features).action,
+      feature: `${util.parseUserInput(userArgs, features).feature}`,
+      options: util.parseUserInput(userArgs, features).options,
+      featureName: util.parseUserInput(userArgs, features).featureName,
+    };
 
-      // [6] Puts the user arguments into an object that seperates them into action,
-      // feature, option and feature name from format
-      // rdvue <action> <feature> <feature name> [options]
-      // TODO: TRY CATCH???
-      const operation: Command = {
-        action: util.parseUserInput(userArgs, features).action,
-        feature: `${util.parseUserInput(userArgs, features).feature}`,
-        options: util.parseUserInput(userArgs, features).options,
-        featureName: util.parseUserInput(userArgs, features).featureName,
-      };
+    // [6] Check to see if user arguments include any valid features
+    if ( operation.action !== '' && operation.feature !== '' ) {
 
-      // [6b] Check to see if the project is valid
+      // [7] Check to see if the project is valid
       project = util.checkProjectValidity(operation);
       if (project.isValid) {
-        // [7a] Call the run function in modules/new/index.ts
+
+        // [8a] Call the run function in modules/new/index.ts
         await MODULE_NEW.run(operation, CLI_DESCRIPTION);
       } else {
 
-        // [7b] Throw an error if this is not a valid project
-        throw Error(`'${process.cwd()}' is not a valid Vue project.`);
+        // [8b] Throw an error if this is not a valid project
+        throw Error(`A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`);
       }
-    } else {
-
+    } else if ( util.hasHelpOption(userArgs) ) {
+      // [7b] The user has asked for help -> Gracefully display help menu
+      // NB: The feature 'project' does not have its own help menu as
+      // it does not have its own manifest file
+      if ( util.hasFeature(userArgs, features) && operation.feature !== 'project' ) {
+        const CLIPROPERTY = getFeatureMenu(operation.feature);
+        console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
+      }
+      else {
+        console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+      }
+    }
+    else {
       // [6c] Show Help Text if no valid feature/action have been inputted
-      // TODO: Throw and error for invalid command
       console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+      throw Error(`The command entered was invalid. Please see help menu above.`);
     }
 
     // [6] Force process to exit
