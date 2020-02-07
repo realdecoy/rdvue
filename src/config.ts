@@ -1,37 +1,47 @@
 import chalk from 'chalk';
+import gitUserName from 'git-user-name';
 import path from 'path';
-import gitUserName from "git-user-name";
+import { Menu } from './types/cli';
 
 const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
 const CLI_PROJECT_ROOT: string = __dirname;
 const TEMPLATE_ROOT: string = path.join(CLI_PROJECT_ROOT, '/../../template');
 
 function USAGE_TEMPLATE(
-    action = 'rdvue',
-    command = '<feature>',
-    options = '[options]'): any[] {
+    service = 'rdvue',
+    action = '<action>',
+    feature = '<feature>',
+    featureName = '<feature name>',
+    options = '[options]'): Menu[] {
     return [
         {
             header: 'Usage:',
-            content: `$ ${chalk.yellow(action)} ${chalk.magenta(command)} ${chalk.cyan(options)}`,
+            content: `$ ${chalk.yellow(service)} ${chalk.green(action)} ${chalk.magenta(feature)} ${chalk.grey(featureName)} ${chalk.cyan(options)}`
+        },
+        {
+            header: 'Actions:',
+            content: [
+                {
+                    name: `${chalk.green('generate')}`,
+                    shortcut: `${chalk.green('g')}`,
+                    summary: 'Used to create a new module',
+                }
+            ]
         },
         {
             header: 'Options:',
-            optionList: [
+            content: [
                 {
-                    name: `${chalk.cyan('new')}`,
-                    description: 'explicitly create a new feature (optional).'
-                },
-                {
-                    name: `${chalk.cyan('help')}`,
-                    description: 'Show this usage guide.'
+                    name: `${chalk.cyan('--help')}`,
+                    shortcut: `${chalk.cyan('-h')}`,
+                    summary: 'Used to create a new module',
                 }
             ]
         }
     ];
 }
 
-export default {
+export {
     TEMPLATE_PROJECT_URL,
     USAGE_TEMPLATE,
     CLI_PROJECT_ROOT,
