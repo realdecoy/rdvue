@@ -22,6 +22,7 @@
     "build:main": "tsc -p tsconfig.json",
     "build:module": "tsc -p tsconfig.module.json",
     "lint": "tslint --fix 'src/**/*.ts'",
+    "pipeline_lint": "tslint 'src/**/*.ts'",
     "clean": "trash build test"
   },
   "scripts-info": {

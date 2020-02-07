@@ -9,8 +9,6 @@ pipelines:
           caches: 
             - node
           script: 
-            - pwd
-            - cd src
             - npm --version
             - npm install
-            - npm run lint
+            - npm run pipeline_lint
