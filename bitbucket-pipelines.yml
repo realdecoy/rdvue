@@ -1,0 +1,14 @@
+# Configured to run TSLint.
+image: node:10.15.3
+
+pipelines: 
+  branches:
+    master:
+      - step:
+          name: Run TS Lint
+          caches: 
+            - node
+          script: 
+            - npm --version
+            - npm install
+            - npm run lint
