@@ -3,7 +3,6 @@ cli
 src/**.js
 .idea/*
 package-lock.json
-
 coverage
 .nyc_output
 *.log

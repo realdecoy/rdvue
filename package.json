@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^16.28.2",
+    "@types/chalk": "^2.2.0",
     "@types/clear": "^0.1.0",
     "@types/clui": "^0.3.0",
     "@types/command-line-usage": "^5.0.1",
@@ -40,7 +41,10 @@
     "@types/figlet": "^1.2.0",
     "@types/git-user-name": "^2.0.0",
     "@types/inquirer": "^6.5.0",
+    "@types/jest": "^24.0.25",
+    "@types/jquery": "^3.3.31",
     "@types/mkdirp": "^0.5.2",
+    "@types/mocha": "^5.2.7",
     "@types/rimraf": "^2.0.3",
     "arg": "^4.1.0",
     "bluebird": "^3.5.5",

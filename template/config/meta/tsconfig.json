@@ -13,8 +13,6 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "jest",
-      "cypress"
     ],
     "paths": {
       "@/*": [
@@ -36,6 +34,6 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
   ]
 }
