@@ -24,7 +24,7 @@
       "content": [
         {
           "matchRegex": "__SERVICE__",
-          "replace": "${serviceNameKebab}"
+          "replace": "${serviceName}"
         }
       ]
     }

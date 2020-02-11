@@ -44,7 +44,7 @@
       "content": [
         {
         "matchRegex":"__PAGE__",
-        "replace": "${pageNameKebab}"
+        "replace": "${pageName}"
         }
       ]
     },
