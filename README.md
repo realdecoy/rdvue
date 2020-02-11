@@ -1,4 +1,4 @@
-# rdvue cli [[![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
+# rdvue cli [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
 
 The [rdvue](https://bitbucket.org/realdecoyteam/rd-vue-cli/src/master/) Command Line Interface (CLI)
 
