@@ -93,7 +93,10 @@ function parseUserInput(args: string[], features: string[])
     featureName: '',
     options: ['']
   };
+  // Magic numbers are not allowed: used to check third argument
+  const argIndex = 2;
   let remainingArgs = [];
+
 
   // [1] Checking first argument <action> to see if it includes a valid actions
   // (eg. generate)
@@ -112,22 +115,23 @@ function parseUserInput(args: string[], features: string[])
       // If the feature name entered contains '--' at the beggining of the word
       // it is assumed that they are entering an option instead and therefore, no feature name
       // has been inputed/proccessed.
-      if ( args[2] !== undefined && args[2].substring(0, 2) !== '--' ) {
-        returnObject.featureName = args[2];
+      if ( args[argIndex] !== undefined && args[argIndex].substring(0, argIndex) !== '--' ) {
+        returnObject.featureName = args[argIndex];
       }
 
       // Remove the first <action> and second <feature> argument from array
-      remainingArgs = args.slice(2);
-      remainingArgs.filter( userinput => userinput.substring(0, 2) !== '--');
+      remainingArgs = args.slice(argIndex);
+      remainingArgs.filter( userinput => userinput.substring(0, argIndex) !== '--');
       if ( remainingArgs.length > 1 )
       {
         // TODO: Display help menu & exit
+        // tslint:disable-next-line
         console.log(commandLineUsage(CLI_DESCRIPTION.general.menu));
         throw new Error(chalk.red(`Please enter a valid project name; See help menu above for instructions.`));
       }
 
       // [4] Checking all arguments to see if they contain any options
-      returnObject.options = args.filter(option => option.substring(0, 2) === '--');
+      returnObject.options = args.filter(option => option.substring(0, argIndex) === '--');
 
     }
   } else {
