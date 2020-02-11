@@ -12,3 +12,12 @@ pipelines:
             - npm --version
             - npm install
             - npm run pipeline_lint
+    FP-49-cli---create-a-bitbucket-pipeline-:
+      - step:
+          name: Run TS Lint
+          caches: 
+            - node
+          script: 
+            - npm --version
+            - npm install
+            - npm run pipeline_lint
