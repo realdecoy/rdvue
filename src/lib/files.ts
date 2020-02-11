@@ -17,7 +17,7 @@ import _ from 'lodash';
 import { TEMPLATE_ROOT } from '../config';
 import {  CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/reusable-constants';
 import { Config } from '../types/cli';
-import { Files } from '../types/index';
+import { FeatureNameObject, Files } from '../types/index';
 
 
 const Spinner = CLI.Spinner;
@@ -151,7 +151,7 @@ async function updateFile(filePath: string, file: string, placeholder: string, v
 async function readAndUpdateFeatureFiles(
     destDir: string,
     files: Files[] | Array<string|Files>,
-    args: any
+    args: FeatureNameObject
     )
 {
   let filename = '';
@@ -262,8 +262,8 @@ async function copyAndUpdateFiles(
     sourceDirectory: string,
     installDirectory: string,
     fileList: Files[] | Array<string|Files>,
-    args: any
-  ): Promise<any> {
+    args: FeatureNameObject
+  ): Promise<boolean> {
   const kebabNameKey = (Object.keys(args)
   .filter(f => utils.hasKebab(f)))[0];
   // Spinner animation
@@ -280,7 +280,7 @@ async function copyAndUpdateFiles(
     // tslint:disable-next-line:no-console
     console.log(`[Processing ${kebabName} files]`);
   })
-  .catch((err: any) => {
+  .catch((err) => {
     // TODO: Implement more contextual errors
     // tslint:disable-next-line:no-console
     console.log(err);
@@ -291,6 +291,10 @@ async function copyAndUpdateFiles(
   // tslint:disable-next-line:no-console
   console.log(`[Processed ${args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''} files]`);
   status.stop();
+
+  const promise = Promise.resolve(true);
+
+  return promise;
 }
 
 export {
