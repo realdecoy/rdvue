@@ -167,7 +167,7 @@ async function readAndUpdateFeatureFiles(
 
   // [3] For each file in the list
   for (const file of files) {
-    
+
     if (typeof file === 'string') {
       continue;
     }
@@ -177,6 +177,7 @@ async function readAndUpdateFeatureFiles(
 
     // Obtaining the file name from the file path
     filename = filePath.replace(/^.*[\\\/]/, '');
+    // tslint:disable-next-line
     console.log(chalk.yellow(` >> processing ${filename}`));
 
     // [3c] Check if the contents of the file is defined
@@ -280,8 +281,8 @@ async function copyAndUpdateFiles(
     console.log(`[Processing ${kebabName} files]`);
   })
   .catch((err: any) => {
-    // tslint:disable-next-line:no-console
     // TODO: Implement more contextual errors
+    // tslint:disable-next-line:no-console
     console.log(err);
   });
 
