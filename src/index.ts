@@ -179,6 +179,7 @@ async function run () {
 
       // [6c] Show Help Text if no valid feature/action have been inputted
       // TODO: Throw and error for invalid command
+      // tslint:disable-next-line
       console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
     }
 
@@ -188,6 +189,7 @@ async function run () {
 
     // TODO: Implement more contextual errors
     if (err) {
+      // tslint:disable-next-line
       console.log(chalk.red(`${err}`));
     }
     process.exit();
@@ -196,8 +198,10 @@ async function run () {
 
 run()
 .then(() => {
+  // tslint:disable-next-line
   console.info('info');
 })
 .catch((err: Error) => {
+  // tslint:disable-next-line
   console.error(`Error at run: ${err}`);
 });
