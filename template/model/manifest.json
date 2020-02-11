@@ -24,7 +24,7 @@
       "content": [
         {
           "matchRegex": "__MODEL__",
-          "replace": "${modelName}"
+          "replace": "${modelNameKebab}"
         }
       ]
     }
