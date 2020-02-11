@@ -3,7 +3,7 @@ image: node:10.15.3
 
 pipelines: 
   branches:
-    master:
+    feature/FP-113-clean-up-tslint-errors:
       - step:
           name: Run TS Lint
           caches: 
