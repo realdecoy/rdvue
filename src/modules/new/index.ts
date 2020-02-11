@@ -161,6 +161,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         if (!isValidCreateRequest) {
              // Show Help Menu
              const CLIPROPERTY = getFeatureMenu(operation.feature);
+             // tslint:disable-next-line:no-console
              console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
 
              return true;
@@ -242,6 +243,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         } else {
             // [10]c Create a section break
             util.sectionBreak();
+            // tslint:disable-next-line:no-console
             console.log(chalk.magenta
                         (`The ${userFeature} "${answers[nameKey]}" has been generated.`));
         }
