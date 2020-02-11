@@ -20,6 +20,7 @@ import { CLI, Config } from '../../types/cli';
 import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
 
 interface Answers{
+    // tslint:disable-next-line
     [key: string]: any;
 }
 
@@ -131,6 +132,7 @@ function updateConfig (featureNameStore: FeatureNameObject, directories: Directo
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
+// tslint:disable-next-line
 async function run (operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
