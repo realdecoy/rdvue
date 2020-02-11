@@ -5,58 +5,45 @@ import { Files } from './index';
 */
 
 // CLI Description interface used in the main index.ts in src folder
-export interface CLI{
+export interface CLI {
     general: General;
-    component: Component;
-    service: ModuleDescriptor;
-    model: ModuleDescriptor;
-    page: ModuleDescriptor;
-    config: ModuleDescriptor;
-    store: ModuleDescriptor;
-    project: ModuleDescriptor;
+    [name: string]: ModuleDescriptor;
 }
 
-
 // General types
-export interface General{
+export interface General {
     menu: Menu[];
 }
 
-export interface ModuleDescriptor{
+export interface ModuleDescriptor {
     config?: Config | Project;
     menu?: Menu[];
 }
 // General Types ended
 
 
-// Component Types
-export interface Component{
-    config: Config;
-    menu: Menu[];
-}
-
 // Config types for each property that has configuration settings
-export interface Config{
+export interface Config {
     version: number;
     name?: string;
     description?: string;
     arguments?: Arguments[];
     sourceDirectory: string;
     installDirectory?: string;
-    files?: Array<string|Files>;
+    files?: Array<string | Files>;
     import?: Import;
     singleUserPerProject?: boolean;
     menu?: Menu[];
 }
 
 // Import interface for the files being imported
-export interface Import{
+export interface Import {
     required: string[];
     optional: string[];
 }
 
 // Arguments content type
-export interface Arguments{
+export interface Arguments {
     name: string;
     type: string;
     description: string;
@@ -66,13 +53,13 @@ export interface Arguments{
 }
 
 // Also used in config.ts in src directory
-export interface Menu{
+export interface Menu {
     header: string;
     content: string | Content[];
 }
 
 // Interface fot the content type
-export interface Content{
+export interface Content {
     name: string;
     summary: string;
     shortcut?: string;
@@ -80,12 +67,12 @@ export interface Content{
 
 // TODO: Refactor along with the option change for the cli description
 // Project propery of the CLI description object
-export interface Project{
+export interface Project {
     config: ProjectConfiguration;
 }
 
 // Configuration type for the project property
-export interface ProjectConfiguration{
+export interface ProjectConfiguration {
     version: number;
     sourceDirectory: string;
     import: Import;

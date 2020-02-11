@@ -10,7 +10,7 @@ import { USAGE_TEMPLATE } from './config';
 import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
-import { contentPopulate, featureConfigurationAssignment } from './lib/helper-functions';
+import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
 import * as MODULE_NEW from './modules/new';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
@@ -36,21 +36,21 @@ async function populateFeatureMenu(feature: string, required = false) {
   featureConfig = readSubConfig(feature);
 
   // [1] Based of the feature that the user inputs, the configuration property is populated
-  featureConfigurationAssignment(feature, featureConfig, true);
+  featureConfigurationAssignment(feature, featureConfig);
 
   // [2] Add feature, under the "Features: " header,
   // to general help text if not required for new project generation
-  if(!required){
+  if (!required) {
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
       `${chalk.magenta(feature)}`,
       `${featureConfig.description}`,
       index
-      );
+    );
   }
 
   // [3] Assign the configuration for the specified feature
-  cliFeature = featureConfigurationAssignment(feature, featureConfig, false);
+  cliFeature = getFeatureMenu(feature);
 
   // [4] Create menu specific to a feature entered by user
   // The USAGE_TEMPLATE in ./config.ts is used as base.
@@ -81,12 +81,12 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
   });
 
   // [3] Add project config to CLI_DESCRIPTION
-  if(CLI_DESCRIPTION.general.menu[index].content !== undefined){
+  if (CLI_DESCRIPTION.general.menu[index].content !== undefined) {
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
       `${chalk.magenta('project')}`,
       'Generate a new project.', index
-      );
+    );
   }
 
   // [4] Parse features provided by template manifest files and generate the CLI help menus
@@ -123,7 +123,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
 }
 
 
-async function run () {
+async function run() {
   try {
 
     // [1a] Assign config to object return from JSON parse
@@ -134,7 +134,7 @@ async function run () {
 
     // [1c] Return value if true and empty array if false
     const requiredFeatures: string[] = (mainConfig.import !== undefined) ?
-    mainConfig.import.required : [];
+      mainConfig.import.required : [];
 
     const sliceNumber = 2;
     // [1d] Check for user arguments
@@ -195,9 +195,9 @@ async function run () {
 }
 
 run()
-.then(() => {
-  console.info('info');
-})
-.catch((err: Error) => {
-  console.error(`Error at run: ${err}`);
-});
+  .then(() => {
+    console.info('info');
+  })
+  .catch((err: Error) => {
+    console.error(`Error at run: ${err}`);
+  });
