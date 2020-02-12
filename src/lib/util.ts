@@ -2,9 +2,8 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
-import { ACTIONS } from '../constants/reusable-constants';
+import { ACTIONS } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
-import { actions } from '../modules/actions';
 import { Command } from '../types/index';
 import { fileExists } from './files';
 
@@ -97,8 +96,7 @@ function parseUserInput(args: string[], features: string[])
 
   // [1] Checking first argument <action> to see if it includes a valid actions
   // (eg. generate)
-
-  if ( args[0] !== undefined && actions.includes(args[0]) ) {
+  if ( args[0] !== undefined && actionBeingRequested(args[0]).length > 0 ) {
 
     returnObject.action = args[0];
 
@@ -116,14 +114,18 @@ function parseUserInput(args: string[], features: string[])
         returnObject.featureName = args[2];
       }
 
-      // Remove the first <action> and second <feature> argument from array
+      // Remove the first <action> and second <feature> argument from array and put remaining 
+      // arguments into remainingArgs array
       remainingArgs = args.slice(2);
       remainingArgs.filter( userinput => userinput.substring(0, 2) !== '--');
-      if ( remainingArgs.length > 1 )
+
+      // If there is more than one argument and none of these include the help option
+      // Assume incorrect name has been inputed.
+      if ( remainingArgs.length > 1  && !hasHelpOption(remainingArgs) )
       {
         // TODO: Display help menu & exit
         console.log(commandLineUsage(CLI_DESCRIPTION.general.menu));
-        throw new Error(chalk.red(`Please enter a valid project name; See help menu above for instructions.`));
+        throw new Error(chalk.red(`Please enter a valid feature name; See help menu above for instructions.`));
       }
 
       // [4] Checking all arguments to see if they contain any options
