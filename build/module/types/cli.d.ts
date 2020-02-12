@@ -1,13 +1,7 @@
 import { Files } from './index';
 export interface CLI {
     general: General;
-    component: Component;
-    service: ModuleDescriptor;
-    model: ModuleDescriptor;
-    page: ModuleDescriptor;
-    config: ModuleDescriptor;
-    store: ModuleDescriptor;
-    project: ModuleDescriptor;
+    [name: string]: ModuleDescriptor;
 }
 export interface General {
     menu: Menu[];
@@ -15,10 +9,6 @@ export interface General {
 export interface ModuleDescriptor {
     config?: Config | Project;
     menu?: Menu[];
-}
-export interface Component {
-    config: Config;
-    menu: Menu[];
 }
 export interface Config {
     version: number;

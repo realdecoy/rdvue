@@ -37,7 +37,7 @@ async function populateFeatureMenu(feature: string, required = false) {
   featureConfig = readSubConfig(feature);
 
   // [1] Based of the feature that the user inputs, the configuration property is populated
-  featureConfigurationAssignment(feature, featureConfig, true);
+  featureConfigurationAssignment(feature, featureConfig);
 
   // [2] Add feature, under the "Features: " header,
   // to general help menu if not required for new project generation
@@ -51,7 +51,7 @@ async function populateFeatureMenu(feature: string, required = false) {
   }
 
   // [3] Assign the configuration for the specified feature
-  cliFeature = featureConfigurationAssignment(feature, featureConfig, false);
+  cliFeature = getFeatureMenu(feature);
 
   // [4] Create menu specific to a feature entered by user
   // The USAGE_TEMPLATE in ./config.ts is used as base.
