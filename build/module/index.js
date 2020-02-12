@@ -153,7 +153,7 @@ async function run() {
         // [8b] Throw an error if this is not a valid project
         throw Error(
           `A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`
-          );
+        );
       }
     } else if (util.hasHelpOption(userArgs)) {
       // [7b] The user has asked for help -> Gracefully display help menu
@@ -162,8 +162,10 @@ async function run() {
       if (util.hasFeature(userArgs, features) && operation.feature !==
         'project') {
         const CLIPROPERTY = getFeatureMenu(operation.feature);
+        // tslint:disable-next-line
         console.log(util.displayHelp(CLIPROPERTY.menu));
       } else {
+        // tslint:disable-next-line
         console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
       }
     } else {

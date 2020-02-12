@@ -199,9 +199,11 @@ async function run() {
       // it does not have its own manifest file
       if (util.hasFeature(userArgs, features) && operation.feature !== 'project') {
         const CLIPROPERTY = getFeatureMenu(operation.feature);
+        // tslint:disable-next-line
         console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
       }
       else {
+        // tslint:disable-next-line
         console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
       }
     }

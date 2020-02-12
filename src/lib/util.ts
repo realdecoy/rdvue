@@ -116,10 +116,10 @@ function parseUserInput(args: string[], features: string[]) {
         returnObject.featureName = args[argIndex];
       }
 
-      // Remove the first <action> and second <feature> argument from array and put remaining 
+      // Remove the first <action> and second <feature> argument from array and put remaining
       // arguments into remainingArgs array
-      remainingArgs = args.slice(2);
-      remainingArgs.filter(userinput => userinput.substring(0, 2) !== '--');
+      remainingArgs = args.slice(argIndex);
+      remainingArgs.filter(userinput => userinput.substring(0, argIndex) !== '--');
 
       // If there is more than one argument and none of these include the help option
       // Assume incorrect name has been inputed.
@@ -166,7 +166,10 @@ function getPascalCase(str: string) {
       .replace('-', '')
       .replace('_', '');
   });
-  return `${word.charAt(0).toLocaleUpperCase()}${word.substring(1)}`;
+
+  return `${word.charAt(0)
+    .toLocaleUpperCase()}${word
+      .substring(1)}`;
 }
 
 function hasKebab(str = '') {
