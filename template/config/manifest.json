@@ -4,14 +4,14 @@
   "description": "Mandatory project configuration.",
   "singleUserPerProject": true,
   "arguments": [{
-      "name": "projectName",
-      "type": "string",
-      "description": "the name for the generated project."
-    },
-    {
       "name": "projectNameKebab",
       "type": "string",
-      "description": "The name in Kebab-case for the generated project.",
+      "description": "The name in Kebab-case for the generated project. (e.g. my-project)"
+    },
+    {
+      "name": "projectName",
+      "type": "string",
+      "description": "the name for the generated project.",
       "isPrivate": true
     }
   ],

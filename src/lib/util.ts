@@ -161,9 +161,12 @@ function getKebabCase(str: string) {
 }
 
 function getPascalCase(str: string) {
-  return (str.replace(/\w\S*/g, m => `${m.charAt(0)
-    .toLocaleUpperCase()}${m.substr(1)
-      .toLocaleLowerCase()}`));
+  const word = str.replace(/([-_][a-z0-9])/ig, ($1) => {
+    return $1.toUpperCase()
+      .replace('-', '')
+      .replace('_', '');
+  });
+  return `${word.charAt(0).toLocaleUpperCase()}${word.substring(1)}`;
 }
 
 function hasKebab(str = '') {

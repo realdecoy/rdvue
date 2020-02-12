@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex { ModuleTree } from 'vuex';
+import Vuex, { ModuleTree } from 'vuex';
 import app from './app';
 
 Vue.use(Vuex);
