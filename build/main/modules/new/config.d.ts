@@ -1,4 +1,4 @@
-import { OPTIONS_ALL, TEMPLATE_PROJECT_URL } from '../../constants/reusable-constants';
+import { OPTIONS_ALL, TEMPLATE_PROJECT_URL } from '../../constants/constants';
 import { Config } from '../../types/cli';
 declare function parsePrompts(config: Config): any[];
 declare const QUESTIONS: any[];

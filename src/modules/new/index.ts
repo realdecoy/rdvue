@@ -12,7 +12,7 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureType, GENERATE_ACTION } from '../../constants/reusable-constants';
+import { featureType, GENERATE_ACTION } from '../../constants/constants';
 import * as files from '../../lib/files';
 import { getFeatureConfiguration, getFeatureMenu } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
@@ -20,6 +20,7 @@ import { CLI, Config } from '../../types/cli';
 import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
 
 interface Answers{
+    // tslint:disable-next-line
     [key: string]: any;
 }
 
@@ -131,6 +132,7 @@ function updateConfig (featureNameStore: FeatureNameObject, directories: Directo
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
+// tslint:disable-next-line
 async function run (operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
@@ -161,6 +163,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         if (!isValidCreateRequest) {
              // Show Help Menu
              const CLIPROPERTY = getFeatureMenu(operation.feature);
+             // tslint:disable-next-line:no-console
              console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
 
              return true;
@@ -242,6 +245,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         } else {
             // [10]c Create a section break
             util.sectionBreak();
+            // tslint:disable-next-line:no-console
             console.log(chalk.magenta
                         (`The ${userFeature} "${answers[nameKey]}" has been generated.`));
         }

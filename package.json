@@ -21,7 +21,8 @@
     "build": "run-s clean && run-p build:*",
     "build:main": "tsc -p tsconfig.json",
     "build:module": "tsc -p tsconfig.module.json",
-    "test": "echo \"Error: no test specified\"",
+    "lint": "tslint --fix 'src/**/*.ts'",
+    "pipeline_lint": "tslint 'src/**/*.ts'",
     "clean": "trash build test"
   },
   "scripts-info": {

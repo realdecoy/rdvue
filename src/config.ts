@@ -24,7 +24,7 @@ function USAGE_TEMPLATE(
                 {
                     name: `${chalk.green('generate')}`,
                     shortcut: `${chalk.green('g')}`,
-                    summary: 'Create a new feature',
+                    summary: 'Creates new feature',
                 }
             ]
         },
