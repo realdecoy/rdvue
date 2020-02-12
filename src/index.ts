@@ -41,13 +41,13 @@ async function populateFeatureMenu(feature: string, required = false) {
 
   // [2] Add feature, under the "Features: " header,
   // to general help menu if not required for new project generation
-  if(!required){
+  if (!required) {
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
       `${chalk.magenta(feature)}`,
       `${featureConfig.description}`,
       index
-      );
+    );
   }
 
   // [3] Assign the configuration for the specified feature
@@ -64,7 +64,7 @@ async function populateFeatureMenu(feature: string, required = false) {
 
   // [5] Add feature, under the "Features: " header,
   // to feature specific help menu
-  if(!required) {
+  if (!required) {
     contentPopulate(
       cliFeature.menu,
       `${chalk.magenta(feature)}`,
@@ -140,7 +140,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
 }
 
 
-async function run () {
+async function run() {
   try {
 
     // [1a] Assign config to object return from JSON parse
@@ -151,7 +151,7 @@ async function run () {
 
     // [1c] Return value if true and empty array if false
     const requiredFeatures: string[] = (mainConfig.import !== undefined) ?
-    mainConfig.import.required : [];
+      mainConfig.import.required : [];
 
     const sliceNumber = 2;
     // [1d] Check for user arguments
@@ -180,7 +180,7 @@ async function run () {
     };
 
     // [6] Check to see if user arguments include any valid features
-    if ( operation.action !== '' && operation.feature !== '' ) {
+    if (operation.action !== '' && operation.feature !== '') {
 
       // [7] Check to see if the project is valid
       project = util.checkProjectValidity(operation);
@@ -193,11 +193,11 @@ async function run () {
         // [8b] Throw an error if this is not a valid project
         throw Error(`A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`);
       }
-    } else if ( util.hasHelpOption(userArgs) ) {
+    } else if (util.hasHelpOption(userArgs)) {
       // [7b] The user has asked for help -> Gracefully display help menu
       // NB: The feature 'project' does not have its own help menu as
       // it does not have its own manifest file
-      if ( util.hasFeature(userArgs, features) && operation.feature !== 'project' ) {
+      if (util.hasFeature(userArgs, features) && operation.feature !== 'project') {
         const CLIPROPERTY = getFeatureMenu(operation.feature);
         console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
       }
@@ -207,6 +207,8 @@ async function run () {
     }
     else {
       // [6c] Show Help Text if no valid feature/action have been inputted
+      // TODO: Throw and error for invalid command
+      // tslint:disable-next-line
       console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
       throw Error(`The command entered was invalid. Please see help menu above.`);
     }
@@ -217,6 +219,7 @@ async function run () {
 
     // TODO: Implement more contextual errors
     if (err) {
+      // tslint:disable-next-line
       console.log(chalk.red(`${err}`));
     }
     process.exit();
@@ -224,9 +227,11 @@ async function run () {
 }
 
 run()
-.then(() => {
-  console.info('info');
-})
-.catch((err: Error) => {
-  console.error(`Error at run: ${err}`);
-});
+  .then(() => {
+    // tslint:disable-next-line
+    console.info('info');
+  })
+  .catch((err: Error) => {
+    // tslint:disable-next-line
+    console.error(`Error at run: ${err}`);
+  });

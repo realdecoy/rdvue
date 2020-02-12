@@ -2,7 +2,7 @@
  * Includes helper functions that associated with files (example: copy files, update files)
  */
 import { Config } from '../types/cli';
-import { Files } from '../types/index';
+import { FeatureNameObject, Files } from '../types/index';
 /**
  * Description: Determine whether or not the given file path is a
  *              directory which exists
@@ -54,5 +54,5 @@ declare function replaceTargetFileNames(files: Array<string | Files>, featureNam
  *                           has generated files
  * @param fileList - files to be copied and updated
  */
-declare function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: Files[] | Array<string | Files>, args: any): Promise<any>;
+declare function copyAndUpdateFiles(sourceDirectory: string, installDirectory: string, fileList: Files[] | Array<string | Files>, args: FeatureNameObject): Promise<boolean>;
 export { directoryExists, fileExists, clearTempFiles, getCurrentDirectoryBase, replaceTargetFileNames, copyAndUpdateFiles, readMainConfig, readSubConfig, writeFile, };
