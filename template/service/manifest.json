@@ -5,7 +5,7 @@
   "arguments": [{
       "name": "serviceNameKebab",
       "type": "string",
-      "description": "The name in Kebab-case for the generated service. (e.g. user-service)"
+      "description": "the name for the generated service. (e.g. user-service)"
     },
     {
       "name": "serviceName",

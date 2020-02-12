@@ -5,7 +5,7 @@
   "arguments": [{
       "name": "componentNameKebab",
       "type": "string",
-      "description": "The name in Kebab-case for the generated component. (e.g. my-component)"
+      "description": "the name for the generated component. (e.g. my-component)"
     },
     {
       "name": "componentName",
