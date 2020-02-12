@@ -4,7 +4,7 @@ import {
   OPTIONS_ALL,
   REGEX_PROJECT_NAME,
   TEMPLATE_PROJECT_URL
-} from '../../constants/reusable-constants';
+} from '../../constants/constants';
 import * as files from '../../lib/files';
 import { Arguments, Config } from '../../types/cli';
 

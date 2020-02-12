@@ -12,7 +12,7 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureType, GENERATE_ACTION } from '../../constants/reusable-constants';
+import { featureType, GENERATE_ACTION } from '../../constants/constants';
 import * as files from '../../lib/files';
 import { getFeatureConfiguration, getFeatureMenu } from '../../lib/helper-functions';
 import * as util from '../../lib/util';

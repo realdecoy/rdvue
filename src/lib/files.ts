@@ -15,7 +15,7 @@ import * as utils from './util';
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import {  CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/reusable-constants';
+import {  CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/constants';
 import { Config } from '../types/cli';
 import { FeatureNameObject, Files } from '../types/index';
 

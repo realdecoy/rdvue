@@ -2,9 +2,8 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
-import { ACTIONS } from '../constants/reusable-constants';
+import { ACTIONS } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
-import { actions } from '../modules/actions';
 import { Command } from '../types/index';
 import { fileExists } from './files';
 
@@ -83,8 +82,7 @@ function parseOptions(args: string[]): string[] {
  * @param args - the arguments that the user provided in the command line
  * @param features - the predefined features that can be created with rdvue
  */
-function parseUserInput(args: string[], features: string[])
-{
+function parseUserInput(args: string[], features: string[]) {
   // The user input should be in the form:
   // <action> <feature> <feature name> [options]
   const returnObject = {
@@ -100,14 +98,13 @@ function parseUserInput(args: string[], features: string[])
 
   // [1] Checking first argument <action> to see if it includes a valid actions
   // (eg. generate)
-
-  if ( args[0] !== undefined && actions.includes(args[0]) ) {
+  if (args[0] !== undefined && actionBeingRequested(args[0]).length > 0) {
 
     returnObject.action = args[0];
 
     // [2] Checking second argument <feature>
     // to see if it includes a valid feature (eg. project or page)
-    if ( args[1] !== undefined && features.includes(args[1]) ) {
+    if (args[1] !== undefined && features.includes(args[1])) {
 
       returnObject.feature = args[1];
 
@@ -115,19 +112,22 @@ function parseUserInput(args: string[], features: string[])
       // If the feature name entered contains '--' at the beggining of the word
       // it is assumed that they are entering an option instead and therefore, no feature name
       // has been inputed/proccessed.
-      if ( args[argIndex] !== undefined && args[argIndex].substring(0, argIndex) !== '--' ) {
+      if (args[argIndex] !== undefined && args[argIndex].substring(0, argIndex) !== '--') {
         returnObject.featureName = args[argIndex];
       }
 
-      // Remove the first <action> and second <feature> argument from array
-      remainingArgs = args.slice(argIndex);
-      remainingArgs.filter( userinput => userinput.substring(0, argIndex) !== '--');
-      if ( remainingArgs.length > 1 )
-      {
+      // Remove the first <action> and second <feature> argument from array and put remaining 
+      // arguments into remainingArgs array
+      remainingArgs = args.slice(2);
+      remainingArgs.filter(userinput => userinput.substring(0, 2) !== '--');
+
+      // If there is more than one argument and none of these include the help option
+      // Assume incorrect name has been inputed.
+      if (remainingArgs.length > 1 && !hasHelpOption(remainingArgs)) {
         // TODO: Display help menu & exit
         // tslint:disable-next-line
         console.log(commandLineUsage(CLI_DESCRIPTION.general.menu));
-        throw new Error(chalk.red(`Please enter a valid project name; See help menu above for instructions.`));
+        throw new Error(chalk.red(`Please enter a valid feature name; See help menu above for instructions.`));
       }
 
       // [4] Checking all arguments to see if they contain any options
@@ -154,7 +154,7 @@ function getKebabCase(str: string) {
   let result = '';
   if (match !== null) {
     result = match.map(x => x.toLowerCase())
-    .join('-');
+      .join('-');
   }
 
   return result;
@@ -163,7 +163,7 @@ function getKebabCase(str: string) {
 function getPascalCase(str: string) {
   return (str.replace(/\w\S*/g, m => `${m.charAt(0)
     .toLocaleUpperCase()}${m.substr(1)
-    .toLocaleLowerCase()}`));
+      .toLocaleLowerCase()}`));
 }
 
 function hasKebab(str = '') {
@@ -191,7 +191,7 @@ function isRootDirectory(location: string | null = null): boolean {
       }
     }
   } catch (e) {
-  // tslint:disable-next-line:no-console
+    // tslint:disable-next-line:no-console
     console.warn('Error checking root directory');
     isRoot = true;
   }
@@ -269,9 +269,9 @@ function actionBeingRequested(enteredAction: string): string {
   actionProperties.forEach((elem, index) => {
     // If the action keyword the user entered in found inside the array
     // the action is assigned to the variable to be returned
-      if(ACTIONS[elem].includes(enteredAction)){
-          actionReturn = actionProperties[index];
-      }
+    if (ACTIONS[elem].includes(enteredAction)) {
+      actionReturn = actionProperties[index];
+    }
   });
 
   return actionReturn;
