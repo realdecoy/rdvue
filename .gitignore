@@ -1,5 +1,6 @@
 node_modules
 test
+build
 src/**.js
 .idea/*
 package-lock.json
