@@ -19,7 +19,7 @@ import * as util from '../../lib/util';
 import { CLI, Config } from '../../types/cli';
 import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
 
-interface Answers{
+interface Answers {
     // tslint:disable-next-line
     [key: string]: any;
 }
@@ -31,7 +31,7 @@ interface Answers{
  * @param answers - user arguments that is returned in response to inquirer questions.
  * see: https://www.npmjs.com/package/inquirer
  */
-function updateNameProp (currentConfig: Config, answers: Answers) {
+function updateNameProp(currentConfig: Config, answers: Answers) {
     const featureName: FeatureNameObject = {};
     let nameKey = '';
     let kebabCaseKey = '';
@@ -42,8 +42,7 @@ function updateNameProp (currentConfig: Config, answers: Answers) {
         // for the argument to be retrieved from user
         // Example of nameKey: "pageName" or "pageNameKebab"
         nameKey = currentConfig.arguments[0].name;
-        if (nameKey !== undefined)
-        {
+        if (nameKey !== undefined) {
             if (util.hasKebab(nameKey) === true) {
                 kebabCaseKey = nameKey;
                 pascalCaseKey = `${nameKey.split('Kebab')[0]}`;
@@ -67,8 +66,7 @@ function updateNameProp (currentConfig: Config, answers: Answers) {
  * @param directoryInput - necessessary input required to obtain install and source directory
  * for given project
  */
-function getDirectories( directoryInput: GetDirectoryInput ) : Directories
-{
+function getDirectories(directoryInput: GetDirectoryInput): Directories {
     const kebabNameKey = directoryInput.kebabNameKey;
     const isConfig = directoryInput.isConfig;
     const isStore = directoryInput.isStore;
@@ -83,15 +81,15 @@ function getDirectories( directoryInput: GetDirectoryInput ) : Directories
     sourceDirectory = path.join(
         ROOT_CONFIG.TEMPLATE_ROOT,
         userFeature,
-        (currSourceDir !== './' ? currSourceDir: '')
+        (currSourceDir !== './' ? currSourceDir : '')
     );
 
     if (isConfig) {
-        installDirectory = `${featureName}${currInstallDir !== './' ? currInstallDir: ''}`;
+        installDirectory = `${featureName}${currInstallDir !== './' ? currInstallDir : ''}`;
     } else if (isStore || currInstallDir === featureType.services) {
-        installDirectory = `src/${currInstallDir !== './' ? currInstallDir: ''}`;
+        installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}`;
     } else {
-        installDirectory = `src/${currInstallDir !== './' ? currInstallDir: ''}/${featureName}`;
+        installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}/${featureName}`;
     }
 
     if (projectRoot !== null && !isConfig) {
@@ -111,8 +109,7 @@ function getDirectories( directoryInput: GetDirectoryInput ) : Directories
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
  */
-function updateConfig (featureNameStore: FeatureNameObject, directories: Directories, kebabNameKey = '')
-{
+function updateConfig(featureNameStore: FeatureNameObject, directories: Directories, kebabNameKey = '') {
     let absProjectRoot = '';
     let configFile = '';
     let projectRootConfig: object;
@@ -133,7 +130,7 @@ function updateConfig (featureNameStore: FeatureNameObject, directories: Directo
 }
 
 // tslint:disable-next-line
-async function run (operation: Command, USAGE: CLI): Promise<any> {
+async function run(operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
         const userFeature = operation.feature;
@@ -142,9 +139,9 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         const hasHelpOption = util.hasHelpOption(userOptions);
         const hasInvalidOption = util.hasInvalidOption(userOptions, CONFIG.OPTIONS_ALL);
         const isValidCreateRequest =
-                !hasHelpOption &&
-                !hasInvalidOption &&
-                ( util.actionBeingRequested(userAction) === GENERATE_ACTION );
+            !hasHelpOption &&
+            !hasInvalidOption &&
+            (util.actionBeingRequested(userAction) === GENERATE_ACTION);
         const isConfig = userFeature === featureType.config;
         const isStore = userFeature === featureType.store;
         const isProject = userFeature === featureType.project;
@@ -161,12 +158,12 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
 
         // [1] Check if the user did not use the generate action or had an overall invalid command
         if (!isValidCreateRequest) {
-             // Show Help Menu
-             const CLIPROPERTY = getFeatureMenu(operation.feature);
-             // tslint:disable-next-line:no-console
-             console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
+            // Show Help Menu
+            const CLIPROPERTY = getFeatureMenu(operation.feature);
+            // tslint:disable-next-line:no-console
+            console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
 
-             return true;
+            return true;
         }
 
         // [1]b If the user used the generate actionwith a valid command and option
@@ -175,13 +172,17 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         if (isProject) {
 
             // [2]b Get required config
-            await run({options: userOptions, feature: featureType.config,
-                        action: userAction, featureName: userFeatureName}, USAGE);
+            await run({
+                options: userOptions, feature: featureType.config,
+                action: userAction, featureName: userFeatureName
+            }, USAGE);
 
             // Console.log(">>>project created");
             // [2]c Create required storage for project
-            await run({options: userOptions, feature: featureType.store,
-                         action: userAction, featureName: userFeatureName}, USAGE);
+            await run({
+                options: userOptions, feature: featureType.store,
+                action: userAction, featureName: userFeatureName
+            }, USAGE);
 
             util.nextSteps(projectName);
 
@@ -196,7 +197,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
 
         // [4] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
-        if ( userFeatureName !== '' ) {
+        if (userFeatureName !== '') {
             answers[nameKey] = userFeatureName;
         }
         else {
@@ -215,20 +216,21 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
 
         // [7]b Retrieving the Kebab case from the featureNameStore object
         kebabNameKey = (Object.keys(featureNameStore)
-                                .filter(f => util.hasKebab(f)))[0];
+            .filter(f => util.hasKebab(f)))[0];
 
         // [8] Determine the directories in which the project files are to be stored
-        directories = getDirectories( {featureNameStore,
-                                        currentConfig,
-                                        kebabNameKey,
-                                        isConfig,
-                                        isStore,
-                                        projectRoot,
-                                        userFeature,
-                                    } );
+        directories = getDirectories({
+            featureNameStore,
+            currentConfig,
+            kebabNameKey,
+            isConfig,
+            isStore,
+            projectRoot,
+            userFeature,
+        });
 
         // [9] Copy and update files from a source directory to a destination directory
-        if(currentConfig.files !== undefined){
+        if (currentConfig.files !== undefined) {
             await files.copyAndUpdateFiles(
                 directories.sourceDir, directories.installDir,
                 currentConfig.files, featureNameStore);
@@ -237,8 +239,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         // [10] If executing the 'config' feature
         if (isConfig) {
             // [10]b Updating the '.rdvue' config file to include the project root path
-            if (kebabNameKey !== undefined)
-            {
+            if (kebabNameKey !== undefined) {
                 updateConfig(featureNameStore, directories, kebabNameKey);
             }
 
@@ -247,7 +248,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             util.sectionBreak();
             // tslint:disable-next-line:no-console
             console.log(chalk.magenta
-                        (`The ${userFeature} "${answers[nameKey]}" has been generated.`));
+                (`The ${userFeature} "${answers[nameKey]}" has been generated.`));
         }
 
         return true;
@@ -258,6 +259,6 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         }
     }
 }
-export{
+export {
     run
 };

@@ -2,31 +2,26 @@
   "version": 1,
   "name": "service",
   "description": "Generate a basic service.",
-  "arguments": [
+  "arguments": [{
+      "name": "serviceNameKebab",
+      "type": "string",
+      "description": "the name for the generated service. (e.g. user-service)"
+    },
     {
       "name": "serviceName",
       "type": "string",
-      "description": "the name of the generated service."
-    },
-    {
-      "name": "serviceNameKebab",
-      "type": "string",
-      "description": "The name in Kebab-case for the generated service.",
+      "description": "the name of the generated service.",
       "isPrivate": true
     }
   ],
   "sourceDirectory": "./",
   "installDirectory": "services",
-  "files": [
-    {
-      "source": "service.ts",
-      "target": "${serviceNameKebab}.ts",
-      "content": [
-        {
-          "matchRegex": "__SERVICE__",
-          "replace": "${serviceName}"
-        }
-      ]
-    }
-  ]
+  "files": [{
+    "source": "service.ts",
+    "target": "${serviceNameKebab}.ts",
+    "content": [{
+      "matchRegex": "__SERVICE__",
+      "replace": "${serviceName}"
+    }]
+  }]
 }
