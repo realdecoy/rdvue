@@ -1,2 +1,2 @@
-export * from './__COMPONENT__';
+export * from './__COMPONENT__KEBAB__';
 

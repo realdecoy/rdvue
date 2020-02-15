@@ -1,2 +1,2 @@
-export * from './__PAGE__';
+export * from './__PAGE__KEBAB__';
 

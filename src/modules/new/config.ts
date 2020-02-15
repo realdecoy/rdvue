@@ -4,10 +4,11 @@ import {
   OPTIONS_ALL,
   REGEX_PROJECT_NAME,
   TEMPLATE_PROJECT_URL
-} from '../../constants/reusable-constants';
+} from '../../constants/constants';
 import * as files from '../../lib/files';
 import { Arguments, Config } from '../../types/cli';
 
+// tslint:disable-next-line
 async function validate(this: any, value: string): Promise<any> {
   const done = this.async();
   if (value.length === 0 || value.match(REGEX_PROJECT_NAME) !== null) {
@@ -20,11 +21,13 @@ async function validate(this: any, value: string): Promise<any> {
   }
 }
 
+// tslint:disable-next-line
 function parsePrompts(config: Config): any[] {
   return config.arguments !== undefined ? config.arguments
     .filter((q: Arguments) => {
       return q.isPrivate === undefined;
     })
+    // tslint:disable-next-line
     .map((p: any) => {
       return {
         type: 'input',
@@ -36,6 +39,7 @@ function parsePrompts(config: Config): any[] {
     }) : [];
 }
 
+// tslint:disable-next-line
 const QUESTIONS: any[] = [
   {
     type: 'input',

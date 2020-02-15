@@ -4,7 +4,7 @@ import Component from 'vue-class-component';
 @Component({
   components: {
   },
-  name: 'component',
+  name: '__COMPONENT__KEBAB__',
 })
 class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------

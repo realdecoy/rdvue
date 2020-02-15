@@ -24,7 +24,7 @@ function USAGE_TEMPLATE(
                 {
                     name: `${chalk.green('generate')}`,
                     shortcut: `${chalk.green('g')}`,
-                    summary: 'Used to create a new module',
+                    summary: 'Creates new feature',
                 }
             ]
         },
@@ -34,7 +34,7 @@ function USAGE_TEMPLATE(
                 {
                     name: `${chalk.cyan('--help')}`,
                     shortcut: `${chalk.cyan('-h')}`,
-                    summary: 'Used to create a new module',
+                    summary: 'Display Help Menu',
                 }
             ]
         }

@@ -3,29 +3,31 @@
   "name": "config",
   "description": "Mandatory project configuration.",
   "singleUserPerProject": true,
-  "arguments": [
+  "arguments": [{
+      "name": "projectNameKebab",
+      "type": "string",
+      "description": "the name for the generated project. (e.g. my-project)"
+    },
     {
       "name": "projectName",
       "type": "string",
-      "description": "the name for the generated project."
-    },
-    {
-      "name": "projectNameKebab",
-      "type": "string",
-      "description": "The name in Kebab-case for the generated project.",
-      "isPrivate":true
+      "description": "the name for the generated project.",
+      "isPrivate": true
     }
   ],
   "sourceDirectory": "./",
   "installDirectory": "./",
-  "files": [
-    {
+  "files": [{
       "source": "meta/.rdvue",
       "target": ".rdvue"
     },
     {
       "source": "core/package.json",
-      "target": "package.json"
+      "target": "package.json",
+      "content": [{
+        "matchRegex": "__PROJECT__NAME__KEBAB__",
+        "replace": "${projectNameKebab}"
+      }]
     },
     {
       "source": "core/main.ts",
