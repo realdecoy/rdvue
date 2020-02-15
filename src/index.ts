@@ -228,7 +228,7 @@ export async function run () {
   }
 }
 
-async function runRDVueCLI (userArguments: []) {
+export async function runRDVueCLI (userArguments: []) {
   try {
 
     // [1a] Assign config to object return from JSON parse
@@ -298,4 +298,5 @@ async function runRDVueCLI (userArguments: []) {
   }
 }
 
-module.exports = [runRDVueCLI];
+
+
