@@ -1,14 +1,16 @@
-const { spawn, exec } = require('child_process');
+// const { spawn, exec } = require('child_process');
 
 
-exec('rdvue --help', (error, stdout, stderr) => {
-  if(error) {
-      console.error('${err}');
-      return;
-    }
 
-  console.log('${stdout}');
-});
+// exec('rdvue --help', (error, stdout, stderr) => {
+//   if(error) {
+//       console.error(`${err}`);
+//       return;
+//     }
+
+//   console.log(`${stdout}`);
+//   return stdout;
+// });
 
 
 // const child = spawn('pwd');
@@ -33,9 +35,9 @@ exec('rdvue --help', (error, stdout, stderr) => {
 function sum(a, b) {
     console.log( a + b );
   }
-  // module.exports = sum;
+  module.exports = sum;
 
-  sum(1,2);
+  // sum(1,2);
 
 
 // function runRdVue(args = '', cwd = process.cwd()) {
