@@ -131,6 +131,7 @@ function updateConfig (featureNameStore: FeatureNameObject, directories: Directo
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
+
 async function run (operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
