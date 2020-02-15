@@ -1,6 +1,7 @@
 // Add test file for help function
-const runRDVueCLI = require('../../build/main/index');
+const methods = require('../../build/main/index');
 
-runRDVueCLI(['generate','project','testing']);
+methods.runRDVueCLI(['generate','project','testing']);
+
 
 
