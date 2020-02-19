@@ -140,7 +140,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
 }
 
 
-export async function run () {
+export async function run (userArguments: string[] | undefined) {
   try {
 
     // [1a] Assign config to object return from JSON parse
@@ -167,13 +167,15 @@ export async function run () {
     await populateCLIMenu(features, requiredFeatures, mainConfig);
 
     // [4] Display "rdvue" heading
-    util.heading();
+    if(userArguments === undefined){
+      util.heading();
+    }
 
     // [5] Puts the user arguments into an object that seperates them into action,
     // feature, option and feature name from format
     // rdvue <action> <feature> <feature name> [options]
     operation = {
-      action: util.parseUserInput(userArgs, features).action,
+      action: util.parseUserInput(userArguments !== undefined ? userArguments : userArgs, features).action,
       feature: `${util.parseUserInput(userArgs, features).feature}`,
       options: util.parseUserInput(userArgs, features).options,
       featureName: util.parseUserInput(userArgs, features).featureName,
