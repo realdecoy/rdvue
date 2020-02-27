@@ -7,5 +7,6 @@ package-lock.json
 coverage
 .nyc_output
 *.log
+.vscode
 
 yarn.lock

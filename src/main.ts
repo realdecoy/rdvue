@@ -1,6 +1,6 @@
 import { run } from '../src/index';
 
-run()
+run(undefined)
 .then(() => {
   console.info('info');
 })
