@@ -227,11 +227,11 @@ export async function run (userArguments: [] | undefined ) {
     // [2] Populate feature usage information
     await populateCLIMenu(features, requiredFeatures, mainConfig);
 
-    // [4] Check to see if user arguments include any valid features
+    // [3] Check to see if user arguments include any valid features
     if (util.hasFeature(userArgs, features)) {
 
-      // [5] Puts the user arguments into an object that seperates them into action,
-      // feature, option and feature name from format
+      // [4] Puts the user arguments into an object that seperates them into action,
+      // feature option and feature name from format
       // rdvue <action> <feature> <feature name> [options]
       // TODO: TRY CATCH???
       const operation: Command = {
@@ -241,14 +241,14 @@ export async function run (userArguments: [] | undefined ) {
         featureName: util.parseUserInput(userArgs, features).featureName,
       };
 
-      // [6b] Check to see if the project is valid
+      // [5] Check to see if the project is valid
       project = util.checkProjectValidity(operation);
       if (project.isValid) {
-        // [7a] Call the run function in modules/new/index.ts
+        // [6a] Call the run function in modules/new/index.ts
         await MODULE_NEW.run(operation, CLI_DESCRIPTION);
       } else {
 
-        // [7b] Throw an error if this is not a valid project
+        // [6b] Throw an error if this is not a valid project
         throw Error(`'${process.cwd()}' is not a valid Vue project.`);
       }
     } else {
@@ -269,75 +269,6 @@ export async function run (userArguments: [] | undefined ) {
     }
 }
 
-// export async function runRDVueCLI (userArguments: []) {
-//   try {
-
-//     // [1a] Assign config to object return from JSON parse
-//     const mainConfig = readMainConfig();
-
-//     // [1b] Return list of features if true and empty array if false
-//     const features: string[] = (mainConfig.import !== undefined) ? mainConfig.import.optional : [];
-
-//     // [1c] Return value if true and empty array if false
-//     const requiredFeatures: string[] = (mainConfig.import !== undefined) ?
-//     mainConfig.import.required : [];
-
-//     // [1d] Check for user arguments
-//     const userArgs = userArguments;
-
-//     let project;
-
-//     // [2] Clear the console
-//     clear();
-
-//     // [3] Populate feature usage information
-//     await populateCLIMenu(features, requiredFeatures, mainConfig);
-
-//     // [4] Display "rdvue" heading
-//     util.heading();
-
-//     // [5] Check to see if user arguments include any valid features
-//     if (util.hasFeature(userArgs, features)) {
-
-//       // [6] Puts the user arguments into an object that seperates them into action,
-//       // feature, option and feature name from format
-//       // rdvue <action> <feature> <feature name> [options]
-//       // TODO: TRY CATCH???
-//       const operation: Command = {
-//         action: util.parseUserInput(userArgs, features).action,
-//         feature: `${util.parseUserInput(userArgs, features).feature}`,
-//         options: util.parseUserInput(userArgs, features).options,
-//         featureName: util.parseUserInput(userArgs, features).featureName,
-//       };
-
-//       // [6b] Check to see if the project is valid
-//       project = util.checkProjectValidity(operation);
-//       if (project.isValid) {
-//         // [7a] Call the run function in modules/new/index.ts
-//         await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-//       } else {
-
-//         // [7b] Throw an error if this is not a valid project
-//         throw Error(`'${process.cwd()}' is not a valid Vue project.`);
-//       }
-//     } else {
-
-//       // [6c] Show Help Text if no valid feature/action have been inputted
-//       // TODO: Throw and error for invalid command
-//       console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-//     }
-
-//     // [6] Force process to exit
-//     process.exit();
-//   } catch (err) {
-
-//     // TODO: Implement more contextual errors
-//     if (err) {
-//       console.log(chalk.red(`${err}`));
-//     }
-//     process.exit();
-//   }
-// }
 
 
 
