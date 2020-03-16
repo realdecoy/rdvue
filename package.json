@@ -1,6 +1,6 @@
 {
   "name": "rdvue",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "command line tool for generating and managing vue projects",
   "author": "avidal_realdecoy",
   "main": "build/main/index.js",
@@ -21,7 +21,7 @@
     "build": "run-s clean && run-p build:*",
     "build:main": "tsc -p tsconfig.json",
     "build:module": "tsc -p tsconfig.module.json",
-    "lint": "tslint --fix 'src/**/*.ts'",
+    "lint": "tslint --fix --project tsconfig.json 'src/**/*.ts'",
     "pipeline_lint": "tslint 'src/**/*.ts'",
     "clean": "trash build test"
   },
