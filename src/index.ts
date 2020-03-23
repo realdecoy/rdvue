@@ -140,7 +140,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
 }
 
 
-async function run() {
+export async function run (userArguments: [] | undefined ) {
   try {
 
     // [1a] Assign config to object return from JSON parse
@@ -155,57 +155,58 @@ async function run() {
 
     const sliceNumber = 2;
     // [1d] Check for user arguments
-    const userArgs = process.argv.slice(sliceNumber);
+    if(userArguments === undefined) {
+      const userArgs = process.argv.slice(sliceNumber);
 
-    let project;
-    let operation: Command;
+      let project;
+      let operation: Command;
 
-    // [2] Clear the console
-    clear();
+      // [2] Clear the console
+      clear();
 
-    // [3] Populate feature usage information
-    await populateCLIMenu(features, requiredFeatures, mainConfig);
+      // [3] Populate feature usage information
+      await populateCLIMenu(features, requiredFeatures, mainConfig);
 
-    // [4] Display "rdvue" heading
-    util.heading();
+      // [4] Display "rdvue" heading
+      util.heading();
 
-    // [5] Puts the user arguments into an object that seperates them into action,
-    // feature, option and feature name from format
-    // rdvue <action> <feature> <feature name> [options]
-    operation = {
-      action: util.parseUserInput(userArgs, features).action,
-      feature: `${util.parseUserInput(userArgs, features).feature}`,
-      options: util.parseUserInput(userArgs, features).options,
-      featureName: util.parseUserInput(userArgs, features).featureName,
-    };
+      // [5] Puts the user arguments into an object that seperates them into action,
+      // feature, option and feature name from format
+      // rdvue <action> <feature> <feature name> [options]
+      operation = {
+        action: util.parseUserInput(userArgs, features).action,
+        feature: `${util.parseUserInput(userArgs, features).feature}`,
+        options: util.parseUserInput(userArgs, features).options,
+        featureName: util.parseUserInput(userArgs, features).featureName,
+      };
 
-    // [6] Check to see if user arguments include any valid features
-    if (operation.action !== '' && operation.feature !== '') {
+      // [6] Check to see if user arguments include any valid features
+      if (operation.action !== '' && operation.feature !== '') {
 
-      // [7] Check to see if the project is valid
-      project = util.checkProjectValidity(operation);
-      if (project.isValid) {
+        // [7] Check to see if the project is valid
+        project = util.checkProjectValidity(operation);
+        if (project.isValid) {
 
-        // [8a] Call the run function in modules/new/index.ts
-        await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-      } else {
+         // [8a] Call the run function in modules/new/index.ts
+          await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+        } else {
 
         // [8b] Throw an error if this is not a valid project
-        throw Error(`A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`);
-      }
-    } else if (util.hasHelpOption(userArgs)) {
+          throw Error(`A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`);
+       }
+      } else if (util.hasHelpOption(userArgs)) {
       // [7b] The user has asked for help -> Gracefully display help menu
       // NB: The feature 'project' does not have its own help menu as
       // it does not have its own manifest file
-      if (util.hasFeature(userArgs, features) && operation.feature !== 'project') {
-        const CLIPROPERTY = getFeatureMenu(operation.feature);
-        // tslint:disable-next-line
-        console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
-      }
-      else {
-        // tslint:disable-next-line
-        console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-      }
+        if (util.hasFeature(userArgs, features) && operation.feature !== 'project') {
+          const CLIPROPERTY = getFeatureMenu(operation.feature);
+          // tslint:disable-next-line
+          console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
+        }
+        else {
+          // tslint:disable-next-line
+          console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+        }
     }
     else {
       // [6c] Show Help Text if no valid feature/action have been inputted
@@ -217,6 +218,46 @@ async function run() {
 
     // [6] Force process to exit
     process.exit();
+  } else {
+    // [1d] Check for user arguments
+    const userArgs = userArguments;
+
+    let project;
+
+    // [2] Populate feature usage information
+    await populateCLIMenu(features, requiredFeatures, mainConfig);
+
+    // [3] Check to see if user arguments include any valid features
+    if (util.hasFeature(userArgs, features)) {
+
+      // [4] Puts the user arguments into an object that seperates them into action,
+      // feature option and feature name from format
+      // rdvue <action> <feature> <feature name> [options]
+      // TODO: TRY CATCH???
+      const operation: Command = {
+        action: util.parseUserInput(userArgs, features).action,
+        feature: `${util.parseUserInput(userArgs, features).feature}`,
+        options: util.parseUserInput(userArgs, features).options,
+        featureName: util.parseUserInput(userArgs, features).featureName,
+      };
+
+      // [5] Check to see if the project is valid
+      project = util.checkProjectValidity(operation);
+      if (project.isValid) {
+        // [6a] Call the run function in modules/new/index.ts
+        await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+      } else {
+
+        // [6b] Throw an error if this is not a valid project
+        throw Error(`'${process.cwd()}' is not a valid Vue project.`);
+      }
+    } else {
+
+      // [6c] Show Help Text if no valid feature/action have been inputted
+      // TODO: Throw and error for invalid command
+      console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+    }
+    }
   } catch (err) {
 
     // TODO: Implement more contextual errors
@@ -224,16 +265,10 @@ async function run() {
       // tslint:disable-next-line
       console.log(chalk.red(`${err}`));
     }
-    process.exit();
-  }
+
+    }
 }
 
-run()
-  .then(() => {
-    // tslint:disable-next-line
-    console.info('info');
-  })
-  .catch((err: Error) => {
-    // tslint:disable-next-line
-    console.error(`Error at run: ${err}`);
-  });
+
+
+

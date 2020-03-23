@@ -129,8 +129,8 @@ function updateConfig(featureNameStore: FeatureNameObject, directories: Director
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
-// tslint:disable-next-line
-async function run(operation: Command, USAGE: CLI): Promise<any> {
+
+async function run (operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
         const userFeature = operation.feature;
