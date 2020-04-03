@@ -1,16 +1,16 @@
 {
-  "name": "rdvue",
+  "name": "rd-vue",
   "version": "0.4.0",
   "description": "command line tool for generating and managing vue projects",
-  "author": "avidal_realdecoy",
+  "author": "realdecoy_it",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "homepage": "https://bitbucket.org/realdecoyteam/rd-vue-cli#readme",
+  "homepage": "https://github.com/realdecoyit/rd-vue#readme",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://avidal_realdecoy@bitbucket.org/realdecoyteam/rd-vue-cli.git"
+    "url": "git+https://github.com/realdecoyit/rd-vue.git"
   },
   "bin": {
     "rdvue": "./build/main/index.js"
