@@ -1,5 +1,5 @@
 node_modules
-test
+cli
 build
 src/**.js
 .idea/*
@@ -7,5 +7,6 @@ package-lock.json
 coverage
 .nyc_output
 *.log
+.vscode
 
 yarn.lock
