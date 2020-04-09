@@ -55,7 +55,8 @@ async function populateFeatureMenu(feature: string, required = false) {
 
   // [4] Create menu specific to a feature entered by user
   // The USAGE_TEMPLATE in ./config.ts is used as base.
-  cliFeature.menu = USAGE_TEMPLATE(undefined, undefined, feature, undefined, undefined);
+  cliFeature.menu = USAGE_TEMPLATE(undefined, undefined, feature, undefined,
+    undefined);
 
   cliFeature.menu.splice(index, 0, {
     header: 'Feature:',
@@ -83,7 +84,8 @@ async function populateFeatureMenu(feature: string, required = false) {
  * @param mainConfig - config data populated from template.json.
  * Describes options the tool can take.
  */
-async function populateCLIMenu(features: string[], requiredFeatures: string[], mainConfig: Config) {
+async function populateCLIMenu(features: string[], requiredFeatures: string[],
+  mainConfig: Config) {
 
   const index = 2;
 
@@ -121,8 +123,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
   // [6] Creating 'project' features configuration
   featureConfig = mainConfig;
   featureConfig.name = 'project';
-  featureConfig.arguments = [
-    {
+  featureConfig.arguments = [{
       'name': 'projectName',
       'type': 'string',
       'description': 'the name for the generated project.'
@@ -140,14 +141,15 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[], m
 }
 
 
-export async function run (userArguments: [] | undefined ) {
+export async function run(userArguments: [] | undefined) {
   try {
 
     // [1a] Assign config to object return from JSON parse
     const mainConfig = readMainConfig();
 
     // [1b] Return list of features if true and empty array if false
-    const features: string[] = (mainConfig.import !== undefined) ? mainConfig.import.optional : [];
+    const features: string[] = (mainConfig.import !== undefined) ? mainConfig
+      .import.optional : [];
 
     // [1c] Return value if true and empty array if false
     const requiredFeatures: string[] = (mainConfig.import !== undefined) ?
@@ -155,7 +157,7 @@ export async function run (userArguments: [] | undefined ) {
 
     const sliceNumber = 2;
     // [1d] Check for user arguments
-    if(userArguments === undefined) {
+    if (userArguments === undefined) {
       const userArgs = process.argv.slice(sliceNumber);
 
       let project;
@@ -187,76 +189,78 @@ export async function run (userArguments: [] | undefined ) {
         project = util.checkProjectValidity(operation);
         if (project.isValid) {
 
-         // [8a] Call the run function in modules/new/index.ts
+          // [8a] Call the run function in modules/new/index.ts
           await MODULE_NEW.run(operation, CLI_DESCRIPTION);
         } else {
 
-        // [8b] Throw an error if this is not a valid project
-          throw Error(`A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`);
-       }
+          // [8b] Throw an error if this is not a valid project
+          throw Error(
+            `A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`
+            );
+        }
       } else if (util.hasHelpOption(userArgs)) {
-      // [7b] The user has asked for help -> Gracefully display help menu
-      // NB: The feature 'project' does not have its own help menu as
-      // it does not have its own manifest file
-        if (util.hasFeature(userArgs, features) && operation.feature !== 'project') {
+        // [7b] The user has asked for help -> Gracefully display help menu
+        // NB: The feature 'project' does not have its own help menu as
+        // it does not have its own manifest file
+        if (util.hasFeature(userArgs, features) && operation.feature !==
+          'project') {
           const CLIPROPERTY = getFeatureMenu(operation.feature);
           // tslint:disable-next-line
           console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
-        }
-        else {
+        } else {
           // tslint:disable-next-line
           console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
         }
-    }
-    else {
-      // [6c] Show Help Text if no valid feature/action have been inputted
-      // TODO: Throw and error for invalid command
-      // tslint:disable-next-line
-      console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-      throw Error(`The command entered was invalid. Please see help menu above.`);
-    }
+      } else {
+        // [6c] Show Help Text if no valid feature/action have been inputted
+        // TODO: Throw and error for invalid command
+        // tslint:disable-next-line
+        console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+        throw Error(
+          `The command entered was invalid. Please see help menu above.`);
+      }
 
-    // [6] Force process to exit
-    process.exit();
-  } else {
-    // [1d] Check for user arguments
-    const userArgs = userArguments;
+      // [6] Force process to exit
+      process.exit();
+    } else {
+      // [1d] Check for user arguments
+      const userArgs = userArguments;
 
-    let project;
+      let project;
 
-    // [2] Populate feature usage information
-    await populateCLIMenu(features, requiredFeatures, mainConfig);
+      // [2] Populate feature usage information
+      await populateCLIMenu(features, requiredFeatures, mainConfig);
 
-    // [3] Check to see if user arguments include any valid features
-    if (util.hasFeature(userArgs, features)) {
+      // [3] Check to see if user arguments include any valid features
+      if (util.hasFeature(userArgs, features)) {
 
-      // [4] Puts the user arguments into an object that seperates them into action,
-      // feature option and feature name from format
-      // rdvue <action> <feature> <feature name> [options]
-      // TODO: TRY CATCH???
-      const operation: Command = {
-        action: util.parseUserInput(userArgs, features).action,
-        feature: `${util.parseUserInput(userArgs, features).feature}`,
-        options: util.parseUserInput(userArgs, features).options,
-        featureName: util.parseUserInput(userArgs, features).featureName,
-      };
+        // [4] Puts the user arguments into an object that seperates them into action,
+        // feature option and feature name from format
+        // rdvue <action> <feature> <feature name> [options]
+        // TODO: TRY CATCH???
+        const operation: Command = {
+          action: util.parseUserInput(userArgs, features).action,
+          feature: `${util.parseUserInput(userArgs, features).feature}`,
+          options: util.parseUserInput(userArgs, features).options,
+          featureName: util.parseUserInput(userArgs, features).featureName,
+        };
 
-      // [5] Check to see if the project is valid
-      project = util.checkProjectValidity(operation);
-      if (project.isValid) {
-        // [6a] Call the run function in modules/new/index.ts
-        await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+        // [5] Check to see if the project is valid
+        project = util.checkProjectValidity(operation);
+        if (project.isValid) {
+          // [6a] Call the run function in modules/new/index.ts
+          await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+        } else {
+
+          // [6b] Throw an error if this is not a valid project
+          throw Error(`'${process.cwd()}' is not a valid Vue project.`);
+        }
       } else {
 
-        // [6b] Throw an error if this is not a valid project
-        throw Error(`'${process.cwd()}' is not a valid Vue project.`);
+        // [6c] Show Help Text if no valid feature/action have been inputted
+        // TODO: Throw and error for invalid command
+        console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
       }
-    } else {
-
-      // [6c] Show Help Text if no valid feature/action have been inputted
-      // TODO: Throw and error for invalid command
-      console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-    }
     }
   } catch (err) {
 
@@ -266,9 +270,13 @@ export async function run (userArguments: [] | undefined ) {
       console.log(chalk.red(`${err}`));
     }
 
-    }
+  }
 }
 
-
-
-
+run(undefined)
+.then(() => {
+  console.info('info');
+})
+.catch((err: Error) => {
+  console.error(`Error at run: ${err}`);
+});
