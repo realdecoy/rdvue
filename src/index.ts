@@ -275,7 +275,7 @@ export async function run(userArguments: [] | undefined) {
 
 run(undefined)
 .then(() => {
-  console.info('info');
+  console.info('');
 })
 .catch((err: Error) => {
   console.error(`Error at run: ${err}`);
