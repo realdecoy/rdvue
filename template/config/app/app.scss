@@ -39,7 +39,7 @@ body {
   margin-top: 2rem;
 }
 
-.call-sign, .contents {
+.call-sign {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -62,8 +62,13 @@ body {
 }
 
 .contents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   padding: 2rem;
   padding-top: 4rem;
+  @media only screen and (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
 }
 .description, .features {
   font-size: .9rem;
@@ -72,6 +77,11 @@ body {
 
 .features {
   margin-left: 2rem;
+  @media only screen and (max-width: 800px) {
+    margin-top: 2rem;
+    margin-left: 0;
+  }
+
   ul {
     list-style: none;
   }
@@ -84,4 +94,8 @@ body {
     width: 1em;
     margin-left: -1em;
   }
+}
+
+.sub-text {
+  color: #718096; // @tailwind -> .text-gray-600
 }
