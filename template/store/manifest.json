@@ -16,6 +16,16 @@
           "replace": "app"
         }
       ]
+    },
+    {
+      "source": "../auth/content/store/auth.ts",
+      "target": "./auth.ts",
+      "content": [
+        {
+          "matchRegex": "__STORE__",
+          "replace": "auth"
+        }
+      ]
     }
   ]
 }

@@ -12,12 +12,21 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureType, GENERATE_ACTION } from '../../constants/constants';
+import { featureGroup, featureType, GENERATE_ACTION } from '../../constants/constants';
 import * as files from '../../lib/files';
-import { getFeatureConfiguration, getFeatureMenu } from '../../lib/helper-functions';
+import {
+    getFeatureConfiguration,
+    getFeatureMenu
+} from '../../lib/helper-functions';
 import * as util from '../../lib/util';
 import { CLI, Config } from '../../types/cli';
-import { Command, Directories, FeatureNameObject, GetDirectoryInput } from '../../types/index';
+import {
+    Command,
+    Directories,
+    FeatureNameObject,
+    Files,
+    GetDirectoryInput
+} from '../../types/index';
 
 interface Answers {
     // tslint:disable-next-line
@@ -46,7 +55,6 @@ function updateNameProp(currentConfig: Config, answers: Answers) {
             if (util.hasKebab(nameKey) === true) {
                 kebabCaseKey = nameKey;
                 pascalCaseKey = `${nameKey.split('Kebab')[0]}`;
-
             } else {
                 kebabCaseKey = `${nameKey}Kebab`;
                 pascalCaseKey = nameKey;
@@ -54,7 +62,6 @@ function updateNameProp(currentConfig: Config, answers: Answers) {
             featureName[kebabCaseKey] = util.getKebabCase(answers[nameKey]);
             featureName[pascalCaseKey] = util.getPascalCase(answers[nameKey]);
         }
-
     }
 
     return featureName;
@@ -81,15 +88,23 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
     sourceDirectory = path.join(
         ROOT_CONFIG.TEMPLATE_ROOT,
         userFeature,
-        (currSourceDir !== './' ? currSourceDir : '')
+        currSourceDir !== './' ? currSourceDir : ''
     );
 
     if (isConfig) {
-        installDirectory = `${featureName}${currInstallDir !== './' ? currInstallDir : ''}`;
-    } else if (isStore || currInstallDir === featureType.services) {
+        installDirectory = `${featureName}${
+            currInstallDir !== './' ? currInstallDir : ''
+            }`;
+    } else if (
+        isStore ||
+        currInstallDir === featureType.services ||
+        userFeature === featureType.auth
+    ) {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}`;
     } else {
-        installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}/${featureName}`;
+        installDirectory = `src/${
+            currInstallDir !== './' ? currInstallDir : ''
+            }/${featureName}`;
     }
 
     if (projectRoot !== null && !isConfig) {
@@ -98,9 +113,8 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
 
     return {
         installDir: installDirectory,
-        sourceDir: sourceDirectory,
+        sourceDir: sourceDirectory
     };
-
 }
 
 /**
@@ -109,14 +123,18 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
  */
-function updateConfig(featureNameStore: FeatureNameObject, directories: Directories, kebabNameKey = '') {
+function updateConfig(
+    featureNameStore: FeatureNameObject,
+    directories: Directories,
+    kebabNameKey = ''
+) {
     let absProjectRoot = '';
     let configFile = '';
     let projectRootConfig: object;
     let strProjectRootConfig = '';
 
     absProjectRoot = path.resolve(directories.installDir);
-    configFile = path.join(absProjectRoot, '.rdvue');
+    configFile = path.join(absProjectRoot, '.rdvue/.rdvue');
     projectRootConfig = {
         projectRoot: absProjectRoot
     };
@@ -129,25 +147,29 @@ function updateConfig(featureNameStore: FeatureNameObject, directories: Director
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
-
-async function run (operation: Command, USAGE: CLI): Promise<any> {
+// tslint:disable-next-line
+async function run(operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
         const userFeature = operation.feature;
         const userOptions = operation.options;
         const userFeatureName = operation.featureName;
         const hasHelpOption = util.hasHelpOption(userOptions);
-        const hasInvalidOption = util.hasInvalidOption(userOptions, CONFIG.OPTIONS_ALL);
+        const hasInvalidOption = util.hasInvalidOption(
+            userOptions,
+            CONFIG.OPTIONS_ALL
+        );
         const isValidCreateRequest =
             !hasHelpOption &&
             !hasInvalidOption &&
-            (util.actionBeingRequested(userAction) === GENERATE_ACTION);
+            util.actionBeingRequested(userAction) === GENERATE_ACTION;
         const isConfig = userFeature === featureType.config;
         const isStore = userFeature === featureType.store;
-        const isProject = userFeature === featureType.project;
+        let isProject = userFeature === featureType.project;
         const currentConfig = getFeatureConfiguration(userFeature);
         const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
         const projectName = '<project-name>';
+        const availableFeatureGroups: string[] = Object.values(featureGroup);
 
         let featureNameStore: FeatureNameObject = {};
         let nameKey = '';
@@ -166,29 +188,68 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             return true;
         }
 
-        // [1]b If the user used the generate actionwith a valid command and option
+        // [1]b If the user used a feature group request
+        if (availableFeatureGroups.includes(userFeature)) {
+            const parsed = files.readSubConfig(userFeature);
+
+            // [1]c Create a section break
+            util.sectionBreak();
+
+            // [1]d Obtaining the path of the project root
+            projectRoot = util.getProjectRoot();
+
+            // [1]e Get directory informations
+            directories = getDirectories({
+                featureNameStore,
+                currentConfig,
+                kebabNameKey,
+                isConfig,
+                isStore,
+                projectRoot,
+                userFeature
+            });
+
+            // [1]f Copy files into designated location
+            await files.copyFiles(
+                directories.sourceDir,
+                directories.installDir,
+                parsed.files as Files[]
+            );
+
+            // [1]g Update the .rdvue/routes.json file in src directory in the project
+            util.parseDynamicRoutes(userFeature);
+            isProject = false;
+        }
 
         // [2] Check if the user requested a new project
         if (isProject) {
-
             // [2]b Get required config
-            await run({
-                options: userOptions, feature: featureType.config,
-                action: userAction, featureName: userFeatureName
-            }, USAGE);
+            await run(
+                {
+                    options: userOptions,
+                    feature: featureType.config,
+                    action: userAction,
+                    featureName: userFeatureName
+                },
+                USAGE
+            );
 
             // Console.log(">>>project created");
             // [2]c Create required storage for project
-            await run({
-                options: userOptions, feature: featureType.store,
-                action: userAction, featureName: userFeatureName
-            }, USAGE);
+            await run(
+                {
+                    options: userOptions,
+                    feature: featureType.store,
+                    action: userAction,
+                    featureName: userFeatureName
+                },
+                USAGE
+            );
 
             util.nextSteps(projectName);
 
             return true;
         }
-
 
         // [3] Getting the name key used. ex: "projectName" or "componentName"
         if (currentConfig.arguments !== undefined) {
@@ -197,10 +258,9 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
 
         // [4] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
-        if (userFeatureName !== '') {
+        if (userFeatureName !== '' || userFeature === 'auth') {
             answers[nameKey] = userFeatureName;
-        }
-        else {
+        } else {
             answers = await inquirer.prompt(questions);
         }
 
@@ -215,8 +275,9 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         featureNameStore = updateNameProp(currentConfig, answers);
 
         // [7]b Retrieving the Kebab case from the featureNameStore object
-        kebabNameKey = (Object.keys(featureNameStore)
-            .filter(f => util.hasKebab(f)))[0];
+        kebabNameKey = Object.keys(featureNameStore).filter(f =>
+            util.hasKebab(f)
+        )[0];
 
         // [8] Determine the directories in which the project files are to be stored
         directories = getDirectories({
@@ -226,14 +287,17 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             isConfig,
             isStore,
             projectRoot,
-            userFeature,
+            userFeature
         });
 
         // [9] Copy and update files from a source directory to a destination directory
         if (currentConfig.files !== undefined) {
             await files.copyAndUpdateFiles(
-                directories.sourceDir, directories.installDir,
-                currentConfig.files, featureNameStore);
+                directories.sourceDir,
+                directories.installDir,
+                currentConfig.files,
+                featureNameStore
+            );
         }
 
         // [10] If executing the 'config' feature
@@ -242,13 +306,15 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             if (kebabNameKey !== undefined) {
                 updateConfig(featureNameStore, directories, kebabNameKey);
             }
-
         } else {
             // [10]c Create a section break
             util.sectionBreak();
             // tslint:disable-next-line:no-console
-            console.log(chalk.magenta
-                (`The ${userFeature} "${answers[nameKey]}" has been generated.`));
+            console.log(
+                chalk.magenta(
+                    `The ${userFeature} "${answers[nameKey]}" has been generated.`
+                )
+            );
         }
 
         return true;
@@ -259,6 +325,4 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
         }
     }
 }
-export {
-    run
-};
+export { run };
