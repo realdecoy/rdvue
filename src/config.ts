@@ -12,11 +12,12 @@ function USAGE_TEMPLATE(
     action = '<action>',
     feature = '<feature>',
     featureName = '<feature name>',
+    featureGroup = '<feature group>',
     options = '[options]'): Menu[] {
     return [
         {
             header: 'Usage:',
-            content: `$ ${chalk.yellow(service)} ${chalk.green(action)} ${chalk.magenta(feature)} ${chalk.grey(featureName)} ${chalk.cyan(options)}`
+            content: `$ ${chalk.yellow(service)} ${chalk.green(action)} ${chalk.yellow(featureGroup)} ${chalk.red('or')} ${chalk.magenta(feature)} ${chalk.grey(featureName)} ${chalk.cyan(options)}`
         },
         {
             header: 'Actions:',
@@ -25,6 +26,15 @@ function USAGE_TEMPLATE(
                     name: `${chalk.green('generate')}`,
                     shortcut: `${chalk.green('g')}`,
                     summary: 'Creates new feature',
+                }
+            ]
+        },
+        {
+            header: 'Feature Group:',
+            content: [
+                {
+                    name: `${chalk.yellow('auth')}`,
+                    summary: 'Used to create the authentication features'
                 }
             ]
         },

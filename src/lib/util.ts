@@ -5,7 +5,9 @@ import path from 'path';
 import { ACTIONS } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
-import { fileExists } from './files';
+import { fileExists, readFile, writeFile } from './files';
+import * as featureGroupRoutes from './routes';
+import * as featureGroupStores from './stores';
 
 const helpOptions = ['--help', '-h'];
 
@@ -206,7 +208,7 @@ function isRootDirectory(location: string | null = null): boolean {
 }
 
 function getProjectRoot() {
-  const configFileName = '.rdvue';
+  const configFileName = '.rdvue/.rdvue';
   const maxTraverse = 20;
 
   let currentPath = process.cwd();
@@ -283,6 +285,53 @@ function actionBeingRequested(enteredAction: string): string {
   return actionReturn;
 }
 
+// Function to update the .rdvue/routes.json file when a new feature group is added
+function parseDynamicRoutes(feature: string): void {
+  // Assign feature group files to a constant
+  const routesObject: { [key: string]: string } = featureGroupRoutes;
+  const storesObject: { [key: string]: string } = featureGroupStores;
+
+  // 1[a] Check for the root of the project
+  const projectroot = getProjectRoot();
+  let CLI_JS_PATH;
+  let CLI_STORE_PATH;
+  let rdRoutes;
+  let rdStores;
+  let rdRoutesStringToBeWritten = '';
+  let rdStoresStringToBeWritten = '';
+
+  // 1[b] Once inside of a project values are assigned to be used
+  if (projectroot !== null) {
+    // Allocate the location of the routes.js file
+    CLI_JS_PATH = path.join(projectroot, '.rdvue', 'routes.js');
+    CLI_STORE_PATH = path.join(projectroot, '.rdvue', 'stores.js');
+
+    // Read files to be modified
+    rdRoutes = readFile(CLI_JS_PATH);
+    rdStores = readFile(CLI_STORE_PATH);
+
+    // Removed closers from files to append information
+    const rdRoutesModified = rdRoutes.slice(0, -2);
+    const rdStoresModified = rdStores.slice(0, -1);
+
+    // Append the new information and close files after changes
+    rdRoutesStringToBeWritten = `${rdRoutesModified}${routesObject[feature]}];`;
+    rdStoresStringToBeWritten = `${rdStoresModified}${storesObject[feature]}}`;
+  }
+
+  // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
+  if (
+    rdRoutes !== undefined &&
+    CLI_JS_PATH !== undefined && rdRoutesStringToBeWritten !== '' &&
+    CLI_STORE_PATH !== undefined && rdStoresStringToBeWritten !== ''
+  ) {
+    writeFile(CLI_JS_PATH, rdRoutesStringToBeWritten);
+    writeFile(CLI_STORE_PATH, rdStoresStringToBeWritten);
+  } else {
+    console.log(feature);
+  }
+}
+
 export {
   heading,
   sectionBreak,
@@ -302,5 +351,6 @@ export {
   checkProjectValidity,
   isRootDirectory,
   getProjectRoot,
-  actionBeingRequested
+  actionBeingRequested,
+  parseDynamicRoutes
 };
