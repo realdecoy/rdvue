@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import User from '../../../model/user';
 import authService from '../../../service/auth';
 
 @Component({
@@ -32,9 +33,10 @@ class Login extends Vue {
    * GENERATED FUNCTION:
    * This is used to authenticate a user
    */
-  public async login(email: string, password: string): Promise<void> {
+  public async login(): Promise<void> {
+    const user: User = { email: this.email, password: this.password };
     try {
-      await authService.login(email, password);
+      await authService.login(user);
     } catch (error) {
       // Handle error is login failed here
     }
