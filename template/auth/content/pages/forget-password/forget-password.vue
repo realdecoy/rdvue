@@ -4,7 +4,9 @@
   <div class="forget-password">
     <h1>Forget password page</h1>
 
-    <input type="text" placeholder="Email" v-model="email">
-    <button @click="sendResetEmail(email);">Reset Password</button>
+    <form @submit.prevent="sendResetEmail">
+      <input type="text" placeholder="Email" v-model="email" />
+      <button type="submit">Reset Password</button>
+    </form>
   </div>
 </template>

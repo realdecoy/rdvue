@@ -28,9 +28,9 @@ class ForgetPassword extends Vue {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
-  public async sendResetEmail (email: string): Promise<void>  {
+  public async sendResetEmail(): Promise<void> {
     try {
-      await authService.sendResetEmail(email);
+      await authService.sendResetEmail(this.email);
     } catch (error) {
       // Handle error here.
     }

@@ -19,24 +19,19 @@ class AuthService {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
-  public login = (email: string, password: string): Promise<User> => {
-    const user: User = { fullname: '', email, password };
-
+  public login = async (user: User): Promise<User> => {
     // Setup method of logging in here.
 
     return Promise.resolve(user);
   }
 
-  public register = (name: string, email: string, password: string): Promise<User> => {
-    const user: User = { fullname: '', email, password };
-
+  public register = async (user: User): Promise<User> => {
     // Setup method of registration here
 
     return Promise.resolve(user);
   }
 
-  public sendResetEmail = (email: string): Promise<void> => {
-
+  public sendResetEmail = async (email: string): Promise<void> => {
     // Setup method of resetting password here.
 
     return Promise.resolve();
@@ -55,7 +50,7 @@ class AuthService {
 // Module Exports
 // ----------------------------------------------------------------------------
 
-const service  = new AuthService();
+const service = new AuthService();
 
 export {
   service as default,

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import User from '../../../model/user';
 import authService from '../../../service/auth';
 
 @Component({
@@ -34,9 +35,10 @@ class Register extends Vue {
    * This is used to register a new user
    */
 
-   public async register (name: string, email: string, password: string): Promise<void> {
+  public async register(): Promise<void> {
+    const user: User = { fullname: this.fullname, email: this.email, password: this.password };
     try {
-      await authService.register(name, email, password);
+      await authService.register(user);
     } catch (error) {
       // Handle registration errors here.
     }
