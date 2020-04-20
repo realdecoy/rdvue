@@ -62,6 +62,10 @@
       "target": "src/config/shims-vue.d.ts"
     },
     {
+      "source": "services/base.ts",
+      "target": "src/services/base.ts"
+    },
+    {
       "source": "app/app.scss",
       "target": "src/pages/app/app.scss"
     },
