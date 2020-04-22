@@ -22,7 +22,7 @@
         <span>
           The rdvue cli tool was created as a way to automate many of the processes that go into building SPAs (Single Page Applications) and setting consistencies between projects, shortenening the learning curve for developers per project.
           The VueJS project will be scaffolded using best-practice structures, dependencies, meta tooling for consistent coding standards, automatic unit test generation (basic ones) and the foundation for E2E testing into a single project.
-       </span>
+        </span>
       </div>
       <div class="features">
         <h3>Features Included</h3>
@@ -31,40 +31,35 @@
             vue-router
             <span class="sub-text">-</span>
             <span class="desc">
-              in-app page navigation (
-              <a href="https://router.vuejs.org/">read more</a>)
+              in-app page navigation (<a href="https://router.vuejs.org/">read more</a>)
             </span>
           </li>
           <li>
             vuex
             <span class="sub-text">-</span>
             <span class="desc">
-              state management (
-              <a href="https://vuex.vuejs.org/">read more</a>)
+              state management (<a href="https://vuex.vuejs.org/">read more</a>)
             </span>
           </li>
           <li>
             sass
             <span class="sub-text">-</span>
             <span class="desc">
-              css extension library (
-              <a href="https://sass-lang.com/">read more</a>)
+              css extension library (<a href="https://sass-lang.com/">read more</a>)
             </span>
           </li>
           <li>
             cypress
             <span class="sub-text">-</span>
             <span class="desc">
-              e2e testing framework (
-              <a href="https://www.cypress.io/">read more</a>)
+              e2e testing framework (<a href="https://www.cypress.io/">read more</a>)
             </span>
           </li>
           <li>
             typescript
             <span class="sub-text">-</span>
             <span class="desc">
-              typechecking for javascript (
-              <a href="https://www.typescriptlang.org/">read more</a>)
+              typechecking for javascript (<a href="https://www.typescriptlang.org/">read more</a>)
             </span>
           </li>
         </ul>
