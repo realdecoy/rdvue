@@ -77,8 +77,21 @@ body {
   text-align: left;
 }
 
+.description {
+  & h3 {
+    margin-bottom: .5rem;
+  }
+
+  & span {
+    line-height: 1rem;
+  }
+}
+
 .features {
   margin-left: 2rem;
+  & h3 {
+    margin-bottom: .5rem;
+  }
   @media only screen and (max-width: 800px) {
     margin-top: 2rem;
     margin-left: 0;
@@ -86,6 +99,10 @@ body {
 
   ul {
     list-style: none;
+
+    & li {
+      margin: .125rem;
+    }
   }
   
   ul li::before {
