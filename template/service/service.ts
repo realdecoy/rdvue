@@ -39,7 +39,7 @@ class __SERVICE__ extends Service {
   // [Private] Methods
   // --------------------------------------------------------------------------
 
-};
+}
 
 // ----------------------------------------------------------------------------
 // Module Exports
@@ -49,5 +49,5 @@ const service  = new __SERVICE__();
 
 export {
   service as default,
-  service as __SERVICE__
-}
+  service as __SERVICE__,
+};

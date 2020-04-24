@@ -46,5 +46,5 @@ class __PAGE__ extends Vue {
 
 export {
   __PAGE__ as default,
-  __PAGE__
-}
+  __PAGE__,
+};
