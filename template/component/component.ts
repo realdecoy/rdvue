@@ -47,5 +47,5 @@ class __COMPONENT__ extends Vue {
 
 export {
   __COMPONENT__ as default,
-  __COMPONENT__
-}
+  __COMPONENT__,
+};

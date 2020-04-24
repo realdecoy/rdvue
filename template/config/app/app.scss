@@ -1,5 +1,120 @@
-// @import '@/themes/index.scss';
+// Google Fonts
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+$font-stack: 'Open Sans', sans-serif;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a, a:visited, a:active, a:link {
+  color: #3fb984; // vue-green
+  text-decoration: none;
+}
+a:hover {
+  color: #fff;
+}
+
+body {
+  display: grid;
+  padding: 1rem;
+  min-height: 100vh;
+  margin: 0;
+}
 
 #app {
-  background-color: slategray;
+  font-family: $font-stack;
+  background-color: #e2e8f0; // @tailwind -> .bg-gray-300
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.logo {
+  width: 170px;
+  margin-top: 2rem;
+}
+
+.call-sign {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.call-sign {  
+  margin-top: 1rem;
+}
+
+.powered-by {
+  text-align: right;
+  padding-right: .5rem;
+  color: #718096; // @tailwind -> .text-gray-600
+  border-right: 1px solid #a0aec0; // @tailwind -> .border-gray-700
+}
+
+.tool {
+  text-align: left;
+  padding-left: .5rem;
+  font-size: 1.8rem;
+}
+
+.contents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 2rem;
+  padding-top: 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  @media only screen and (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
+}
+.description, .features {
+  font-size: .9rem;
+  text-align: left;
+}
+
+.description {
+  & h3 {
+    margin-bottom: .5rem;
+  }
+
+  & span {
+    line-height: 1.5rem;
+  }
+}
+
+.features {
+  margin-left: 2rem;
+  & h3 {
+    margin-bottom: .5rem;
+  }
+  @media only screen and (max-width: 800px) {
+    margin-top: 2rem;
+    margin-left: 0;
+  }
+
+  ul {
+    list-style: none;
+
+    & li {
+      line-height: 1.5rem;
+    }
+  }
+  
+  ul li::before {
+    content: "\25A0";
+    color: #3fb984; // vue-green
+    font-weight: bold;
+    display: inline-block; 
+    width: 1em;
+    margin-left: -1em;
+  }
+}
+
+.sub-text {
+  color: #718096; // @tailwind -> .text-gray-600
 }
