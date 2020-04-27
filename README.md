@@ -33,7 +33,7 @@ npm install rdvue -g
 npm install rdvue
 ```
 
-Test the CLI by running the help command
+Test the CLI by running the help option
 
 ```bash
 rdvue --help
