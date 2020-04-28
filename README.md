@@ -1,12 +1,8 @@
-<div align="center">
+<div align="left">
   <br/>
   <a href="https://www.realdecoy.com/jamaica/" title="REALDECOY">
-    <img width=710px src="https://www.realdecoy.com/wp-content/uploads/2019/02/Realdecoy-logo-transparent.png" alt="rd logo">
+    <img width=400px src="https://www.realdecoy.com/wp-content/uploads/2019/02/Realdecoy-logo-transparent.png" alt="rd logo">
   </a>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
   <br/>
 </div>
 
@@ -22,6 +18,7 @@ The accompanying CLI tool provides an interactive shell interface to aid in cust
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [Documentation](#documentation)
+
 
 
 [![NPM](https://nodei.co/npm/rdvue.png)](https://nodei.co/npm/rdvue/)
@@ -65,7 +62,7 @@ Options:
 
 ## Contributing
 
-RD VUE CLI is a part of the FP Frontend Practice area at RealDecoy, where contributions are welcomed, You can help us by fixing bugs, reporting bugs or improving documentation.
+The rdvue CLI is a part of the FP Frontend Practice area at RealDecoy, where contributions are welcomed, You can help us by fixing bugs, reporting bugs or improving documentation.
 
 Please read the [contributing guidelines](docs/CONTRIBUTING.md)
 
