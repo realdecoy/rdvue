@@ -34,6 +34,7 @@
     "babel-core": "7.0.0-bridge.0",
     "cypress": "^4.4.0",
     "node-sass": "^4.9.0",
+    "rdvue": "^0.5.6",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.0.0",
