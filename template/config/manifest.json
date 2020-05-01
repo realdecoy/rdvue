@@ -82,6 +82,26 @@
       "target": "src/pages/app/index.ts"
     },
     {
+      "source": "public/index.html",
+      "target": "public/index.html",
+      "content": [{
+        "matchRegex": "__PROJECT__NAME__KEBAB__",
+        "replace": "${projectNameKebab}"
+      }]
+    },
+    {
+      "source": "public/manifest.json",
+      "target": "public/manifest.json",
+      "content": [{
+        "matchRegex": "__PROJECT__NAME__KEBAB__",
+        "replace": "${projectNameKebab}"
+      }]
+    },
+    {
+      "source": "public/favicon.ico",
+      "target": "public/favicon.ico"
+    },
+    {
       "source": "meta/gitignore.txt",
       "target": ".gitignore"
     },
