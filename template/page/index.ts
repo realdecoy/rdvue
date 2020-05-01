@@ -1,2 +1,2 @@
-export * from './__PAGE__KEBAB__';
+export { default } from './__PAGE__KEBAB__.vue';
 
