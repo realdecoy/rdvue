@@ -1,6 +1,16 @@
-# rdvue cli [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
+<div align="left">
+  <br/>
+  <a href="https://www.realdecoy.com/jamaica/" title="REALDECOY">
+    <img width=400px src="https://www.realdecoy.com/wp-content/uploads/2019/02/Realdecoy-logo-transparent.png" alt="rd logo">
+  </a>
+  <br/>
+</div>
+
+# rdvue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
 
 The [rdvue](https://github.com/realdecoy/rdvue/tree/master) Command Line Interface (CLI)
+The project provides a scaffolded approach to building Single Page Applications with VueJS.
+The accompanying CLI tool provides an interactive shell interface to aid in customizing the generated template and expand the project with component modules as needed.
 
 ## Table of Contents
 
@@ -9,6 +19,10 @@ The [rdvue](https://github.com/realdecoy/rdvue/tree/master) Command Line Interfa
 - [Contributing](#contributing)
 - [Documentation](#documentation)
 
+
+
+[![NPM](https://nodei.co/npm/rdvue.png)](https://nodei.co/npm/rdvue/)
+
 ## Installation
 
 ```bash
@@ -16,7 +30,7 @@ npm install rdvue -g
 npm install rdvue
 ```
 
-And then you should be able to run the CLI with
+Test the CLI by running the help option
 
 ```bash
 rdvue --help
@@ -25,39 +39,32 @@ rdvue --help
 ### Usage
 
 ```
-RDVUE CLI [Node: 12.13. 1, CLI: 0.0.6]
-
 rdvue [command]
 
 Commands:
   rdvue <action> <feature> <feature name> [options]
 
-
-rdvue [actions]
-
 Actions:
-  generate  g    Creates new feature
-
-
-rdvue [features]
+  generate  Creates new feature
+  g         Creates new feature
 
 Features:
   project       Generates a new Vue.js Typescript Single Page Application(SPA)
-  component     Generates shell for a basic component with all its base boilerplate code
-  page          Generates shell for a basic page with all its base boilerplate code
-  service       Generates shell for a basic service with all its base boilerplate code
-  model         Generates shell for a basic model/interface
-
+  component     Generates a new component directory with the following main files to build and test: <component-name>.vue, <component-name>.ts, <component-name>.scss, <component-name>.spec.ts
+  page          Generates a new page directory with the following main files to build and test: <page-name>.vue, <page-name>.ts, <page-name>.scss, <page-name>.spec.ts
+  service       Generates a new service file within the services directory to integrate methods that should interact with external apis: <service-name>.ts
+  model         Generates a new model/interface within the entities directory: <interface-name>.ts
 
 Options:
   --help        Show help                                                   [boolean]
+  -h            Show help                                                   [boolean]
 ```
 
 ## Contributing
 
-RD VUE CLI is a part of the FP Frontend Practice area, where contributions are welcomed, You can help us by fixing bugs, reporting bugs or improving documentation.
+The rdvue CLI is a part of the FP Frontend Practice area at RealDecoy, where contributions are welcomed, You can help us by fixing bugs, reporting bugs or improving documentation.
 
-Please read the [contributing guidelines](CONTRIBUTING.md).
+Please read the [contributing guidelines](docs/CONTRIBUTING.md)
 
 ## Documentation
 
