@@ -1,4 +1,4 @@
-<style lang="scss" src="./__PAGE__.scss"></style>
+<style scoped lang="scss" src="./__PAGE__.scss"></style>
 <script lang="ts" src="./__PAGE__.ts"></script>
 <template>
   <div class="__PAGE__">
