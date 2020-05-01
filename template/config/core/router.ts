@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import HelloWorldView from '@/pages/hello-world/hello-world';
 // import HomeView from '@/page/home';
 
 Vue.use(Router);
@@ -8,6 +9,11 @@ export default new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: '/',
+      name: 'hello-world',
+      component: HelloWorldView,
+    },
     // {
     //   path: '/',
     //   name: 'home',
