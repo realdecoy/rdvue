@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorldView from '@/pages/hello-world/hello-world';
-// import HomeView from '@/page/home';
+import HelloWorldView from '@/pages/hello-world';
 
 Vue.use(Router);
 
@@ -27,7 +26,7 @@ export default new Router({
     //   // chunk (login.[hash].js) for this route which is lazy-loaded when
     //   // the route is visited.
     //   component: () =>
-    //     import(/* webpackChunkName: "login" */ '@/page/login'),
+    //     import(/* webpackChunkName: "login" */ '@/pages/login'),
     // },
   ],
 });

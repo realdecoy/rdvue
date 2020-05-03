@@ -17,8 +17,8 @@
   "sourceDirectory": "./",
   "installDirectory": "pages",
   "files": [{
-      "source": "index.d.ts",
-      "target": "index.d.ts",
+      "source": "index.ts",
+      "target": "index.ts",
       "content": [{
         "matchRegex": "__PAGE__KEBAB__",
         "replace": "${pageNameKebab}"
