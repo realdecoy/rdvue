@@ -82,6 +82,22 @@
       "target": "src/pages/app/index.ts"
     },
     {
+      "source": "hello-world/hello-world.scss",
+      "target": "src/pages/hello-world/hello-world.scss"
+    },
+    {
+      "source": "hello-world/hello-world.ts",
+      "target": "src/pages/hello-world/hello-world.ts"
+    },
+    {
+      "source": "hello-world/hello-world.vue",
+      "target": "src/pages/hello-world/hello-world.vue"
+    },
+    {
+      "source": "hello-world/index.ts",
+      "target": "src/pages/hello-world/index.ts"
+    },
+    {
       "source": "public/index.html",
       "target": "public/index.html",
       "content": [{
