@@ -32,7 +32,6 @@
 		"no-duplicate-super": true,
 		"no-irregular-whitespace": true,
 		"no-mergeable-namespace": true,
-		"no-magic-numbers": true,
 		"no-parameter-reassignment": true,
 		"no-redundant-jsdoc": true,
 		"no-reference": true,
