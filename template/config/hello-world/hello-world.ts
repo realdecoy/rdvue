@@ -2,9 +2,9 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {},
-  name: 'app',
+  name: 'hello-world',
 })
-export default class AppView extends Vue {
+class HelloWorldView extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
@@ -25,10 +25,6 @@ export default class AppView extends Vue {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
-  public navigateTo(path: string) {
-    // this.$router.push({ path });
-  }
-
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
   // --------------------------------------------------------------------------
@@ -45,3 +41,8 @@ export default class AppView extends Vue {
     // TODO: stuff to do when this component loads.
   }
 }
+
+export {
+    HelloWorldView as default,
+    HelloWorldView,
+};

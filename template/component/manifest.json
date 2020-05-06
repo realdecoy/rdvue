@@ -17,8 +17,8 @@
   "sourceDirectory": "./",
   "installDirectory": "components",
   "files": [{
-      "source": "index.d.ts",
-      "target": "index.d.ts",
+      "source": "index.ts",
+      "target": "index.ts",
       "content": [{
         "matchRegex": "__COMPONENT__KEBAB__",
         "replace": "${componentNameKebab}"

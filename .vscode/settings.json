@@ -1,0 +1,11 @@
+{
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": false,
+    "source.organizeImports": false
+  },
+  "editor.formatOnSave": false,
+  "tslint.autoFixOnSave": false,
+  "typescript.preferences.quoteStyle": "single",
+  "vetur.format.defaultFormatter.ts": "vscode-typescript"
+}
