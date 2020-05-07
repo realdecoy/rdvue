@@ -1,6 +1,7 @@
+// Example spec file to see the different methods that can be used in Cypress for navigation
 /// <reference types="Cypress" />
 
-context('Navigation', () => {
+context('Navigation Examples', () => {
     beforeEach(() => {
       cy.visit('https://example.cypress.io');
       cy.get('.navbar-nav').contains('Commands').click();

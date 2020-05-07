@@ -1,8 +1,9 @@
+// Example spec file to see the different ways to select elements that can be used in Cypress
 /// <reference types="Cypress" />
 
-context('Querying', () => {
+context('Selecting Elements Example', () => {
     beforeEach(() => {
-      cy.visit('https://example.cypress.io/commands/querying')
+      cy.visit('https://example.cypress.io/commands/querying');
     });
 
     // The most commonly used query is 'cy.get()', you can

@@ -1,6 +1,7 @@
+// Example spec file to see the different methods that can be used in Cypress to set the current viewport
 /// <reference types="Cypress" />
 
-context('Viewport', () => {
+context('Viewport Examples', () => {
     beforeEach(() => {
       cy.visit('https://example.cypress.io/commands/viewport');
     });
