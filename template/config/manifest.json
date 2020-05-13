@@ -130,6 +130,22 @@
       "target": "cypress/tsconfig.json"
     },
     {
+      "source": "cypress/integration/specs/actions.spec.ts",
+      "target": "cypress/integration/specs/actions.spec.ts"
+    },
+    {
+      "source": "cypress/integration/specs/navigation.spec.ts",
+      "target": "cypress/integration/specs/navigation.spec.ts"
+    },
+    {
+      "source": "cypress/integration/specs/selecting-elements.spec.ts",
+      "target": "cypress/integration/specs/selecting-elements.spec.ts"
+    },
+    {
+      "source": "cypress/integration/specs/viewport.spec.ts",
+      "target": "cypress/integration/specs/viewport.spec.ts"
+    },
+    {
       "source": "cypress/integration/specs/test.spec.ts",
       "target": "cypress/integration/specs/test.spec.ts"
     },

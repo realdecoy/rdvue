@@ -44,8 +44,8 @@
       }]
     },
     {
-      "source": "component.spec.ts",
-      "target": "${componentNameKebab}.spec.ts",
+      "source": "component.spec.js",
+      "target": "${componentNameKebab}.spec.js",
       "content": [{
           "matchRegex": "__COMPONENT__KEBAB__",
           "replace": "${componentNameKebab}"
