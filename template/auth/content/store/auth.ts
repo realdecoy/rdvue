@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import User from '../model/user';
+import User from '@/model/user';
 
 @Module({ namespaced: true })
 class AuthStore {
@@ -22,12 +22,12 @@ class AuthStore {
   // specified as the decorator's "commit" attribute.
   // ------------------------------------------------------------------------
 
-  @Action({ commit: 'setFooBar' })
+  @Action({ commit: 'setUser' })
   public clearCurrentUser() {
     return null;
   }
 
-  @Action({ commit: 'setFooBar' })
+  @Action({ commit: 'setUser' })
   public setCustomUser(user: User) {
     return user;
   }

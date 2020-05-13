@@ -10,8 +10,8 @@
       "target": "store/auth.ts"
     },
     {
-      "source": "service/auth.ts",
-      "target": "service/auth.ts"
+      "source": "services/auth.ts",
+      "target": "services/auth.ts"
     },
     {
       "source": "model/user.ts",

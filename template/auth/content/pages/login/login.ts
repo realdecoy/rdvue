@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import User from '../../../model/user';
-import authService from '../../../service/auth';
+import User from '@/model/user';
+import AuthService from '@/services/auth';
 
 @Component({
   components: {},
@@ -36,7 +36,7 @@ class Login extends Vue {
   public async login(): Promise<void> {
     const user: User = { email: this.email, password: this.password };
     try {
-      await authService.login(user);
+      await AuthService.login(user);
     } catch (error) {
       // Handle error is login failed here
     }
@@ -62,5 +62,5 @@ class Login extends Vue {
 
 export {
   Login as default,
-  Login
+  Login,
 };

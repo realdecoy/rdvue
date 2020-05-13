@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import User from '../../../model/user';
-import authService from '../../../service/auth';
+import User from '@/model/user';
+import AuthService from '@/services/auth';
 
 @Component({
   components: {},
@@ -38,7 +38,7 @@ class Register extends Vue {
   public async register(): Promise<void> {
     const user: User = { fullname: this.fullname, email: this.email, password: this.password };
     try {
-      await authService.register(user);
+      await AuthService.register(user);
     } catch (error) {
       // Handle registration errors here.
     }
@@ -63,5 +63,5 @@ class Register extends Vue {
 
 export {
   Register as default,
-  Register
+  Register,
 };

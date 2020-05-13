@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import authService from '../../../service/auth';
+import AuthService from '@/services/auth';
 
 @Component({
   components: {},
@@ -30,7 +30,7 @@ class ForgetPassword extends Vue {
 
   public async sendResetEmail(): Promise<void> {
     try {
-      await authService.sendResetEmail(this.email);
+      await AuthService.sendResetEmail(this.email);
     } catch (error) {
       // Handle error here.
     }
@@ -55,5 +55,5 @@ class ForgetPassword extends Vue {
 
 export {
   ForgetPassword as default,
-  ForgetPassword
+  ForgetPassword,
 };

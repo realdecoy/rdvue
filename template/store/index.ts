@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex, { ModuleTree } from 'vuex';
 import app from './app';
-import { stores} from '../../.rdvue/stores.js';
+/* tslint:disable-next-line */
+const { stores } = require('../../.rdvue/stores.js');
 
 Vue.use(Vuex);
 

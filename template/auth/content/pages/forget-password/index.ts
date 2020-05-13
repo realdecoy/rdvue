@@ -1,4 +1,1 @@
-import ForgetPassword from "./forget-password";
-
-export default ForgetPassword;
-
+export { default } from './forget-password';

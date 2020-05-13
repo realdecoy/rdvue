@@ -1,2 +1,1 @@
-import Register from './register';
-export default Register;
+export { default } from './register';

@@ -1,9 +1,9 @@
 interface User {
-    fullname: string;
+    fullname?: string;
     email: string;
     password?: string;
 }
 
 export {
-    User as default
+    User as default,
 };

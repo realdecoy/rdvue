@@ -1,4 +1,4 @@
-<style lang="scss" src="./register.scss"></style>
+<style scoped lang="scss" src="./register.scss"></style>
 <script lang="ts" src="./register.ts"></script>
 <template>
   <div class="register">

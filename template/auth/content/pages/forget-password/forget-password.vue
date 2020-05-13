@@ -1,4 +1,4 @@
-<style lang="scss" src="./forget-password.scss"></style>
+<style scoped lang="scss" src="./forget-password.scss"></style>
 <script lang="ts" src="./forget-password.ts"></script>
 <template>
   <div class="forget-password">
