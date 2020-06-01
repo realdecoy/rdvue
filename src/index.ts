@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import clear from 'clear';
 import { Section } from 'command-line-usage';
 import { USAGE_TEMPLATE } from './config';
-import { readMainConfig, readSubConfig } from './lib/files';
+import { isFeatureGroup, readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
 import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
@@ -18,7 +18,7 @@ import { CLI_DEFAULT } from './default objects/cli-description';
 import { CLI, Config, ModuleDescriptor } from './types/cli';
 import { Command } from './types/index';
 
-
+const two = 2;
 // Assign CLI object a default value
 export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
 
@@ -29,9 +29,9 @@ export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
  * @param feature - Feature that the user inputed (eg. project, page, component)
  * @param required - Boolean value which tells you if the feature is required or not.
  *                   Required features include 'config' and 'store'
+ * @param index - Index of menu to be populated
  */
-async function populateFeatureMenu(feature: string, required = false) {
-  const index = 2;
+async function populateFeatureMenu(feature: string, required = false, index: number) {
   let featureConfig: Config;
   let cliFeature: ModuleDescriptor | Config;
   featureConfig = readSubConfig(feature);
@@ -44,7 +44,7 @@ async function populateFeatureMenu(feature: string, required = false) {
   if (!required) {
     contentPopulate(
       CLI_DESCRIPTION.general.menu,
-      `${chalk.magenta(feature)}`,
+      `${index === two ? chalk.magenta(feature) : chalk.yellow(feature)}`,
       `${featureConfig.description}`,
       index
     );
@@ -62,18 +62,6 @@ async function populateFeatureMenu(feature: string, required = false) {
     header: 'Feature:',
     content: [],
   });
-
-  // [5] Add feature, under the "Features: " header,
-  // to feature specific help menu
-  if (!required) {
-    contentPopulate(
-      cliFeature.menu,
-      `${chalk.magenta(feature)}`,
-      `${featureConfig.description}`,
-      index
-    );
-  }
-
 }
 
 /**
@@ -87,34 +75,53 @@ async function populateFeatureMenu(feature: string, required = false) {
 async function populateCLIMenu(features: string[], requiredFeatures: string[],
   mainConfig: Config) {
 
-  const index = 2;
-
   let featureConfig: Config;
+  let iterations = 0;
+  let index: number;
+  const three = 3;
 
   // [1] Intialize the CLI menu with the USAGE_TEMPLATE (./config.ts)
   CLI_DESCRIPTION.general.menu = USAGE_TEMPLATE();
 
-  CLI_DESCRIPTION.general.menu.splice(index, 0, {
-    header: 'Features:',
-    content: [],
-  });
-
-  // [3] Add project config to CLI_DESCRIPTION
-  if (CLI_DESCRIPTION.general.menu[index].content !== undefined) {
-    contentPopulate(
-      CLI_DESCRIPTION.general.menu,
-      `${chalk.magenta('project')}`,
-      'Generate a new project.', index
-    );
-  }
-
-  // [4] Parse features provided by template manifest files and generate the CLI help menus
-  // for both required and non required features depending on user input
   for (const feature of features) {
-    await populateFeatureMenu(feature);
+    // [2] Check each item of list to see if its a feature group or just a feature
+    const isGroup: boolean = isFeatureGroup(feature);
+
+    // [3] Set the index on the menu list to be modified/added
+    index = isGroup ? three : two;
+
+    // [4] Check if the features/ group is present on menu list and populate if isnt
+    if(
+      !Object
+        .values(CLI_DESCRIPTION.general.menu[index])
+        .includes('Features:' || 'Feature Group:')
+      ){
+
+      CLI_DESCRIPTION.general.menu.splice(index, 0, {
+        header: isGroup ? 'Feature Group:' : 'Features:',
+        content: [],
+      });
+    }
+
+    // [5] Add project config to CLI_DESCRIPTION
+    if (iterations < 1) {
+      contentPopulate(
+        CLI_DESCRIPTION.general.menu,
+        `${chalk.magenta('project')}`,
+        'Generate a new project.', index
+      );
+    }
+    iterations++;
+
+    // [6] Parse features provided by template manifest files and generate the CLI help menus
+    // for both required and non required features depending on user input
+    await populateFeatureMenu(feature, undefined, index);
   }
   for (const feature of requiredFeatures) {
-    await populateFeatureMenu(feature, true);
+    const isGroup: boolean = isFeatureGroup(feature);
+    index = isGroup ? three : two;
+
+    await populateFeatureMenu(feature, true, index);
   }
 
   // [5] Add 'project' to list of features input by user

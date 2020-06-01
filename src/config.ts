@@ -30,15 +30,6 @@ function USAGE_TEMPLATE(
             ]
         },
         {
-            header: 'Feature Group:',
-            content: [
-                {
-                    name: `${chalk.yellow('auth')}`,
-                    summary: 'Used to create the authentication features'
-                }
-            ]
-        },
-        {
             header: 'Options:',
             content: [
                 {

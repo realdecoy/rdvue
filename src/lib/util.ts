@@ -314,7 +314,7 @@ function parseDynamicRoutes(feature: string): void {
     const jsonRoutes = readFile(FEATURE_GROUP_ROUTES);
     const jsonStores = readFile(FEATURE_GROUP_STORES);
 
-    // Replace brackets in string
+    // Replace brackets & ("/`) quotations in string
     const editedRoutesString = jsonRoutes.replace(/[\[\]"`]+/g, '');
     const editedStoresString = jsonStores.replace(/[\[\]"`]+/g, '');
 

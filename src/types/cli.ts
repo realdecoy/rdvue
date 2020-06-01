@@ -34,6 +34,7 @@ export interface Config {
     import?: Import;
     singleUserPerProject?: boolean;
     menu?: Menu[];
+    group?: boolean;
 }
 
 // Import interface for the files being imported
