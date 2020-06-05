@@ -22,7 +22,7 @@
       "target": ".rdvue"
     },
     {
-      "source": "core/package.json",
+      "source": "core/meta/package.json",
       "target": "package.json",
       "content": [{
         "matchRegex": "__PROJECT__NAME__KEBAB__",
