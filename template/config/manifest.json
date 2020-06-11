@@ -22,7 +22,7 @@
       "target": ".rdvue"
     },
     {
-      "source": "core/package.json",
+      "source": "core/meta/package.json",
       "target": "package.json",
       "content": [{
         "matchRegex": "__PROJECT__NAME__KEBAB__",
@@ -122,7 +122,7 @@
       "target": ".gitignore"
     },
     {
-      "source": "cypress.json",
+      "source": "cypress/cypress.json",
       "target": "cypress.json"
     },
     {
@@ -184,6 +184,10 @@
     {
       "source": "layouts/default/index.ts",
       "target": "src/layouts/default/index.ts"
+    },
+    {
+      "source": "meta/vue.config.js",
+      "target": "vue.config.js"
     }
   ]
 }
