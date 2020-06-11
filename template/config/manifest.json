@@ -22,7 +22,7 @@
       "target": ".rdvue"
     },
     {
-      "source": "core/meta/package.json",
+      "source": "meta/package.json",
       "target": "package.json",
       "content": [{
         "matchRegex": "__PROJECT__NAME__KEBAB__",
@@ -188,6 +188,14 @@
     {
       "source": "meta/vue.config.js",
       "target": "vue.config.js"
+    },
+    {
+      "source": "theme/_all.scss",
+      "target": "src/theme/_all.scss"
+    },
+    {
+      "source": "theme/tailwind.css",
+      "target": "src/theme/tailwind.css"
     }
   ]
 }
