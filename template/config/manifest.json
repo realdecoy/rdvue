@@ -166,6 +166,26 @@
       "target": "tslint.json"
     },
     {
+      "source": "layouts/default/default.scss",
+      "target": "src/layouts/default/default.scss"
+    },
+    {
+      "source": "layouts/default/default.spec.ts",
+      "target": "src/layouts/default/default.spec.ts"
+    },
+    {
+      "source": "layouts/default/default.ts",
+      "target": "src/layouts/default/default.ts"
+    },
+    {
+      "source": "layouts/default/default.vue",
+      "target": "src/layouts/default/default.vue"
+    },
+    {
+      "source": "layouts/default/index.ts",
+      "target": "src/layouts/default/index.ts"
+    },
+    {
       "source": "meta/vue.config.js",
       "target": "vue.config.js"
     }
