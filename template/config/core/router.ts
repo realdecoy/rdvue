@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorldView from '@/pages/hello-world';
 
 Vue.use(Router);
 
@@ -8,25 +7,29 @@ export default new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
+    // ------------------------------------------------------------------------
+    // HelloWorld Page
+    // ------------------------------------------------------------------------
     {
       path: '/',
       name: 'hello-world',
-      component: HelloWorldView,
+      meta: {
+        // Specify the layout to use for this page. All pages will use
+        // the 'default' layout if not explicity specified here.
+        layout: 'default'
+      },
+      // Route level code-splitting is used encapsulate all the code
+      // needed for a page into it's own JS file. This greatly speeds-up
+      // the load time of individual page. The 'webpackChunkName' comment
+      // below *SHOULD* have a unique name from other routes.
+      component: () =>
+        import(
+          /* webpackChunkName: "hello-world" */
+          '@/pages/hello-world'),
     },
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: HomeView,
-    // },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   // route level code-splitting. use this for code that doesn't need
-    //   // to load with the initial app payload. this generates a separate
-    //   // chunk (login.[hash].js) for this route which is lazy-loaded when
-    //   // the route is visited.
-    //   component: () =>
-    //     import(/* webpackChunkName: "login" */ '@/pages/login'),
-    // },
+    // ------------------------------------------------------------------------
+    // TODO: Add your own pages
+    // ------------------------------------------------------------------------
+
   ],
 });
