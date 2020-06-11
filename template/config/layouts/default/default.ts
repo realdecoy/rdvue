@@ -25,7 +25,7 @@ class Default extends Vue {
   // --------------------------------------------------------------------------
   // [Public] Methods
   // --------------------------------------------------------------------------
-  
+
   public async navigate(path: string, params?: Dictionary<string>) {
     await this.$router.push({ path, params });
   }
@@ -48,5 +48,7 @@ class Default extends Vue {
   }
 }
 
-export { Default as default, Default, };
-
+export {
+  Default as default,
+  Default,
+};
