@@ -97,6 +97,7 @@
       "source": "hello-world/index.ts",
       "target": "src/pages/hello-world/index.ts"
     },
+     
     {
       "source": "public/index.html",
       "target": "public/index.html",
@@ -196,6 +197,99 @@
     {
       "source": "theme/tailwind.css",
       "target": "src/theme/tailwind.css"
-    }
+    },
+      
+       {
+        "source": "meta/.babelrc",
+        "target": ".babelrc"
+      },
+
+      {
+        "source": "storybook/components/example.vue",
+        "target": ".storybook/components/example.vue"
+      },
+      {
+        "source": "storybook/components/index.ts",
+        "target": ".storybook/components/index.ts"
+      },
+      {
+        "source": "storybook/components/playground.vue",
+        "target": ".storybook/components/playground.vue"
+      },
+      {
+        "source": "storybook/components/props.vue",
+        "target": ".storybook/components/props.vue"
+      },
+      {
+        "source": "storybook/components/preview.vue",
+        "target": ".storybook/components/preview.vue"
+      },
+      {
+        "source": "storybook/modules/constants.ts",
+        "target": ".storybook/modules/constants.ts"
+      },
+      {
+        "source": "storybook/modules/index.ts",
+        "target": ".storybook/modules/index.ts"
+      },
+      {
+        "source": "storybook/modules/preview-of.ts",
+        "target": ".storybook/modules/preview-of.ts"
+      },
+      {
+        "source": "storybook/addons.js",
+        "target": ".storybook/addons.js"
+      },
+      {
+        "source": "storybook/config.js",
+        "target": ".storybook/config.js",
+        "content": [
+          {
+            "matchRegex": "__PROJECT__NAME__KEBAB__",
+            "replace": "${projectNameKebab}"
+          }
+        ]
+      },
+      {
+        "source": "storybook/logo.svg",
+        "target": ".storybook/logo.svg"
+      },
+      {
+        "source": "storybook/main.js",
+        "target": ".storybook/main.js"
+      },
+      {
+        "source": "storybook/preview-head.html",
+        "target": ".storybook/preview-head.html"
+      },
+      {
+        "source": "storybook/stories.scss",
+        "target": ".storybook/stories.scss"
+      },
+      {
+        "source": "storybook/tailwind.css",
+        "target": ".storybook/tailwind.css"
+      },
+      {
+        "source": "storybook/webpack.config.js",
+        "target": ".storybook/webpack.config.js"
+      },
+      {
+        "source": "storybook/story.ts",
+        "target": "src/modules/story.ts"
+      },
+      {
+        "source": "storybook/constants.ts",
+        "target": "src/modules/constants.ts"
+      },
+      {
+        "source": "storybook/stories/index.js",
+        "target": ".storybook/stories/index.js"
+      },
+      
+      {
+        "source": "storybook/postcss.config.js",
+        "target": "postcss.config.js"
+      }
   ]
 }

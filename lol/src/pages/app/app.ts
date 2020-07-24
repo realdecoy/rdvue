@@ -1,20 +1,10 @@
-import { Component, Prop, Vue} from 'vue-property-decorator';
-import { Story, StoryProp } from '@/modules/story';
-import { DEFAULT_MODULE } from '@/modules/constants';
+import { Component, Vue } from 'vue-property-decorator';
 
-
-@Story({
-  module: DEFAULT_MODULE,
-  description: '__COMPONENT__ States'
-})
-
-  
 @Component({
-  components: {
-  },
-  name: '__COMPONENT__KEBAB__',
+  components: {},
+  name: 'app',
 })
-class __COMPONENT__ extends Vue {
+export default class AppView extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
@@ -31,9 +21,28 @@ class __COMPONENT__ extends Vue {
   // [Public] Accessors
   // --------------------------------------------------------------------------
 
+  public get layout() {
+    const meta = this.$route.meta as { layout?: string } | undefined;
+
+    // Lookup the layout property defined on the route.
+    // Fallback to 'default' to load the Default layout otherwise.
+    const { layout = 'default' } = meta ?? {};
+
+    // Load the layout component aynchronously
+    // (see: https://vuejs.org/v2/guide/components-dynamic-async.html)
+    Vue.component(layout, () => import(`@/layouts/${layout}`));
+
+    // Return tag to render: the layout's tag name or plain div as a fallback.
+    return layout ?? 'div';
+  }
+
   // --------------------------------------------------------------------------
   // [Public] Methods
   // --------------------------------------------------------------------------
+
+  public navigateTo(path: string) {
+    // this.$router.push({ path });
+  }
 
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
@@ -44,29 +53,10 @@ class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Props
-  // --------------------------------------------------------------------------
-  @StoryProp({
-    description: '',
-    values: []
-  })
-
-  @Prop({})
-
-
-  // --------------------------------------------------------------------------
   // [Private] Lifecycle Hooks
   // --------------------------------------------------------------------------
 
-
-  
   private mounted() {
     // TODO: stuff to do when this component loads.
-
   }
 }
-
-export {
-  __COMPONENT__ as default,
-  __COMPONENT__,
-};

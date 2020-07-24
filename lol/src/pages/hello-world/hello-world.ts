@@ -1,20 +1,10 @@
-import { Component, Prop, Vue} from 'vue-property-decorator';
-import { Story, StoryProp } from '@/modules/story';
-import { DEFAULT_MODULE } from '@/modules/constants';
+import { Component, Vue } from 'vue-property-decorator';
 
-
-@Story({
-  module: DEFAULT_MODULE,
-  description: '__COMPONENT__ States'
-})
-
-  
 @Component({
-  components: {
-  },
-  name: '__COMPONENT__KEBAB__',
+  components: {},
+  name: 'hello-world',
 })
-class __COMPONENT__ extends Vue {
+class HelloWorldView extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
@@ -44,29 +34,15 @@ class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Props
-  // --------------------------------------------------------------------------
-  @StoryProp({
-    description: '',
-    values: []
-  })
-
-  @Prop({})
-
-
-  // --------------------------------------------------------------------------
   // [Private] Lifecycle Hooks
   // --------------------------------------------------------------------------
 
-
-  
   private mounted() {
     // TODO: stuff to do when this component loads.
-
   }
 }
 
 export {
-  __COMPONENT__ as default,
-  __COMPONENT__,
+    HelloWorldView as default,
+    HelloWorldView,
 };

@@ -1,5 +1,5 @@
 {
-  "name": "__PROJECT__NAME__KEBAB__",
+  "name": "lol",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -58,7 +58,7 @@
     "@storybook/preset-typescript": "^2.1.0",
     "@storybook/vue": "^5.3.19",
     "@types/storybook__vue": "^5.0.1",
-        "babel-preset-vue": "^2.0.2"
+     "babel-preset-vue": "^2.0.2"
         
         
   },

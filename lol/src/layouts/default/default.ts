@@ -1,20 +1,11 @@
-import { Component, Prop, Vue} from 'vue-property-decorator';
-import { Story, StoryProp } from '@/modules/story';
-import { DEFAULT_MODULE } from '@/modules/constants';
+import { Component, Vue } from 'vue-property-decorator';
+import { Dictionary } from 'vue-router/types/router';
 
-
-@Story({
-  module: DEFAULT_MODULE,
-  description: '__COMPONENT__ States'
-})
-
-  
 @Component({
-  components: {
-  },
-  name: '__COMPONENT__KEBAB__',
+  components: {},
+  name: 'default',
 })
-class __COMPONENT__ extends Vue {
+class Default extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
@@ -35,6 +26,10 @@ class __COMPONENT__ extends Vue {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
+  public async navigate(path: string, params?: Dictionary<string>) {
+    await this.$router.push({ path, params });
+  }
+
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
   // --------------------------------------------------------------------------
@@ -44,22 +39,9 @@ class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Props
-  // --------------------------------------------------------------------------
-  @StoryProp({
-    description: '',
-    values: []
-  })
-
-  @Prop({})
-
-
-  // --------------------------------------------------------------------------
   // [Private] Lifecycle Hooks
   // --------------------------------------------------------------------------
 
-
-  
   private mounted() {
     // TODO: stuff to do when this component loads.
 
@@ -67,6 +49,6 @@ class __COMPONENT__ extends Vue {
 }
 
 export {
-  __COMPONENT__ as default,
-  __COMPONENT__,
+  Default as default,
+  Default,
 };
