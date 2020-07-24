@@ -1,49 +1,54 @@
-import { StoryComponent, StoryProp, Vue } from '.storybook/modules';
+import { Component, Vue } from 'vue-property-decorator';
+import { Dictionary } from 'vue-router/types/router';
 
-@StoryComponent({
-  name: '__COMPONENT__KEBAB__',
-  description: '__COMPONENT__ component.',
-  import: '@/components/__COMPONENT__KEBAB__',
+@Component({
   components: {},
+  name: 'default',
 })
-
-class __COMPONENT__ extends Vue {
+class Default extends Vue {
   // --------------------------------------------------------------------------
-  // Fields
-  // --------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------
-  // Props
+  // [Private] Fields
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Constructor
+  // [Public] Constructor
   // --------------------------------------------------------------------------
+
   constructor() {
     super();
   }
 
   // --------------------------------------------------------------------------
-  // Accessors
+  // [Public] Accessors
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Methods
+  // [Public] Methods
+  // --------------------------------------------------------------------------
+
+  public async navigate(path: string, params?: Dictionary<string>) {
+    await this.$router.push({ path, params });
+  }
+
+  // --------------------------------------------------------------------------
+  // [Private] Event Handlers
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Event Handlers
+  // [Private] Methods
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Lifecycle Hooks
+  // [Private] Lifecycle Hooks
   // --------------------------------------------------------------------------
-  public mounted() {
+
+  private mounted() {
     // TODO: stuff to do when this component loads.
+
   }
 }
 
 export {
-  __COMPONENT__ as default,
-  __COMPONENT__,
+  Default as default,
+  Default,
 };

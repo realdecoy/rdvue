@@ -113,7 +113,6 @@
       "source": "hello-world/index.ts",
       "target": "src/pages/hello-world/index.ts"
     },
-
     {
       "source": "public/index.html",
       "target": "public/index.html",

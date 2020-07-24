@@ -4,8 +4,7 @@
   "import": {
     "required": [
       "config",
-      "store",
-      "storybook"
+      "store"
     ],
     "optional": [
       "component",
