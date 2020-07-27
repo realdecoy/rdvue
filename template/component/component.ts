@@ -1,19 +1,35 @@
-import { Component, Prop, Vue} from 'vue-property-decorator';
-import { Story, StoryProp } from '@/modules/story';
+import { Prop, Vue} from 'vue-property-decorator';
+import { StoryComponent, StoryProp } from '@/modules/story';
 import { DEFAULT_MODULE } from '@/modules/constants';
 
 
-@Story({
-  module: DEFAULT_MODULE,
-  description: '__COMPONENT__ States'
-})
+@StoryComponent(
+
+  {
+    module: DEFAULT_MODULE,
+    description: '__COMPONENT__ States',
+    api: true,
+    playground: true
+  },
+
+  {
+    components: {},
+    name: '__COMPONENT__KEBAB__',
+  })
+
+// @Story({
+//   module: DEFAULT_MODULE,
+//   description: '__COMPONENT__ States'
+// })
 
   
-@Component({
-  components: {
-  },
-  name: '__COMPONENT__KEBAB__',
-})
+// @Component({
+//   components: {
+//   },
+//   name: '__COMPONENT__KEBAB__',
+// })
+  
+  
 class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields

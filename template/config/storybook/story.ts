@@ -1,5 +1,7 @@
-
 import Vue from "vue";
+import { Component } from 'vue-property-decorator';
+import { ComponentOptions, VueConstructor } from 'vue/types/umd';
+ 
 
 const storySafe = new WeakMap<object, { story: StoryOptions; props: StoryPropStore }>();
 let props: StoryPropStore = {};
@@ -82,3 +84,19 @@ StoryProp.isDefined = function <V extends object>(target: V, propName: string) {
 StoryProp.getValues = function <V extends object>(target: V, propName: string) {
   return storySafe.get(target)?.props[propName]?.values;
 };
+
+
+export function StoryComponent(story: StoryOptions, compDetails: ComponentOptions<Vue>) {
+
+  // pass component details to @Component and store the returned function
+  const compDecor = Component(compDetails);
+
+  // pass story details for story to @Story
+  const storyDec = Story(story);
+
+  // target is decorated and returned as a new constructor.
+  // This new construtor is passed to the function returned by @Story
+  // the new constructor is then used as the key inside the storySafe weakmap
+  return (target: VueConstructor<Vue>) => storyDec(compDecor(target));
+
+}

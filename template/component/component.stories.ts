@@ -1,5 +1,5 @@
 import __COMPONENT__ from './__COMPONENT__KEBAB__.vue';
-import { Category, previewOf } from '../../../.storybook/modules';
+import { Category, previewOf } from '.storybook/modules';
 
 // ----------------------------------------------------------------------------
 // Module Exports
