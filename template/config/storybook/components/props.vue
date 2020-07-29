@@ -1,7 +1,7 @@
 <script lang="ts">
 import { PropOptions, VueConstructor } from "vue";
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Story, StoryProp } from "@/modules/story";
+import { StoryComponent, StoryProp } from '@/modules/story';
 
 const JSON_INDENTATION = 2;
 
@@ -26,7 +26,7 @@ export default class Props extends Vue {
 
   private mounted() {
     this.propNames = Object.keys(this.items ?? {});
-    this.slots = Story.getSlots(this.source ?? {});
+    this.slots = StoryComponent.getSlots(this.source ?? {});
   }
 
   private getType(propName: string) {
@@ -54,7 +54,7 @@ export default class Props extends Vue {
 
     return `${typeName}${
       values !== undefined ? `<br/>One of: ${formattedValues}` : ""
-    }`;
+      }`;
   }
 
   private getDefault(propName: string) {

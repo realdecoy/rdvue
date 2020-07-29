@@ -1,6 +1,7 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
+import { StoryComponent } from '@/modules/story';
 
-@Component({
+@StoryComponent({
   components: {},
   name: 'hello-world',
 })

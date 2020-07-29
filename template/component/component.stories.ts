@@ -13,7 +13,7 @@ const preview = previewOf(__COMPONENT__, Category.COMPONENT)
       description: 'This is the standard __COMPONENT__ component',
       styles: ''
     },
-    
+
 // add snippet of component use here
     `
     <__COMPONENT__KEBAB__ />

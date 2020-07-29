@@ -97,7 +97,7 @@
       "source": "hello-world/index.ts",
       "target": "src/pages/hello-world/index.ts"
     },
-     
+
     {
       "source": "public/index.html",
       "target": "public/index.html",
@@ -198,7 +198,7 @@
       "source": "theme/tailwind.css",
       "target": "src/theme/tailwind.css"
     },
-      
+
        {
         "source": "meta/.babelrc",
         "target": ".babelrc"
@@ -264,7 +264,13 @@
       },
       {
         "source": "storybook/stories.scss",
-        "target": ".storybook/stories.scss"
+        "target": ".storybook/stories.scss",
+        "content": [
+          {
+            "matchRegex": "__PROJECT__NAME__KEBAB__",
+            "replace": "${projectNameKebab}"
+          }
+        ]
       },
       {
         "source": "storybook/tailwind.css",
@@ -275,18 +281,18 @@
         "target": ".storybook/webpack.config.js"
       },
       {
-        "source": "storybook/story.ts",
+        "source": "storybook/modules/story.ts",
         "target": "src/modules/story.ts"
       },
       {
-        "source": "storybook/constants.ts",
-        "target": "src/modules/constants.ts"
+        "source": "storybook/modules/constants.ts",
+        "target": ".storybook/modules/constants.ts"
       },
       {
         "source": "storybook/stories/index.js",
         "target": ".storybook/stories/index.js"
       },
-      
+
       {
         "source": "storybook/postcss.config.js",
         "target": "postcss.config.js"

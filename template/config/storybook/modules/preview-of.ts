@@ -1,6 +1,6 @@
 // @ts-ignore
 import Vue, { VueConstructor } from 'vue';
-import { Story } from "@/modules/story";
+import { StoryComponent } from "@/modules/story";
 import { Example, Preview } from '../components';
 import { Category } from '../modules';
 
@@ -86,6 +86,6 @@ export function docFor(name: string, description: string) {
   const constructor = Vue.extend({ name });
 
   // Apply Story decorator
-  Story.call(null, { description, playground: false, api: false })(constructor);
+  StoryComponent.call(null, { description, playground: false, api: false })(constructor);
   return constructor;
 }
