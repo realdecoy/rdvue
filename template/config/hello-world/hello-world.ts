@@ -1,6 +1,6 @@
 import { Component,Vue} from 'vue-property-decorator';
 
-@Component({
+@StoryComponent({
   components: {},
   name: 'hello-world',
 })

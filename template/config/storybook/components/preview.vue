@@ -1,9 +1,9 @@
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import Example from "./example.vue";
-import Playground from "./playground.vue";
-import Props from "./props.vue";
-import { Story } from "@/modules/story";
+import Playground from './playground.vue';
+import Props from './props.vue';
+import { StoryComponent } from '@/modules/story';
 
 const safe = new WeakMap<object, PreviewData>();
 
@@ -16,7 +16,7 @@ interface VueLike {
   options: { name: string };
 }
 
-@Component({
+@StoryComponent({
   name: "Preview",
   components: {
     Props,
@@ -56,13 +56,13 @@ export default class Preview extends Vue {
 
   private mounted() {
     const component = this.resolveStoryComponent() ?? {};
-    const componentModule = Story.getModule(component);
+    const componentModule = StoryComponent.getModule(component);
 
     this.component = component;
     this.title = component.options?.name;
-    this.description = Story.getDescription(component);
-    this.enablePlayground = Story.getPlaygroundEnabled(component);
-    this.enableApi = Story.getApiEnabled(component);
+    this.description = StoryComponent.getDescription(component);
+    this.enablePlayground = StoryComponent.getPlaygroundEnabled(component);
+    this.enableApi = StoryComponent.getApiEnabled(component);
 
     if (componentModule !== undefined) {
       const componentModuleStr =
@@ -80,7 +80,7 @@ export default class Preview extends Vue {
     if (this.for === undefined) {
       component = Object.values(
         this.$parent.$options.components ?? {}
-      ).find(p => Story.isDefined(p)) as VueLike;
+      ).find(p => StoryComponent.isDefined(p)) as VueLike;
     } else {
       component = this.for;
     }
