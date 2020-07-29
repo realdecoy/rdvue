@@ -282,7 +282,7 @@
       },
       {
         "source": "storybook/modules/story.ts",
-        "target": "src/modules/story.ts"
+        "target": ".storybook/modules/story.ts"
       },
       {
         "source": "storybook/modules/constants.ts",

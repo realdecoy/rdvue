@@ -1,6 +1,6 @@
 import {Vue} from 'vue-property-decorator';
-import { StoryComponent, StoryProp } from '@/modules/story';
-import { DEFAULT_MODULE } from '.storybook/modules/constants';
+import { StoryComponent, StoryProp } from '.storybook/modules';;
+import { DEFAULT_MODULE } from '.storybook/modules';
 
 @StoryComponent(
   {
