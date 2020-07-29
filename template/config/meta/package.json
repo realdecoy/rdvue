@@ -8,10 +8,10 @@
     "lint": "vue-cli-service lint",
     "test:e2e": "cypress open",
     "test:unit": "vue-cli-service test:unit",
-"storybook": "run-s storybook:tailwind storybook:serve",
-"storybook:build": "build-storybook -c .storybook -o dist/storybook",
-"storybook:serve": "start-storybook -s ./public -p 8000 --ci storybook:tailwind",
-"storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css"
+    "storybook:serve": "run-s storybook:tailwind storybook",
+    "storybook:build": "build-storybook -c .storybook -o dist/storybook",
+    "storybook": "start-storybook -s ./public -p 8000 --ci storybook:tailwind",
+    "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css"
 
   },
   "dependencies": {

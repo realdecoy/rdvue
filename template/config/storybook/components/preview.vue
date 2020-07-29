@@ -3,7 +3,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import Example from "./example.vue";
 import Playground from './playground.vue';
 import Props from './props.vue';
-import { StoryComponent } from '@/modules/story';
+import { StoryComponent } from '.storybook/modules/story';
 
 const safe = new WeakMap<object, PreviewData>();
 
