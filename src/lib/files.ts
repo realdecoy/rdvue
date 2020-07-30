@@ -15,7 +15,7 @@ import * as utils from './util';
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import {  CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8} from '../constants/constants';
+import { CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8 } from '../constants/constants';
 import { Config } from '../types/cli';
 import { FeatureNameObject, Files } from '../types/index';
 
@@ -41,7 +41,7 @@ function readFile(filePath: string): string {
 function directoryExists(filePath: string): boolean {
   try {
     return fs.statSync(filePath)
-              .isDirectory();
+      .isDirectory();
   } catch (err) {
     // TODO: log error here
     return false;
@@ -89,12 +89,19 @@ function readSubConfig(command: string): Config {
   return JSON.parse(readFile(filePath)) as Config;
 }
 
+function isFeatureGroup(command: string): boolean {
+  const filePath = path.join(TEMPLATE_ROOT, `/${command}`, MANIFEST_FILE);
+  const configuration = JSON.parse(readFile(filePath)) as Config;
+
+  return configuration.group as boolean;
+}
+
 /**
  * Description: Clear temporary files at a given path
  * @param folderPath - the folder path for which you would like to clear temporary files
  */
 async function clearTempFiles(folderPath: string) {
-   rimraf.sync(folderPath);
+  rimraf.sync(folderPath);
 }
 
 /**
@@ -149,21 +156,20 @@ async function updateFile(filePath: string, file: string, placeholder: string, v
  * @param args - input received from user
  */
 async function readAndUpdateFeatureFiles(
-    destDir: string,
-    files: Files[] | Array<string|Files>,
-    args: FeatureNameObject
-    )
-{
+  destDir: string,
+  files: Files[] | Array<string | Files>,
+  args: FeatureNameObject
+) {
   let filename = '';
   let filePath = '';
 
   // [1] Get the kebab name key from arugments
   const kebabNameKey = (Object.keys(args)
-  .filter(f => utils.hasKebab(f)))[0];
+    .filter(f => utils.hasKebab(f)))[0];
 
   // [2] Get the pascal name key from arguments
   const pascalNameKey = (Object.keys(args)
-  .filter(f => !utils.hasKebab(f)))[0];
+    .filter(f => !utils.hasKebab(f)))[0];
 
   // [3] For each file in the list
   for (const file of files) {
@@ -193,9 +199,9 @@ async function readAndUpdateFeatureFiles(
 
           // [5] Update the contents of the file at given filePath
           await updateFile(filePath, fileContent, contentBlock.matchRegex,
-            ( utils.hasKebab(contentBlock.replace) === true ?
-            args[kebabNameKey] : (contentBlock.replace.includes('${')) ?
-            args[pascalNameKey] : contentBlock.replace));
+            (utils.hasKebab(contentBlock.replace) === true ?
+              args[kebabNameKey] : (contentBlock.replace.includes('${')) ?
+                args[pascalNameKey] : contentBlock.replace));
         }
       }
     } else if (file.content) {
@@ -211,26 +217,26 @@ async function readAndUpdateFeatureFiles(
  * @param destDir - directory to which files will be copied
  * @param files - files to be copied
  */
-async function copyFiles(srcDir: string, destDir: string, files:Array<string|Files>) {
+async function copyFiles(srcDir: string, destDir: string, files: Array<string | Files>) {
   return Promise.all(files.map(
     async (f: Files | string) => {
-    let source = '';
-    let dest = '';
-    // Get source and destination paths
-    if (typeof f !== 'string') {
-      source = path.join(srcDir, f.source);
-      dest = path.join(destDir, f.target);
-    } else {
-      source = path.join(srcDir, `${srcDir.includes(featureType.config) ? CORE : ''}`, f);
-      dest = path.join(destDir, f);
-    }
+      let source = '';
+      let dest = '';
+      // Get source and destination paths
+      if (typeof f !== 'string') {
+        source = path.join(srcDir, f.source);
+        dest = path.join(destDir, f.target);
+      } else {
+        source = path.join(srcDir, `${srcDir.includes(featureType.config) ? CORE : ''}`, f);
+        dest = path.join(destDir, f);
+      }
 
-    // Create all the necessary directories if they dont exist
-    const dirName = getDirName(dest);
-    mkdirp.sync(dirName);
+      // Create all the necessary directories if they dont exist
+      const dirName = getDirName(dest);
+      mkdirp.sync(dirName);
 
-    return copyFilePromise(source, dest);
-  }));
+      return copyFilePromise(source, dest);
+    }));
 }
 
 /**
@@ -238,14 +244,14 @@ async function copyFiles(srcDir: string, destDir: string, files:Array<string|Fil
  * @param files - filenames which need to be updated
  * @param featureName - the string used to update the name of the files
  */
-function replaceTargetFileNames(files: Array<string|Files>, featureName: string){
-   if (featureName !== '') {
-    files.forEach((file:string | Files) => {
-     if (typeof file !== 'string') {
-      if (file.target !== file.source) {
-        file.target = replaceFileName(file.target, /(\${.*?\})/, featureName);
+function replaceTargetFileNames(files: Array<string | Files>, featureName: string) {
+  if (featureName !== '') {
+    files.forEach((file: string | Files) => {
+      if (typeof file !== 'string') {
+        if (file.target !== file.source) {
+          file.target = replaceFileName(file.target, /(\${.*?\})/, featureName);
+        }
       }
-     }
     });
   }
 }
@@ -259,13 +265,14 @@ function replaceTargetFileNames(files: Array<string|Files>, featureName: string)
  * @param fileList - files to be copied and updated
  */
 async function copyAndUpdateFiles(
-    sourceDirectory: string,
-    installDirectory: string,
-    fileList: Files[] | Array<string|Files>,
-    args: FeatureNameObject
-  ): Promise<boolean> {
+  sourceDirectory: string,
+  installDirectory: string,
+  fileList: Files[] | Array<string | Files>,
+  args: FeatureNameObject
+): Promise<boolean> {
   const kebabNameKey = (Object.keys(args)
-  .filter(f => utils.hasKebab(f)))[0];
+    .filter(f => utils.hasKebab(f)))[0];
+
   // Spinner animation
   const status = new Spinner('updating template files from boilerplate...', spinnerIcons);
   status.start();
@@ -274,17 +281,17 @@ async function copyAndUpdateFiles(
 
   // Copy files from template and place in target destination
   await copyFiles(sourceDirectory, installDirectory, fileList)
-  .then(() => {
-    const kebabName = args[kebabNameKey] !== undefined ? args[kebabNameKey] : '';
+    .then(() => {
+      const kebabName = args[kebabNameKey] !== undefined ? args[kebabNameKey] : '';
 
-    // tslint:disable-next-line:no-console
-    console.log(`[Processing ${kebabName} files]`);
-  })
-  .catch((err) => {
-    // TODO: Implement more contextual errors
-    // tslint:disable-next-line:no-console
-    console.log(err);
-  });
+      // tslint:disable-next-line:no-console
+      console.log(`[Processing ${kebabName} files]`);
+    })
+    .catch((err) => {
+      // TODO: Implement more contextual errors
+      // tslint:disable-next-line:no-console
+      console.log(err);
+    });
 
   // Apply changes to generated files
   await readAndUpdateFeatureFiles(installDirectory, fileList, args);
@@ -307,5 +314,9 @@ export {
   readMainConfig,
   readSubConfig,
   writeFile,
+  copyFiles,
+  readFile,
+  updateFile,
+  isFeatureGroup
 };
 
