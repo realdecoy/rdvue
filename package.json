@@ -1,6 +1,6 @@
 {
   "name": "rdvue",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "command line tool for generating and managing vue projects",
   "author": "realdecoy",
   "main": "build/main/index.js",
@@ -86,7 +86,6 @@
     "prettier": "^1.15.2",
     "standard-version": "^7.1.0",
     "trash-cli": "^1.4.0",
-    "ts-jest": "^25.3.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-immutable": "^5.0.0",

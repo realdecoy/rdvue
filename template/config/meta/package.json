@@ -19,6 +19,8 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/jest": "^23.1.4",
     "@types/jquery": "^3.3.30",
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.14.8",
@@ -27,20 +29,21 @@
     "@vue/cli-plugin-typescript": "^3.4.0",
     "@vue/cli-plugin-unit-jest": "^4.3.1",
     "@vue/cli-service": "^4.3.1",
-    "@vue/test-utils": "^1.0.0-beta.20",
+    "@vue/test-utils": "^1.0.2",
+    "autoprefixer": "^9.7.6",
     "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^26.0.1",
+    "chai": "^4.2.0",
     "cypress": "^4.4.0",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-webpack-plugin": "^2.4.2",
     "node-sass": "^4.9.0",
     "rdvue": "^0.5.6",
     "sass-loader": "^7.1.0",
-    "ts-jest": "^23.0.0",
+    "tailwindcss": "^1.4.1",
     "typescript": "^3.0.0",
-    "vue-template-compiler": "^2.5.21"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+    "vue-template-compiler": "^2.5.21",
+    "webpack-bundle-analyzer": "^3.7.0"
   },
   "browserslist": [
     "> 1%",
@@ -52,14 +55,12 @@
       "js",
       "jsx",
       "json",
-      "vue",
-      "ts",
-      "tsx"
+      "vue"
     ],
     "transform": {
       "^.+\\.vue$": "vue-jest",
       ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.jsx?$": "babel-jest"
     },
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
@@ -69,6 +70,13 @@
     ],
     "testMatch": [
       "**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
+    ],
+    "testPathIgnorePatterns": [
+      "/cypress/",
+      "/node_modules/"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/"
     ],
     "testURL": "http://localhost:8080",
     "globals": {
