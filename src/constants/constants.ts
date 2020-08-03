@@ -19,13 +19,18 @@ export enum featureType {
     config = 'config',
     store = 'store',
     project = 'project',
-    services= 'services'
+    services = 'services',
+    auth = 'auth'
 }
 
-interface Actions{
-    [key: string ]: string[];
+export enum featureGroup {
+    auth = 'auth'
+}
+
+interface Actions {
+    [key: string]: string[];
 }
 
 export const ACTIONS: Actions = {
-    generate:['generate', 'g']
+    generate: ['generate', 'g']
 };

@@ -42,7 +42,7 @@ rdvue --help
 rdvue [command]
 
 Commands:
-  rdvue <action> <feature> <feature name> [options]
+  rdvue <action> <feature group> or <feature> <feature name> [options]
 
 Actions:
   generate  Creates new feature
@@ -54,6 +54,9 @@ Features:
   page          Generates a new page directory with the following main files to build and test: <page-name>.vue, <page-name>.ts, <page-name>.scss, <page-name>.spec.ts
   service       Generates a new service file within the services directory to integrate methods that should interact with external apis: <service-name>.ts
   model         Generates a new model/interface within the entities directory: <interface-name>.ts
+
+Feature Group:
+  auth          Generates component directory pages/auth and auth service module in the services directory.
 
 Options:
   --help        Show help                                                   [boolean]

@@ -288,10 +288,6 @@
         "source": "storybook/modules/constants.ts",
         "target": ".storybook/modules/constants.ts"
       },
-      {
-        "source": "storybook/stories/index.js",
-        "target": ".storybook/stories/index.js"
-      },
 
       {
         "source": "storybook/postcss.config.js",
