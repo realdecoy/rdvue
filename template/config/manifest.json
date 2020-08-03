@@ -17,10 +17,20 @@
   ],
   "sourceDirectory": "./",
   "installDirectory": "./",
-  "files": [{
-      "source": "meta/.rdvue",
-      "target": ".rdvue"
+  "files": [
+    {
+      "source": "meta/.rdvue/.rdvue",
+      "target": ".rdvue/.rdvue"
     },
+    {
+      "source": "meta/.rdvue/routes.js",
+      "target": ".rdvue/routes.js"
+    },
+    {
+      "source": "meta/.rdvue/stores.js",
+      "target": ".rdvue/stores.js"
+    },
+
     {
       "source": "meta/package.json",
       "target": "package.json",

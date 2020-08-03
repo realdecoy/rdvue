@@ -246,8 +246,25 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 USAGE
             );
 
+            let features = files.readMainConfig()?.import?.optional ?? null;
+
+            if (features !== null) {
+                features  = features.filter((feature) =>files.isFeatureGroup(feature))
+            };
+
+            // ask questions here
+            console.log("featuressdsd",features);
             util.nextSteps(projectName);
 
+            await run(
+                {
+                    options: userOptions,
+                    feature: featureType.store,
+                    action: userAction,
+                    featureName: userFeatureName
+                },
+                USAGE
+            );
             return true;
         }
 
