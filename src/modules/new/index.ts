@@ -259,6 +259,15 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
             util.nextSteps(projectName);
 
+            await run(
+                {
+                    options: userOptions,
+                    feature: featureType.store,
+                    action: userAction,
+                    featureName: userFeatureName
+                },
+                USAGE
+            );
             return true;
         }
 

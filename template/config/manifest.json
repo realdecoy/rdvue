@@ -38,6 +38,11 @@
       "target": ".rdvue/options.js"
     },
     {
+      "source": "meta/.rdvue/stores.js",
+      "target": ".rdvue/stores.js"
+    },
+
+    {
       "source": "meta/package.json",
       "target": "package.json",
       "content": [{
