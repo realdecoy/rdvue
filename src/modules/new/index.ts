@@ -5,8 +5,10 @@
  */
 
 import chalk from 'chalk';
+import clear from 'clear';
+
 import { Section } from 'command-line-usage';
-import inquirer from 'inquirer';
+import inquirer, { QuestionCollection } from 'inquirer';
 import path from 'path';
 import process from 'process';
 import * as CONFIG from './config';
@@ -201,7 +203,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
             // [1]c Create a section break
             util.sectionBreak();
-
             // [1]d Obtaining the path of the project root
             projectRoot = util.getProjectRoot();
 
@@ -215,6 +216,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 projectRoot,
                 userFeature
             });
+
 
             // [1]f Copy files into designated location
             await files.copyFiles(
@@ -259,15 +261,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
             util.nextSteps(projectName);
 
-            await run(
-                {
-                    options: userOptions,
-                    feature: featureType.store,
-                    action: userAction,
-                    featureName: userFeatureName
-                },
-                USAGE
-            );
             return true;
         }
 

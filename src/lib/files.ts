@@ -89,6 +89,14 @@ function readSubConfig(command: string): Config {
   return JSON.parse(readFile(filePath)) as Config;
 }
 
+function getOptionalModules() {
+  const config = 'config';
+
+  const filePath = path.join(TEMPLATE_ROOT, `/${config}`, MANIFEST_FILE);
+
+  return JSON.parse(readFile(filePath)) as Config;
+}
+
 function isFeatureGroup(command: string): boolean {
   const filePath = path.join(TEMPLATE_ROOT, `/${command}`, MANIFEST_FILE);
   const configuration = JSON.parse(readFile(filePath)) as Config;
