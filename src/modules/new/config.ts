@@ -1,14 +1,14 @@
 import chalk from 'chalk';
 import {
   DEFAULT_PROJECT_NAME,
+  featureType,
   OPTIONS_ALL,
   REGEX_PROJECT_NAME,
   TEMPLATE_PROJECT_URL
 } from '../../constants/constants';
 import * as files from '../../lib/files';
 import { Arguments, Config } from '../../types/cli';
-
-// tslint:disable-next-line
+ // tslint:disable-next-line
 async function validate(this: any, value: string): Promise<any> {
   const done = this.async();
   if (value.length === 0 || value.match(REGEX_PROJECT_NAME) !== null) {
@@ -56,9 +56,26 @@ const QUESTIONS: any[] = [
   }
 ];
 
+const optionalModulesPrompt = () => {
+  const optFeatures = files.readSubConfig(featureType.config)?.optionalModules ?? null;
+  let inquirerObj;
+  if (optFeatures !== null) {
+    const choices = optFeatures.map((feature) => feature.name);
+    inquirerObj = [{
+      type: 'checkbox',
+      name: 'optionalModules',
+      message: 'Select Optional Modules to install',
+      choices
+    }];
+  }
+
+  return inquirerObj ?? null;
+};
+
 export {
   TEMPLATE_PROJECT_URL,
   OPTIONS_ALL,
   QUESTIONS,
   parsePrompts,
+  optionalModulesPrompt
 };

@@ -32,5 +32,6 @@ interface Actions {
 }
 
 export const ACTIONS: Actions = {
-    generate: ['generate', 'g']
+    generate: ['generate', 'g'],
+    add: ['add']
 };

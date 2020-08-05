@@ -5,8 +5,10 @@
  */
 
 import chalk from 'chalk';
+import clear from 'clear';
+
 import { Section } from 'command-line-usage';
-import inquirer from 'inquirer';
+import inquirer, { QuestionCollection } from 'inquirer';
 import path from 'path';
 import process from 'process';
 import * as CONFIG from './config';
@@ -194,7 +196,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
             // [1]c Create a section break
             util.sectionBreak();
-
             // [1]d Obtaining the path of the project root
             projectRoot = util.getProjectRoot();
 
@@ -208,6 +209,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 projectRoot,
                 userFeature
             });
+
 
             // [1]f Copy files into designated location
             await files.copyFiles(
@@ -246,25 +248,28 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 USAGE
             );
 
-            let features = files.readMainConfig()?.import?.optional ?? null;
+            clear();
+            const optFeaturesQuestions = CONFIG.optionalModulesPrompt();
 
-            if (features !== null) {
-                features  = features.filter((feature) =>files.isFeatureGroup(feature))
-            };
+            if (optFeaturesQuestions !== null) {
+                const selected = await inquirer.prompt(optFeaturesQuestions);
+                const selectedArr = selected.optionalModules as [];
 
-            // ask questions here
-            console.log("featuressdsd",features);
+                for (const feature of selectedArr) {
+                    // TODO: Check if files for feature exist before calling run
+                    await run(
+                        {
+                            options: userOptions,
+                            feature,
+                            action: userAction,
+                        },
+                        USAGE
+                    );
+                }
+
+            }
             util.nextSteps(projectName);
 
-            await run(
-                {
-                    options: userOptions,
-                    feature: featureType.store,
-                    action: userAction,
-                    featureName: userFeatureName
-                },
-                USAGE
-            );
             return true;
         }
 

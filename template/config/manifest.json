@@ -303,5 +303,19 @@
         "source": "storybook/postcss.config.js",
         "target": "postcss.config.js"
       }
+  ],
+
+  "optionalModules":[
+    {
+      "type":"auth",
+       "name":"auth",
+       "description":"Basic auth implementation"
+    },
+
+    {
+      "type":"ui",
+      "name":"Bootstrap",
+      "description":"Basic bootstrap"
+    }
   ]
 }

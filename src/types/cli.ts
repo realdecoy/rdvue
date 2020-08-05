@@ -35,6 +35,14 @@ export interface Config {
     singleUserPerProject?: boolean;
     menu?: Menu[];
     group?: boolean;
+    optionalModules?: OptionalModules[];
+}
+
+// Interface for optional modules
+export interface OptionalModules{
+    type: string;
+    name: string;
+    description?: string;
 }
 
 // Import interface for the files being imported
