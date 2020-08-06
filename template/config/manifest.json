@@ -128,7 +128,13 @@
     },
     {
       "source": "cypress/tsconfig.json",
-      "target": "cypress/tsconfig.json"
+      "target": "cypress/tsconfig.json",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "cypress/integration/specs/actions.spec.ts",
@@ -287,10 +293,6 @@
       {
         "source": "storybook/modules/constants.ts",
         "target": ".storybook/modules/constants.ts"
-      },
-      {
-        "source": "storybook/stories/index.js",
-        "target": ".storybook/stories/index.js"
       },
 
       {
