@@ -313,7 +313,7 @@
     },
 
     {
-      "type":"ui",
+      "type":"ui-library",
       "name":"Bootstrap",
       "description":"Basic bootstrap"
     }
