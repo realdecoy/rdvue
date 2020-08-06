@@ -7,6 +7,7 @@
 import chalk from 'chalk';
 import clear from 'clear';
 import { Section } from 'command-line-usage';
+import inquirer from 'inquirer';
 import { USAGE_TEMPLATE } from './config';
 import { isFeatureGroup, readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
@@ -18,6 +19,7 @@ import { CLI_DEFAULT } from './default objects/cli-description';
 import { CLI, Config, ModuleDescriptor } from './types/cli';
 import { Command } from './types/index';
 
+import {ADD_ACTION, featureGroupType, featureType} from './constants/constants';
 const two = 2;
 // Assign CLI object a default value
 export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
@@ -189,15 +191,51 @@ export async function run(userArguments: [] | undefined) {
         featureName: util.parseUserInput(userArgs, features).featureName,
       };
 
-      // [6] Check to see if user arguments include any valid features
+       // [6] Check to see if user arguments include any valid features
       if (operation.action !== '' && operation.feature !== '') {
 
         // [7] Check to see if the project is valid
         project = util.checkProjectValidity(operation);
         if (project.isValid) {
+          // If action is ADD
+          // check if feature is a group type
+          // if it is a group type, grab list of features from that group and show questions
+          // set operatioon.feature to selected option
+          // else if it is not a group type,
+          // and is an actual featureGroup(e.g a sigle auth feature) set operation.feature to it
+          // next, call the run method with this info
 
-          // [8a] Call the run function in modules/new/index.ts
-          await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+          if (operation.action === ADD_ACTION && operation.feature in featureGroupType) {
+
+              const optionalModules =
+                readSubConfig(featureType.config)?.optionalModules ??
+                null;
+
+            let choices;
+
+            if (optionalModules !== null) {
+              choices = optionalModules
+                .filter(feature => feature.type === operation.feature)
+                .map(feature => feature.name);
+
+              const question = [
+                {
+                  type: 'list',
+                  name: 'answer',
+                  message: `Select one of the following ${operation.feature} options`,
+                  choices
+                }
+              ];
+              const answer = await inquirer.prompt(question);
+              operation.feature = answer.answer as string;
+
+              // [8a] Call the run function in modules/new/index.ts
+              await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+            }
+          } else {
+                   // [8a] Call the run function in modules/new/index.ts
+                   await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+                 }
         } else {
 
           // [8b] Throw an error if this is not a valid project

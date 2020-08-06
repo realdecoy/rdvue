@@ -7,6 +7,7 @@ import gitUserName from 'git-user-name';
 export const DEFAULT_PROJECT_NAME = 'my-vue-app';
 export const REGEX_PROJECT_NAME = /^\s+$/;
 export const GENERATE_ACTION = 'generate';
+export const ADD_ACTION = 'add';
 export const TEMPLATE_PROJECT_URL = `https://${gitUserName()}@bitbucket.org/realdecoyteam/rd-vue-cli.git`;
 export const OPTIONS_ALL: string[] = [GENERATE_ACTION];
 export const spinnerIcons = ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'];

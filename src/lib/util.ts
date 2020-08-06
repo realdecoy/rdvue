@@ -2,8 +2,12 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
+
 import npm from 'npm-programmatic';
-import { ACTIONS, DYNAMIC_OBJECTS } from '../constants/constants';
+import { ACTIONS, DYNAMIC_OBJECTS, featureGroupType } from '../constants/constants';
+
+import { TEMPLATE_ROOT } from '../config';
+ >>>>>>> added support for add feature
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
 import { fileExists, readFile, writeFile } from './files';
@@ -79,6 +83,13 @@ function parseOptions(args: string[]): string[] {
 }
 
 /**
+ * Checks if the argument given by the user after add or generate is a feature group type
+ * @param feature
+ */
+function isFeatureGroupType(feature: string) {
+  return feature in featureGroupType;
+}
+/**
  * Description - seperates the user input into <service> <action> <feature>
  * <featureName> [options]
  * @param args - the arguments that the user provided in the command line
@@ -91,9 +102,10 @@ function parseUserInput(args: string[], features: string[]) {
     action: '',
     feature: '',
     featureName: '',
-    options: ['']
+    options: [''],
   };
-  // Magic numbers are not allowed: used to check third argument
+
+   // Magic numbers are not allowed: used to check third argument
   const argIndex = 2;
   let remainingArgs = [];
 
@@ -104,9 +116,12 @@ function parseUserInput(args: string[], features: string[]) {
 
     returnObject.action = args[0];
 
+
+
     // [2] Checking second argument <feature>
     // to see if it includes a valid feature (eg. project or page)
-    if (args[1] !== undefined && features.includes(args[1])) {
+    // TODO check if it includes valid feature group type
+    if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1]))) {
 
       returnObject.feature = args[1];
 
@@ -259,6 +274,9 @@ function checkProjectValidity(operation: Command) {
 
   return results;
 }
+
+
+
 
 // Function to iterate through the actions object
 // and check for the matching action to the users input
