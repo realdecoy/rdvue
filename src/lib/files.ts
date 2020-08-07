@@ -257,7 +257,7 @@ function replaceTargetFileNames(files: Array<string | Files>, featureName: strin
     files.forEach((file: string | Files) => {
       if (typeof file !== 'string') {
         if (file.target !== file.source) {
-          file.target = replaceFileName(file.target, /(\${.*?\})/, featureName);
+          file.target = replaceFileName(file.target, /(\${.*?\})/, featureName??'');
         }
       }
     });

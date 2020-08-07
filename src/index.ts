@@ -218,6 +218,11 @@ export async function run(userArguments: [] | undefined) {
                 .filter(feature => feature.type === operation.feature)
                 .map(feature => feature.name);
 
+              if (choices.length < 1) {
+                throw Error(
+                  `There are currently no features available for ${operation.feature}`);
+              }
+
               const question = [
                 {
                   type: 'list',
@@ -226,6 +231,7 @@ export async function run(userArguments: [] | undefined) {
                   choices
                 }
               ];
+
               const answer = await inquirer.prompt(question);
               operation.feature = answer.answer as string;
 

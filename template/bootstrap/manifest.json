@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "name": "bootstrap",
+  "group": true,
+  "description": "Adds bootstrap JS and CSS files to project fr usage",
+  "sourceDirectory": "./",
+  "installDirectory": "bootstrap",
+  "files": [
+    {
+      "source": "css/bootstrap.css",
+      "target": "css/bootstrap.css"
+    },
+    {
+      "source": "css/bootstrap.min.css",
+      "target": "css/bootstrap.min.css"
+    },
+     {
+      "source": "js/bootstrap.js",
+      "target": "js/bootstrap.min.js"
+    }
+  ]
+}

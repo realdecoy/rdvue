@@ -201,7 +201,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         let directories: Directories;
 
         // [1]b If the user used a feature group request
-        if (availableFeatureGroups.includes(userFeature)) {
+        if (userAction === ADD_ACTION && availableFeatureGroups.includes(userFeature)) {
             const parsed = files.readSubConfig(userFeature);
 
             // [1]c Create a section break
@@ -220,7 +220,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 userFeature
             });
 
-
             // [1]f Copy files into designated location
             await files.copyFiles(
                 directories.sourceDir,
@@ -228,8 +227,11 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 parsed.files as Files[]
             );
 
+            // [1]g Update the .rdvue/routes.json file in src directory in the project
             isProject = false;
+
         }
+
 
         // [2] Check if the user requested a new project
         if (isProject) {
@@ -267,62 +269,27 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             return true;
         }
 
-        return true;
-    }
+        // [1] Check if the user did not use the generate action/add/list
+        // or had an overall invalid command
+        if (!isValidCreateRequest) {
+            // Show Help Menu
+            const CLIPROPERTY = getFeatureMenu(operation.feature);
+            // tslint:disable-next-line:no-console
+            console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
+
+
+            return true;
+        }
+
 
         // [4] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
         if (userFeatureName !== '' || availableFeaturesWithNoNames.includes(userFeature)) {
-        answers[nameKey] = userFeatureName;
-    } else {
-        answers = await inquirer.prompt(questions);
-    }
-
-    // [2] Check if the user requested a new project
-    if (isProject) {
-        // [2]b Get required config
-        await run(
-            {
-                options: userOptions,
-                feature: featureType.config,
-                action: userAction,
-                featureName: userFeatureName
-            },
-            USAGE
-        );
-
-        // Console.log(">>>project created");
-        // [2]c Create required storage for project
-        await run(
-            {
-                options: userOptions,
-                feature: featureType.store,
-                action: userAction,
-                featureName: userFeatureName
-            },
-            USAGE
-        );
-
-        clear();
-        const optFeaturesQuestions = CONFIG.optionalModulesPrompt();
-
-        if (optFeaturesQuestions !== null) {
-            const selected = await inquirer.prompt(optFeaturesQuestions);
-            const selectedArr = selected.optionalModules as [];
-
-            for (const feature of selectedArr) {
-                // TODO: Check if files for feature exist before calling run
-                await run(
-                    {
-                        options: userOptions,
-                        feature,
-                        action: userAction
-                    },
-                    USAGE
-                );
-            }
+            answers[nameKey] = userFeatureName;
+        } else {
+            answers = await inquirer.prompt(questions);
         }
-        util.nextSteps(projectName);
+
 
         // Update the .rdvue/routes.js file in src directory in the project
         if (currentConfig.routes !== undefined) {
@@ -423,22 +390,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             );
         }
 
-        // [10] If executing the 'config' feature
-        if (isConfig) {
-            // [10]b Updating the '.rdvue' config file to include the project root path
-            if (kebabNameKey !== undefined) {
-                updateConfig(featureNameStore, directories, kebabNameKey);
-            }
-        } else {
-            // [10]c Create a section break
-            util.sectionBreak();
-            // tslint:disable-next-line:no-console
-            console.log(
-                chalk.magenta(
-                    `The ${userFeature} "${answers[nameKey]}" has been generated.`
-                )
-            );
-        }
+
 
         return true;
     } catch (err) {
