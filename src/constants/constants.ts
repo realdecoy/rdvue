@@ -25,12 +25,15 @@ export enum featureType {
 }
 
 export enum featureGroup {
-    auth = 'auth'
+    auth = 'auth',
+    auth0 = 'auth0',
 }
 
 export enum featureGroupType {
-  auth = 'auth',
-  'ui-library' = 'ui-library'
+    auth = 'auth',
+    'ui-library' = 'ui-library',
+    test = 'test'
+
 }
 
 interface Actions {

@@ -192,7 +192,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
     // [1] Check if the user did not use the generate action/add/list
     // or had an overall invalid command
-    if (!isValidCreateRequest) {
+    if (!isValidCreateRequest){
       // Show Help Menu
       const CLIPROPERTY = getFeatureMenu(operation.feature);
       // tslint:disable-next-line:no-console
@@ -271,7 +271,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
       );
 
       // [1]g Update the .rdvue/routes.json file in src directory in the project
-      util.parseDynamicRoutes(userFeature);
+      if (userFeature === 'auth') {util.parseDynamicRoutes(userFeature);}
       isProject = false;
     }
 

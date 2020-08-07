@@ -311,10 +311,15 @@
        "name":"auth",
        "description":"Basic auth implementation"
     },
+     {
+      "type":"auth",
+       "name":"auth0",
+       "description":"Basic Auth0 implementation"
+    },
 
     {
       "type":"ui-library",
-      "name":"Bootstrap",
+      "name":"bootstrap",
       "description":"Basic bootstrap"
     }
   ]

@@ -12,7 +12,9 @@
       "model",
       "page",
       "auth",
-      "sm"
+      "auth0",
+      "sm",
+      "bootstrap"
     ]
   }
 }

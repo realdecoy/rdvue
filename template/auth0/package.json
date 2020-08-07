@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "auth0-js": "^9.13.4"
+  }
+}

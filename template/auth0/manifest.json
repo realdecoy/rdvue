@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "auth0",
+  "group": true,
+  "description": "Generate a basic component needed for basic Auth0.",
+  "sourceDirectory": "./",
+  "installDirectory": "auth0",
+  "files": [
+    {
+      "source": "page/Auth0.ts",
+      "target": "./Auth0.ts"
+    },
+    {
+      "source": "page/Auth0.vue",
+      "target": "./Auth0.vue"
+    }]
+}
