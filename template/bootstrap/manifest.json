@@ -4,19 +4,19 @@
   "group": true,
   "description": "Adds bootstrap JS and CSS files to project fr usage",
   "sourceDirectory": "./",
-  "installDirectory": "bootstrap",
+  "installDirectory": "plugins",
   "files": [
     {
       "source": "css/bootstrap.css",
-      "target": "css/bootstrap.css"
+      "target": "bootstrap/css/bootstrap.css"
     },
     {
       "source": "css/bootstrap.min.css",
-      "target": "css/bootstrap.min.css"
+      "target": "bootstrap/css/bootstrap.min.css"
     },
      {
       "source": "js/bootstrap.js",
-      "target": "js/bootstrap.min.js"
+      "target": "bootstrap/js/bootstrap.min.js"
     }
   ]
 }

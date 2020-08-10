@@ -301,7 +301,13 @@
 
       {
         "source": "storybook/postcss.config.js",
-        "target": "postcss.config.js"
+        "target": "postcss.config.js",
+        "content": [
+          {
+            "matchRegex": "__PROJECT__NAME__KEBAB__",
+            "replace": "${projectNameKebab}"
+          }
+        ]
       }
   ],
 
