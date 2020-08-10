@@ -4,11 +4,11 @@ class Auth0 extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
-  @StoryProp({
-    description: '',
-    values: [true,false]
-  })
-  private isAuthenticated: false
+  // @StoryProp({
+  //   description: '',
+  //   values: [true,false]
+  // })
+  // private isAuthenticated: false
 
   // --------------------------------------------------------------------------
   // [Public] Constructor
@@ -27,18 +27,18 @@ class Auth0 extends Vue {
   // --------------------------------------------------------------------------
   @Emit()
   addToCount(n: number) {
-    this.$auth.login();
+    // this.$auth.login();
   }
 
   @Emit()
   logout() {
-    this.$auth.logOut();
+    // this.$auth.logOut();
   }
 
   @Emit()
-  handleLoginEvent(data) {
-    this.isAuthenticated = data.loggedIn;
-    this.profile = data.profile;
+  handleLoginEvent(data:string) {
+    // this.isAuthenticated = data.loggedIn;
+    // this.profile = data.profile;
   }
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
@@ -59,7 +59,7 @@ class Auth0 extends Vue {
 
   private async created() {
     try {
-      await this.$auth.renewTokens();
+      // await this.$auth.renewTokens();
     } catch (e) {
       console.log(e);
     }

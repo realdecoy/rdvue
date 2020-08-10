@@ -14,7 +14,7 @@ function loadStories() {
 
 const theme = create({
   base: 'light',
-  brandTitle: `trial ${version}`,
+  brandTitle: `__PROJECT__NAME__KEBAB__ ${version}`,
   brandUrl: '__BRAND_URL__',
 });
 
