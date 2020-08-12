@@ -1,11 +1,27 @@
 {
 	"defaultSeverity": "error",
-	"extends": [ "tslint:latest", "tslint-config-prettier", "tslint-immutable" ],
+	"extends": [
+		"tslint:latest",
+		"tslint-config-prettier",
+		"tslint-immutable"
+	],
 	"rules": {
-		"no-implicit-dependencies": [ true, [ "@" ] ],
-		"no-console": true,
-		"quotemark": [ true, "single" ],
-		"indent": [ true, "spaces", 2 ],
+		"no-implicit-dependencies": [
+			true,
+			[
+				"@"
+			]
+		],
+		"no-console": false,
+		"quotemark": [
+			true,
+			"single"
+		],
+		"indent": [
+			true,
+			"spaces",
+			2
+		],
 		"no-default-export": false,
 		"interface-name": false,
 		"ordered-imports": true,
@@ -59,16 +75,30 @@
 		"await-promise": true,
 		"arrow-return-shorthand": true,
 		"binary-expression-operand-order": true,
-		"comment-format": [ true, "check-space", "check-uppercase", "allow-trailing-lowercase" ],
+		"comment-format": [
+			true,
+			"check-space",
+			"check-uppercase",
+			"allow-trailing-lowercase"
+		],
 		"curly": true,
 		"cyclomatic-complexity": true,
 		"deprecation": true,
 		"encoding": true,
 		"eofline": true,
 		"import-spacing": true,
-		"max-classes-per-file": [ true, 1 ],
-		"max-file-line-count": [ true, 1000 ],
-		"max-line-length": [ true, 100 ],
+		"max-classes-per-file": [
+			true,
+			1
+		],
+		"max-file-line-count": [
+			true,
+			1000
+		],
+		"max-line-length": [
+			true,
+			100
+		],
 		"member-access": true,
 		"member-ordering": true,
 		"number-literal-format": true,
@@ -102,7 +132,11 @@
 		"unified-signatures": true,
 		"use-default-type-parameter": true,
 		"variable-name": {
-			"options": [ "ban-keywords", "check-format", "allow-leading-underscore" ]
+			"options": [
+				"ban-keywords",
+				"check-format",
+				"allow-leading-underscore"
+			]
 		}
 	}
 }

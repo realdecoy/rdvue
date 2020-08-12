@@ -7,8 +7,9 @@ import {
   TEMPLATE_PROJECT_URL
 } from '../../constants/constants';
 import * as files from '../../lib/files';
-import { Arguments, Config } from '../../types/cli';
- // tslint:disable-next-line
+import { Arguments, Config, Group } from '../../types/cli';
+import inquirer from 'inquirer';
+// tslint:disable-next-line
 async function validate(this: any, value: string): Promise<any> {
   const done = this.async();
   if (value.length === 0 || value.match(REGEX_PROJECT_NAME) !== null) {
@@ -56,26 +57,23 @@ const QUESTIONS: any[] = [
   }
 ];
 
-const optionalModulesPrompt = () => {
-  const optFeatures = files.readSubConfig(featureType.config)?.optionalModules ?? null;
-  let inquirerObj;
-  if (optFeatures !== null) {
-    const choices = optFeatures.map((feature) => feature.name);
-    inquirerObj = [{
-      type: 'checkbox',
-      name: 'optionalModules',
-      message: 'Select Optional Modules to install',
-      choices
-    }];
-  }
 
-  return inquirerObj ?? null;
-};
+function getQuestionByGroup(group: Group) {
+
+  const question: inquirer.QuestionCollection = {
+    type: group.promptType as any,
+    name: 'feature',
+    message: group.question,
+    choices: group.modules,
+  };
+
+  return question;
+}
 
 export {
   TEMPLATE_PROJECT_URL,
   OPTIONS_ALL,
   QUESTIONS,
   parsePrompts,
-  optionalModulesPrompt
+  getQuestionByGroup
 };

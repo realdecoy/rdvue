@@ -19,15 +19,16 @@ import {
   featureGroup,
   featureGroupType,
   featureType,
-  GENERATE_ACTION
+  GENERATE_ACTION,
+  ADD_GROUP
 } from '../../constants/constants';
 import * as files from '../../lib/files';
 import {
   getFeatureConfiguration,
-  getFeatureMenu
+  getFeatureMenu,
 } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
-import { CLI, Config } from '../../types/cli';
+import { CLI, Config, Group } from '../../types/cli';
 import {
   Command,
   Directories,
@@ -103,7 +104,7 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
   if (isConfig) {
     installDirectory = `${featureName}${
       currInstallDir !== './' ? currInstallDir : ''
-    }`;
+      }`;
   } else if (
     isStore ||
     currInstallDir === featureType.services ||
@@ -113,7 +114,7 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
   } else {
     installDirectory = `src/${
       currInstallDir !== './' ? currInstallDir : ''
-    }/${featureName}`;
+      }/${featureName}`;
   }
 
   if (projectRoot !== null && !isConfig) {
@@ -156,13 +157,29 @@ function updateConfig(
   process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
+
+async function handleFeatureGroupsQuestions(featureGroups: Group[] | undefined) {
+  const selectedmodules: string[] = [];
+
+  if (featureGroups !== undefined) {
+    for (const group of featureGroups) {
+      clear();
+      const selected = await inquirer.prompt(CONFIG.getQuestionByGroup(group));
+      if (selected.feature.length > 0) { selectedmodules.push(selected.feature[0] as string); }
+    }
+  }
+
+  return selectedmodules;
+}
+
+
 // tslint:disable-next-line
 async function run(operation: Command, USAGE: CLI): Promise<any> {
   try {
     const userAction = operation.action;
     const userFeature = operation.feature;
     const userOptions = operation.options;
-    const userFeatureName = operation.featureName;
+    const userFeatureName = operation?.featureName;
     const hasHelpOption = util.hasHelpOption(userOptions);
     const hasInvalidOption = util.hasInvalidOption(
       userOptions,
@@ -172,12 +189,13 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
       !hasHelpOption &&
       !hasInvalidOption &&
       (util.actionBeingRequested(userAction) === GENERATE_ACTION ||
-        util.actionBeingRequested(userAction) === ADD_ACTION);
+        util.actionBeingRequested(userAction) === ADD_ACTION ||
+        util.actionBeingRequested(userAction) === ADD_GROUP);
 
     const isConfig = userFeature === featureType.config;
     const isStore = userFeature === featureType.store;
     let isProject = userFeature === featureType.project;
-      const currentConfig = getFeatureConfiguration(userFeature);
+    const currentConfig = getFeatureConfiguration(userFeature);
     const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
     const projectName = '<project-name>';
     const availableFeatureGroups: string[] = Object.values(featureGroup);
@@ -192,7 +210,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
     // [1] Check if the user did not use the generate action/add/list
     // or had an overall invalid command
-    if (!isValidCreateRequest){
+    if (!isValidCreateRequest) {
       // Show Help Menu
       const CLIPROPERTY = getFeatureMenu(operation.feature);
       // tslint:disable-next-line:no-console
@@ -201,50 +219,10 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
       return true;
     }
 
-    if (userAction === ADD_ACTION) {
-      if (availableFeatureGroups.includes(userFeature)) {
-        // If is feature group
-        // read the config..... add package.json to config
-        // then select field from the packae.json part of config and patch that inside
-        // the projects package.json
-        // console.log('parsed', files.readSubConfig(userFeature));
-      }
-
-      // Check if it's a type
-      //   if (userFeature in featureGroupType) {
-
-      //   // Load all feature from this type into inquirer object
-
-
-      //       const optionalModules = files.readSubConfig(featureType.config)
-      //           ?.optionalModules ?? null;
-
-      //     let choices;
-      //     if (optionalModules !== null) {
-      //         choices = optionalModules
-      //             .filter((feature => feature.type === userFeature))
-      //             .map(feature => feature.name);
-
-      //     const quest = [
-      //       {
-      //             type: 'list',
-      //             name:'answers',
-      //             message: `${userFeature} options`,
-      //             choices
-      //       }
-      //     ];
-      //         await inquirer.prompt(quest);
-      //       // Next read in answer
-      //         // when I find the feature, I add it to current config
-      //       // then do the copying of files here
-      //       // check for package.json fields when copying
-      //     }
-
-      // }
-    }
     // TODO change this if check to if it is both action and in featureGroups
     // [1]b If the user used a feature group request
-    if (userAction === ADD_ACTION && availableFeatureGroups.includes(userFeature)) {
+    if ((userAction === ADD_GROUP || userAction === ADD_ACTION)
+      && availableFeatureGroups.includes(userFeature)) {
       const parsed = files.readSubConfig(userFeature);
 
       // [1]c Create a section break
@@ -271,7 +249,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
       );
 
       // [1]g Update the .rdvue/routes.json file in src directory in the project
-      if (userFeature === 'auth') {util.parseDynamicRoutes(userFeature);}
+      if (userFeature === 'auth') { util.parseDynamicRoutes(userFeature); }
       isProject = false;
     }
 
@@ -301,27 +279,25 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
       );
 
       clear();
-      const optFeaturesQuestions = CONFIG.optionalModulesPrompt();
+      const featureGroups = files.readMainConfig().import?.groups;
+      const selectedmodules = await handleFeatureGroupsQuestions(featureGroups);
 
-      if (optFeaturesQuestions !== null) {
-        const selected = await inquirer.prompt(optFeaturesQuestions);
-        const selectedArr = selected.optionalModules as [];
+      // TODO: Check if files for feature exist before calling run
+      for (const feature of selectedmodules) {
+        await run({
+          options: userOptions,
+          feature,
+          action: ADD_ACTION,
+        },
+          USAGE
+        );
 
-        for (const feature of selectedArr) {
-          // TODO: Check if files for feature exist before calling run
-          await run(
-            {
-              options: userOptions,
-              feature,
-              action: userAction
-            },
-            USAGE
-          );
-        }
       }
+
       util.nextSteps(projectName);
 
       return true;
+
     }
 
     // [3] Getting the name key used. ex: "projectName" or "componentName"
@@ -393,7 +369,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
     return true;
   } catch (err) {
     // TODO: Implement more contextual errors
-      if (err) {
+    if (err) {
       throw new Error(err);
     }
   }

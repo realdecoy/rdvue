@@ -3,10 +3,12 @@ import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
 import { TEMPLATE_ROOT } from '../config';
-import { ACTIONS, featureGroupType } from '../constants/constants';
+import { ACTIONS, featureType } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
-import { fileExists, readFile, writeFile } from './files';
+import { fileExists, readFile, writeFile, readMainConfig } from './files';
+import { Group } from '../types/cli';
+import { getFeatureConfiguration } from './helper-functions';
 
 const helpOptions = ['--help', '-h'];
 
@@ -78,11 +80,51 @@ function parseOptions(args: string[]): string[] {
 }
 
 /**
- * Checks if the argument given by the user after add or generate is a feature group type
+ *
+ * @param name
+ */
+function getFeatureGroupByName(name: string): Group | undefined {
+  const featureGroups = readMainConfig().import?.groups;
+
+  let featureGroup: Group;
+  if (featureGroups !== undefined) {
+    featureGroup = featureGroups.filter((group) => group.name === name)[0];
+
+    return featureGroup;
+  }
+
+  return undefined;
+}
+/**
+ * Checks if the feature given by the user is a feature group type
  * @param feature
  */
-function isFeatureGroupType(feature: string) {
-  return feature in featureGroupType;
+function isFeatureGroupType(feature: string): boolean {
+  const featureGroups = readMainConfig().import?.groups;
+  let isGroup;
+  if (featureGroups !== undefined) {
+    isGroup = featureGroups.find(featureGroup => featureGroup.name === feature);
+  }
+  return isGroup === undefined ? false : true;
+}
+
+function isOptionalFeature(feature: string): boolean {
+  let found;
+  const featureGroups = readMainConfig().import?.groups;
+
+  if (featureGroups !== undefined) {
+
+    // Gets multidemensional array of optional modules
+    const optionalModules = featureGroups.map((g) => g.modules);
+    // Flatten array into one
+    const flatArr = [].concat.apply([], optionalModules as []);
+
+    if (flatArr.length > 0) {
+      found = flatArr.find((el) => el === feature);
+    }
+  }
+
+  return found !== undefined ? true : false;
 }
 /**
  * Description - seperates the user input into <service> <action> <feature>
@@ -100,7 +142,9 @@ function parseUserInput(args: string[], features: string[]) {
     options: [''],
   };
 
-   // Magic numbers are not allowed: used to check third argument
+  // This holds the argument that is expected after <rdvue list>
+  const isFeatures = 'features';
+  // Magic numbers are not allowed: used to check third argument
   const argIndex = 2;
   let remainingArgs = [];
 
@@ -115,8 +159,10 @@ function parseUserInput(args: string[], features: string[]) {
 
     // [2] Checking second argument <feature>
     // to see if it includes a valid feature (eg. project or page)
-    // TODO check if it includes valid feature group type
-    if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1]))) {
+    // OR a Optional Feature or a Feature Group Type
+    // OR if its 'features' which was passed - 'features' is used to list optional modules/features
+    if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1])
+      || isOptionalFeature(args[1]) || args[1] === isFeatures)) {
 
       returnObject.feature = args[1];
 
@@ -298,7 +344,29 @@ function actionBeingRequested(enteredAction: string): string {
   return actionReturn;
 }
 
+/**
+ * Description - displays all feature group types and their respective modules
+ */
+function displayModulesByFeatureGroup() {
+  const groups = readMainConfig().import?.groups;
+  if (groups !== undefined) {
+    console.log(chalk.green('Feature Groups'));
 
+    for (const group of groups) {
+      console.log(commandLineUsage([{ header: group.name }] as Section));
+
+      for (const module of group.modules) {
+        const details = getFeatureConfiguration(module);
+        console.log(commandLineUsage([{
+          content: [{
+            name: chalk.magenta(details?.name as string),
+            summary: details.description
+          }]
+        }]));
+      }
+    }
+  }
+}
 // Function to update the .rdvue/routes.json file when a new feature group is added
 function parseDynamicRoutes(feature: string): void {
   let PROJECT_ROUTES_FILE_PATH;
@@ -375,5 +443,8 @@ export {
   isRootDirectory,
   getProjectRoot,
   actionBeingRequested,
-  parseDynamicRoutes
+  parseDynamicRoutes,
+  getFeatureGroupByName,
+  isOptionalFeature,
+  displayModulesByFeatureGroup
 };
