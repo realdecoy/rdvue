@@ -12,7 +12,8 @@
       "model",
       "page",
       "auth",
-      "sm"
+      "sm",
+      "localization"
     ]
   }
 }

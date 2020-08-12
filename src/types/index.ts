@@ -15,6 +15,17 @@ export interface Manifest{
     files: ManifestFiles[];
     singleUserPerProject?: boolean;
     arguments?: ManifestArguments[];
+    group?: false;
+    packages?: Dependencies;
+    hasRoutes?: boolean;
+    hasStores?: boolean;
+    hasPluginOptions?: boolean;
+    hasModules?: boolean;
+}
+
+export interface Dependencies {
+    dependencies: string[];
+    devDependencies: string[];
 }
 
 export interface ManifestArguments{

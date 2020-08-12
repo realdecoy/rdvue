@@ -20,11 +20,17 @@ export enum featureType {
     store = 'store',
     project = 'project',
     services = 'services',
-    auth = 'auth'
+    auth = 'auth',
+    localization = 'localization'
 }
 
 export enum featureGroup {
     auth = 'auth'
+}
+
+export enum featuresWithNoNames {
+    auth = 'auth',
+    localization = 'localization'
 }
 
 interface Actions {

@@ -2,11 +2,14 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
+import npm from 'npm-programmatic';
+// import { exec } from 'child_process';
 import { TEMPLATE_ROOT } from '../config';
 import { ACTIONS } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
 import { fileExists, readFile, writeFile } from './files';
+import { NpmProgrammaticConfiguration } from '../types/cli';
 
 const helpOptions = ['--help', '-h'];
 
@@ -287,13 +290,9 @@ function actionBeingRequested(enteredAction: string): string {
 // Function to update the .rdvue/routes.json file when a new feature group is added
 function parseDynamicRoutes(feature: string): void {
   let PROJECT_ROUTES_FILE_PATH;
-  let PROJECT_STORE_FILE_PATH;
   let FEATURE_GROUP_ROUTES;
-  let FEATURE_GROUP_STORES;
   let rdRoutes;
-  let rdStores;
   let rdRoutesStringToBeWritten = '';
-  let rdStoresStringToBeWritten = '';
 
   // 1[a] Check for the root of the project
   const projectroot = getProjectRoot();
@@ -302,41 +301,108 @@ function parseDynamicRoutes(feature: string): void {
   if (projectroot !== null) {
     // Allocate the location of the routes.js file
     PROJECT_ROUTES_FILE_PATH = path.join(projectroot, '.rdvue', 'routes.js');
-    PROJECT_STORE_FILE_PATH = path.join(projectroot, '.rdvue', 'stores.js');
     FEATURE_GROUP_ROUTES = path.join(TEMPLATE_ROOT, feature, 'routes', `${feature}.json`);
-    FEATURE_GROUP_STORES = path.join(TEMPLATE_ROOT, feature, 'store', `${feature}.json`);
 
     // Read files to be modified
     rdRoutes = readFile(PROJECT_ROUTES_FILE_PATH);
-    rdStores = readFile(PROJECT_STORE_FILE_PATH);
 
     // Read json files to be written
     const jsonRoutes = readFile(FEATURE_GROUP_ROUTES);
-    const jsonStores = readFile(FEATURE_GROUP_STORES);
 
     // Replace brackets & ("/`) quotations in string
     const editedRoutesString = jsonRoutes.replace(/[\[\]"`]+/g, '');
-    const editedStoresString = jsonStores.replace(/[\[\]"`]+/g, '');
 
     // Removed closers from files to append information
     const rdRoutesModified = rdRoutes.slice(0, -2);
-    const rdStoresModified = rdStores.slice(0, -1);
 
     // Append the new information and close files after changes
-    rdRoutesStringToBeWritten = `${rdRoutesModified}${editedRoutesString}];`;
-    rdStoresStringToBeWritten = `${rdStoresModified}${editedStoresString}}`;
+    rdRoutesStringToBeWritten = `${rdRoutesModified}${editedRoutesString},];`;
   }
 
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
   if (
     rdRoutes !== undefined &&
-    PROJECT_ROUTES_FILE_PATH !== undefined && rdRoutesStringToBeWritten !== '' &&
-    PROJECT_STORE_FILE_PATH !== undefined && rdStoresStringToBeWritten !== ''
+    PROJECT_ROUTES_FILE_PATH !== undefined && rdRoutesStringToBeWritten !== ''
   ) {
     writeFile(PROJECT_ROUTES_FILE_PATH, rdRoutesStringToBeWritten);
-    writeFile(PROJECT_STORE_FILE_PATH, rdStoresStringToBeWritten);
   } else {
     console.log(feature);
+  }
+}
+
+function parseDynamicObjects(feature: string, objectName: string, hasBrackets?: boolean): void {
+  let filePathOfObjectInsideProject;
+  let featureJsonFilePath;
+  let objectInProject;
+  let objectStringToBeWritten = '';
+
+  // 1[a] Check for the root of the project
+  const PROJECT_ROOT = getProjectRoot();
+
+  // 1[b] Once inside of a project values are assigned to be used
+  if (PROJECT_ROOT !== null) {
+    // Allocate the location of the <OBJECT>.js file
+    filePathOfObjectInsideProject = path.join(PROJECT_ROOT, '.rdvue', `${objectName}.js`);
+    featureJsonFilePath = path.join(TEMPLATE_ROOT, feature, `${objectName}`, `${feature}.json`);
+
+    // Read files to be modified
+    objectInProject = readFile(filePathOfObjectInsideProject);
+
+    // Read json files to be written
+    const JSON_DATA = readFile(featureJsonFilePath);
+
+    // Replace brackets & ("/`) quotations in string
+    let modifiedJSONData = JSON_DATA.replace(/[\[\]"`]+/g, '');
+
+    // Remove beginning and closing brackets if its an option to be modified
+    if (hasBrackets) {
+      modifiedJSONData = modifiedJSONData.substring(1, modifiedJSONData.length -1);
+    }
+
+    // Removed closers from files to append information
+    const originalObjectString = objectInProject.slice(0, -2);
+
+    // Append the new information and close files after changes
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData},};`;
+  }
+
+  // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
+  if (
+    featureJsonFilePath !== undefined &&
+    filePathOfObjectInsideProject !== undefined && objectStringToBeWritten !== ''
+  ) {
+    writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
+  } else {
+    console.log(feature);
+  }
+}
+
+async function dependencieInstaller(script: string[], config: NpmProgrammaticConfiguration) {
+  const projectroot = getProjectRoot();
+  if (projectroot !== null) {
+    config.cwd = projectroot;
+
+    await npm.install(script, config)
+    .then(function(){
+      if (config.save) {
+        console.log(`Successfully installed required package/s ${[...script]}`);
+      }
+
+      if (config.saveDev) {
+        console.log(`Successfully installed required dev package/s ${[...script]}`);
+      }
+    })
+    .catch(function(){
+      if (config.save) {
+        console.log(`Unable to install required package/s ${[...script]}`);
+      }
+
+      if (config.saveDev) {
+        console.log(`Unable to install required dev package/s ${[...script]}`);
+      }
+    });
+  } else {
+    console.log('Project location not found');
   }
 }
 
@@ -360,5 +426,7 @@ export {
   isRootDirectory,
   getProjectRoot,
   actionBeingRequested,
-  parseDynamicRoutes
+  parseDynamicObjects,
+  parseDynamicRoutes,
+  dependencieInstaller
 };

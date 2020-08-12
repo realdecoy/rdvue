@@ -1,1 +1,1 @@
-export const stores = {}
+export const stores = {};

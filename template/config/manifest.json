@@ -26,8 +26,16 @@
       "target": ".rdvue/routes.js"
     },
     {
+      "source": "meta/.rdvue/modules.js",
+      "target": ".rdvue/modules.js"
+    },
+    {
       "source": "meta/.rdvue/stores.js",
       "target": ".rdvue/stores.js"
+    },
+    {
+      "source": "meta/.rdvue/options.js",
+      "target": ".rdvue/options.js"
     },
     {
       "source": "meta/package.json",
