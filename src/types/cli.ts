@@ -53,10 +53,18 @@ export interface ConfigurationRoutes {
     path: string;
     component: string;
 }
+// Interface for a feature group
+export interface Group {
+    promptType: string;
+    name: string;
+    modules: string[];
+    question: string;
+}
 // Import interface for the files being imported
 export interface Import {
     required: string[];
     optional: string[];
+    groups: Group[];
 }
 
 // Arguments content type

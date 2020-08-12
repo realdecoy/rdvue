@@ -14,6 +14,29 @@
       "auth",
       "sm",
       "localization"
+    ],
+    "groups": [
+      {
+        "promptType": "checkbox",
+        "name": "ui-library",
+        "modules": [
+          "bootstrap"
+        ],
+        "question": [
+          "Which UI Library would like like to include?"
+        ]
+      },
+      {
+        "promptType": "checkbox",
+        "name": "auth",
+        "modules": [
+          "auth0",
+          "auth"
+        ],
+        "question": [
+          "Which Authentication would you like to include?"
+        ]
+      }
     ]
   }
 }

@@ -14,12 +14,13 @@ import * as util from './lib/util';
 
 import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
 import * as MODULE_NEW from './modules/new';
+import { getQuestionByGroup } from './modules/new/config';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
-import { CLI, Config, ModuleDescriptor } from './types/cli';
+import { CLI, Config, Group, ModuleDescriptor } from './types/cli';
 import { Command } from './types/index';
 
-import {ADD_ACTION, featureGroupType, featureType} from './constants/constants';
+import { ADD_ACTION, ADD_GROUP, LIST_ACTION } from './constants/constants';
 const two = 2;
 // Assign CLI object a default value
 export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
@@ -71,10 +72,13 @@ async function populateFeatureMenu(feature: string, required = false, index: num
  * @param features - acceptable features that can be created with rdvue
  * @param requiredFeatures - features that can't be user requested
  * but are required to create a project (eg. config and store)
+ * @param featureGroups - feature groups data from template.json
+ *  describes each feature group
  * @param mainConfig - config data populated from template.json.
  * Describes options the tool can take.
  */
 async function populateCLIMenu(features: string[], requiredFeatures: string[],
+  featureGroups: Group[],
   mainConfig: Config) {
 
   let featureConfig: Config;
@@ -85,6 +89,12 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   // [1] Intialize the CLI menu with the USAGE_TEMPLATE (./config.ts)
   CLI_DESCRIPTION.general.menu = USAGE_TEMPLATE();
 
+  // Gets a multidimensional array of all modules from the different feature groups
+  let optionalModules = featureGroups.map((g) => g.modules);
+
+  // Flatten array into one
+  optionalModules = [].concat.apply([], optionalModules as []);
+
   for (const feature of features) {
     // [2] Check each item of list to see if its a feature group or just a feature
     const isGroup: boolean = isFeatureGroup(feature);
@@ -93,14 +103,14 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
     index = isGroup ? three : two;
 
     // [4] Check if the features/ group is present on menu list and populate if isnt
-    if(
+    if (
       !Object
         .values(CLI_DESCRIPTION.general.menu[index])
-        .includes('Features:' || 'Feature Group:')
-      ){
+        .includes('Features:' || 'Feature Groups:')
+    ) {
 
       CLI_DESCRIPTION.general.menu.splice(index, 0, {
-        header: isGroup ? 'Feature Group:' : 'Features:',
+        header: isGroup ? 'Feature Groups:' : 'Features:',
         content: [],
       });
     }
@@ -119,11 +129,17 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
     // for both required and non required features depending on user input
     await populateFeatureMenu(feature, undefined, index);
   }
+
   for (const feature of requiredFeatures) {
     const isGroup: boolean = isFeatureGroup(feature);
     index = isGroup ? three : two;
 
     await populateFeatureMenu(feature, true, index);
+  }
+
+  for (const feature of optionalModules as []) {
+    index = 3;
+    await populateFeatureMenu(feature, undefined, index);
   }
 
   // [5] Add 'project' to list of features input by user
@@ -133,28 +149,52 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   featureConfig = mainConfig;
   featureConfig.name = 'project';
   featureConfig.arguments = [{
-      'name': 'projectName',
-      'type': 'string',
-      'description': 'the name for the generated project.'
-    },
-    {
-      'name': 'projectNameKebab',
-      'type': 'string',
-      'description': 'the name in Kebab-case for the generated project.',
-      'isPrivate': true
-    }
+    'name': 'projectName',
+    'type': 'string',
+    'description': 'the name for the generated project.'
+  },
+  {
+    'name': 'projectNameKebab',
+    'type': 'string',
+    'description': 'the name in Kebab-case for the generated project.',
+    'isPrivate': true
+  }
   ];
 
   // [7] Setting the project config to the newly created featureConfig
   CLI_DESCRIPTION.project.config = featureConfig;
 }
 
+/**
+ * Description - Prompts the user to choose modules from the given featuregroup type
+ *  Assigns seletced module to operation.feature and returns the update
+ * @param featureGroupName - name of feature group type whose question and options will be dsiplayed
+ */
+async function handleAddGroupRequest(featureGroupName: string) {
+  // Will store the selected  module
+  let choice = '';
+
+  // Gets the questions for the group along with the modules
+  const featureGroup = util.getFeatureGroupByName(featureGroupName);
+
+  if (featureGroup !== undefined) {
+    // Prompts user with question and choices(modules) from requested feature group type
+    const selectedFeature = await inquirer.prompt(getQuestionByGroup(featureGroup));
+
+    choice = selectedFeature.feature[0] || '';
+  } else {
+    throw Error(`${featureGroupName} is not a valid group`);
+  }
+
+  return choice;
+}
 
 export async function run(userArguments: [] | undefined) {
-  try {
 
+  try {
     // [1a] Assign config to object return from JSON parse
     const mainConfig = readMainConfig();
+
 
     // [1b] Return list of features if true and empty array if false
     const features: string[] = (mainConfig.import !== undefined) ? mainConfig
@@ -164,8 +204,12 @@ export async function run(userArguments: [] | undefined) {
     const requiredFeatures: string[] = (mainConfig.import !== undefined) ?
       mainConfig.import.required : [];
 
+    // [1d] return array of available groups
+    const featureGroups: Group[] = (mainConfig.import?.groups !== undefined) ?
+      mainConfig.import.groups : [];
+
     const sliceNumber = 2;
-    // [1d] Check for user arguments
+    // [1e] Check for user arguments
     if (userArguments === undefined) {
       const userArgs = process.argv.slice(sliceNumber);
 
@@ -176,7 +220,7 @@ export async function run(userArguments: [] | undefined) {
       clear();
 
       // [3] Populate feature usage information
-      await populateCLIMenu(features, requiredFeatures, mainConfig);
+      await populateCLIMenu(features, requiredFeatures, featureGroups, mainConfig);
 
       // [4] Display "rdvue" heading
       util.heading();
@@ -191,63 +235,48 @@ export async function run(userArguments: [] | undefined) {
         featureName: util.parseUserInput(userArgs, features).featureName,
       };
 
-       // [6] Check to see if user arguments include any valid features
+      // [6] Check to see if user arguments include any valid features
       if (operation.action !== '' && operation.feature !== '') {
 
-        // [7] Check to see if the project is valid
+        // [7a] Check to see if the project is valid
         project = util.checkProjectValidity(operation);
         if (project.isValid) {
-          // If action is ADD
-          // check if feature is a group type
-          // if it is a group type, grab list of features from that group and show questions
-          // set operatioon.feature to selected option
-          // else if it is not a group type,
-          // and is an actual featureGroup(e.g a sigle auth feature) set operation.feature to it
-          // next, call the run method with this info
 
-          if (operation.action === ADD_ACTION && operation.feature in featureGroupType) {
+          // [7b] Check if user requested a feature Group Type
+          if (operation.action === ADD_GROUP) {
+            const selectedModule = await handleAddGroupRequest(operation.feature);
+            clear();
 
-              const optionalModules =
-                readSubConfig(featureType.config)?.optionalModules ??
-                null;
+            if (selectedModule !== '') {
+              // [7c] Updates operation.feature to the selected module
+              operation.feature = selectedModule;
 
-            let choices;
-
-            if (optionalModules !== null) {
-              choices = optionalModules
-                .filter(feature => feature.type === operation.feature)
-                .map(feature => feature.name);
-
-              if (choices.length < 1) {
-                throw Error(
-                  `There are currently no features available for ${operation.feature}`);
-              }
-
-              const question = [
-                {
-                  type: 'list',
-                  name: 'answer',
-                  message: `Select one of the following ${operation.feature} options`,
-                  choices
-                }
-              ];
-
-              const answer = await inquirer.prompt(question);
-              operation.feature = answer.answer as string;
-
-              // [8a] Call the run function in modules/new/index.ts
+              // [7d] Call the run function in modules / new /index.ts
               await MODULE_NEW.run(operation, CLI_DESCRIPTION);
             }
+
+
           } else {
-                   // [8a] Call the run function in modules/new/index.ts
-                   await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-                 }
+            if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
+              throw Error(`${operation.feature} is not a valid Optional Feature`);
+            }
+            else {
+              if (operation.action === LIST_ACTION) {
+                util.displayModulesByFeatureGroup();
+              }
+              else {
+                // [8a] Call the run function in modules/new/index.ts
+                await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+              }
+            }
+          }
+
         } else {
 
           // [8b] Throw an error if this is not a valid project
           throw Error(
             `A ${operation.feature} cannot be created/modified in invalid Vue project: '${process.cwd()}'`
-            );
+          );
         }
       } else if (util.hasHelpOption(userArgs)) {
         // [7b] The user has asked for help -> Gracefully display help menu
@@ -280,7 +309,7 @@ export async function run(userArguments: [] | undefined) {
       let project;
 
       // [2] Populate feature usage information
-      await populateCLIMenu(features, requiredFeatures, mainConfig);
+      await populateCLIMenu(features, requiredFeatures, featureGroups, mainConfig);
 
       // [3] Check to see if user arguments include any valid features
       if (util.hasFeature(userArgs, features)) {
@@ -325,9 +354,9 @@ export async function run(userArguments: [] | undefined) {
 }
 
 run(undefined)
-.then(() => {
-  console.info('');
-})
-.catch((err: Error) => {
-  console.error(`Error at run: ${err}`);
-});
+  .then(() => {
+    console.info('');
+  })
+  .catch((err: Error) => {
+    console.error(`Error at run: ${err}`);
+  });

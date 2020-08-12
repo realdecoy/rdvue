@@ -2,7 +2,7 @@
   "version": 1,
   "name": "auth0",
   "group": true,
-  "description": "Generate a basic component needed for basic Auth0.",
+  "description": "Generate setup needed for Auth0.",
   "sourceDirectory": "./",
   "installDirectory": "auth0",
   "files": [
@@ -13,5 +13,6 @@
     {
       "source": "page/Auth0.vue",
       "target": "./Auth0.vue"
-    }]
+    }
+  ]
 }

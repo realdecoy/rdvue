@@ -3,7 +3,7 @@
 // Types that determines what should be present in each default object imported
 import {
     General,
-    ModuleDescriptor
+    ModuleDescriptor,
 } from '../types/cli';
 
 /*
@@ -25,7 +25,15 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
         sourceDirectory: '',
         import: {
             required: [''],
-            optional: ['']
+            optional: [''],
+            groups: [
+                {
+                    promptType:'',
+                    name: '',
+                    question: '',
+                    modules:['']
+                }
+            ]
         },
         name: '',
         arguments: [

@@ -232,5 +232,25 @@
       "source": "modules/core/index.ts",
       "target": "src/modules/core/index.ts"
     }
+  ],
+
+  "optionalModulesQuestions":[
+    {
+      "question":"Which UI Library would you like to add?",
+      "choices":[
+        "bootstrap",
+        "vuetify",
+        "materialize css"
+      ]
+    },
+
+    {
+      "question":"Which Authentication strategy would you like to add?",
+      "choices":[
+        "basic auth",
+        "auth0",
+        "google OAuth,"
+      ]
+    }
   ]
 }

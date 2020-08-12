@@ -23,16 +23,23 @@ import {
     featureGroupType,
     featuresWithNoNames,
     featureType,
-    GENERATE_ACTION
+    GENERATE_ACTION,
+    ADD_GROUP
 } from '../../constants/constants';
 
 import * as files from '../../lib/files';
+
 import {
     getFeatureConfiguration,
     getFeatureMenu
 } from '../../lib/helper-functions';
+
 import * as util from '../../lib/util';
 import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
+
+import * as util from '../../lib/util';
+import { Group } from '../../types/cli';
+
 import {
     Command,
     Directories,
