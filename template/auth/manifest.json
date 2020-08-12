@@ -2,6 +2,8 @@
   "version": 1,
   "name": "auth",
   "group": true,
+  "hasRoutes": true,
+  "hasStores": true,
   "description": "Generate a basic components needed for basic authenticaton.",
   "sourceDirectory": "content",
   "installDirectory": "./",

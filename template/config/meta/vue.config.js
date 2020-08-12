@@ -6,6 +6,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const isProd = process.env.NODE_ENV === 'production';
 const { default: ImageminPlugin } = require('imagemin-webpack-plugin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
+const options = require('./.rdvue/options');
 
 module.exports = {
   chainWebpack: (config) => {
@@ -78,5 +79,7 @@ module.exports = {
         }
       }
     }
-  }
+  },
+
+  pluginOptions: options
 };
