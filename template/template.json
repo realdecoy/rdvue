@@ -56,7 +56,8 @@
     "customPreset": {
       "name": "custom",
       "groups": [
-        "ui-library"
+        "ui-library",
+        "auth"
       ]
     }
   }

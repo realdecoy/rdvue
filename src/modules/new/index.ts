@@ -38,6 +38,7 @@ import {
 import { flatten, concat, flattenDeep, merge } from 'lodash';
 import { read } from 'fs';
 import { strict } from 'assert';
+import { group } from 'console';
 
 interface Answers {
   // tslint:disable-next-line
@@ -182,14 +183,14 @@ async function handleFeatureGroupsQuestions(featureGroups: Group[] | undefined) 
 }
 
 
-function loadRequiredFeatureGroups(): Group[] {
-  let groups = files.readMainConfig().import?.groups;
+function loadFeatureGroups(): Group[] {
 
-  if (groups !== undefined) {
-    groups = groups.filter((group) => group.isRequired);
-  }
+  const imports = files.readMainConfig().import;
+  const startupGroupNames = imports?.customPreset?.groups;
 
-  return groups ?? [];
+  const startupGroups = imports?.groups.filter((g) => startupGroupNames?.includes(g.name));
+
+  return startupGroups ?? [];
 }
 
 async function promptPresetOptions() {
@@ -216,6 +217,30 @@ async function promptPresetOptions() {
 
     return choice.preset;
   }
+}
+
+
+function isPresetSelected(name: string): boolean {
+
+  const presets = files.readMainConfig().import
+    ?.presets?.map((preset) => preset.name);
+
+  return presets !== undefined && presets.includes(name) ? true : false;
+
+}
+
+function isCustomSelected(name: string): boolean {
+  const custom = files.readMainConfig().import?.customPreset;
+
+  return custom !== undefined && custom.name === name ? true : false;
+}
+
+function loadPresetDependencies(presetName: string): string[] {
+  const dependencies = files.readMainConfig().import?.presets
+    ?.find((preset) => preset.name === presetName)?.dependencies;
+
+  return dependencies !== undefined ? dependencies : [];
+
 }
 // tslint:disable-next-line
 async function run(operation: Command, USAGE: CLI): Promise<any> {
@@ -301,7 +326,15 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
     if (isProject) {
 
       // Prompt preset options here
-      const selectedPreset = await promptPresetOptions();
+      const selectedPreset = await promptPresetOptions() as string;
+      let modulesToInstall: string[] = [];
+
+      if (isPresetSelected(selectedPreset)) {
+        modulesToInstall = loadPresetDependencies(selectedPreset);
+      }
+      else if (isCustomSelected(selectedPreset)) {
+        modulesToInstall = await handleFeatureGroupsQuestions(loadFeatureGroups());
+      }
 
       // [2]b Get required config
       await run(
@@ -327,12 +360,17 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
       );
 
       // TODO process selected preset
-      // is a preset is selected then load all of its modules and pass it to run()
+      // if a preset is selected then load all of its modules and pass it to run()
       // if custom is selected then load groups, ask questions, and store responses
       // then pass resposes to run()
       // create a function that does this
       // TODO: Check if files for feature exist before calling run
-      for (const module of []) {
+
+
+
+
+
+      for (const module of modulesToInstall) {
         await run({
           options: userOptions,
           feature: module,
