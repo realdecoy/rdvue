@@ -53,6 +53,7 @@ import {
 import { flatten, concat, flattenDeep, merge } from 'lodash';
 import { read } from 'fs';
 import { strict } from 'assert';
+import { group } from 'console';
 
 interface Answers {
     // tslint:disable-next-line
