@@ -3,7 +3,8 @@
   "name": "config",
   "description": "Mandatory project configuration.",
   "singleUserPerProject": true,
-  "arguments": [{
+  "arguments": [
+    {
       "name": "projectNameKebab",
       "type": "string",
       "description": "the name for the generated project. (e.g. my-project)"
@@ -17,7 +18,8 @@
   ],
   "sourceDirectory": "./",
   "installDirectory": "./",
-  "files": [{
+  "files": [
+    {
       "source": "meta/.rdvue/.rdvue",
       "target": ".rdvue/.rdvue"
     },
@@ -41,14 +43,15 @@
       "source": "meta/.rdvue/stores.js",
       "target": ".rdvue/stores.js"
     },
-
     {
       "source": "meta/package.json",
       "target": "package.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "core/main.ts",
@@ -121,18 +124,22 @@
     {
       "source": "public/index.html",
       "target": "public/index.html",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/manifest.json",
       "target": "public/manifest.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/favicon.ico",
@@ -233,20 +240,18 @@
       "target": "src/modules/core/index.ts"
     }
   ],
-
-  "optionalModulesQuestions":[
+  "optionalModulesQuestions": [
     {
-      "question":"Which UI Library would you like to add?",
-      "choices":[
+      "question": "Which UI Library would you like to add?",
+      "choices": [
         "bootstrap",
         "vuetify",
         "materialize css"
       ]
     },
-
     {
-      "question":"Which Authentication strategy would you like to add?",
-      "choices":[
+      "question": "Which Authentication strategy would you like to add?",
+      "choices": [
         "basic auth",
         "auth0",
         "google OAuth,"

@@ -17,14 +17,16 @@ import * as ROOT_CONFIG from '../../config';
 
 
 import {
+
     ADD_ACTION,
+    ADD_GROUP,
     DYNAMIC_OBJECTS
   featureGroup,
     featureGroupType,
     featuresWithNoNames,
     featureType,
     GENERATE_ACTION,
-    ADD_GROUP
+
 } from '../../constants/constants';
 
 import * as files from '../../lib/files';
@@ -38,8 +40,9 @@ import * as util from '../../lib/util';
 import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
 
 import * as util from '../../lib/util';
-import { Group } from '../../types/cli';
 
+
+import { CLI, Config, Group, Preset, CustomPreset } from '../../types/cli';
 import {
     Command,
     Directories,
@@ -47,7 +50,9 @@ import {
     Files,
     GetDirectoryInput
 } from '../../types/index';
-import { config } from 'bluebird';
+import { flatten, concat, flattenDeep, merge } from 'lodash';
+import { read } from 'fs';
+import { strict } from 'assert';
 
 interface Answers {
     // tslint:disable-next-line

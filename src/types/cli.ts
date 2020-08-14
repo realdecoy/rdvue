@@ -45,6 +45,23 @@ export interface Config {
 // Generic string property
 export interface ConfigurationGenericProperty {
     [key: string]: string;
+
+}
+
+
+// Base interface for Presets
+export interface BasePreset {
+    name: string;
+}
+
+// Interface for presets
+export interface Preset extends BasePreset {
+    dependencies: string[];
+}
+
+// Interface for custom preset
+export interface CustomPreset extends BasePreset {
+    groups: string[];
 }
 
 // Routes property for the feature being called
@@ -65,6 +82,8 @@ export interface Import {
     required: string[];
     optional: string[];
     groups: Group[];
+    presets?: Preset[];
+    customPreset?: CustomPreset;
 }
 
 // Arguments content type

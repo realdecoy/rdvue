@@ -17,8 +17,9 @@
     ],
     "groups": [
       {
-        "promptType": "checkbox",
+        "isRequired": true,
         "name": "ui-library",
+        "promptType": "list",
         "modules": [
           "bootstrap"
         ],
@@ -27,8 +28,9 @@
         ]
       },
       {
-        "promptType": "checkbox",
+        "isRequired": false,
         "name": "auth",
+        "promptType": "checkbox",
         "modules": [
           "auth0",
           "auth"
@@ -37,6 +39,27 @@
           "Which Authentication would you like to include?"
         ]
       }
-    ]
+    ],
+    "presets": [
+      {
+        "name": "default",
+        "dependencies": [
+          "auth",
+          "bootstrap"
+        ]
+      },
+      {
+        "name": "preset1",
+        "dependencies": [
+          "auth0"
+        ]
+      }
+    ],
+    "customPreset": {
+      "name": "custom",
+      "groups": [
+        "ui-library"
+      ]
+    }
   }
 }
