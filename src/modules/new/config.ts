@@ -60,18 +60,18 @@ const QUESTIONS: any[] = [
 ];
 
 
-function getQuestionByGroup(group: Group, promptType?: string) {
-
+function getQuestionByGroup(group: Group) {
   const question: inquirer.QuestionCollection = {
-    type: promptType || group.promptType as any,
+    type: group.promptType as any,
     name: 'feature',
-
+    prefix: '',
     message: group.question,
-    choices: group.modules,
+    choices: ['None', ...group.modules]
   };
 
   return question;
 }
+
 
 
 /**

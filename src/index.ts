@@ -238,7 +238,7 @@ export async function run(userArguments: [] | undefined) {
             clear();
             util.heading();
 
-            if (selectedModule !== '') {
+            if (selectedModule !== '' && util.isOptionalFeature(selectedModule)) {
               // [7c] Updates operation.feature to the selected module
               operation.feature = selectedModule;
 

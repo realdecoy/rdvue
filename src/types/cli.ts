@@ -86,6 +86,9 @@ export interface Import {
     customPreset?: CustomPreset;
 }
 
+export interface ModuleName {
+    name: string;
+}
 // Arguments content type
 export interface Arguments {
     name: string;

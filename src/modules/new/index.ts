@@ -42,7 +42,9 @@ import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
 import * as util from '../../lib/util';
 
 
-import { CLI, Config, Group, Preset, CustomPreset } from '../../types/cli';
+
+
+import { CLI, Config, Group, Preset, CustomPreset, ModuleName } from '../../types/cli';
 import {
     Command,
     Directories,
@@ -50,10 +52,7 @@ import {
     Files,
     GetDirectoryInput
 } from '../../types/index';
-import { flatten, concat, flattenDeep, merge } from 'lodash';
-import { read } from 'fs';
-import { strict } from 'assert';
-import { group } from 'console';
+import { flatten, concat, isArray } from 'lodash';
 
 interface Answers {
     // tslint:disable-next-line
