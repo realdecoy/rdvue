@@ -28,12 +28,21 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
             optional: [''],
             groups: [
                 {
-                    promptType:'',
+                    isRequired: false,
+                    promptType: '',
                     name: '',
                     question: '',
-                    modules:['']
+                    modules: ['']
                 }
-            ]
+            ],
+            presets: [{
+                dependencies: [''],
+                name: ''
+            }],
+            customPreset: {
+                groups: [''],
+                name: ''
+            }
         },
         name: '',
         arguments: [

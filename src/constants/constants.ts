@@ -33,12 +33,6 @@ export enum featureGroup {
     bootstrap = 'bootstrap'
 }
 
-export enum featureGroupType {
-    auth = 'auth',
-    'ui-library' = 'ui-library',
-    test = 'test'
-
-}
 
 interface Actions {
     [key: string]: string[];

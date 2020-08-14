@@ -14,7 +14,7 @@ import * as util from './lib/util';
 
 import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
 import * as MODULE_NEW from './modules/new';
-import { getQuestionByGroup } from './modules/new/config';
+import { getQuestionByGroup, handleAddGroupRequest } from './modules/new/config';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
 import { CLI, Config, Group, ModuleDescriptor } from './types/cli';
@@ -92,21 +92,22 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   // Gets a multidimensional array of all modules from the different feature groups
   let optionalModules = featureGroups.map((g) => g.modules);
 
+
+
   // Flatten array into one
   optionalModules = [].concat.apply([], optionalModules as []);
-
+  const mergedFeatures = features.concat(optionalModules as []);
   for (const feature of features) {
     // [2] Check each item of list to see if its a feature group or just a feature
     const isGroup: boolean = isFeatureGroup(feature);
-
     // [3] Set the index on the menu list to be modified/added
     index = isGroup ? three : two;
 
     // [4] Check if the features/ group is present on menu list and populate if isnt
     if (
-      !Object
+      !(Object
         .values(CLI_DESCRIPTION.general.menu[index])
-        .includes('Features:' || 'Feature Groups:')
+        .includes('Features:' || 'Feature Groups:'))
     ) {
 
       CLI_DESCRIPTION.general.menu.splice(index, 0, {
@@ -123,6 +124,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
         'Generate a new project.', index
       );
     }
+
     iterations++;
 
     // [6] Parse features provided by template manifest files and generate the CLI help menus
@@ -133,12 +135,22 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   for (const feature of requiredFeatures) {
     const isGroup: boolean = isFeatureGroup(feature);
     index = isGroup ? three : two;
-
     await populateFeatureMenu(feature, true, index);
   }
 
   for (const feature of optionalModules as []) {
     index = 3;
+
+    if (
+      !(Object
+        .values(CLI_DESCRIPTION.general.menu[index])
+        .includes('Feature Groups:'))
+    ) {
+      CLI_DESCRIPTION.general.menu.splice(index, 0, {
+        header: 'Feature Groups:',
+        content: [],
+      });
+    }
     await populateFeatureMenu(feature, undefined, index);
   }
 
@@ -165,29 +177,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   CLI_DESCRIPTION.project.config = featureConfig;
 }
 
-/**
- * Description - Prompts the user to choose modules from the given featuregroup type
- *  Assigns seletced module to operation.feature and returns the update
- * @param featureGroupName - name of feature group type whose question and options will be dsiplayed
- */
-async function handleAddGroupRequest(featureGroupName: string) {
-  // Will store the selected  module
-  let choice = '';
 
-  // Gets the questions for the group along with the modules
-  const featureGroup = util.getFeatureGroupByName(featureGroupName);
-
-  if (featureGroup !== undefined) {
-    // Prompts user with question and choices(modules) from requested feature group type
-    const selectedFeature = await inquirer.prompt(getQuestionByGroup(featureGroup));
-
-    choice = selectedFeature.feature[0] || '';
-  } else {
-    throw Error(`${featureGroupName} is not a valid group`);
-  }
-
-  return choice;
-}
 
 export async function run(userArguments: [] | undefined) {
 
@@ -246,6 +236,7 @@ export async function run(userArguments: [] | undefined) {
           if (operation.action === ADD_GROUP) {
             const selectedModule = await handleAddGroupRequest(operation.feature);
             clear();
+            util.heading();
 
             if (selectedModule !== '') {
               // [7c] Updates operation.feature to the selected module
@@ -255,13 +246,17 @@ export async function run(userArguments: [] | undefined) {
               await MODULE_NEW.run(operation, CLI_DESCRIPTION);
             }
 
-
           } else {
             if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
-              throw Error(`${operation.feature} is not a valid Optional Feature`);
+              clear();
+              console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+              throw Error(`${operation.feature} is not a valid Optional Feature. See menu above.`);
             }
             else {
               if (operation.action === LIST_ACTION) {
+                clear();
+                util.heading();
+
                 util.displayModulesByFeatureGroup();
               }
               else {
@@ -325,11 +320,37 @@ export async function run(userArguments: [] | undefined) {
           featureName: util.parseUserInput(userArgs, features).featureName,
         };
 
-        // [5] Check to see if the project is valid
+        // [5a] Check to see if the project is valid
         project = util.checkProjectValidity(operation);
         if (project.isValid) {
-          // [6a] Call the run function in modules/new/index.ts
-          await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+
+          // [6a] Check if user requested a feature Group Type
+          if (operation.action === ADD_GROUP) {
+            const selectedModule = await handleAddGroupRequest(operation.feature);
+            clear();
+
+            if (selectedModule !== '') {
+              operation.feature = selectedModule;
+
+              await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+            }
+
+          } else {
+            if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
+
+              console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+              throw Error(`${operation.feature} is not a valid Optional Feature. See menu above.`);
+            }
+            else {
+              if (operation.action === LIST_ACTION) {
+                util.displayModulesByFeatureGroup();
+              }
+              else {
+                await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+              }
+            }
+          }
+
         } else {
 
           // [6b] Throw an error if this is not a valid project

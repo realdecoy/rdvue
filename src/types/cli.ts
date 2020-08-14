@@ -35,18 +35,28 @@ export interface Config {
     singleUserPerProject?: boolean;
     menu?: Menu[];
     group?: boolean;
-    optionalModules?: OptionalModules[];
+
 }
 
-// Interface for optional modules
-export interface OptionalModules{
-    type: string;
+
+// Base interface for Presets
+export interface BasePreset {
     name: string;
-    description?: string;
+}
+
+// Interface for presets
+export interface Preset extends BasePreset {
+    dependencies: string[];
+}
+
+// Interface for custom preset
+export interface CustomPreset extends BasePreset {
+    groups: string[];
 }
 
 // Interface for a feature group
-export interface Group{
+export interface Group {
+    isRequired: boolean;
     promptType: string;
     name: string;
     modules: string[];
@@ -57,6 +67,8 @@ export interface Import {
     required: string[];
     optional: string[];
     groups: Group[];
+    presets?: Preset[];
+    customPreset?: CustomPreset;
 }
 
 // Arguments content type

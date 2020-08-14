@@ -16,11 +16,10 @@ import * as CONFIG from './config';
 import * as ROOT_CONFIG from '../../config';
 import {
   ADD_ACTION,
+  ADD_GROUP,
   featureGroup,
-  featureGroupType,
   featureType,
   GENERATE_ACTION,
-  ADD_GROUP
 } from '../../constants/constants';
 import * as files from '../../lib/files';
 import {
@@ -28,7 +27,7 @@ import {
   getFeatureMenu,
 } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
-import { CLI, Config, Group } from '../../types/cli';
+import { CLI, Config, Group, Preset, CustomPreset } from '../../types/cli';
 import {
   Command,
   Directories,
@@ -36,7 +35,9 @@ import {
   Files,
   GetDirectoryInput
 } from '../../types/index';
-import { config } from 'bluebird';
+import { flatten, concat, flattenDeep, merge } from 'lodash';
+import { read } from 'fs';
+import { strict } from 'assert';
 
 interface Answers {
   // tslint:disable-next-line
@@ -158,21 +159,64 @@ function updateConfig(
 }
 
 
+/**
+ * Description - prompts the user with the question an choices for each feature group
+ * and returns an array ofll all selected modules
+ * @param featureGroups
+ */
 async function handleFeatureGroupsQuestions(featureGroups: Group[] | undefined) {
   const selectedmodules: string[] = [];
 
   if (featureGroups !== undefined) {
     for (const group of featureGroups) {
-      clear();
+      const currStep = featureGroups.indexOf(group) + 1;
+      const len = featureGroups.length;
+      console.log(`${chalk.blue('Add Optional Modules')}: ${currStep} of ${len}`);
+
       const selected = await inquirer.prompt(CONFIG.getQuestionByGroup(group));
-      if (selected.feature.length > 0) { selectedmodules.push(selected.feature[0] as string); }
+      if (selected.feature.length > 0) { selectedmodules.push(selected.feature as string); }
     }
   }
 
-  return selectedmodules;
+  return flatten(selectedmodules);
 }
 
 
+function loadRequiredFeatureGroups(): Group[] {
+  let groups = files.readMainConfig().import?.groups;
+
+  if (groups !== undefined) {
+    groups = groups.filter((group) => group.isRequired);
+  }
+
+  return groups ?? [];
+}
+
+async function promptPresetOptions() {
+  clear();
+  let options;
+  const imports = files.readMainConfig().import;
+
+  // Return array of presets available
+  const presets = imports?.presets?.map((preset) => preset.name);
+
+  // Get get custom preset if available
+  const customPreset = imports?.customPreset?.name;
+
+  if (presets !== undefined) { options = concat(presets) as []; }
+  if (customPreset !== undefined) { options = concat(options, customPreset) as []; }
+
+  if (options !== undefined) {
+    const choice = await inquirer.prompt({
+      type: 'list',
+      name: 'preset',
+      message: 'Pick a preset',
+      choices: options
+    });
+
+    return choice.preset;
+  }
+}
 // tslint:disable-next-line
 async function run(operation: Command, USAGE: CLI): Promise<any> {
   try {
@@ -255,6 +299,10 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
     // [2] Check if the user requested a new project
     if (isProject) {
+
+      // Prompt preset options here
+      const selectedPreset = await promptPresetOptions();
+
       // [2]b Get required config
       await run(
         {
@@ -278,26 +326,25 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         USAGE
       );
 
-      clear();
-      const featureGroups = files.readMainConfig().import?.groups;
-      const selectedmodules = await handleFeatureGroupsQuestions(featureGroups);
-
+      // TODO process selected preset
+      // is a preset is selected then load all of its modules and pass it to run()
+      // if custom is selected then load groups, ask questions, and store responses
+      // then pass resposes to run()
+      // create a function that does this
       // TODO: Check if files for feature exist before calling run
-      for (const feature of selectedmodules) {
+      for (const module of []) {
         await run({
           options: userOptions,
-          feature,
+          feature: module,
           action: ADD_ACTION,
         },
           USAGE
         );
-
       }
 
       util.nextSteps(projectName);
 
       return true;
-
     }
 
     // [3] Getting the name key used. ex: "projectName" or "componentName"

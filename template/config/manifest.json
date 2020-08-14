@@ -3,7 +3,8 @@
   "name": "config",
   "description": "Mandatory project configuration.",
   "singleUserPerProject": true,
-  "arguments": [{
+  "arguments": [
+    {
       "name": "projectNameKebab",
       "type": "string",
       "description": "the name for the generated project. (e.g. my-project)"
@@ -30,14 +31,15 @@
       "source": "meta/.rdvue/stores.js",
       "target": ".rdvue/stores.js"
     },
-
     {
       "source": "meta/package.json",
       "target": "package.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "core/main.ts",
@@ -107,22 +109,25 @@
       "source": "hello-world/index.ts",
       "target": "src/pages/hello-world/index.ts"
     },
-
     {
       "source": "public/index.html",
       "target": "public/index.html",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/manifest.json",
       "target": "public/manifest.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/favicon.ico",
@@ -208,144 +213,102 @@
       "source": "theme/tailwind.css",
       "target": "src/theme/tailwind.css"
     },
-
-       {
-        "source": "meta/.babelrc",
-        "target": ".babelrc"
-      },
-
-      {
-        "source": "storybook/components/example.vue",
-        "target": ".storybook/components/example.vue"
-      },
-      {
-        "source": "storybook/components/index.ts",
-        "target": ".storybook/components/index.ts"
-      },
-      {
-        "source": "storybook/components/playground.vue",
-        "target": ".storybook/components/playground.vue"
-      },
-      {
-        "source": "storybook/components/props.vue",
-        "target": ".storybook/components/props.vue"
-      },
-      {
-        "source": "storybook/components/preview.vue",
-        "target": ".storybook/components/preview.vue"
-      },
-      {
-        "source": "storybook/modules/constants.ts",
-        "target": ".storybook/modules/constants.ts"
-      },
-      {
-        "source": "storybook/modules/index.ts",
-        "target": ".storybook/modules/index.ts"
-      },
-      {
-        "source": "storybook/modules/preview-of.ts",
-        "target": ".storybook/modules/preview-of.ts"
-      },
-      {
-        "source": "storybook/addons.js",
-        "target": ".storybook/addons.js"
-      },
-      {
-        "source": "storybook/config.js",
-        "target": ".storybook/config.js",
-        "content": [
-          {
-            "matchRegex": "__PROJECT__NAME__KEBAB__",
-            "replace": "${projectNameKebab}"
-          }
-        ]
-      },
-      {
-        "source": "storybook/logo.svg",
-        "target": ".storybook/logo.svg"
-      },
-      {
-        "source": "storybook/main.js",
-        "target": ".storybook/main.js"
-      },
-      {
-        "source": "storybook/preview-head.html",
-        "target": ".storybook/preview-head.html"
-      },
-      {
-        "source": "storybook/stories.scss",
-        "target": ".storybook/stories.scss",
-        "content": [
-          {
-            "matchRegex": "__PROJECT__NAME__KEBAB__",
-            "replace": "${projectNameKebab}"
-          }
-        ]
-      },
-      {
-        "source": "storybook/tailwind.css",
-        "target": ".storybook/tailwind.css"
-      },
-      {
-        "source": "storybook/webpack.config.js",
-        "target": ".storybook/webpack.config.js"
-      },
-      {
-        "source": "storybook/modules/story.ts",
-        "target": ".storybook/modules/story.ts"
-      },
-      {
-        "source": "storybook/modules/constants.ts",
-        "target": ".storybook/modules/constants.ts"
-      },
-
-      {
-        "source": "storybook/postcss.config.js",
-        "target": "postcss.config.js",
-        "content": [
-          {
-            "matchRegex": "__PROJECT__NAME__KEBAB__",
-            "replace": "${projectNameKebab}"
-          }
-        ]
-      }
-  ],
-
-  "optionalModules":[
     {
-      "type":"auth",
-       "name":"auth",
-       "description":"Basic auth implementation"
+      "source": "meta/.babelrc",
+      "target": ".babelrc"
     },
-     {
-      "type":"auth",
-       "name":"auth0",
-       "description":"Basic Auth0 implementation"
+    {
+      "source": "storybook/components/example.vue",
+      "target": ".storybook/components/example.vue"
     },
-
     {
-      "type":"ui-library",
-      "name":"bootstrap",
-      "description":"Basic bootstrap"
-    }
-  ],
-
-  "optionalModulesQuestions":[
+      "source": "storybook/components/index.ts",
+      "target": ".storybook/components/index.ts"
+    },
     {
-      "question":"Which UI Library would you like to add?",
-      "choices":[
-        "bootstrap",
-        "vuetify",
-        "materialize css"
+      "source": "storybook/components/playground.vue",
+      "target": ".storybook/components/playground.vue"
+    },
+    {
+      "source": "storybook/components/props.vue",
+      "target": ".storybook/components/props.vue"
+    },
+    {
+      "source": "storybook/components/preview.vue",
+      "target": ".storybook/components/preview.vue"
+    },
+    {
+      "source": "storybook/modules/constants.ts",
+      "target": ".storybook/modules/constants.ts"
+    },
+    {
+      "source": "storybook/modules/index.ts",
+      "target": ".storybook/modules/index.ts"
+    },
+    {
+      "source": "storybook/modules/preview-of.ts",
+      "target": ".storybook/modules/preview-of.ts"
+    },
+    {
+      "source": "storybook/addons.js",
+      "target": ".storybook/addons.js"
+    },
+    {
+      "source": "storybook/config.js",
+      "target": ".storybook/config.js",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
       ]
     },
-
     {
-      "question":"Which Authentication strategy would you like to add?",
-      "choices":[
-        "basic auth",
-        "auth0",
-        "google OAuth,"
+      "source": "storybook/logo.svg",
+      "target": ".storybook/logo.svg"
+    },
+    {
+      "source": "storybook/main.js",
+      "target": ".storybook/main.js"
+    },
+    {
+      "source": "storybook/preview-head.html",
+      "target": ".storybook/preview-head.html"
+    },
+    {
+      "source": "storybook/stories.scss",
+      "target": ".storybook/stories.scss",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "storybook/tailwind.css",
+      "target": ".storybook/tailwind.css"
+    },
+    {
+      "source": "storybook/webpack.config.js",
+      "target": ".storybook/webpack.config.js"
+    },
+    {
+      "source": "storybook/modules/story.ts",
+      "target": ".storybook/modules/story.ts"
+    },
+    {
+      "source": "storybook/modules/constants.ts",
+      "target": ".storybook/modules/constants.ts"
+    },
+    {
+      "source": "storybook/postcss.config.js",
+      "target": "postcss.config.js",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
       ]
     }
   ]
