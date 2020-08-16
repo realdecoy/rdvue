@@ -17,8 +17,8 @@
     ],
     "groups": [
       {
-        "isRequired": true,
         "name": "ui-library",
+        "isMultipleChoice": false,
         "promptType": "list",
         "modules": [
           "bootstrap"
@@ -31,6 +31,7 @@
         "isRequired": false,
         "name": "auth",
         "promptType": "checkbox",
+        "isMultipleChoice": true,
         "modules": [
           "auth0",
           "auth"
@@ -43,6 +44,7 @@
     "presets": [
       {
         "name": "default",
+        "description": "Deafult",
         "dependencies": [
           "auth",
           "bootstrap"

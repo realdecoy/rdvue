@@ -29,6 +29,7 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
             groups: [
                 {
                     isRequired: false,
+                    isMultipleChoice: false,
                     promptType: '',
                     name: '',
                     question: '',

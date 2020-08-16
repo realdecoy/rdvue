@@ -37,14 +37,16 @@ import {
 } from '../../lib/helper-functions';
 
 import * as util from '../../lib/util';
+
 import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
 
-import * as util from '../../lib/util';
 
 
 
 
 import { CLI, Config, Group, Preset, CustomPreset, ModuleName } from '../../types/cli';
+
+
 import {
     Command,
     Directories,
