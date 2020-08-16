@@ -1,0 +1,27 @@
+// Google Fonts
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+$font-stack: 'Open Sans', sans-serif;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  padding: 1rem;
+  min-height: 100vh;
+  margin: 0;
+}
+
+#app {
+  font-family: $font-stack;
+  background-color: #e2e8f0; // @tailwind -> .bg-gray-300
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 1rem;
+}

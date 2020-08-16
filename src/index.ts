@@ -14,7 +14,7 @@ import * as util from './lib/util';
 
 import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
 import * as MODULE_NEW from './modules/new';
-import { getQuestionByGroup, handleAddGroupRequest } from './modules/new/config';
+import { getQuestionByGroup, handleAddGroupRequest, promptQuestionByGroup } from './modules/new/config';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
 import { CLI, Config, Group, ModuleDescriptor } from './types/cli';
@@ -234,17 +234,25 @@ export async function run(userArguments: [] | undefined) {
 
           // [7b] Check if user requested a feature Group Type
           if (operation.action === ADD_GROUP) {
-            const selectedModule = await handleAddGroupRequest(operation.feature);
             clear();
             util.heading();
+            const group = util.getFeatureGroupByName(operation.action);
 
-            if (selectedModule !== '' && util.isOptionalFeature(selectedModule)) {
-              // [7c] Updates operation.feature to the selected module
-              operation.feature = selectedModule;
+            if (group !== undefined) {
+              const selectedModules = await promptQuestionByGroup(group);
+              for (const module of selectedModules) {
+                if (util.isOptionalFeature(module)) {
 
-              // [7d] Call the run function in modules / new /index.ts
-              await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+                  // [7c] Updates operation.feature to the selected module
+                  operation.feature = module;
+
+                  // [7d] Call the run function in modules / new /index.ts
+                  await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+                }
+              }
             }
+
+
 
           } else {
             if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
@@ -326,14 +334,14 @@ export async function run(userArguments: [] | undefined) {
 
           // [6a] Check if user requested a feature Group Type
           if (operation.action === ADD_GROUP) {
-            const selectedModule = await handleAddGroupRequest(operation.feature);
-            clear();
+            // const selectedModule = await handleAddGroupRequest(operation.feature);
+            // clear();
 
-            if (selectedModule !== '') {
-              operation.feature = selectedModule;
+            // if (selectedModule !== '') {
+            //   operation.feature = selectedModule;
 
-              await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-            }
+            //   await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+            // }
 
           } else {
             if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {

@@ -42,6 +42,7 @@ export interface Config {
 // Base interface for Presets
 export interface BasePreset {
     name: string;
+    description?: string;
 }
 
 // Interface for presets
@@ -58,6 +59,7 @@ export interface CustomPreset extends BasePreset {
 export interface Group {
     isRequired: boolean;
     promptType: string;
+    isMultipleChoice: boolean;
     name: string;
     modules: string[];
     question: string;
@@ -71,8 +73,8 @@ export interface Import {
     customPreset?: CustomPreset;
 }
 
-export interface ModuleName {
-    name: string;
+export interface Module {
+    name: string[] | string;
 }
 // Arguments content type
 export interface Arguments {
