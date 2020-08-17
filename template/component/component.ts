@@ -7,6 +7,7 @@ import { StoryComponent, StoryProp, Vue } from '.storybook/modules';
   components: {},
 })
 
+
 class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
   // Fields
