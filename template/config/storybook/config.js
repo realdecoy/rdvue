@@ -10,8 +10,7 @@ function loadStories() {
 const theme = create({
   base: 'light',
   brandTitle: `__PROJECT__NAME__KEBAB__ ${version}`,
-  brandUrl: '__BRAND_URL__',
-});
+ });
 
 // Parameters
 addParameters({
