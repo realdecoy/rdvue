@@ -1,18 +1,10 @@
-import {Vue} from 'vue-property-decorator';
-import { StoryComponent, StoryProp } from '.storybook/modules';;
-import { DEFAULT_MODULE } from '.storybook/modules';
+import { Component, Vue } from 'vue-property-decorator';
 
-@StoryComponent(
-  {
-    module: DEFAULT_MODULE,
-    description: '__COMPONENT__ States',
-    api: true,
-    playground: true,
-    components: {},
-    name: '__COMPONENT__KEBAB__',
-  })
-
-
+@Component({
+  components: {
+  },
+  name: '__COMPONENT__KEBAB__',
+})
 class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
@@ -43,20 +35,8 @@ class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // Props
-  // --------------------------------------------------------------------------
-  @StoryProp({
-    description: '',
-    values: []
-  })
-
-
-
-  // --------------------------------------------------------------------------
   // [Private] Lifecycle Hooks
   // --------------------------------------------------------------------------
-
-
 
   private mounted() {
     // TODO: stuff to do when this component loads.
