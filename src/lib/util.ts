@@ -80,24 +80,18 @@ function parseOptions(args: string[]): string[] {
 }
 
 /**
- *
- * @param name
+ * Description - Finds and returns the feature group that has the given name
+ * @param name - name of the feature group
  */
 function getFeatureGroupByName(name: string): Group | undefined {
-  const featureGroups = readMainConfig().import?.groups;
+  const feature = readMainConfig().import?.groups
+    .find((g) => g.name === name);
 
-  let featureGroup: Group;
-  if (featureGroups !== undefined) {
-    featureGroup = featureGroups.filter((group) => group.name === name)[0];
-
-    return featureGroup;
-  }
-
-  return undefined;
+  return feature;
 }
 /**
  * Checks if the feature given by the user is a feature group type
- * @param feature
+ * @param feature - name of feature
  */
 function isFeatureGroupType(feature: string): boolean {
   const featureGroups = readMainConfig().import?.groups;
@@ -105,9 +99,14 @@ function isFeatureGroupType(feature: string): boolean {
   if (featureGroups !== undefined) {
     isGroup = featureGroups.find(featureGroup => featureGroup.name === feature);
   }
+
   return isGroup === undefined ? false : true;
 }
 
+/**
+ * Description - Checks if the feature inputted is an optional feature
+ * @param feature - name of feature
+ */
 function isOptionalFeature(feature: string): boolean {
   let found;
   const featureGroups = readMainConfig().import?.groups;
@@ -126,6 +125,7 @@ function isOptionalFeature(feature: string): boolean {
 
   return found !== undefined ? true : false;
 }
+
 /**
  * Description - seperates the user input into <service> <action> <feature>
  * <featureName> [options]

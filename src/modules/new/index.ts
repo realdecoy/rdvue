@@ -5,7 +5,6 @@
  */
 
 import chalk from 'chalk';
-import clear from 'clear';
 
 import { Section } from 'command-line-usage';
 import inquirer from 'inquirer';
@@ -27,7 +26,7 @@ import {
   getFeatureMenu,
 } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
-import { CLI, Config, Group, Preset, CustomPreset } from '../../types/cli';
+import { CLI, Config, Group, } from '../../types/cli';
 import {
   Command,
   Directories,
@@ -35,7 +34,6 @@ import {
   Files,
   GetDirectoryInput
 } from '../../types/index';
-import { flatten, concat, isArray } from 'lodash';
 
 interface Answers {
   // tslint:disable-next-line
@@ -203,25 +201,6 @@ async function carl(featureGroups: Group[] = []) {
   return result;
 }
 
-async function carl2(featureGroups: Group[] = []) {
-  const result = featureGroups.map(async (group, i) => {
-    group.question = `${chalk.yellowBright(i.toString())}. ${group.question}`;
-
-    return inquirer.prompt(CONFIG.getQuestionByGroup(group))
-      .then(({ feature }) => {
-        const featureArr = feature instanceof Array ? feature as { name: string }[] : [feature];
-
-        return featureArr
-          .filter((p: string) => util.isOptionalFeature(p))
-          .map((p: { name: string }) => p.name);
-      });
-  });
-
-  return (await Promise.allSettled(result))
-    .filter(p => p.status === 'fulfilled')
-    .map(p => (p as PromiseFulfilledResult<string[]>).value);
-}
-
 function loadFeatureGroups(): Group[] {
   const imports = files.readMainConfig().import;
   const startupGroupNames = imports?.customPreset?.groups;
@@ -238,7 +217,6 @@ function isPresetSelected(name: string): boolean {
     ?.map((preset) => preset.name);
 
   return presets !== undefined && presets.includes(name) ? true : false;
-
 }
 
 function isCustomSelected(name: string): boolean {
