@@ -5,7 +5,6 @@
  */
 
 import chalk from 'chalk';
-import clear from 'clear';
 
 import { Section } from 'command-line-usage';
 import inquirer from 'inquirer';
@@ -38,7 +37,7 @@ import {
 
 import * as util from '../../lib/util';
 
-import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
+import { NpmProgrammaticConfiguration } from '../../types/cli';
 
 
 
@@ -54,7 +53,6 @@ import {
     Files,
     GetDirectoryInput
 } from '../../types/index';
-import { flatten, concat, isArray } from 'lodash';
 
 interface Answers {
     // tslint:disable-next-line

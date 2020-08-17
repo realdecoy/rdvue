@@ -9,7 +9,7 @@ import {
 import * as files from '../../lib/files';
 import * as util from '../../lib/util';
 import { CLI_DESCRIPTION } from '../../index';
-import { Arguments, Config, Group, Module } from '../../types/cli';
+import { Arguments, Config, Group } from '../../types/cli';
 import inquirer from 'inquirer';
 import { clear } from 'console';
 import { concat, flatten } from 'lodash';
@@ -82,7 +82,7 @@ function getQuestionByGroup(group: Group) {
 }
 
 /**
- * Description - Prompts the user with the question from the given feature group
+ * Description - Accepts a feature group and Prompts the user with its question
  * and returns an array of the selected modules
  * @param group - Group to prompt by
  */
@@ -144,8 +144,7 @@ async function promptPresetOptions() {
   const imports = files.readMainConfig().import;
 
   // Gets array of presets available
-  const presets = imports?.presets?.map((preset) =>
-    `${preset.name} ${preset?.description !== undefined ? `- ${preset.description}` : ''}`);
+  const presets = imports?.presets?.map((preset) => preset.name);
 
   // Get get custom preset option if available
   const customPreset = imports?.customPreset?.name;

@@ -107,11 +107,11 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
     if (
       !(Object
         .values(CLI_DESCRIPTION.general.menu[index])
-        .includes('Features:' || 'Feature Groups:'))
+        .includes('Features:'))
     ) {
 
       CLI_DESCRIPTION.general.menu.splice(index, 0, {
-        header: isGroup ? 'Feature Groups:' : 'Features:',
+        header: 'Features:',
         content: [],
       });
     }
@@ -138,20 +138,20 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
     await populateFeatureMenu(feature, true, index);
   }
 
+  // Loads in the Optional Modules
   for (const feature of optionalModules as []) {
-    index = 3;
 
     if (
       !(Object
-        .values(CLI_DESCRIPTION.general.menu[index])
-        .includes('Feature Groups:'))
+        .values(CLI_DESCRIPTION.general.menu[three])
+        .includes('Optional Modules:'))
     ) {
-      CLI_DESCRIPTION.general.menu.splice(index, 0, {
-        header: 'Feature Groups:',
+      CLI_DESCRIPTION.general.menu.splice(three, 0, {
+        header: 'Optional Modules:',
         content: [],
       });
     }
-    await populateFeatureMenu(feature, undefined, index);
+    await populateFeatureMenu(feature, undefined, three);
   }
 
   // [5] Add 'project' to list of features input by user
@@ -236,10 +236,12 @@ export async function run(userArguments: [] | undefined) {
           if (operation.action === ADD_GROUP) {
             clear();
             util.heading();
-            const group = util.getFeatureGroupByName(operation.action);
+            const group = util.getFeatureGroupByName(operation.feature);
 
             if (group !== undefined) {
+              // Prompt User to select Feature(s)
               const selectedModules = await promptQuestionByGroup(group);
+
               for (const module of selectedModules) {
                 if (util.isOptionalFeature(module)) {
 
@@ -250,10 +252,10 @@ export async function run(userArguments: [] | undefined) {
                   await MODULE_NEW.run(operation, CLI_DESCRIPTION);
                 }
               }
+            } else {
+              clear();
+              throw Error(`${operation.feature} is not a valid Feature Group. See menu above.`);
             }
-
-
-
           } else {
             if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
               clear();
@@ -264,7 +266,6 @@ export async function run(userArguments: [] | undefined) {
               if (operation.action === LIST_ACTION) {
                 clear();
                 util.heading();
-
                 util.displayModulesByFeatureGroup();
               }
               else {
@@ -334,23 +335,39 @@ export async function run(userArguments: [] | undefined) {
 
           // [6a] Check if user requested a feature Group Type
           if (operation.action === ADD_GROUP) {
-            // const selectedModule = await handleAddGroupRequest(operation.feature);
-            // clear();
+            clear();
+            util.heading();
+            const group = util.getFeatureGroupByName(operation.feature);
 
-            // if (selectedModule !== '') {
-            //   operation.feature = selectedModule;
+            if (group !== undefined) {
+              // Prompt User to select Feature(s)
+              const selectedModules = await promptQuestionByGroup(group);
 
-            //   await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-            // }
+              for (const module of selectedModules) {
+                if (util.isOptionalFeature(module)) {
+
+                  // [7c] Updates operation.feature to the selected module
+                  operation.feature = module;
+
+                  // [7d] Call the run function in modules / new /index.ts
+                  await MODULE_NEW.run(operation, CLI_DESCRIPTION);
+                }
+              }
+            } else {
+              clear();
+              throw Error(`${operation.feature} is not a valid Feature Group. See menu above.`);
+            }
 
           } else {
             if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
-
+              clear();
               console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
               throw Error(`${operation.feature} is not a valid Optional Feature. See menu above.`);
             }
             else {
               if (operation.action === LIST_ACTION) {
+                clear();
+                util.heading();
                 util.displayModulesByFeatureGroup();
               }
               else {
