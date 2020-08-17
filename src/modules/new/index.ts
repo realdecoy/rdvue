@@ -180,27 +180,6 @@ async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
 }
 
 
-async function carl(featureGroups: Group[] = []) {
-  const featureGroupsLen = featureGroups.length ?? 0;
-  let result = new Array<string>();
-
-  for (let i = 0; i < featureGroupsLen; i++) {
-    const group = featureGroups[i];
-
-    group.question = `${chalk.yellowBright(i.toString())}. ${group.question}`;
-    const { feature } = await inquirer.prompt(CONFIG.getQuestionByGroup(group));
-    const featureArr = feature instanceof Array ? feature as { name: string }[] : [feature];
-
-    const names = featureArr
-      .filter((p: string) => util.isOptionalFeature(p))
-      .map((p: { name: string }) => p.name);
-
-    result = [...result, ...names];
-  }
-
-  return result;
-}
-
 function loadFeatureGroups(): Group[] {
   const imports = files.readMainConfig().import;
   const startupGroupNames = imports?.customPreset?.groups;
