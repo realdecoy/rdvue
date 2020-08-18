@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import {
   DEFAULT_PROJECT_NAME,
-  featureType,
   OPTIONS_ALL,
   REGEX_PROJECT_NAME,
   TEMPLATE_PROJECT_URL

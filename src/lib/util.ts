@@ -4,17 +4,19 @@ import figlet from 'figlet';
 import path from 'path';
 
 import npm from 'npm-programmatic';
-import { ACTIONS, DYNAMIC_OBJECTS, featureGroupType } from '../constants/constants';
+import { DYNAMIC_OBJECTS, featureGroupType } from '../constants/constants';
 
 import { TEMPLATE_ROOT } from '../config';
+
 
 import { ACTIONS, featureType, ADD_ACTION, ADD_GROUP, LIST_ACTION } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
-import { fileExists, readFile, writeFile, readMainConfig } from './files';
 import { NpmProgrammaticConfiguration } from '../types/cli';
 
 import { featureType } from '../constants/constants';
+import { fileExists, readFile, readMainConfig, writeFile } from './files';
+
 import { Group } from '../types/cli';
 import { getFeatureConfiguration } from './helper-functions';
 

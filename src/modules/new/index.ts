@@ -280,7 +280,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 action: userAction
             }, USAGE);
 
-            // 2[d] Loads in optional modules after project has been setup
+            // 2[e] Loads in optional modules after project has been setup
             for (const module of modulesToInstall) {
                 await OPTIONAL_MODULES.addOptionalModule(module);
             }
