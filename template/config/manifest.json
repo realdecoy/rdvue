@@ -205,11 +205,6 @@
       "target": "src/theme/tailwind.css"
     },
 
-       {
-        "source": "meta/.babelrc",
-        "target": ".babelrc"
-      },
-
       {
         "source": "storybook/components/example.vue",
         "target": ".storybook/components/example.vue"
