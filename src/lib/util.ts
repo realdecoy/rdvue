@@ -8,7 +8,7 @@ import { ACTIONS, DYNAMIC_OBJECTS, featureGroupType } from '../constants/constan
 
 import { TEMPLATE_ROOT } from '../config';
 
-
+import { ACTIONS, featureType, ADD_ACTION, ADD_GROUP, LIST_ACTION } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
 import { fileExists, readFile, writeFile, readMainConfig } from './files';
@@ -133,6 +133,21 @@ function isOptionalFeature(feature: string): boolean {
   }
 
   return found !== undefined ? true : false;
+}
+
+/**
+ * Description - Accepts a string representing an ACTION and checks
+ * if that string is a Command (ACTION) relating to optional modules
+ * @param command - Name of ACTION
+ */
+function isOptionalModuleAction(command: string) {
+
+  const isTrue =
+    command === ADD_ACTION ||
+    command === ADD_GROUP ||
+    command === LIST_ACTION;
+
+  return isTrue;
 }
 
 /**
@@ -450,4 +465,7 @@ export {
   getFeatureGroupByName,
   isOptionalFeature,
 
+
+  displayModulesByFeatureGroup,
+  isOptionalModuleAction
 };

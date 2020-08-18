@@ -21,9 +21,13 @@ import { CLI, Config, Group, ModuleDescriptor } from './types/cli';
 import { Command } from './types/index';
 
 import { ADD_ACTION, ADD_GROUP, LIST_ACTION } from './constants/constants';
+
+import * as OPTIONAL_MODULES from './lib/optional-modules';
+
 const two = 2;
 // Assign CLI object a default value
 export let CLI_DESCRIPTION: CLI = CLI_DEFAULT;
+
 
 /**
  * Parse commands provided by template manifest files
@@ -68,7 +72,8 @@ async function populateFeatureMenu(feature: string, required = false, index: num
 }
 
 /**
- * Description: Adding the necessary information to the Usage object to be used in command execution
+ * Description: Adding the necessary information to the Usage object to be
+ * used in command execution
  * @param features - acceptable features that can be created with rdvue
  * @param requiredFeatures - features that can't be user requested
  * but are required to create a project (eg. config and store)
@@ -231,49 +236,15 @@ export async function run(userArguments: [] | undefined) {
         project = util.checkProjectValidity(operation);
         if (project.isValid) {
 
-          // [7b] Check if user requested a feature Group Type
-          if (operation.action === ADD_GROUP) {
-            clear();
-            util.heading();
-            const group = util.getFeatureGroupByName(operation.feature);
+          // [7b] Check if user requested an Optional Modules command
+          // Calls function to handle Optional Module commands or
+          // Call the run function in modules/new/index.ts
 
-            if (group !== undefined) {
-              // Prompt User to select Feature(s)
-              const selectedModules = await promptQuestionByGroup(group);
-
-              for (const module of selectedModules) {
-                if (util.isOptionalFeature(module)) {
-
-                  // [7c] Updates operation.feature to the selected module
-                  operation.feature = module;
-
-                  // [7d] Call the run function in modules / new /index.ts
-                  await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-                }
-              }
-            } else {
-              clear();
-              throw Error(`${operation.feature} is not a valid Feature Group. See menu above.`);
-            }
+          if (util.isOptionalModuleAction(operation.action)) {
+            await OPTIONAL_MODULES.handleOptionalModulesRequests(operation);
           } else {
-            if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
-              clear();
-              console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-              throw Error(`${operation.feature} is not a valid Optional Feature. See menu above.`);
-            }
-            else {
-              if (operation.action === LIST_ACTION) {
-                clear();
-                util.heading();
-                util.displayModulesByFeatureGroup();
-              }
-              else {
-                // [8a] Call the run function in modules/new/index.ts
-                await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-              }
-            }
+            await MODULE_NEW.run(operation, CLI_DESCRIPTION);
           }
-
         } else {
 
           // [8b] Throw an error if this is not a valid project
@@ -332,47 +303,12 @@ export async function run(userArguments: [] | undefined) {
         project = util.checkProjectValidity(operation);
         if (project.isValid) {
 
-          // [6a] Check if user requested a feature Group Type
-          if (operation.action === ADD_GROUP) {
-            clear();
-            util.heading();
-            const group = util.getFeatureGroupByName(operation.feature);
-
-            if (group !== undefined) {
-              // Prompt User to select Feature(s)
-              const selectedModules = await promptQuestionByGroup(group);
-
-              for (const module of selectedModules) {
-                if (util.isOptionalFeature(module)) {
-
-                  // [7c] Updates operation.feature to the selected module
-                  operation.feature = module;
-
-                  // [7d] Call the run function in modules / new /index.ts
-                  await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-                }
-              }
-            } else {
-              clear();
-              throw Error(`${operation.feature} is not a valid Feature Group. See menu above.`);
-            }
-
+          // 5[b] Calls function to handle Optional Module commands or
+          // Call the run function in modules/new/index.ts
+          if (util.isOptionalModuleAction(operation.action)) {
+            await OPTIONAL_MODULES.handleOptionalModulesRequests(operation);
           } else {
-            if (operation.action === ADD_ACTION && !util.isOptionalFeature(operation.feature)) {
-              clear();
-              console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-              throw Error(`${operation.feature} is not a valid Optional Feature. See menu above.`);
-            }
-            else {
-              if (operation.action === LIST_ACTION) {
-                clear();
-                util.heading();
-                util.displayModulesByFeatureGroup();
-              }
-              else {
-                await MODULE_NEW.run(operation, CLI_DESCRIPTION);
-              }
-            }
+            await MODULE_NEW.run(operation, CLI_DESCRIPTION);
           }
 
         } else {

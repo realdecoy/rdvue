@@ -43,7 +43,7 @@ import { NpmProgrammaticConfiguration } from '../../types/cli';
 
 
 
-import { CLI, Config, Group, Preset, CustomPreset, ModuleName } from '../../types/cli';
+import { CLI, Config, Group, Preset, CustomPreset } from '../../types/cli';
 
 
 import {
@@ -54,6 +54,7 @@ import {
     GetDirectoryInput
 } from '../../types/index';
 
+import * as OPTIONAL_MODULES from '../../lib/optional-modules';
 interface Answers {
     // tslint:disable-next-line
     [key: string]: any;
@@ -151,7 +152,7 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
 }
 
 /**
- * Description: Updating the configuration to hace correct directory place for .rdvue file
+ * Description: Updating the configuration to have correct directory place for .rdvue file
  * @param featureNameStore - object holding both Kebab and Pascal cases of the feature name
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
@@ -247,6 +248,9 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
         // [2] Check if the user requested a new project
         if (isProject) {
+
+            const modulesToInstall = await OPTIONAL_MODULES.requestPresetSelection();
+
             // [2]b Get required config
             await run(
                 {
@@ -276,9 +280,15 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 action: userAction
             }, USAGE);
 
+            // 2[d] Loads in optional modules after project has been setup
+            for (const module of modulesToInstall) {
+                await OPTIONAL_MODULES.addOptionalModule(module);
+            }
+
             util.nextSteps(projectName);
 
             return true;
+
         }
 
         // [1] Check if the user did not use the generate action/add/list
