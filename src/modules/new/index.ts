@@ -35,6 +35,7 @@ import {
   GetDirectoryInput
 } from '../../types/index';
 
+import * as OPTIONAL_MODULES from '../../lib/optional-modules';
 interface Answers {
   // tslint:disable-next-line
   [key: string]: any;
@@ -125,7 +126,7 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
 }
 
 /**
- * Description: Updating the configuration to hace correct directory place for .rdvue file
+ * Description: Updating the configuration to have correct directory place for .rdvue file
  * @param featureNameStore - object holding both Kebab and Pascal cases of the feature name
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
@@ -155,63 +156,9 @@ function updateConfig(
 }
 
 
-/**
- * Description - prompts the user with the question and choices for each feature group
- * inside the customPreset object in the template.json.
- * Returns an array of all selected modules
- * @param featureGroups -array of feature groups
- */
-async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
-  let selectedmodules: string[] = [];
-
-  if (featureGroups !== undefined) {
-    for (const group of featureGroups) {
-
-      const currStep = featureGroups.indexOf(group) + 1;
-      group.question = `${chalk.yellowBright(currStep.toString())}. ${group.question}`;
-      const selections = await CONFIG.promptQuestionByGroup(group);
-
-      selectedmodules = selections.length > 0 ? [...selectedmodules, ...selections]
-        : [...selectedmodules];
-    }
-  }
-
-  return selectedmodules;
-}
-
-
-function loadFeatureGroups(): Group[] {
-  const imports = files.readMainConfig().import;
-  const startupGroupNames = imports?.customPreset?.groups;
-  const startupGroups = imports?.groups?.filter((g) => startupGroupNames?.includes(g.name));
-
-  return startupGroups ?? [];
-}
 
 
 
-
-function isPresetSelected(name: string): boolean {
-  const presets = files.readMainConfig().import?.presets
-    ?.map((preset) => preset.name);
-
-  return presets !== undefined && presets.includes(name) ? true : false;
-}
-
-function isCustomSelected(name: string): boolean {
-  return files.readMainConfig().import?.customPreset?.name === name ? true : false;
-}
-
-/**
- * Description - Returns an array of dependencies for a given preset
- * @param presetName - Name of preset
- */
-function loadPresetDependencies(presetName: string): string[] {
-  const dependencies = files.readMainConfig().import?.presets
-    ?.find((preset) => preset.name === presetName)?.dependencies;
-
-  return dependencies !== undefined ? dependencies : [];
-}
 // tslint:disable-next-line
 async function run(operation: Command, USAGE: CLI): Promise<any> {
   try {
@@ -296,17 +243,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
     if (isProject) {
 
       // Prompts preset options here
-      const selectedPreset = await CONFIG.promptPresetOptions() as string;
-      let modulesToInstall: string[] = [];
-
-      if (isPresetSelected(selectedPreset)) {
-        modulesToInstall = loadPresetDependencies(selectedPreset);
-      }
-      else if (isCustomSelected(selectedPreset)) {
-        modulesToInstall = await handleFeatureGroupsQuestions(loadFeatureGroups());
-      }
-
-      console.log('sssss', modulesToInstall);
+      const modulesToInstall = await OPTIONAL_MODULES.requestPresetSelection();
 
       // [2]b Get required config
       await run(
@@ -331,18 +268,9 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         USAGE
       );
 
-      // Loads in optional features after project has been setup
+      // 2[d] Loads in optional modules after project has been setup
       for (const module of modulesToInstall) {
-        if (util.isOptionalFeature(module)) {
-          await run({
-            options: userOptions,
-            feature: module,
-            action: ADD_ACTION,
-          },
-            USAGE
-          );
-        }
-
+        await OPTIONAL_MODULES.addOptionalModule(module);
       }
 
       util.nextSteps(projectName);

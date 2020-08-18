@@ -35,7 +35,6 @@ export interface Config {
     singleUserPerProject?: boolean;
     menu?: Menu[];
     group?: boolean;
-
 }
 
 

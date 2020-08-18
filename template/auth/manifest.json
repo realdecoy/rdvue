@@ -2,7 +2,7 @@
   "version": 1,
   "name": "auth",
   "group": true,
-  "description": "Generate a basic components needed for basic authenticaton.",
+  "description": "Generate the basic components needed for basic authenticaton.",
   "sourceDirectory": "content",
   "installDirectory": "./",
   "files": [
