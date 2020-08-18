@@ -96,7 +96,6 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
 
   // Flatten array into one
   optionalModules = [].concat.apply([], optionalModules as []);
-  const mergedFeatures = features.concat(optionalModules as []);
   for (const feature of features) {
     // [2] Check each item of list to see if its a feature group or just a feature
     const isGroup: boolean = isFeatureGroup(feature);

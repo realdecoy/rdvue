@@ -183,7 +183,7 @@ async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
 function loadFeatureGroups(): Group[] {
   const imports = files.readMainConfig().import;
   const startupGroupNames = imports?.customPreset?.groups;
-  const startupGroups = imports?.groups.filter((g) => startupGroupNames?.includes(g.name));
+  const startupGroups = imports?.groups?.filter((g) => startupGroupNames?.includes(g.name));
 
   return startupGroups ?? [];
 }
@@ -306,6 +306,8 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         modulesToInstall = await handleFeatureGroupsQuestions(loadFeatureGroups());
       }
 
+      console.log('sssss', modulesToInstall);
+
       // [2]b Get required config
       await run(
         {
@@ -331,13 +333,16 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
       // Loads in optional features after project has been setup
       for (const module of modulesToInstall) {
-        await run({
-          options: userOptions,
-          feature: module,
-          action: ADD_ACTION,
-        },
-          USAGE
-        );
+        if (util.isOptionalFeature(module)) {
+          await run({
+            options: userOptions,
+            feature: module,
+            action: ADD_ACTION,
+          },
+            USAGE
+          );
+        }
+
       }
 
       util.nextSteps(projectName);
