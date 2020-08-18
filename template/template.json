@@ -34,29 +34,6 @@
           "Which Authentication would you like to include?"
         ]
       }
-    ],
-    "presets": [
-      {
-        "name": "default",
-        "description": "Deafult",
-        "dependencies": [
-          "auth",
-          "bootstrap"
-        ]
-      },
-      {
-        "name": "preset1",
-        "dependencies": [
-          "auth0"
-        ]
-      }
-    ],
-    "customPreset": {
-      "name": "custom",
-      "groups": [
-        "ui-library",
-        "auth"
-      ]
-    }
+    ]
   }
 }
