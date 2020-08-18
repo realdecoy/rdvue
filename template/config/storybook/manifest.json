@@ -1,0 +1,19 @@
+{
+  "version":1,
+  "name":"storybook",
+  "sourceDirectory":"./",
+  "installDirectory":".storybook",
+
+  "packages":{
+  "devDependencies":[
+    "@storybook/addon-links",
+    "@storybook/addon-options",
+    "@storybook/preset-scss",
+    "@storybook/preset-typescript",
+    "@storybook/vue",
+    "@types/storybook__vue",
+    "babel-preset-vue",
+     "npm-run-all"
+  ]
+  }
+}
