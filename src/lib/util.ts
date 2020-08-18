@@ -3,10 +3,11 @@ import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
 import { TEMPLATE_ROOT } from '../config';
-import { ACTIONS, featureType, ADD_ACTION, ADD_GROUP, LIST_ACTION } from '../constants/constants';
+import { ACTIONS, ADD_ACTION, ADD_GROUP, LIST_ACTION } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
-import { fileExists, readFile, writeFile, readMainConfig } from './files';
+import { fileExists, readFile, readMainConfig, writeFile } from './files';
+
 import { Group } from '../types/cli';
 import { getFeatureConfiguration } from './helper-functions';
 

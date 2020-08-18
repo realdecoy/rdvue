@@ -16,7 +16,6 @@ import * as ROOT_CONFIG from '../../config';
 import {
   ADD_ACTION,
   ADD_GROUP,
-  featureGroup,
   featureType,
   GENERATE_ACTION,
 } from '../../constants/constants';
@@ -184,7 +183,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
     const currentConfig = getFeatureConfiguration(userFeature);
     const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
     const projectName = '<project-name>';
-    const availableFeatureGroups: string[] = Object.values(featureGroup);
+    const availableFeatureGroups: string[] = OPTIONAL_MODULES.getOptionalFeatures();
 
     let featureNameStore: FeatureNameObject = {};
     let nameKey = '';

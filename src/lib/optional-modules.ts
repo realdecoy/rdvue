@@ -77,6 +77,12 @@ async function addOptionalModule(featureName: string) {
   }
 }
 
+function getOptionalFeatures() {
+  const optionalFeatures = files.readMainConfig().import?.groups
+    .map((g) => g.modules);
+
+  return flatten(optionalFeatures);
+}
 /**
  * Description - Processes the ACTIONS for Optional Modules
  * @param operation - Command object
@@ -215,5 +221,6 @@ async function requestPresetSelection() {
 export {
   requestPresetSelection,
   handleOptionalModulesRequests,
-  addOptionalModule
+  addOptionalModule,
+  getOptionalFeatures
 };
