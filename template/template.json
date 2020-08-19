@@ -12,45 +12,6 @@
       "model",
       "page",
       "sm"
-    ],
-    "groups": [
-      {
-        "name": "ui-library",
-        "isMultipleChoice": false,
-        "promptType": "list",
-        "modules": [],
-        "question": [
-          "Which UI Library would like like to include?"
-        ]
-      },
-      {
-        "isRequired": false,
-        "isMultipleChoice": true,
-        "name": "auth",
-        "promptType": "checkbox",
-        "modules": [
-          "auth"
-        ],
-        "question": [
-          "Which Authentication would you like to include?"
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Default",
-        "description": "This is default",
-        "dependencies": [
-          "auth"
-        ]
-      }
-    ],
-    "customPreset": {
-      "name": "custom",
-      "groups": [
-        "ui-library",
-        "auth"
-      ]
-    }
+    ]
   }
 }
