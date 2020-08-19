@@ -56,7 +56,6 @@ export interface CustomPreset extends BasePreset {
 
 // Interface for a feature group
 export interface Group {
-    isRequired: boolean;
     promptType: string;
     isMultipleChoice: boolean;
     name: string;
