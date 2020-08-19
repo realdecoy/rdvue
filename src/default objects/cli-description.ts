@@ -30,6 +30,7 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
                 {
                     isRequired: false,
                     isMultipleChoice: false,
+                    description: '',
                     promptType: '',
                     name: '',
                     question: '',

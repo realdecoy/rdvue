@@ -78,6 +78,7 @@ export interface Group {
     name: string;
     modules: string[];
     question: string;
+    description: string;
 }
 // Import interface for the files being imported
 export interface Import {
