@@ -56,6 +56,7 @@ async function populateFeatureMenu(feature: string, required = false, index: num
     );
   }
 
+
   // [3] Assign the configuration for the specified feature
   cliFeature = getFeatureMenu(feature);
 
@@ -69,6 +70,34 @@ async function populateFeatureMenu(feature: string, required = false, index: num
     content: [],
   });
 }
+
+/**
+ *
+ * @param groups - Array of groups
+ */
+function populateFeatureGroupMenu(groups: Group[], index: number) {
+  if (groups.length > 0) {
+    if (
+      !(Object
+        .values(CLI_DESCRIPTION.general.menu[index])
+        .includes('Groups:'))
+    ) {
+      CLI_DESCRIPTION.general.menu.splice(index, 0, {
+        header: 'Groups:',
+        content: [],
+      });
+    }
+    for (const group of groups) {
+      contentPopulate(
+        CLI_DESCRIPTION.general.menu,
+        `${chalk.magenta(group.name)}`,
+        group.description,
+        index
+      );
+    }
+  }
+}
+
 
 /**
  * Description: Adding the necessary information to the Usage object to be
@@ -89,17 +118,17 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   let iterations = 0;
   let index: number;
   const three = 3;
+  const groupsIndex = 4;
 
   // [1] Intialize the CLI menu with the USAGE_TEMPLATE (./config.ts)
   CLI_DESCRIPTION.general.menu = USAGE_TEMPLATE();
 
   // Gets a multidimensional array of all modules from the different feature groups
   let optionalModules = featureGroups.map((g) => g.modules);
-
-
-
   // Flatten array into one
   optionalModules = [].concat.apply([], optionalModules as []);
+
+
   for (const feature of features) {
     // [2] Check each item of list to see if its a feature group or just a feature
     const isGroup: boolean = isFeatureGroup(feature);
@@ -156,6 +185,10 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
     }
     await populateFeatureMenu(feature, undefined, three);
   }
+
+  // Loads in Feature Groups
+  populateFeatureGroupMenu(featureGroups, groupsIndex);
+
 
   // [5] Add 'project' to list of features input by user
   features.push('project');

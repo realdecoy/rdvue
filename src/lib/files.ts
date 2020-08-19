@@ -89,14 +89,6 @@ function readSubConfig(command: string): Config {
   return JSON.parse(readFile(filePath)) as Config;
 }
 
-function getOptionalModules() {
-  const config = 'config';
-
-  const filePath = path.join(TEMPLATE_ROOT, `/${config}`, MANIFEST_FILE);
-
-  return JSON.parse(readFile(filePath)) as Config;
-}
-
 function isFeatureGroup(command: string): boolean {
   const filePath = path.join(TEMPLATE_ROOT, `/${command}`, MANIFEST_FILE);
   const configuration = JSON.parse(readFile(filePath)) as Config;
@@ -257,7 +249,7 @@ function replaceTargetFileNames(files: Array<string | Files>, featureName: strin
     files.forEach((file: string | Files) => {
       if (typeof file !== 'string') {
         if (file.target !== file.source) {
-          file.target = replaceFileName(file.target, /(\${.*?\})/, featureName??'');
+          file.target = replaceFileName(file.target, /(\${.*?\})/, featureName ?? '');
         }
       }
     });
