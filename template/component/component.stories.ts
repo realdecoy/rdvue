@@ -1,25 +1,26 @@
 import __COMPONENT__ from './__COMPONENT__KEBAB__.vue';
 import { Category, previewOf } from '.storybook/modules';
 
-// ----------------------------------------------------------------------------
-// Module Exports
-// ----------------------------------------------------------------------------
-
 const preview = previewOf(__COMPONENT__, Category.COMPONENT)
-  // You can add mutiple examples
+  // Default example. You can add more by chaining .addExample().
   .addExample(
     {
-      title: 'Standard - __COMPONENT__ Component',
-      description: 'This is the standard __COMPONENT__ component',
+      title: 'Default - __COMPONENT__',
+      description: 'This is the default __COMPONENT__ component',
       styles: ''
     },
-
-// add snippet of component use here
+    // Template code for component example.
     `
     <__COMPONENT__KEBAB__ />
     `,
   )
   .render();
 
-export { preview as default, preview as __COMPONENT__ };
+// ----------------------------------------------------------------------------
+// Module Exports
+// ----------------------------------------------------------------------------
+export {
+  preview as default,
+  preview as __COMPONENT__
+};
 

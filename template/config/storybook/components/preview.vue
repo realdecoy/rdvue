@@ -56,7 +56,7 @@ export default class Preview extends Vue {
 
   private mounted() {
     const component = this.resolveStoryComponent() ?? {};
-    const componentModule = StoryComponent.getModule(component);
+    const componentModule = StoryComponent.getImportPath(component);
 
     this.component = component;
     this.title = component.options?.name;
