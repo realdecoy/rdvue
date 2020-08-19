@@ -2,7 +2,8 @@
   "version": 1,
   "name": "component",
   "description": "Generate a basic component.",
-  "arguments": [{
+  "arguments": [
+    {
       "name": "componentNameKebab",
       "type": "string",
       "description": "the name for the generated component. (e.g. my-component)"
@@ -16,49 +17,60 @@
   ],
   "sourceDirectory": "./",
   "installDirectory": "components",
-  "files": [{
+  "files": [
+    {
       "source": "index.ts",
       "target": "index.ts",
-      "content": [{
-        "matchRegex": "__COMPONENT__KEBAB__",
-        "replace": "${componentNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        }
+      ]
     },
     {
       "source": "component.stories.ts",
       "target": "${componentNameKebab}.stories.ts",
-      "content": [{
-        "matchRegex": "__COMPONENT__KEBAB__",
-        "replace": "${componentNameKebab}"
-      },
-     {
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentName}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        },
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
     },
     {
       "source": "component.scss",
       "target": "${componentNameKebab}.scss",
-      "content": [{
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentNameKebab}"
+        }
+      ]
     },
     {
       "source": "component.ts",
       "target": "${componentNameKebab}.ts",
-      "content": [{
-        "matchRegex": "__COMPONENT__KEBAB__",
-        "replace": "${componentNameKebab}"
-      }, {
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentName}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        },
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
     },
     {
       "source": "component.spec.js",
       "target": "${componentNameKebab}.spec.js",
-      "content": [{
+      "content": [
+        {
           "matchRegex": "__COMPONENT__KEBAB__",
           "replace": "${componentNameKebab}"
         },
@@ -71,10 +83,12 @@
     {
       "source": "component.vue",
       "target": "${componentNameKebab}.vue",
-      "content": [{
-        "matchRegex": "__COMPONENT__",
-        "replace": "${componentNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentNameKebab}"
+        }
+      ]
     }
   ]
 }

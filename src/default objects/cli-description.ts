@@ -28,7 +28,6 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
             optional: [''],
             groups: [
                 {
-                    isRequired: false,
                     isMultipleChoice: false,
                     description: '',
                     promptType: '',
