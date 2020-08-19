@@ -16,7 +16,7 @@
     "groups": [
       {
         "name": "ui-library",
-        "multipleChoice": true,
+        "isMultipleChoice": false,
         "promptType": "list",
         "modules": [],
         "question": [
@@ -25,6 +25,7 @@
       },
       {
         "isRequired": false,
+        "isMultipleChoice": true,
         "name": "auth",
         "promptType": "checkbox",
         "modules": [
@@ -34,6 +35,22 @@
           "Which Authentication would you like to include?"
         ]
       }
-    ]
+    ],
+    "presets": [
+      {
+        "name": "Default",
+        "description": "This is default",
+        "dependencies": [
+          "auth"
+        ]
+      }
+    ],
+    "customPreset": {
+      "name": "custom",
+      "groups": [
+        "ui-library",
+        "auth"
+      ]
+    }
   }
 }
