@@ -44,13 +44,18 @@ async function promptQuestionByGroup(group: Group) {
   const multiple = '(multiple)';
   const single = '(single)';
   const result = Array();
+  const selectionBtn = group.isMultipleChoice ? `${chalk.blueBright('<space>')} to select,
+  ${chalk.blueBright('<a>')} to toggle all,
+  ${chalk.blueBright('<i>')} to invert selection` : 'Enter';
+
+  const confirmBtn = group.isMultipleChoice ? 'Press Enter to continue' : '';
+  const instructions = chalk.yellow(`Use arrow keys to navigate. Press ${selectionBtn} to select an option. ${confirmBtn}`);
 
   const question: inquirer.QuestionCollection = {
-    // tslint:disable-next-line: no-any
     type: group.promptType as any,
     name: 'feature',
     prefix: '',
-    message: `${group.question} ${group.isMultipleChoice ? multiple : single}`,
+    message: `\n \n${instructions} \n${group.question} ${group.isMultipleChoice ? multiple : single}`,
     choices: ['None', ...group.modules]
   };
 
@@ -120,7 +125,7 @@ async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
     for (const group of featureGroups) {
 
       const currStep = featureGroups.indexOf(group) + 1;
-      group.question = `${chalk.yellowBright(currStep.toString())}. ${group.question}`;
+      group.question = `${chalk.greenBright(currStep.toString())}. ${group.question}`;
       const selections = await promptQuestionByGroup(group);
 
       selectedmodules = selections.length > 0 ? [...selectedmodules, ...selections]
@@ -138,6 +143,7 @@ function loadFeatureGroups(): Group[] {
   const imports = files.readMainConfig().import;
   const startupGroupNames = imports?.customPreset?.groups;
   const startupGroups = imports?.groups?.filter((g) => startupGroupNames?.includes(g.name));
+  // ?.filter((p) => p.modules.length > 0);
 
   return startupGroups ?? [];
 }
@@ -148,11 +154,19 @@ function loadFeatureGroups(): Group[] {
  */
 async function promptPresetOptions() {
   clear();
+
+  // Will store the name of preset to return
+  let cleanedPresetChoice = '';
   let options = Array<string>();
   const imports = files.readMainConfig().import;
 
   // Gets array of presets available
-  const presets = imports?.presets?.map((preset) => preset.name);
+  const presets = imports?.presets?.map((preset) => {
+    const desc = preset.description;
+
+    // Appends the description (if available) to the text displayed to the user
+    return desc !== undefined ? `${preset.name} (${desc})` : preset.name;
+  });
 
   // Get get custom preset option if available
   const customPreset = imports?.customPreset?.name;
@@ -164,13 +178,16 @@ async function promptPresetOptions() {
     const { preset } = await inquirer.prompt({
       type: 'list',
       name: 'preset',
-      prefix: '',
       message: 'Pick a preset',
       choices: options
     });
 
-    return preset;
+    // Removes description from option selected in order to get the original preset name
+    cleanedPresetChoice = preset.split('(')[0]
+      .trim() as string;
   }
+
+  return cleanedPresetChoice;
 }
 
 

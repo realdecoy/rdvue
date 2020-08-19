@@ -14,7 +14,6 @@ import * as util from './lib/util';
 
 import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
 import * as MODULE_NEW from './modules/new';
-import { getQuestionByGroup, handleAddGroupRequest, promptQuestionByGroup } from './modules/new/config';
 
 import { CLI_DEFAULT } from './default objects/cli-description';
 import { CLI, Config, Group, ModuleDescriptor } from './types/cli';

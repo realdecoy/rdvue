@@ -60,117 +60,16 @@ const QUESTIONS: any[] = [
   }
 ];
 
-/**
- * Description - accepts a feature froup and returns its questions and choices
- * to prompt user with
- * @param group - Group to prompt by
- */
-function getQuestionByGroup(group: Group) {
-  const multiple = '(multiple)';
-  const single = '(single)';
-
-  const question: inquirer.QuestionCollection = {
-    type: group.promptType as any,
-    name: 'feature',
-    prefix: '',
-    message: `${group.question} ${group.isMultipleChoice ? multiple : single}`,
-    choices: ['None', ...group.modules]
-  };
-
-  return question;
-}
-
-/**
- * Description - Accepts a feature group and Prompts the user with its question
- * and returns an array of the selected modules
- * @param group - Group to prompt by
- */
-async function promptQuestionByGroup(group: Group) {
-  const multiple = '(multiple)';
-  const single = '(single)';
-  const result = Array();
-
-  const question: inquirer.QuestionCollection = {
-    type: group.promptType as any,
-    name: 'feature',
-    prefix: '',
-    message: `${group.question} ${group.isMultipleChoice ? multiple : single}`,
-    choices: ['None', ...group.modules]
-  };
-
-  const selected = await inquirer.prompt(question);
-  result.push(selected.feature);
-
-  return flatten(result) as string[];
-}
 
 
 
-/**
- * Description - Process the feature group that the user is requesting
- * and returns the name of the selected module
- *  @param featureGroupName - name of feature group type whose question
- *  and options will be dsiplayed
- */
-
-async function handleAddGroupRequest(featureGroupName: string) {
-  // Will store the selected  module
-  let choices = Array<string>();
-
-  // Gets the questions for the group along with the modules
-  const featureGroup = util.getFeatureGroupByName(featureGroupName);
-
-  if (featureGroup !== undefined) {
-    // Prompts user with question and choices(modules) from requested feature group type
-    choices = await promptQuestionByGroup(featureGroup);
-
-  } else {
-    console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-    throw Error(`${featureGroupName} is not a valid group`);
-  }
-
-  return choices;
-}
 
 
-/**
- * Description - Prompts the user with a list of presets to choose from
- * and returns the selected preset
- */
-async function promptPresetOptions() {
-  clear();
-  let options = Array<string>();
-  const imports = files.readMainConfig().import;
 
-  // Gets array of presets available
-  const presets = imports?.presets?.map((preset) => preset.name);
-
-  // Get get custom preset option if available
-  const customPreset = imports?.customPreset?.name;
-
-  if (presets !== undefined) { options = concat(presets) as []; }
-  if (customPreset !== undefined) { options = concat(options, customPreset) as []; }
-
-  if (options.length > 0) {
-    const { preset } = await inquirer.prompt({
-      type: 'list',
-      name: 'preset',
-      prefix: '',
-      message: 'Pick a preset',
-      choices: options
-    });
-
-    return preset;
-  }
-}
 
 export {
   TEMPLATE_PROJECT_URL,
   OPTIONS_ALL,
   QUESTIONS,
-  parsePrompts,
-  getQuestionByGroup,
-  handleAddGroupRequest,
-  promptPresetOptions,
-  promptQuestionByGroup
+  parsePrompts
 };
