@@ -4,7 +4,6 @@ import router from '@/config/router';
 import store from '@/store';
 import '@/config/register-service-worker';
 import '@/theme/_all.scss';
-/* tslint:disable-next-line */
 const modules = require('../.rdvue/modules.js').default;
 
 Vue.config.productionTip = false;
