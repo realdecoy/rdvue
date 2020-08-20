@@ -1,7 +1,8 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import store from './index';
 
 @Module({ namespaced: true })
-class Store {
+class __STORE__ extends VuexModule {
   private fooBarVal: string = '';
 
   // ------------------------------------------------------------------------
@@ -48,6 +49,6 @@ class Store {
 }
 
 export {
-  Store as default,
-  Store,
+  __STORE__ as default,
+  __STORE__,
 };

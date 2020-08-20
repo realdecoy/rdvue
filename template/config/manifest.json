@@ -205,5 +205,9 @@
       "source": "theme/tailwind.css",
       "target": "src/theme/tailwind.css"
     }
+    {
+      "source": "modules/core/vuex.ts",
+      "target": "src/modules/core/vuex.ts"
+    }
   ]
 }
