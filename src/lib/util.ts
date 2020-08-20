@@ -3,7 +3,6 @@ import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
 import npm from 'npm-programmatic';
-// import { exec } from 'child_process';
 import { TEMPLATE_ROOT } from '../config';
 import { ACTIONS } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
