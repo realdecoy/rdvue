@@ -1,12 +1,16 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { getMultiParamModule, MultiParamAction } from '@/modules/core/vuex';
 import User from '@/model/user';
+import MainStore from './index';
 
-@Module({ namespaced: true })
-class AuthStore {
+const MODULE_NAME = 'Auth';
+
+@Module({ namespaced: true, name: MODULE_NAME, dynamic: true, MainStore })
+class AuthStore extends VuexModule {
   private currentUserVal: User | null = null;
 
   // ------------------------------------------------------------------------
-  // Getters retrieve properties from the Store.
+  // Getters
   // ------------------------------------------------------------------------
 
   public get currentUser() {
@@ -14,27 +18,21 @@ class AuthStore {
   }
 
   // ------------------------------------------------------------------------
-  // Actions are publicly accessbile wrappers to perform mutations
-  // on the Store. These actions will internally call the appropriate
-  // mutations to update the Store.
-  //
-  // Note: The returned value will be passed to the mutation handler
-  // specified as the decorator's "commit" attribute.
+  // Actions
   // ------------------------------------------------------------------------
 
-  @Action({ commit: 'setUser' })
+  @MultiParamAction({ commit: 'setUser' })
   public clearCurrentUser() {
     return null;
   }
 
-  @Action({ commit: 'setUser' })
+  @MultiParamAction({ commit: 'setUser' })
   public setCustomUser(user: User) {
     return user;
   }
 
   // ------------------------------------------------------------------------
-  // Mutations update the properties in the Store.
-  // They are internal
+  // Mutations
   // ------------------------------------------------------------------------
 
   @Mutation
@@ -43,7 +41,8 @@ class AuthStore {
   }
 }
 
+const result = getMultiParamModule<AuthStore>(AuthStore, MODULE_NAME, (MainStore as any));
+
 export {
-  AuthStore as default,
-  AuthStore,
+  result
 };

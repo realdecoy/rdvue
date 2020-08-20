@@ -1,12 +1,15 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import store from './index';
+import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
+import MainStore from './index';
+import { getMultiParamModule, MultiParamAction } from '@/modules/core/vuex';
 
-@Module({ namespaced: true })
+const MODULE_NAME = '__STORE__';
+
+@Module({ namespaced: true, name: MODULE_NAME, dynamic: true, MainStore })
 class __STORE__ extends VuexModule {
   private fooBarVal: string = '';
 
   // ------------------------------------------------------------------------
-  // Getters retrieve properties from the Store.
+  // Getters
   // ------------------------------------------------------------------------
 
   public get fooBar() {
@@ -14,32 +17,26 @@ class __STORE__ extends VuexModule {
   }
 
   // ------------------------------------------------------------------------
-  // Actions are publicly accessbile wrappers to perform mutations
-  // on the Store. These actions will internally call the appropriate
-  // mutations to update the Store.
-  //
-  // Note: The returned value will be passed to the mutation handler
-  // specified as the decorator's "commit" attribute.
+  // Actions
   // ------------------------------------------------------------------------
 
-  @Action({ commit: 'setFooBar' })
+  @MultiParamAction({ commit: 'setFooBar' })
   public initializeFooBar() {
     return 'Hello World';
   }
 
-  @Action({ commit: 'setFooBar' })
+  @MultiParamAction({ commit: 'setFooBar' })
   public resetFooBar() {
     return null;
   }
 
-  @Action({ commit: 'setFooBar' })
+  @MultiParamAction({ commit: 'setFooBar' })
   public setCustomFooBar(value: string) {
     return value;
   }
 
   // ------------------------------------------------------------------------
-  // Mutations update the properties in the Store.
-  // They are internal
+  // Mutations
   // ------------------------------------------------------------------------
 
   @Mutation
@@ -48,7 +45,8 @@ class __STORE__ extends VuexModule {
   }
 }
 
+const result = getMultiParamModule<__STORE__>(__STORE__, MODULE_NAME, (MainStore as any));
+
 export {
-  __STORE__ as default,
-  __STORE__,
-};
+  result
+}
