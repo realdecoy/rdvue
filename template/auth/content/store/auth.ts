@@ -1,49 +1,51 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { getMultiParamModule, MultiParamAction } from '@/modules/core';
 import User from '@/model/user';
+import store from './index';
 
-@Module({ namespaced: true })
-class AuthStore {
-  private currentUserVal: User | null = null;
+const MODULE_NAME = 'Auth';
+
+@Module({ namespaced: true, name: MODULE_NAME, dynamic: true, store })
+class Store extends VuexModule {
+  private _user: User | null = null;
 
   // ------------------------------------------------------------------------
-  // Getters retrieve properties from the Store.
+  // Getters
   // ------------------------------------------------------------------------
 
-  public get currentUser() {
-    return this.currentUserVal;
+  public get user() {
+    return this._user;
   }
 
   // ------------------------------------------------------------------------
-  // Actions are publicly accessbile wrappers to perform mutations
-  // on the Store. These actions will internally call the appropriate
-  // mutations to update the Store.
-  //
-  // Note: The returned value will be passed to the mutation handler
-  // specified as the decorator's "commit" attribute.
+  // Actions
   // ------------------------------------------------------------------------
 
-  @Action({ commit: 'setUser' })
+  @MultiParamAction()
   public clearCurrentUser() {
     return null;
   }
 
-  @Action({ commit: 'setUser' })
-  public setCustomUser(user: User) {
-    return user;
+  @MultiParamAction()
+  public login(user: String, password: String) {
+    // TODO: invoke service to perform authentication.
+    this.setUser(null);
+
+    return true
   }
 
   // ------------------------------------------------------------------------
-  // Mutations update the properties in the Store.
-  // They are internal
+  // Mutations
   // ------------------------------------------------------------------------
 
   @Mutation
   private setUser(user: User) {
-    this.currentUserVal = user;
+    this._user = user;
   }
 }
 
+const AuthStore = getMultiParamModule<Store>(Store, MODULE_NAME, (store as any));
+
 export {
-  AuthStore as default,
-  AuthStore,
+  AuthStore
 };

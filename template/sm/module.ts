@@ -1,44 +1,28 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
+import { getMultiParamModule, MultiParamAction } from '@/modules/core';
+import store from './index';
 
-@Module({ namespaced: true })
-class Store {
-    private __STORE_MODULE__Val: string = '';
+const MODULE_NAME = '__STORE_MODULE__';
 
-    // ------------------------------------------------------------------------
-    // Getters retrieve properties from the Store.
-    // ------------------------------------------------------------------------
-
-    public get fooBar() {
-        return this.__STORE_MODULE__Val;
-    }
+@Module({ namespaced: true, name: MODULE_NAME, dynamic: true, store })
+class Store extends VuexModule {
 
     // ------------------------------------------------------------------------
-    // Actions are publicly accessbile wrappers to perform mutations
-    // on the Store. These actions will internally call the appropriate
-    // mutations to update the Store.
-    //
-    // Note: The returned value will be passed to the mutation handler
-    // specified as the decorator's "commit" attribute.
+    // Getters
     // ------------------------------------------------------------------------
 
-    @Action({ commit: 'setFooBar' })
-    public initializeFooBar() {
-        return 'Hello World';
-    }
-
-
     // ------------------------------------------------------------------------
-    // Mutations update the properties in the Store.
-    // They are internal
+    // Actions
     // ------------------------------------------------------------------------
 
-    @Mutation
-    private setFooBar(value: string) {
-        this.__STORE_MODULE__Val = value;
-    }
+    // ------------------------------------------------------------------------
+    // Mutations
+    // ------------------------------------------------------------------------
+
 }
 
+const __STORE_MODULE__ = getMultiParamModule<Store>(Store, MODULE_NAME, (store as any));
+
 export {
-    Store as default,
-    Store,
+    __STORE_MODULE__
 };

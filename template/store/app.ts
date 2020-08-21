@@ -1,11 +1,15 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
+import store from './index';
+import { getMultiParamModule, MultiParamAction } from '@/modules/core';
 
-@Module({ namespaced: true })
-class Store {
+const MODULE_NAME = 'App';
+
+@Module({ namespaced: true, name: MODULE_NAME, dynamic: true, store })
+class Store extends VuexModule {
   private fooBarVal: string = '';
 
   // ------------------------------------------------------------------------
-  // Getters retrieve properties from the Store.
+  // Getters
   // ------------------------------------------------------------------------
 
   public get fooBar() {
@@ -13,32 +17,26 @@ class Store {
   }
 
   // ------------------------------------------------------------------------
-  // Actions are publicly accessbile wrappers to perform mutations
-  // on the Store. These actions will internally call the appropriate
-  // mutations to update the Store.
-  //
-  // Note: The returned value will be passed to the mutation handler
-  // specified as the decorator's "commit" attribute.
+  // Actions
   // ------------------------------------------------------------------------
 
-  @Action({ commit: 'setFooBar' })
+  @MultiParamAction()
   public initializeFooBar() {
-    return 'Hello World';
+    return this.setFooBar('Hello World');
   }
 
-  @Action({ commit: 'setFooBar' })
+  @MultiParamAction()
   public resetFooBar() {
     return null;
   }
 
-  @Action({ commit: 'setFooBar' })
+  @MultiParamAction()
   public setCustomFooBar(value: string) {
     return value;
   }
 
   // ------------------------------------------------------------------------
-  // Mutations update the properties in the Store.
-  // They are internal
+  // Mutations
   // ------------------------------------------------------------------------
 
   @Mutation
@@ -47,7 +45,8 @@ class Store {
   }
 }
 
+const App = getMultiParamModule<Store>(Store, MODULE_NAME, (store as any));
+
 export {
-  Store as default,
-  Store,
-};
+  App
+}
