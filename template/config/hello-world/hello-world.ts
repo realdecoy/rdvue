@@ -3,7 +3,8 @@ import { Component,Vue} from 'vue-property-decorator';
 Component({
   components: {},
   name: 'hello-world',
-});
+})
+
 class HelloWorldView extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
