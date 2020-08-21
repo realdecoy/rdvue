@@ -1,1 +1,1 @@
-export { getMultiParamModule, MultiParamAction } from './core/vuex';
+export * from './core/vuex';
