@@ -40,10 +40,12 @@ export default class Playground extends Vue {
   }
 
   private getType(propName: string) {
-     const typeDef = this.items[propName]?.type as
+    // tslint:disable-next-line:ban-types
+    const typeDef = this.items[propName]?.type as
       | { name: string }
       | Array<Function>;
-     let typeName = (typeDef as any)?.name as string | undefined;
+    // tslint:disable-next-line:no-any
+    let typeName = (typeDef as any)?.name as string | undefined;
     const values = StoryProp.getValues(this.source, propName);
 
     if (typeDef instanceof Array) {
@@ -72,7 +74,8 @@ export default class Playground extends Vue {
       normalizedValue = this.items[propName].default;
     }
 
-     ((this.livePreview as unknown) as { [key: string]: any })[
+    // tslint:disable-next-line:no-any
+    ((this.livePreview as unknown) as { [key: string]: any })[
       propName
     ] = normalizedValue;
   }

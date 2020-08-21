@@ -85,6 +85,10 @@ export default class Preview extends Vue {
       component = this.for;
     }
 
+    // If (component === undefined) {
+    //   throw new Error('Preview component must have the prop "component" set.');
+    // }
+
     return component;
   }
 
@@ -129,6 +133,7 @@ export default class Preview extends Vue {
           v-html="importStatementPretty"
         ></div>
       </div>
+      <!-- <div class="text-4xl mt-16">Examples</div> -->
       <div class="grid grid-flow-row gap-10 mt-24">
         <slot />
       </div>

@@ -10,6 +10,11 @@ module.exports = {
   },
   module: {
     rules: [
+      // {
+      //   test: /\.s?[ca]ss$/,
+      //   loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+      //   include: path.resolve(__dirname, '../'),
+      // },
       {
         test: /\.(woff|woff2|ttf|eot)$/,
         use: 'file-loader?name=fonts/[name].[ext]!static'

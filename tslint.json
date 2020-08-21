@@ -3,7 +3,7 @@
 	"extends": [ "tslint:latest", "tslint-config-prettier", "tslint-immutable" ],
 	"rules": {
 		"no-implicit-dependencies": [ true, [ "@" ] ],
-		"no-console": false,
+		"no-console": true,
 		"quotemark": [ true, "single" ],
 		"indent": [ true, "spaces", 2 ],
 		"no-default-export": false,
@@ -12,7 +12,7 @@
 		"object-literal-sort-keys": false,
 		"no-consecutive-blank-lines": false,
 		"whitespace": true,
-		"no-any": false,
+		"no-any": true,
 		"no-conditional-assignment": true,
 		"no-debugger": true,
 		"no-duplicate-imports": true,
