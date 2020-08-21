@@ -1,5 +1,4 @@
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const path = require('path');
+ const path = require('path');
 
 module.exports = {
   resolve: {
@@ -10,11 +9,6 @@ module.exports = {
   },
   module: {
     rules: [
-      // {
-      //   test: /\.s?[ca]ss$/,
-      //   loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
-      //   include: path.resolve(__dirname, '../'),
-      // },
       {
         test: /\.(woff|woff2|ttf|eot)$/,
         use: 'file-loader?name=fonts/[name].[ext]!static'
