@@ -210,8 +210,8 @@
       "target": "src/modules/core/vuex.ts"
     },
     {
-      "source": "modules/index.ts",
-      "target": "src/modules/index.ts"
+      "source": "modules/core/index.ts",
+      "target": "src/modules/core/index.ts"
     }
   ]
 }
