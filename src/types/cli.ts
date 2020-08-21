@@ -40,6 +40,11 @@ export interface Config {
     stores?: string[];
     vueOptions?: ConfigurationGenericProperty;
     modules?: ConfigurationGenericProperty;
+    features: Feature[];
+    plugins?: string[];
+    project?: TemplateProject;
+    groups?: Group[];
+    presets?: Preset[];
 }
 
 // Generic string property
@@ -49,8 +54,20 @@ export interface ConfigurationGenericProperty {
 }
 
 
+// Features interface
+interface Feature {
+    name: string;
+    private: boolean;
+}
+
+// Interface for projects section in template.json
+// TODO update this name
+interface TemplateProject {
+    features: string[];
+    plugins: string[];
+}
 // Base interface for Presets
-export interface BasePreset {
+interface BasePreset {
     name: string;
     description?: string;
 }
@@ -58,6 +75,7 @@ export interface BasePreset {
 // Interface for presets
 export interface Preset extends BasePreset {
     dependencies: string[];
+    plugins: string[];
 }
 
 // Interface for custom preset
@@ -73,9 +91,10 @@ export interface ConfigurationRoutes {
 }
 // Interface for a feature group
 export interface Group {
-    promptType: string;
-    isMultipleChoice: boolean;
+    promptType?: string;
+    plugins?: string[];
     name: string;
+    isMultipleChoice: boolean;
     modules: string[];
     question: string;
     description: string;
