@@ -30,10 +30,10 @@ export default class Props extends Vue {
   }
 
   private getType(propName: string) {
-     const typeDef = this.items[propName]?.type as
+    const typeDef = this.items[propName]?.type as
       | { name: string }
       | Array<Function>;
-     let typeName = (typeDef as any)?.name as string | undefined;
+    let typeName = (typeDef as any)?.name as string | undefined;
     const values = StoryProp.getValues(this.source, propName);
 
     if (typeDef instanceof Array) {

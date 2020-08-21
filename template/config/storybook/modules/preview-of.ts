@@ -10,7 +10,7 @@ interface PreviewAddExample {
 }
 
 interface Components { [key: string]: VueConstructor; }
- interface Data { [key: string]: string | number | boolean | unknown[] | Function; }
+interface Data { [key: string]: string | number | boolean | unknown[] | Function; }
 
 interface PreviewOf {
   components: Components;
@@ -66,8 +66,8 @@ export function addExample(
 
   return {
     ...data,
-     addExample: addExample.bind(null, data) as any,
-     render: render.bind(null, data) as any
+    addExample: addExample.bind(null, data) as any,
+    render: render.bind(null, data) as any
   };
 }
 

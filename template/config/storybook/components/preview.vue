@@ -129,7 +129,7 @@ export default class Preview extends Vue {
           v-html="importStatementPretty"
         ></div>
       </div>
-       <div class="grid grid-flow-row gap-10 mt-24">
+      <div class="grid grid-flow-row gap-10 mt-24">
         <slot />
       </div>
     </div>
