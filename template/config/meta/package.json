@@ -7,12 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "cypress open",
-    "test:unit": "vue-cli-service test:unit",
-    "storybook:serve": "run-s storybook:tailwind storybook",
-    "storybook:build": "build-storybook -c .storybook -o dist/storybook",
-    "storybook": "start-storybook -s ./public -p 8000 --ci storybook:tailwind",
-    "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css"
-
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "axios": "^0.19.2",
