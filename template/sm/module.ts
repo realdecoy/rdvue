@@ -21,7 +21,7 @@ class Store extends VuexModule {
 
 }
 
-const __STORE_MODULE__ = getMultiParamModule<Store>(Store, MODULE_NAME, (MainStore as any));
+const __STORE_MODULE__ = getMultiParamModule<Store>(Store, MODULE_NAME, (store as any));
 
 export {
     __STORE_MODULE__
