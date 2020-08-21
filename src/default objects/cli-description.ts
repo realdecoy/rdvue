@@ -23,6 +23,24 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
     config: {
         version: 1,
         sourceDirectory: '',
+        features: [{
+            name: '',
+            private: false
+        }],
+        plugins: [''],
+        project: {
+            features: [''],
+            plugins: ['']
+        },
+        groups: [{
+            promptType: '',
+            plugins: [''],
+            name: '',
+            isMultipleChoice: false,
+            modules: [''],
+            question: '',
+            description: ''
+        }],
         import: {
             required: [''],
             optional: [''],
@@ -38,6 +56,7 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
             ],
             presets: [{
                 dependencies: [''],
+                plugins: [''],
                 name: ''
             }],
             customPreset: {
@@ -45,6 +64,12 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
                 name: ''
             }
         },
+        presets: [{
+            name: '',
+            dependencies: [''],
+            plugins: [''],
+        }
+        ],
         name: '',
         arguments: [
             {

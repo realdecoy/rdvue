@@ -223,8 +223,9 @@ export async function run(userArguments: [] | undefined) {
 
 
     // [1b] Return list of features if true and empty array if false
-    const features: string[] = (mainConfig.import !== undefined) ? mainConfig
-      .import.optional : [];
+    const features: string[] = mainConfig?.features
+      ?.filter((feature) => !feature.private)
+      ?.map((f) => f.name);
 
     // [1c] Return value if true and empty array if false
     const requiredFeatures: string[] = (mainConfig.import !== undefined) ?

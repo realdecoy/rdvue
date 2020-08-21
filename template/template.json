@@ -1,6 +1,48 @@
 {
   "version": 1,
   "sourceDirectory": "./",
+  "features": [
+    {
+      "name": "config",
+      "private": true
+    },
+    "store",
+    "component",
+    "service",
+    "model",
+    "page",
+    "sm"
+  ],
+  "plugins": [
+    "buefy",
+    "localization"
+  ],
+  "project": {
+    "features": [
+      "config",
+      "store"
+    ],
+    "plugins": []
+  },
+  "groups": [
+    {
+      "name": "name1",
+      "promptType": "list",
+      "isMultipleChoice": true,
+      "plugins": [
+        "a",
+        "b"
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "preset1",
+      "plugins": [
+        "a"
+      ]
+    }
+  ],
   "import": {
     "required": [
       "config",
