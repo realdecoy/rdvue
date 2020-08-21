@@ -1,10 +1,10 @@
-import { Vue } from 'vue-property-decorator';
+import { Component,Vue} from 'vue-property-decorator';
 import { StoryComponent } from '.storybook/modules';
 
-@StoryComponent({
+Component({
   components: {},
   name: 'hello-world',
-})
+});
 class HelloWorldView extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
