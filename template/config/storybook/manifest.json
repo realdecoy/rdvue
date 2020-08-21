@@ -1,29 +1,26 @@
 {
-  "version":1,
-  "name":"storybook",
-  "sourceDirectory":"./",
-  "installDirectory":".storybook",
-
-  "packages":{
-  "devDependencies":[
-    "@storybook/addon-links",
-    "@storybook/addon-options",
-    "@storybook/preset-scss",
-    "@storybook/preset-typescript",
-    "@storybook/vue",
-    "@types/storybook__vue",
-    "babel-preset-vue",
-     "npm-run-all"
-  ],
-
-
-  "scripts":{
-    "build-storybook": "run-s storybook:build storybook:copyres",
-    "storybook": "run-s storybook:tailwind storybook:serve",
-    "storybook:build": "build-storybook -c .storybook -o dist/storybook",
-    "storybook:serve": "start-storybook -s ./public -p 8000 --ci",
-    "storybook:copyres": "ncp ./public/images dist/storybook/images",
-    "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css"
-  }
+  "version": 1,
+  "name": "storybook",
+  "sourceDirectory": "./",
+  "installDirectory": ".storybook",
+  "packages": {
+    "devDependencies": [
+      "@storybook/addon-links",
+      "@storybook/addon-options",
+      "@storybook/preset-scss",
+      "@storybook/preset-typescript",
+      "@storybook/vue",
+      "@types/storybook__vue",
+      "babel-preset-vue",
+      "npm-run-all"
+    ],
+    "scripts": {
+      "build-storybook": "run-s storybook:build storybook:copyres",
+      "storybook": "run-s storybook:tailwind storybook:serve",
+      "storybook:build": "build-storybook -c .storybook -o dist/storybook",
+      "storybook:serve": "start-storybook -s ./public -p 8000 --ci",
+      "storybook:copyres": "ncp ./public/images dist/storybook/images",
+      "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css"
+    }
   }
 }
