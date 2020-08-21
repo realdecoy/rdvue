@@ -3,10 +3,10 @@ import { ComponentOptions } from 'vue/types/umd';
 import { PropOptions } from 'vue/types/options';
 import { VueClass } from "@vue/test-utils";
 
-const storySafe = new WeakMap<object, { story: StoryComponentOptions; props: StoryPropStore }>();
+const storySafe = new WeakMap<object, { story: StoryOptions; props: StoryPropStore }>();
 let props: StoryPropStore = {};
 
-interface StoryComponentOptions {
+interface StoryOptions {
   description?: string;
   module?: ((componentName: string) => string) | string;
   slots?: { [key: string]: string };
@@ -28,7 +28,7 @@ export interface StoryDef {
 }
 
 
-export function StoryComponent<V extends Vue>(options: StoryComponentOptions & ComponentOptions<V> & ThisType<V>)
+export function StoryComponent<V extends Vue>(options: StoryOptions & ComponentOptions<V> & ThisType<V>)
   : <VC extends VueClass<V>>(target: VC) => VC {
   const componentDecoratorFn = Component(options);
   return (target) => {

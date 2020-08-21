@@ -11,3 +11,14 @@ body {
 	line-height: 1.2;
 	font-size: 16px;
 }
+
+$color-positive: #75a156;
+
+.__PROJECT__NAME__KEBAB__ {
+	&-text-positive {
+		color: $color-positive;
+	}
+	&-border-positive {
+		border-color: $color-positive;
+	}
+}

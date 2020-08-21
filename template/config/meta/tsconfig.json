@@ -21,7 +21,8 @@
       ]
     },
     "lib": [
-      "esnext",
+      "es2015",
+      "es2017",      
       "dom",
       "dom.iterable",
       "scripthost"
