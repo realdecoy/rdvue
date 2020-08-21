@@ -10,8 +10,7 @@ interface PreviewAddExample {
 }
 
 interface Components { [key: string]: VueConstructor; }
-// tslint:disable-next-line: ban-types
-interface Data { [key: string]: string | number | boolean | unknown[] | Function; }
+ interface Data { [key: string]: string | number | boolean | unknown[] | Function; }
 
 interface PreviewOf {
   components: Components;
@@ -67,10 +66,8 @@ export function addExample(
 
   return {
     ...data,
-    // tslint:disable-next-line: no-any
-    addExample: addExample.bind(null, data) as any,
-    // tslint:disable-next-line: no-any
-    render: render.bind(null, data) as any
+     addExample: addExample.bind(null, data) as any,
+     render: render.bind(null, data) as any
   };
 }
 
