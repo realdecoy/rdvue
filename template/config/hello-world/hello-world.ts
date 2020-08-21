@@ -1,5 +1,4 @@
 import { Component,Vue} from 'vue-property-decorator';
-import { StoryComponent } from '.storybook/modules';
 
 Component({
   components: {},
