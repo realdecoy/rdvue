@@ -2,10 +2,10 @@ import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
 import MainStore from './index';
 import { getMultiParamModule, MultiParamAction } from '@/modules/core/vuex';
 
-const MODULE_NAME = '__STORE__';
+const MODULE_NAME = 'App';
 
 @Module({ namespaced: true, name: MODULE_NAME, dynamic: true, MainStore })
-class __STORE__ extends VuexModule {
+class Store extends VuexModule {
   private fooBarVal: string = '';
 
   // ------------------------------------------------------------------------
@@ -45,8 +45,8 @@ class __STORE__ extends VuexModule {
   }
 }
 
-const result = getMultiParamModule<__STORE__>(__STORE__, MODULE_NAME, (MainStore as any));
+const App = getMultiParamModule<Store>(Store, MODULE_NAME, (MainStore as any));
 
 export {
-  result
+  App
 }

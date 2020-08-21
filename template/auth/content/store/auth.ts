@@ -6,7 +6,7 @@ import MainStore from './index';
 const MODULE_NAME = 'Auth';
 
 @Module({ namespaced: true, name: MODULE_NAME, dynamic: true, MainStore })
-class AuthStore extends VuexModule {
+class Store extends VuexModule {
   private currentUserVal: User | null = null;
 
   // ------------------------------------------------------------------------
@@ -41,8 +41,8 @@ class AuthStore extends VuexModule {
   }
 }
 
-const result = getMultiParamModule<AuthStore>(AuthStore, MODULE_NAME, (MainStore as any));
+const AuthStore = getMultiParamModule<Store>(Store, MODULE_NAME, (MainStore as any));
 
 export {
-  result
+  AuthStore
 };
