@@ -1,34 +1,37 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { getMultiParamModule, MultiParamAction } from '@/modules/core/vuex';
+import { getMultiParamModule, MultiParamAction } from '@/modules/core';
 import User from '@/model/user';
-import MainStore from './index';
+import store from './index';
 
 const MODULE_NAME = 'Auth';
 
-@Module({ namespaced: true, name: MODULE_NAME, dynamic: true, MainStore })
+@Module({ namespaced: true, name: MODULE_NAME, dynamic: true, store })
 class Store extends VuexModule {
-  private currentUserVal: User | null = null;
+  private _user: User | null = null;
 
   // ------------------------------------------------------------------------
   // Getters
   // ------------------------------------------------------------------------
 
-  public get currentUser() {
-    return this.currentUserVal;
+  public get user() {
+    return this._user;
   }
 
   // ------------------------------------------------------------------------
   // Actions
   // ------------------------------------------------------------------------
 
-  @MultiParamAction({ commit: 'setUser' })
+  @MultiParamAction()
   public clearCurrentUser() {
     return null;
   }
 
-  @MultiParamAction({ commit: 'setUser' })
-  public setCustomUser(user: User) {
-    return user;
+  @MultiParamAction()
+  public login(user: String, password: String) {
+    // TODO: invoke service to perform authentication.
+    this.setUser(null);
+
+    return true
   }
 
   // ------------------------------------------------------------------------
@@ -37,11 +40,11 @@ class Store extends VuexModule {
 
   @Mutation
   private setUser(user: User) {
-    this.currentUserVal = user;
+    this._user = user;
   }
 }
 
-const AuthStore = getMultiParamModule<Store>(Store, MODULE_NAME, (MainStore as any));
+const AuthStore = getMultiParamModule<Store>(Store, MODULE_NAME, (store as any));
 
 export {
   AuthStore
