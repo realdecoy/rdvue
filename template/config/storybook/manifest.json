@@ -3,6 +3,96 @@
   "name": "storybook",
   "sourceDirectory": "./",
   "installDirectory": ".storybook",
+  "files": [
+    {
+      "source": "components/example.vue",
+      "target": ".storybook/components/example.vue"
+    },
+    {
+      "source": "components/index.ts",
+      "target": ".storybook/components/index.ts"
+    },
+    {
+      "source": "components/playground.vue",
+      "target": ".storybook/components/playground.vue"
+    },
+    {
+      "source": "components/props.vue",
+      "target": ".storybook/components/props.vue"
+    },
+    {
+      "source": "components/preview.vue",
+      "target": ".storybook/components/preview.vue"
+    },
+    {
+      "source": "modules/constants.ts",
+      "target": ".storybook/modules/constants.ts"
+    },
+    {
+      "source": "modules/index.ts",
+      "target": ".storybook/modules/index.ts"
+    },
+    {
+      "source": "modules/preview-of.ts",
+      "target": ".storybook/modules/preview-of.ts"
+    },
+    {
+      "source": "addons.js",
+      "target": ".storybook/addons.js"
+    },
+    {
+      "source": "config.js",
+      "target": ".storybook/config.js",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "logo.svg",
+      "target": ".storybook/logo.svg"
+    },
+    {
+      "source": "main.js",
+      "target": ".storybook/main.js"
+    },
+    {
+      "source": "preview-head.html",
+      "target": ".storybook/preview-head.html"
+    },
+    {
+      "source": "stories.scss",
+      "target": ".storybook/stories.scss",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "tailwind.css",
+      "target": ".storybook/tailwind.css"
+    },
+    {
+      "source": "webpack.config.js",
+      "target": ".storybook/webpack.config.js"
+    },
+    {
+      "source": "modules/story.ts",
+      "target": ".storybook/modules/story.ts"
+    },
+    {
+      "source": "modules/constants.ts",
+      "target": ".storybook/modules/constants.ts"
+    },
+    {
+      "source": "postcss.config.js",
+      "target": "postcss.config.js"
+    }
+  ],
   "packages": {
     "devDependencies": [
       "@storybook/addon-links",
