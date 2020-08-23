@@ -1,7 +1,0 @@
-[
-  {
-    "path": "'/test'",
-    "name": "'testLang'",
-    "component": "`require('@/pages/HelloI18n/HelloI18n.vue').default`"
-  }
-]

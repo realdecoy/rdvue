@@ -12,7 +12,7 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureGroup, featureType, featuresWithNoNames, GENERATE_ACTION } from '../../constants/constants';
+import { featureGroup, featureType, featuresWithNoNames, GENERATE_ACTION, DYNAMIC_OBJECTS } from '../../constants/constants';
 import * as files from '../../lib/files';
 import {
     getFeatureConfiguration,
@@ -301,24 +301,26 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             );
         }
 
+        // console.log(JSON.stringify(currentConfig.routes as ConfigurationRoutes[]));
+
          // Update the .rdvue/routes.js file in src directory in the project
-        if (currentConfig.hasRoutes) {
-            await util.parseDynamicRoutes(userFeature);
+        if (currentConfig.routes !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.routes, null, 1), DYNAMIC_OBJECTS.routes);
         }
 
          // Update the .rdvue/stores.js file in src directory in the project
-        if (currentConfig.hasStores) {
-            await util.parseDynamicObjects(userFeature, 'stores');
+        if (currentConfig.stores !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.stores, null, 1), DYNAMIC_OBJECTS.stores);
         }
 
         // Update the .rdvue/options.js file in src directory in the project
-        if (currentConfig.hasPluginOptions) {
-            await util.parseDynamicObjects(userFeature, 'options', currentConfig.hasPluginOptions);
+        if (currentConfig.vueOptions !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.vueOptions, null, 1), DYNAMIC_OBJECTS.options, true);
         }
 
         // Update the .rdvue/modules.js file in src directory in the project
-        if (currentConfig.hasModules) {
-            await util.parseDynamicObjects(userFeature, 'modules', currentConfig.hasModules);
+        if (currentConfig.modules !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
         }
 
         // [10] Install dependencies if they are required

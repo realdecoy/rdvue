@@ -3,8 +3,7 @@ import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
 import npm from 'npm-programmatic';
-import { TEMPLATE_ROOT } from '../config';
-import { ACTIONS } from '../constants/constants';
+import { ACTIONS, DYNAMIC_OBJECTS } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
 import { fileExists, readFile, writeFile } from './files';
@@ -286,52 +285,9 @@ function actionBeingRequested(enteredAction: string): string {
   return actionReturn;
 }
 
-// Function to update the .rdvue/routes.json file when a new feature group is added
-function parseDynamicRoutes(feature: string): void {
-  let PROJECT_ROUTES_FILE_PATH;
-  let FEATURE_GROUP_ROUTES;
-  let rdRoutes;
-  let rdRoutesStringToBeWritten = '';
 
-  // 1[a] Check for the root of the project
-  const projectroot = getProjectRoot();
-
-  // 1[b] Once inside of a project values are assigned to be used
-  if (projectroot !== null) {
-    // Allocate the location of the routes.js file
-    PROJECT_ROUTES_FILE_PATH = path.join(projectroot, '.rdvue', 'routes.js');
-    FEATURE_GROUP_ROUTES = path.join(TEMPLATE_ROOT, feature, 'routes', `${feature}.json`);
-
-    // Read files to be modified
-    rdRoutes = readFile(PROJECT_ROUTES_FILE_PATH);
-
-    // Read json files to be written
-    const jsonRoutes = readFile(FEATURE_GROUP_ROUTES);
-
-    // Replace brackets & ("/`) quotations in string
-    const editedRoutesString = jsonRoutes.replace(/[\[\]"`]+/g, '');
-
-    // Removed closers from files to append information
-    const rdRoutesModified = rdRoutes.slice(0, -2);
-
-    // Append the new information and close files after changes
-    rdRoutesStringToBeWritten = `${rdRoutesModified}${editedRoutesString},];`;
-  }
-
-  // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
-  if (
-    rdRoutes !== undefined &&
-    PROJECT_ROUTES_FILE_PATH !== undefined && rdRoutesStringToBeWritten !== ''
-  ) {
-    writeFile(PROJECT_ROUTES_FILE_PATH, rdRoutesStringToBeWritten);
-  } else {
-    console.log(feature);
-  }
-}
-
-function parseDynamicObjects(feature: string, objectName: string, hasBrackets?: boolean): void {
+function parseDynamicObjects(jsonData: string, objectName: string, hasBrackets?: boolean): void {
   let filePathOfObjectInsideProject;
-  let featureJsonFilePath;
   let objectInProject;
   let objectStringToBeWritten = '';
 
@@ -342,16 +298,12 @@ function parseDynamicObjects(feature: string, objectName: string, hasBrackets?: 
   if (PROJECT_ROOT !== null) {
     // Allocate the location of the <OBJECT>.js file
     filePathOfObjectInsideProject = path.join(PROJECT_ROOT, '.rdvue', `${objectName}.js`);
-    featureJsonFilePath = path.join(TEMPLATE_ROOT, feature, `${objectName}`, `${feature}.json`);
 
     // Read files to be modified
     objectInProject = readFile(filePathOfObjectInsideProject);
 
-    // Read json files to be written
-    const JSON_DATA = readFile(featureJsonFilePath);
-
     // Replace brackets & ("/`) quotations in string
-    let modifiedJSONData = JSON_DATA.replace(/[\[\]"`]+/g, '');
+    let modifiedJSONData = jsonData.replace(/[\[\]"`]+/g, '');
 
     // Remove beginning and closing brackets if its an option to be modified
     if (hasBrackets) {
@@ -362,17 +314,14 @@ function parseDynamicObjects(feature: string, objectName: string, hasBrackets?: 
     const originalObjectString = objectInProject.slice(0, -2);
 
     // Append the new information and close files after changes
-    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData},};`;
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.routes ? ']' : '}'};`;
   }
 
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
-  if (
-    featureJsonFilePath !== undefined &&
-    filePathOfObjectInsideProject !== undefined && objectStringToBeWritten !== ''
-  ) {
+  if (    filePathOfObjectInsideProject !== undefined && objectStringToBeWritten !== '') {
     writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
   } else {
-    console.log(feature);
+    // console.log(feature);
   }
 }
 
@@ -426,6 +375,5 @@ export {
   getProjectRoot,
   actionBeingRequested,
   parseDynamicObjects,
-  parseDynamicRoutes,
   dependencieInstaller
 };

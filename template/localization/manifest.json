@@ -2,11 +2,8 @@
   "version": 1,
   "name": "localization",
   "group": false,
-  "hasRoutes": true,
-  "hasPluginOptions": true,
-  "hasModules": true,
   "description": "Generate files needed for basic localization.",
-  "sourceDirectory": "content",
+  "sourceDirectory": "./",
   "installDirectory": "./",
   "files": [
     {
@@ -14,8 +11,8 @@
       "target": "config/i18n.ts"
     },
     {
-      "source": "pages/HelloI18n/HelloI18n.vue",
-      "target": "pages/HelloI18n/HelloI18n.vue"
+      "source": "pages/hello-i18n/hello-i18n.vue",
+      "target": "pages/hello-i18n/hello-i18n.vue"
     },
     {
       "source": "locales/en.json",
@@ -29,5 +26,23 @@
   "packages": {
     "dependencies": ["vue-i18n"],
     "devDependencies": ["vue-cli-plugin-i18n"]
+  },
+  "routes": [
+    {
+      "path": "'/hello-i18n'",
+      "name": "'i18nTest'",
+      "component": "`require('@/pages/hello-i18n/hello-i18n.vue').default`"
+    }
+  ],
+  "vueOptions": {
+    "i18n": {
+      "locale": "'en'",
+      "fallbackLocale": "'es'",
+      "localeDir": "'locales'",
+      "enableInSFC": "false"
+    }
+  },
+  "modules": {
+    "i18n": "`require('../src/config/i18n').default`"
   }
 }

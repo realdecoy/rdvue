@@ -40,3 +40,10 @@ interface Actions {
 export const ACTIONS: Actions = {
     generate: ['generate', 'g']
 };
+
+export enum DYNAMIC_OBJECTS {
+    routes = 'routes',
+    stores = 'stores',
+    options = 'options',
+    modules = 'modules'
+}
