@@ -1,4 +1,4 @@
-import { Config } from './cli';
+import { Config, ConfigurationRoutes, ConfigurationGenericProperty } from './cli';
 
 /*
  Please note:
@@ -15,12 +15,12 @@ export interface Manifest{
     files: ManifestFiles[];
     singleUserPerProject?: boolean;
     arguments?: ManifestArguments[];
-    group?: false;
+    group?: boolean;
     packages?: Dependencies;
-    hasRoutes?: boolean;
-    hasStores?: boolean;
-    hasPluginOptions?: boolean;
-    hasModules?: boolean;
+    routes?: ConfigurationRoutes[];
+    stores?: string[];
+    vueOptions?: ConfigurationGenericProperty;
+    modules?: ConfigurationGenericProperty;
 }
 
 export interface Dependencies {

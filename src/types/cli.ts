@@ -36,12 +36,23 @@ export interface Config {
     menu?: Menu[];
     group?: boolean;
     packages?: Dependencies;
-    hasRoutes?: boolean;
-    hasStores?: boolean;
-    hasPluginOptions?: boolean;
-    hasModules?: boolean;
+    routes?: ConfigurationRoutes[];
+    stores?: string[];
+    vueOptions?: ConfigurationGenericProperty;
+    modules?: ConfigurationGenericProperty;
 }
 
+// Generic string property
+export interface ConfigurationGenericProperty {
+    [key: string]: string;
+}
+
+// Routes property for the feature being called
+export interface ConfigurationRoutes {
+    name: string;
+    path: string;
+    component: string;
+}
 // Import interface for the files being imported
 export interface Import {
     required: string[];

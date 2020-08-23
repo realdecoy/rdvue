@@ -2,10 +2,8 @@
   "version": 1,
   "name": "auth",
   "group": true,
-  "hasRoutes": true,
-  "hasStores": true,
   "description": "Generate a basic components needed for basic authenticaton.",
-  "sourceDirectory": "content",
+  "sourceDirectory": "./",
   "installDirectory": "./",
   "files": [
     {
@@ -67,6 +65,26 @@
     {
       "source": "pages/forget-password/forget-password.vue",
       "target": "pages/auth/forget-password/forget-password.vue"
+    }
+  ],
+  "stores": [
+    "auth: require('@/store/auth.ts').default"
+  ],
+  "routes": [
+    {
+      "name": "'Login'",
+      "path": "'/login'",
+      "component": "`require('@/pages/auth/login').default`"
+    },
+    {
+      "name": "'Register'",
+      "path": "'/register'",
+      "component": "`require('@/pages/auth/register').default`"
+    },
+    {
+      "name": "'ForgetPassword'",
+      "path": "'/forget-password'",
+      "component": "`require('@/pages/auth/forget-password').default`"
     }
   ]
 }
