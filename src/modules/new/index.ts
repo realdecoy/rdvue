@@ -301,8 +301,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             );
         }
 
-        // console.log(JSON.stringify(currentConfig.routes as ConfigurationRoutes[]));
-
          // Update the .rdvue/routes.js file in src directory in the project
         if (currentConfig.routes !== undefined) {
             await util.parseDynamicObjects(JSON.stringify(currentConfig.routes, null, 1), DYNAMIC_OBJECTS.routes);
@@ -329,13 +327,13 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
             if (currentConfig.packages.dependencies.length > 0) {
                 config.save = true;
-                await util.dependencieInstaller(currentConfig.packages.dependencies, config);
+                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
             }
 
             if (currentConfig.packages.devDependencies.length > 0) {
                 config.save = false;
                 config.saveDev = true;
-                await util.dependencieInstaller(currentConfig.packages.devDependencies, config);
+                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
             }
         }
 
