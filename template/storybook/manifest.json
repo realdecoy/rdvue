@@ -1,7 +1,7 @@
 {
   "version": 1,
   "name": "storybook",
-  "sourceDirectory": ".",
+  "sourceDirectory": "./",
   "installDirectory": ".storybook",
   "files": [
     {
@@ -78,7 +78,7 @@
     },
     {
       "source": "content/postcss.config.js",
-      "target": "postcss.config.js"
+      "target": "../postcss.config.js"
     }
   ],
   "packages": {
