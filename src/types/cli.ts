@@ -36,9 +36,9 @@ export interface Config {
     menu?: Menu[];
     group?: boolean;
     features: Feature[];
-    plugins?: string[];
-    project?: TemplateProject;
-    groups?: Group[];
+    plugins: string[];
+    project: TemplateProject;
+    groups: Group[];
     presets?: Preset[];
 }
 

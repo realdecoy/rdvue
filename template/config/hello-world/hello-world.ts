@@ -1,7 +1,6 @@
-import { Vue } from 'vue-property-decorator';
-import { StoryComponent } from '.storybook/modules';
+import { Component, Vue } from 'vue-property-decorator';
 
-@StoryComponent({
+@Component({
   components: {},
   name: 'hello-world',
 })
@@ -44,6 +43,6 @@ class HelloWorldView extends Vue {
 }
 
 export {
-    HelloWorldView as default,
-    HelloWorldView,
+  HelloWorldView as default,
+  HelloWorldView,
 };

@@ -6,16 +6,33 @@
       "name": "config",
       "private": true
     },
-    "store",
-    "component",
-    "service",
-    "model",
-    "page",
-    "sm"
+    {
+      "name": "store",
+      "private": true
+    },
+    {
+      "name": "component",
+      "private": false
+    },
+    {
+      "name": "service",
+      "private": false
+    },
+    {
+      "name": "model",
+      "private": false
+    },
+    {
+      "name": "page",
+      "private": false
+    },
+    {
+      "name": "sm",
+      "private": false
+    }
   ],
   "plugins": [
-    "buefy",
-    "localization"
+    "auth"
   ],
   "project": {
     "features": [
@@ -26,36 +43,23 @@
   },
   "groups": [
     {
-      "name": "name1",
+      "name": "auth",
       "promptType": "list",
       "isMultipleChoice": true,
       "plugins": [
-        "a",
-        "b"
+        "auth"
       ]
     }
   ],
   "presets": [
     {
       "name": "preset1",
-      "plugins": [
-        "a"
-      ]
+      "plugins": [],
+      "description": "preset 1"
     }
   ],
-  "import": {
-    "required": [
-      "config",
-      "store"
-    ],
-    "optional": [
-      "component",
-      "service",
-      "model",
-      "page",
-      "sm"
-    ],
-    "groups": [],
-    "presets": []
+  "customPreset": {
+    "plugins": [],
+    "name": "name"
   }
 }

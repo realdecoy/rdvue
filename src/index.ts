@@ -112,7 +112,8 @@ function populateFeatureGroupMenu(groups: Group[], index: number) {
  */
 async function populateCLIMenu(features: string[], requiredFeatures: string[],
   featureGroups: Group[],
-  mainConfig: Config) {
+  mainConfig: Config,
+  plugins: string[]) {
 
   let featureConfig: Config;
   let iterations = 0;
@@ -124,10 +125,6 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   CLI_DESCRIPTION.general.menu = USAGE_TEMPLATE();
 
   // Gets a multidimensional array of all modules from the different feature groups
-  let optionalModules = featureGroups.map((g) => g.modules);
-  // Flatten array into one
-  optionalModules = [].concat.apply([], optionalModules as []);
-
 
   for (const feature of features) {
     // [2] Check each item of list to see if its a feature group or just a feature
@@ -171,19 +168,19 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   }
 
   // Loads in the Optional Modules
-  for (const feature of optionalModules as []) {
+  for (const plugin of plugins as []) {
 
     if (
       !(Object
         .values(CLI_DESCRIPTION.general.menu[three])
-        .includes('Optional Modules:'))
+        .includes('Plugins:'))
     ) {
       CLI_DESCRIPTION.general.menu.splice(three, 0, {
-        header: 'Optional Modules:',
+        header: 'Plugins:',
         content: [],
       });
     }
-    await populateFeatureMenu(feature, undefined, three);
+    await populateFeatureMenu(plugin, undefined, three);
   }
 
   // Loads in Feature Groups
@@ -208,7 +205,6 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
     'isPrivate': true
   }
   ];
-
   // [7] Setting the project config to the newly created featureConfig
   CLI_DESCRIPTION.project.config = featureConfig;
 }
@@ -223,17 +219,18 @@ export async function run(userArguments: [] | undefined) {
 
 
     // [1b] Return list of features if true and empty array if false
-    const features: string[] = mainConfig?.features
-      ?.filter((feature) => !feature.private)
-      ?.map((f) => f.name);
+    const features: string[] = mainConfig.features
+      .filter((feature) => !feature.private)
+      .map((f) => f.name);
 
     // [1c] Return value if true and empty array if false
-    const requiredFeatures: string[] = (mainConfig.import !== undefined) ?
-      mainConfig.import.required : [];
+    const requiredFeatures: string[] = mainConfig.project.features;
 
-    // [1d] return array of available groups
-    const featureGroups: Group[] = (mainConfig.import?.groups !== undefined) ?
-      mainConfig.import.groups : [];
+
+    // Return array of available groups
+    const featureGroups: Group[] = mainConfig.groups;
+
+    const plugins: string[] = mainConfig.plugins;
 
     const sliceNumber = 2;
     // [1e] Check for user arguments
@@ -247,7 +244,7 @@ export async function run(userArguments: [] | undefined) {
       clear();
 
       // [3] Populate feature usage information
-      await populateCLIMenu(features, requiredFeatures, featureGroups, mainConfig);
+      await populateCLIMenu(features, requiredFeatures, featureGroups, mainConfig, plugins);
 
       // [4] Display "rdvue" heading
       util.heading();
@@ -276,6 +273,7 @@ export async function run(userArguments: [] | undefined) {
           if (util.isOptionalModuleAction(operation.action)) {
             await OPTIONAL_MODULES.handleOptionalModulesRequests(operation);
           } else {
+
             await MODULE_NEW.run(operation, CLI_DESCRIPTION);
           }
         } else {
@@ -316,7 +314,7 @@ export async function run(userArguments: [] | undefined) {
       let project;
 
       // [2] Populate feature usage information
-      await populateCLIMenu(features, requiredFeatures, featureGroups, mainConfig);
+      await populateCLIMenu(features, requiredFeatures, featureGroups, mainConfig, plugins);
 
       // [3] Check to see if user arguments include any valid features
       if (util.hasFeature(userArgs, features)) {
