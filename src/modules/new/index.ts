@@ -84,11 +84,16 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
         (currSourceDir !== './' ? currSourceDir : '')
     );
 
+
+
     if (isConfig) {
         installDirectory = `${featureName}${currInstallDir !== './' ? currInstallDir : ''}`;
     } else if (isStore || currInstallDir === featureType.services) {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}`;
-    } else {
+    } else if (userFeature === featureType.storybook) {
+        installDirectory = `${currInstallDir}`;
+    }
+    else {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}/${featureName}`;
     }
 
@@ -130,7 +135,7 @@ function updateConfig(featureNameStore: FeatureNameObject, directories: Director
 }
 
 
-async function run (operation: Command, USAGE: CLI): Promise<any> {
+async function run(operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
         const userFeature = operation.feature;
@@ -182,6 +187,12 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             await run({
                 options: userOptions, feature: featureType.store,
                 action: userAction, featureName: userFeatureName
+            }, USAGE);
+
+            // [2]d Adds storybook
+            await run({
+                options: userOptions, feature: featureType.storybook,
+                action: userAction
             }, USAGE);
 
             util.nextSteps(projectName);
@@ -248,7 +259,7 @@ async function run (operation: Command, USAGE: CLI): Promise<any> {
             util.sectionBreak();
             // tslint:disable-next-line:no-console
             console.log(chalk.magenta
-                (`The ${userFeature} "${answers[nameKey]}" has been generated.`));
+                (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
         }
 
         return true;
