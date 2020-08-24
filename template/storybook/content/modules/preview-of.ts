@@ -83,6 +83,11 @@ export function docFor(name: string, description: string) {
   const constructor = Vue.extend({ name });
 
   // Apply Story decorator
-  StoryComponent.call(null, { description, playground: false, api: false })(constructor);
+  StoryComponent.call(null, {
+    description,
+    enablePlayground: false,
+    enableApi: false
+  })(constructor);
+
   return constructor;
 }
