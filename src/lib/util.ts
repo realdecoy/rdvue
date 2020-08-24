@@ -325,7 +325,7 @@ function parseDynamicObjects(jsonData: string, objectName: string, hasBrackets?:
   }
 }
 
-async function dependencieInstaller(script: string[], config: NpmProgrammaticConfiguration) {
+async function dependencyInstaller(script: string[], config: NpmProgrammaticConfiguration) {
   const projectroot = getProjectRoot();
   if (projectroot !== null) {
     config.cwd = projectroot;
@@ -375,5 +375,5 @@ export {
   getProjectRoot,
   actionBeingRequested,
   parseDynamicObjects,
-  dependencieInstaller
+  dependencyInstaller
 };
