@@ -27,6 +27,7 @@ async function handleAddGroup(groupName: string) {
   const group = util.getFeatureGroupByName(groupName);
 
   if (group !== undefined) {
+
     // Prompt User to select Feature(s)
     const selectedModules = await promptQuestionByGroup(group);
     for (const module of selectedModules) {
@@ -102,16 +103,19 @@ async function handleOptionalModulesRequests(operation: Command) {
   clear();
   util.heading();
 
-  if (action === ADD_GROUP) {
-    // Code for add action
+  if (action === ADD_GROUP && util.isFeatureGroupType(feature)) {
     await handleAddGroup(feature);
+
   }
   else if (action === ADD_ACTION && util.isPlugin(feature)) {
     await addPlugin(feature);
   }
   else if (action === LIST_ACTION) {
-    // List features here
-    util.displayModulesByFeatureGroup();
+    util.displayFeatureGroupsWithPlugins();
+  }
+  else {
+    console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+    throw Error(`The command entered was invalid. Please see help menu above.`);
   }
 }
 

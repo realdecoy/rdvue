@@ -85,8 +85,8 @@ function parseOptions(args: string[]): string[] {
  * @param name - name of the feature group
  */
 function getFeatureGroupByName(name: string): Group | undefined {
-  const feature = readMainConfig().import?.groups
-    .find((g) => g.name === name);
+  const feature = readMainConfig()?.groups
+    ?.find((g) => g.name === name);
 
   return feature;
 }
@@ -95,7 +95,7 @@ function getFeatureGroupByName(name: string): Group | undefined {
  * @param feature - name of feature
  */
 function isFeatureGroupType(feature: string): boolean {
-  const featureGroups = readMainConfig().import?.groups;
+  const featureGroups = readMainConfig()?.groups;
   let isGroup;
   if (featureGroups !== undefined) {
     isGroup = featureGroups.find(featureGroup => featureGroup.name === feature);
@@ -164,7 +164,7 @@ function parseUserInput(args: string[], features: string[]) {
 
     // [2] Checking second argument <feature>
     // to see if it includes a valid feature (eg. project or page)
-    // OR a Optional Feature or a Feature Group Type
+    // OR a Plugin or a Feature Group Type
     // OR if its 'features' which was passed - 'features' is used to list optional modules/features
     if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1])
       || isPlugin(args[1]) || args[1] === isFeatures)) {
@@ -350,24 +350,29 @@ function actionBeingRequested(enteredAction: string): string {
 }
 
 /**
- * Description - displays all feature group types and their respective modules
+ * Description - displays all feature group types and their respective plugins
  */
-function displayModulesByFeatureGroup() {
-  const groups = readMainConfig().import?.groups;
+function displayFeatureGroupsWithPlugins() {
+  const groups = readMainConfig()?.groups;
+
   if (groups !== undefined) {
     console.log(chalk.green('Feature Groups'));
 
     for (const group of groups) {
-      console.log(commandLineUsage([{ header: group.name }] as Section));
+      if (group.plugins.length > 0) {
+        console.log(commandLineUsage([{ header: group.name }] as Section));
 
-      for (const module of group.modules) {
-        const details = getFeatureConfiguration(module);
-        console.log(commandLineUsage([{
-          content: [{
-            name: chalk.magenta(details?.name as string),
-            summary: details.description
-          }]
-        }]));
+        for (const module of group.plugins) {
+
+          const details = getFeatureConfiguration(module);
+
+          console.log(commandLineUsage([{
+            content: [{
+              name: chalk.magenta(details?.name as string),
+              summary: details.description
+            }]
+          }]));
+        }
       }
     }
   }
@@ -453,6 +458,7 @@ export {
   parseDynamicRoutes,
   getFeatureGroupByName,
   isPlugin,
-  displayModulesByFeatureGroup,
-  isOptionalModuleAction
+  displayFeatureGroupsWithPlugins,
+  isOptionalModuleAction,
+  isFeatureGroupType
 };
