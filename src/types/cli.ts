@@ -36,10 +36,11 @@ export interface Config {
     menu?: Menu[];
     group?: boolean;
     features: Feature[];
-    plugins: string[];
+    plugins?: string[];
     project: TemplateProject;
-    groups: Group[];
+    groups?: Group[];
     presets?: Preset[];
+    customPreset?: CustomPreset;
 }
 
 
@@ -69,13 +70,13 @@ export interface Preset extends BasePreset {
 
 // Interface for custom preset
 export interface CustomPreset extends BasePreset {
-    groups: string[];
+    groups?: string[];
+
 }
 
 // Interface for a feature group
 export interface Group {
-    promptType?: string;
-    plugins?: string[];
+    plugins: string[];
     name: string;
     isMultipleChoice: boolean;
     modules: string[];

@@ -33,7 +33,6 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
             plugins: ['']
         },
         groups: [{
-            promptType: '',
             plugins: [''],
             name: '',
             isMultipleChoice: false,
@@ -48,10 +47,10 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
                 {
                     isMultipleChoice: false,
                     description: '',
-                    promptType: '',
                     name: '',
                     question: '',
-                    modules: ['']
+                    modules: [''],
+                    plugins: ['']
                 }
             ],
             presets: [{

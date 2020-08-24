@@ -108,21 +108,10 @@ function isFeatureGroupType(feature: string): boolean {
  * Description - Checks if the feature inputted is an optional feature
  * @param feature - name of feature
  */
-function isOptionalFeature(feature: string): boolean {
+function isPlugin(plugin: string): boolean {
   let found;
-  const featureGroups = readMainConfig().import?.groups;
-
-  if (featureGroups !== undefined) {
-
-    // Gets multidemensional array of optional modules
-    const optionalModules = featureGroups.map((g) => g.modules);
-    // Flatten array into one
-    const flatArr = [].concat.apply([], optionalModules as []);
-
-    if (flatArr.length > 0) {
-      found = flatArr.find((el) => el === feature);
-    }
-  }
+  const plugins = readMainConfig()?.plugins;
+  found = plugins?.find((p) => p === plugin);
 
   return found !== undefined ? true : false;
 }
@@ -178,7 +167,7 @@ function parseUserInput(args: string[], features: string[]) {
     // OR a Optional Feature or a Feature Group Type
     // OR if its 'features' which was passed - 'features' is used to list optional modules/features
     if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1])
-      || isOptionalFeature(args[1]) || args[1] === isFeatures)) {
+      || isPlugin(args[1]) || args[1] === isFeatures)) {
 
       returnObject.feature = args[1];
 
@@ -463,7 +452,7 @@ export {
   actionBeingRequested,
   parseDynamicRoutes,
   getFeatureGroupByName,
-  isOptionalFeature,
+  isPlugin,
   displayModulesByFeatureGroup,
   isOptionalModuleAction
 };

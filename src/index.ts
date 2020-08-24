@@ -228,9 +228,9 @@ export async function run(userArguments: [] | undefined) {
 
 
     // Return array of available groups
-    const featureGroups: Group[] = mainConfig.groups;
+    const featureGroups: Group[] = (mainConfig?.groups !== undefined) ? mainConfig?.groups : [];
 
-    const plugins: string[] = mainConfig.plugins;
+    const plugins: string[] = (mainConfig?.plugins !== undefined) ? mainConfig?.plugins : [];
 
     const sliceNumber = 2;
     // [1e] Check for user arguments
@@ -273,7 +273,6 @@ export async function run(userArguments: [] | undefined) {
           if (util.isOptionalModuleAction(operation.action)) {
             await OPTIONAL_MODULES.handleOptionalModulesRequests(operation);
           } else {
-
             await MODULE_NEW.run(operation, CLI_DESCRIPTION);
           }
         } else {

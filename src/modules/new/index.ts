@@ -161,7 +161,8 @@ function updateConfig(
 // tslint:disable-next-line
 async function run(operation: Command, USAGE: CLI): Promise<any> {
   try {
-    const userAction = operation.action;
+    const userAction
+      = operation.action;
     const userFeature = operation.feature;
     const userOptions = operation.options;
     const userFeatureName = operation?.featureName;
@@ -183,7 +184,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
     const currentConfig = getFeatureConfiguration(userFeature);
     const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
     const projectName = '<project-name>';
-    const availableFeatureGroups: string[] = OPTIONAL_MODULES.getOptionalFeatures();
+    const availableFeatureGroups: string[] = OPTIONAL_MODULES.getPlugins();
 
     let featureNameStore: FeatureNameObject = {};
     let nameKey = '';
@@ -269,10 +270,11 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
       // 2[d] Loads in optional modules after project has been setup
       for (const module of modulesToInstall) {
-        await OPTIONAL_MODULES.addOptionalModule(module);
+        await OPTIONAL_MODULES.addPlugin(module);
       }
 
       util.nextSteps(projectName);
+
 
       return true;
     }
