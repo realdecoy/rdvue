@@ -41,9 +41,9 @@ export interface Config {
     vueOptions?: ConfigurationGenericProperty;
     modules?: ConfigurationGenericProperty;
     features: Feature[];
-    plugins?: string[];
-    project?: TemplateProject;
-    groups?: Group[];
+    plugins: string[];
+    project: TemplateProject;
+    groups: Group[];
     presets?: Preset[];
 }
 

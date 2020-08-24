@@ -1,6 +1,6 @@
-import { Component,Vue} from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
-@StoryComponent({
+@Component({
   components: {},
   name: 'hello-world',
 })
@@ -44,6 +44,6 @@ class HelloWorldView extends Vue {
 }
 
 export {
-    HelloWorldView as default,
-    HelloWorldView,
+  HelloWorldView as default,
+  HelloWorldView,
 };

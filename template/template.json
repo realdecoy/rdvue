@@ -6,15 +6,33 @@
       "name": "config",
       "private": true
     },
-    "store",
-    "component",
-    "service",
-    "model",
-    "page",
-    "sm"
+    {
+      "name": "store",
+      "private": true
+    },
+    {
+      "name": "component",
+      "private": false
+    },
+    {
+      "name": "service",
+      "private": false
+    },
+    {
+      "name": "model",
+      "private": false
+    },
+    {
+      "name": "page",
+      "private": false
+    },
+    {
+      "name": "sm",
+      "private": false
+    }
   ],
   "plugins": [
-    "buefy",
+    "auth",
     "localization"
   ],
   "project": {
@@ -22,79 +40,29 @@
       "config",
       "store"
     ],
-    "plugins": []
+    "plugins": [
+      "storybook"
+    ]
   },
   "groups": [
     {
-      "name": "name1",
+      "name": "auth",
       "promptType": "list",
       "isMultipleChoice": true,
       "plugins": [
-        "a",
-        "b"
+        "auth"
       ]
     }
   ],
   "presets": [
     {
       "name": "preset1",
-      "plugins": [
-        "a"
-      ]
+      "plugins": [],
+      "description": "preset 1"
     }
   ],
-  "import": {
-    "required": [
-      "config",
-      "store"
-    ],
-    "optional": [
-      "component",
-      "service",
-      "model",
-      "page",
-      "auth",
-      "sm",
-      "localization"
-    ],
-    "groups": [
-      {
-        "name": "ui-library",
-        "isMultipleChoice": false,
-        "promptType": "list",
-        "modules": [],
-        "question": [
-          "Which UI Library would like like to include?"
-        ]
-      },
-      {
-        "isRequired": false,
-        "name": "auth",
-        "promptType": "checkbox",
-        "isMultipleChoice": true,
-        "modules": [],
-        "question": [
-          "Which Authentication would you like to include?"
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "default",
-        "description": "Deafult",
-        "dependencies": []
-      },
-      {
-        "name": "preset1",
-        "dependencies": []
-      }
-    ],
-    "customPreset": {
-      "name": "custom",
-      "groups": [
-        "ui-library",
-        "auth"
-      ]
-    }
+  "customPreset": {
+    "plugins": [],
+    "name": "name"
   }
 }
