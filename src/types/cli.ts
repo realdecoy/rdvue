@@ -41,10 +41,11 @@ export interface Config {
     vueOptions?: ConfigurationGenericProperty;
     modules?: ConfigurationGenericProperty;
     features: Feature[];
-    plugins: string[];
+    plugins?: string[];
     project: TemplateProject;
-    groups: Group[];
+    groups?: Group[];
     presets?: Preset[];
+    customPreset?: CustomPreset;
 }
 
 // Generic string property
@@ -80,7 +81,8 @@ export interface Preset extends BasePreset {
 
 // Interface for custom preset
 export interface CustomPreset extends BasePreset {
-    groups: string[];
+    groups?: string[];
+
 }
 
 // Routes property for the feature being called
@@ -91,8 +93,7 @@ export interface ConfigurationRoutes {
 }
 // Interface for a feature group
 export interface Group {
-    promptType?: string;
-    plugins?: string[];
+    plugins: string[];
     name: string;
     isMultipleChoice: boolean;
     modules: string[];

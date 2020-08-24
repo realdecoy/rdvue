@@ -30,7 +30,7 @@ async function handleAddGroup(groupName: string) {
     // Prompt User to select Feature(s)
     const selectedModules = await promptQuestionByGroup(group);
     for (const module of selectedModules) {
-      await addOptionalModule(module);
+      await addPlugin(module);
     }
   }
 }
@@ -44,22 +44,23 @@ async function promptQuestionByGroup(group: Group) {
   const multiple = '(multiple)';
   const single = '(single)';
   const result = Array();
-  const selectionBtn = group.isMultipleChoice ? `${chalk.blueBright('<space>')} to select,
-  ${chalk.blueBright('<a>')} to toggle all,
-  ${chalk.blueBright('<i>')} to invert selection` : 'Enter';
-
   const confirmBtn = group.isMultipleChoice ? 'Press Enter to continue' : '';
+
+  const selectionBtn = group.isMultipleChoice ? `${chalk.blueBright('<space>')} to select,${chalk.blueBright('<a>')} to toggle all, ${chalk.blueBright('<i>')} to invert selection` : 'Enter';
+
   const instructions = chalk.yellow(`Use arrow keys to navigate. Press ${selectionBtn} to select an option. ${confirmBtn}`);
 
+
   const question: inquirer.QuestionCollection = {
-    type: group.promptType as any,
+    type: group.isMultipleChoice ? 'checkbox' : 'list',
     name: 'feature',
     prefix: '',
     message: `\n \n${instructions} \n${group.question} ${group.isMultipleChoice ? multiple : single}`,
-    choices: ['None', ...group.modules]
+    choices: ['None', ...group.plugins]
   };
 
   const selected = await inquirer.prompt(question);
+
   result.push(selected.feature);
 
   return flatten(result) as string[];
@@ -70,8 +71,8 @@ async function promptQuestionByGroup(group: Group) {
  * Description - Accepts the name of an optional module and adds the module to project
  * @param featureName - name of module
  */
-async function addOptionalModule(featureName: string) {
-  if (util.isOptionalFeature(featureName)) {
+async function addPlugin(featureName: string) {
+  if (util.isPlugin(featureName)) {
     await MODULE_NEW.run(
       {
         action: ADD_ACTION,
@@ -82,12 +83,16 @@ async function addOptionalModule(featureName: string) {
   }
 }
 
-function getOptionalFeatures() {
-  const optionalFeatures = files.readMainConfig().import?.groups
-    .map((g) => g.modules);
+/**
+ * Descriptions - Returns an array of the currently available plugins
+ */
+function getPlugins() {
+  const plugins = files.readMainConfig()?.plugins;
 
-  return flatten(optionalFeatures);
+  return plugins !== undefined ? plugins : [];
 }
+
+
 /**
  * Description - Processes the ACTIONS for Optional Modules
  * @param operation - Command object
@@ -101,8 +106,8 @@ async function handleOptionalModulesRequests(operation: Command) {
     // Code for add action
     await handleAddGroup(feature);
   }
-  else if (action === ADD_ACTION && util.isOptionalFeature(feature)) {
-    await addOptionalModule(feature);
+  else if (action === ADD_ACTION && util.isPlugin(feature)) {
+    await addPlugin(feature);
   }
   else if (action === LIST_ACTION) {
     // List features here
@@ -120,17 +125,16 @@ async function handleOptionalModulesRequests(operation: Command) {
  */
 async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
   let selectedmodules: string[] = [];
-
+  let step = 1;
   if (featureGroups !== undefined) {
     for (const group of featureGroups) {
-
-      const currStep = featureGroups.indexOf(group) + 1;
-      group.question = `${chalk.greenBright(currStep.toString())}. ${group.question}`;
+      group.question = `${chalk.greenBright(step.toString())}. ${group.question}`;
       const selections = await promptQuestionByGroup(group);
 
       selectedmodules = selections.length > 0 ? [...selectedmodules, ...selections]
         : [...selectedmodules];
     }
+    step++;
   }
 
   return selectedmodules;
@@ -140,10 +144,9 @@ async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
  * Description - returns an array of feature groups avaialble for selection at project startup
  */
 function loadFeatureGroups(): Group[] {
-  const imports = files.readMainConfig().import;
-  const startupGroupNames = imports?.customPreset?.groups;
-  const startupGroups = imports?.groups?.filter((g) => startupGroupNames?.includes(g.name));
-  // ?.filter((p) => p.modules.length > 0);
+  const startupGroupNames = files.readMainConfig()?.customPreset?.groups;
+  const startupGroups = files.readMainConfig()?.groups
+    ?.filter((g) => startupGroupNames?.includes(g.name));
 
   return startupGroups ?? [];
 }
@@ -158,10 +161,10 @@ async function promptPresetOptions() {
   // Will store the name of preset to return
   let cleanedPresetChoice = '';
   let options = Array<string>();
-  const imports = files.readMainConfig().import;
+  const template = files.readMainConfig();
 
   // Gets array of presets available
-  const presets = imports?.presets?.map((preset) => {
+  const presets = template?.presets?.map((preset) => {
     const desc = preset.description;
 
     // Appends the description (if available) to the text displayed to the user
@@ -169,7 +172,7 @@ async function promptPresetOptions() {
   });
 
   // Get get custom preset option if available
-  const customPreset = imports?.customPreset?.name;
+  const customPreset = template?.customPreset?.name;
 
   if (presets !== undefined) { options = concat(presets) as []; }
   if (customPreset !== undefined) { options = concat(options, customPreset) as []; }
@@ -184,7 +187,7 @@ async function promptPresetOptions() {
 
     // Removes description from option selected in order to get the original preset name
     cleanedPresetChoice = preset.split('(')[0]
-      .trim() as string;
+      .trim();
   }
 
   return cleanedPresetChoice;
@@ -196,25 +199,25 @@ async function promptPresetOptions() {
  * @param name -selection
  */
 function isPresetSelected(name: string): boolean {
-  const presets = files.readMainConfig().import?.presets
+  const presets = files.readMainConfig()?.presets
     ?.map((preset) => preset.name);
 
   return presets !== undefined && presets.includes(name) ? true : false;
 }
 
 function isCustomSelected(name: string): boolean {
-  return files.readMainConfig().import?.customPreset?.name === name ? true : false;
+  return files.readMainConfig()?.customPreset?.name === name ? true : false;
 }
 
 /**
  * Description - Returns an array of dependencies for a given preset
  * @param presetName - Name of preset
  */
-function loadPresetDependencies(presetName: string): string[] {
-  const dependencies = files.readMainConfig().import?.presets
-    ?.find((preset) => preset.name === presetName)?.dependencies;
+function loadPresetPlugins(presetName: string): string[] {
+  const plugins = files.readMainConfig()?.presets
+    ?.find((preset) => preset.name === presetName)?.plugins;
 
-  return dependencies !== undefined ? dependencies : [];
+  return plugins !== undefined ? plugins : [];
 }
 
 /**
@@ -222,15 +225,16 @@ function loadPresetDependencies(presetName: string): string[] {
  * based on user selections
  */
 async function requestPresetSelection() {
-  const selectedPreset = await promptPresetOptions() as string;
+  const selectedPreset = await promptPresetOptions();
   let modulesToInstall: string[] = [];
 
   if (isPresetSelected(selectedPreset)) {
-    modulesToInstall = loadPresetDependencies(selectedPreset);
+    modulesToInstall = loadPresetPlugins(selectedPreset);
   }
   else if (isCustomSelected(selectedPreset)) {
     modulesToInstall = await handleFeatureGroupsQuestions(loadFeatureGroups());
   }
+
 
   return modulesToInstall;
 }
@@ -238,6 +242,6 @@ async function requestPresetSelection() {
 export {
   requestPresetSelection,
   handleOptionalModulesRequests,
-  addOptionalModule,
-  getOptionalFeatures
+  addPlugin,
+  getPlugins
 };
