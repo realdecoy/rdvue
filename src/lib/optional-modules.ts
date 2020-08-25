@@ -128,6 +128,7 @@ async function handleOptionalModulesRequests(operation: Command) {
  * @param featureGroups -array of feature groups
  */
 async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
+
   let selectedmodules: string[] = [];
   let step = 1;
   if (featureGroups !== undefined) {
@@ -148,7 +149,7 @@ async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
  * Description - returns an array of feature groups avaialble for selection at project startup
  */
 function loadFeatureGroups(): Group[] {
-  const startupGroupNames = files.readMainConfig()?.customPreset?.groups;
+  const startupGroupNames = files.readMainConfig()?.customPreset?.plugins;
   const startupGroups = files.readMainConfig()?.groups
     ?.filter((g) => startupGroupNames?.includes(g.name));
 

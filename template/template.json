@@ -59,7 +59,9 @@
     }
   ],
   "customPreset": {
-    "plugins": [],
-    "name": "name"
+    "plugins": [
+      "auth"
+    ],
+    "name": "custom"
   }
 }

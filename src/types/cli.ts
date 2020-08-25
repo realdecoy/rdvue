@@ -70,7 +70,7 @@ export interface Preset extends BasePreset {
 
 // Interface for custom preset
 export interface CustomPreset extends BasePreset {
-    groups?: string[];
+    plugins: string[];
 
 }
 
