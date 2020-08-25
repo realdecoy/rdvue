@@ -18,8 +18,24 @@
   "sourceDirectory": "./",
   "installDirectory": "./",
   "files": [{
-      "source": "meta/.rdvue",
-      "target": ".rdvue"
+      "source": "meta/.rdvue/.rdvue",
+      "target": ".rdvue/.rdvue"
+    },
+    {
+      "source": "meta/.rdvue/routes.js",
+      "target": ".rdvue/routes.js"
+    },
+    {
+      "source": "meta/.rdvue/modules.js",
+      "target": ".rdvue/modules.js"
+    },
+    {
+      "source": "meta/.rdvue/stores.js",
+      "target": ".rdvue/stores.js"
+    },
+    {
+      "source": "meta/.rdvue/options.js",
+      "target": ".rdvue/options.js"
     },
     {
       "source": "meta/package.json",
@@ -97,6 +113,7 @@
       "source": "hello-world/index.ts",
       "target": "src/pages/hello-world/index.ts"
     },
+
     {
       "source": "public/index.html",
       "target": "public/index.html",
@@ -127,7 +144,13 @@
     },
     {
       "source": "cypress/tsconfig.json",
-      "target": "cypress/tsconfig.json"
+      "target": "cypress/tsconfig.json",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "cypress/integration/specs/actions.spec.ts",
@@ -196,6 +219,14 @@
     {
       "source": "theme/tailwind.css",
       "target": "src/theme/tailwind.css"
+    },
+    {
+      "source": "modules/core/vuex.ts",
+      "target": "src/modules/core/vuex.ts"
+    },
+    {
+      "source": "modules/core/index.ts",
+      "target": "src/modules/core/index.ts"
     }
   ]
 }

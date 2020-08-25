@@ -4,14 +4,17 @@
   "import": {
     "required": [
       "config",
-      "store"
+      "store",
+      "storybook"
     ],
     "optional": [
       "component",
       "service",
       "model",
       "page",
-      "sm"
+      "auth",
+      "sm",
+      "localization"
     ]
   }
 }

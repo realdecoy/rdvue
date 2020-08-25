@@ -1,4 +1,4 @@
-import { Files } from './index';
+import { Files, Dependencies } from './index';
 /*
  Please note:
  Linked interfaces have the parent interface followed by there name
@@ -34,8 +34,25 @@ export interface Config {
     import?: Import;
     singleUserPerProject?: boolean;
     menu?: Menu[];
+    group?: boolean;
+    packages?: Dependencies;
+    routes?: ConfigurationRoutes[];
+    stores?: string[];
+    vueOptions?: ConfigurationGenericProperty;
+    modules?: ConfigurationGenericProperty;
 }
 
+// Generic string property
+export interface ConfigurationGenericProperty {
+    [key: string]: string;
+}
+
+// Routes property for the feature being called
+export interface ConfigurationRoutes {
+    name: string;
+    path: string;
+    component: string;
+}
 // Import interface for the files being imported
 export interface Import {
     required: string[];
@@ -78,4 +95,15 @@ export interface ProjectConfiguration {
     import: Import;
     name: string;
     arguments: Arguments;
+}
+
+// Configuration type for <npm-programmatic> package
+export interface NpmProgrammaticConfiguration {
+    cwd: string;
+    save?: boolean;
+    saveDev?: boolean;
+    global?: boolean;
+    noOptional?: boolean;
+    legacyBundling?: boolean;
+    output?: boolean;
 }

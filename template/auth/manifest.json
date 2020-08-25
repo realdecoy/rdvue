@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "name": "auth",
+  "group": true,
+  "description": "Generate a basic components needed for basic authenticaton.",
+  "sourceDirectory": "./",
+  "installDirectory": "./",
+  "files": [
+    {
+      "source": "store/auth.ts",
+      "target": "store/auth.ts"
+    },
+    {
+      "source": "services/auth.ts",
+      "target": "services/auth.ts"
+    },
+    {
+      "source": "model/user.ts",
+      "target": "model/user.ts"
+    },
+    {
+      "source": "pages/register/index.ts",
+      "target": "pages/auth/register/index.ts"
+    },
+    {
+      "source": "pages/register/register.ts",
+      "target": "pages/auth/register/register.ts"
+    },
+    {
+      "source": "pages/register/register.scss",
+      "target": "pages/auth/register/register.scss"
+    },
+    {
+      "source": "pages/register/register.vue",
+      "target": "pages/auth/register/register.vue"
+    },
+    {
+      "source": "pages/login/index.ts",
+      "target": "pages/auth/login/index.ts"
+    },
+    {
+      "source": "pages/login/login.ts",
+      "target": "pages/auth/login/login.ts"
+    },
+    {
+      "source": "pages/login/login.scss",
+      "target": "pages/auth/login/login.scss"
+    },
+    {
+      "source": "pages/login/login.vue",
+      "target": "pages/auth/login/login.vue"
+    },
+    {
+      "source": "pages/forget-password/index.ts",
+      "target": "pages/auth/forget-password/index.ts"
+    },
+    {
+      "source": "pages/forget-password/forget-password.ts",
+      "target": "pages/auth/forget-password/forget-password.ts"
+    },
+    {
+      "source": "pages/forget-password/forget-password.scss",
+      "target": "pages/auth/forget-password/forget-password.scss"
+    },
+    {
+      "source": "pages/forget-password/forget-password.vue",
+      "target": "pages/auth/forget-password/forget-password.vue"
+    }
+  ],
+  "stores": [
+    "auth: require('@/store/auth.ts').default"
+  ],
+  "routes": [
+    {
+      "name": "'Login'",
+      "path": "'/login'",
+      "component": "`require('@/pages/auth/login').default`"
+    },
+    {
+      "name": "'Register'",
+      "path": "'/register'",
+      "component": "`require('@/pages/auth/register').default`"
+    },
+    {
+      "name": "'ForgetPassword'",
+      "path": "'/forget-password'",
+      "component": "`require('@/pages/auth/forget-password').default`"
+    }
+  ]
+}
