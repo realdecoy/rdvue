@@ -21,7 +21,8 @@ interface VueLike {
   components: {
     Props,
     Playground
-  }
+  },
+  description:'Preview'
 })
 export default class Preview extends Vue {
   // --------------------------------------------------------------------------
