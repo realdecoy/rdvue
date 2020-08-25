@@ -1,0 +1,13 @@
+@import "./tailwind.css";
+
+html {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	font-family: "Lato", Arial, Helvetica, sans-serif;
+	color: #222;
+	line-height: 1.2;
+	font-size: 16px;
+}

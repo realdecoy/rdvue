@@ -94,6 +94,8 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
         currSourceDir !== './' ? currSourceDir : ''
     );
 
+
+
     if (isConfig) {
         installDirectory = `${featureName}${
             currInstallDir !== './' ? currInstallDir : ''
@@ -102,12 +104,15 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
         isStore ||
         currInstallDir === featureType.services ||
         availableFeaturesWithNoNames.includes(userFeature)
-    ) {
+    ) 
+    {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}`;
-    } else {
-        installDirectory = `src/${
-            currInstallDir !== './' ? currInstallDir : ''
-            }/${featureName}`;
+    } 
+    else if (userFeature === featureType.storybook) {
+        installDirectory = `${currInstallDir}`;
+    }
+    else {
+        installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}/${featureName}`;
     }
 
     if (projectRoot !== null && !isConfig) {
@@ -150,7 +155,6 @@ function updateConfig(
     process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
-// tslint:disable-next-line
 async function run(operation: Command, USAGE: CLI): Promise<any> {
     try {
         const userAction = operation.action;
@@ -246,6 +250,12 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 },
                 USAGE
             );
+
+            // [2]d Adds storybook
+            await run({
+                options: userOptions, feature: featureType.storybook,
+                action: userAction
+            }, USAGE);
 
             util.nextSteps(projectName);
 
@@ -347,11 +357,8 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             // [11]b Create a section break
             util.sectionBreak();
             // tslint:disable-next-line:no-console
-            console.log(
-                chalk.magenta(
-                    `The ${userFeature} "${answers[nameKey]}" has been generated.`
-                )
-            );
+            console.log(chalk.magenta
+                (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
         }
 
         return true;
