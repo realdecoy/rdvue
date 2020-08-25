@@ -3,13 +3,6 @@ import { PropOptions } from 'vue/types/options';
 import { ComponentOptions } from 'vue/types/umd';
 
 // ----------------------------------------------------------------------------
-// Module Vars
-// ----------------------------------------------------------------------------
-const IS_DEV = process.env.NODE_ENV !== 'production';
-const storySafe = new WeakMap<object, { story: StoryComponentOptions<never>; props: StoryPropStore }>();
-let storyPropAggregator: StoryPropStore = {};
-
-// ----------------------------------------------------------------------------
 // Module Types
 // ----------------------------------------------------------------------------
 type StoryComponentOptions<V extends Vue> = ComponentOptions<V> & {
@@ -29,10 +22,18 @@ type StoryPropOptions<T = unknown, U = unknown, V = unknown> = PropOptions & {
   type: ConstructorOf<T> | Array<ConstructorOf<unknown>>;
 };
 
-type StoryPropStore = { [key: string]: StoryPropOptions; };
+type StoryPropStore = { [key: string]: StoryPropOptions };
 type ConstructorOf<C, P = unknown> = new (...args: P[]) => C;
 type DecoratorTarget = { [key: string]: unknown };
 type Delegate<Param, Result> = (param: Param) => Result;
+type StorySafe = { story: StoryComponentOptions<never>; props: StoryPropStore };
+
+// ----------------------------------------------------------------------------
+// Module Vars
+// ----------------------------------------------------------------------------
+const IS_DEV = process.env.NODE_ENV !== 'production';
+const storySafe = new WeakMap<object, StorySafe>();
+let storyPropAggregator: StoryPropStore = {};
 
 // ----------------------------------------------------------------------------
 // Module Functions

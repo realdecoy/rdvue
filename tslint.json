@@ -103,6 +103,7 @@
 		"use-default-type-parameter": true,
 		"variable-name": {
 			"options": [ "ban-keywords", "check-format", "allow-leading-underscore" ]
-		}
+    },
+    "interface-over-type-literal": false
 	}
 }
