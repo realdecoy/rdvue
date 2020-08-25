@@ -18,6 +18,7 @@ export const CORE = 'core';
 export enum featureType {
     config = 'config',
     store = 'store',
+    storybook ='storybook',
     project = 'project',
     services= 'services'
 }

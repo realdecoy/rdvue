@@ -1,7 +1,7 @@
 // import * as React from 'react';
 import { create } from '@storybook/theming';
 import { addParameters, configure } from '@storybook/vue';
-import { version } from '../package.json';
+import { name, version } from '../package.json';
 
 function loadStories() {
   require('./stories.scss');
@@ -9,7 +9,7 @@ function loadStories() {
 
 const theme = create({
   base: 'light',
-  brandTitle: `__PROJECT__NAME__KEBAB__ ${version}`,
+  brandTitle: `${name} ${version}`,
  });
 
 // Parameters

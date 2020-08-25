@@ -30,11 +30,9 @@ export default class Props extends Vue {
   }
 
   private getType(propName: string) {
-    // tslint:disable-next-line:ban-types
     const typeDef = this.items[propName]?.type as
       | { name: string }
       | Array<Function>;
-    // tslint:disable-next-line:no-any
     let typeName = (typeDef as any)?.name as string | undefined;
     const values = StoryProp.getValues(this.source, propName);
 

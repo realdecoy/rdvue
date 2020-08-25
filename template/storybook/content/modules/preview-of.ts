@@ -10,7 +10,6 @@ interface PreviewAddExample {
 }
 
 interface Components { [key: string]: VueConstructor; }
-// tslint:disable-next-line: ban-types
 interface Data { [key: string]: string | number | boolean | unknown[] | Function; }
 
 interface PreviewOf {
@@ -67,9 +66,7 @@ export function addExample(
 
   return {
     ...data,
-    // tslint:disable-next-line: no-any
     addExample: addExample.bind(null, data) as any,
-    // tslint:disable-next-line: no-any
     render: render.bind(null, data) as any
   };
 }
@@ -86,6 +83,11 @@ export function docFor(name: string, description: string) {
   const constructor = Vue.extend({ name });
 
   // Apply Story decorator
-  StoryComponent.call(null, { description, playground: false, api: false })(constructor);
+  StoryComponent.call(null, {
+    description,
+    enablePlayground: false,
+    enableApi: false
+  })(constructor);
+
   return constructor;
 }
