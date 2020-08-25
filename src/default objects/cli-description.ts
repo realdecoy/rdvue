@@ -40,29 +40,7 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
             question: '',
             description: ''
         }],
-        import: {
-            required: [''],
-            optional: [''],
-            groups: [
-                {
-                    isMultipleChoice: false,
-                    description: '',
-                    name: '',
-                    question: '',
-                    modules: [''],
-                    plugins: ['']
-                }
-            ],
-            presets: [{
-                dependencies: [''],
-                plugins: [''],
-                name: ''
-            }],
-            customPreset: {
-                groups: [''],
-                name: ''
-            }
-        },
+
         presets: [{
             name: '',
             dependencies: [''],
