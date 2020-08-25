@@ -18,8 +18,24 @@
   "sourceDirectory": "./",
   "installDirectory": "./",
   "files": [{
-      "source": "meta/.rdvue",
-      "target": ".rdvue"
+      "source": "meta/.rdvue/.rdvue",
+      "target": ".rdvue/.rdvue"
+    },
+    {
+      "source": "meta/.rdvue/routes.js",
+      "target": ".rdvue/routes.js"
+    },
+    {
+      "source": "meta/.rdvue/modules.js",
+      "target": ".rdvue/modules.js"
+    },
+    {
+      "source": "meta/.rdvue/stores.js",
+      "target": ".rdvue/stores.js"
+    },
+    {
+      "source": "meta/.rdvue/options.js",
+      "target": ".rdvue/options.js"
     },
     {
       "source": "meta/package.json",
@@ -203,6 +219,14 @@
     {
       "source": "theme/tailwind.css",
       "target": "src/theme/tailwind.css"
+    },
+    {
+      "source": "modules/core/vuex.ts",
+      "target": "src/modules/core/vuex.ts"
+    },
+    {
+      "source": "modules/core/index.ts",
+      "target": "src/modules/core/index.ts"
     }
   ]
 }

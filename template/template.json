@@ -12,7 +12,9 @@
       "service",
       "model",
       "page",
-      "sm"
+      "auth",
+      "sm",
+      "localization"
     ]
   }
 }

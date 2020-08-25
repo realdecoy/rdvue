@@ -20,13 +20,31 @@ export enum featureType {
     store = 'store',
     storybook ='storybook',
     project = 'project',
-    services= 'services'
+    services = 'services',
+    auth = 'auth',
+    localization = 'localization'
 }
 
-interface Actions{
-    [key: string ]: string[];
+export enum featureGroup {
+    auth = 'auth'
+}
+
+export enum featuresWithNoNames {
+    auth = 'auth',
+    localization = 'localization'
+}
+
+interface Actions {
+    [key: string]: string[];
 }
 
 export const ACTIONS: Actions = {
-    generate:['generate', 'g']
+    generate: ['generate', 'g']
 };
+
+export enum DYNAMIC_OBJECTS {
+    routes = 'routes',
+    stores = 'stores',
+    options = 'options',
+    modules = 'modules'
+}
