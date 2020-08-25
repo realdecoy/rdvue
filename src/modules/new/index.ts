@@ -104,10 +104,10 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
         isStore ||
         currInstallDir === featureType.services ||
         availableFeaturesWithNoNames.includes(userFeature)
-    ) 
+    )
     {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}`;
-    } 
+    }
     else if (userFeature === featureType.storybook) {
         installDirectory = `${currInstallDir}`;
     }
@@ -335,12 +335,12 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         if (currentConfig.packages !== undefined) {
             const config: NpmProgrammaticConfiguration = { cwd: '' };
 
-            if (currentConfig.packages.dependencies.length > 0) {
+            if (currentConfig.packages?.dependencies?.length > 0) {
                 config.save = true;
                 await util.dependencyInstaller(currentConfig.packages.dependencies, config);
             }
 
-            if (currentConfig.packages.devDependencies.length > 0) {
+            if (currentConfig.packages?.devDependencies?.length > 0) {
                 config.save = false;
                 config.saveDev = true;
                 await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
