@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-/* tslint:disable-next-line */
 const rdRoutes = require('../../.rdvue/routes.js');
 const routeList = rdRoutes.default;
 

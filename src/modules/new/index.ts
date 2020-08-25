@@ -12,14 +12,14 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureGroup, featureType, GENERATE_ACTION } from '../../constants/constants';
+import { featureGroup, featureType, featuresWithNoNames, GENERATE_ACTION, DYNAMIC_OBJECTS } from '../../constants/constants';
 import * as files from '../../lib/files';
 import {
     getFeatureConfiguration,
     getFeatureMenu
 } from '../../lib/helper-functions';
 import * as util from '../../lib/util';
-import { CLI, Config } from '../../types/cli';
+import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
 import {
     Command,
     Directories,
@@ -32,6 +32,9 @@ interface Answers {
     // tslint:disable-next-line
     [key: string]: any;
 }
+
+// List of features that does not require naming
+const availableFeaturesWithNoNames: string[] = Object.values(featuresWithNoNames);
 
 /**
  * Description: Transforms user input into Kebab and or Pascal case updating
@@ -98,7 +101,7 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
     } else if (
         isStore ||
         currInstallDir === featureType.services ||
-        userFeature === featureType.auth
+        availableFeaturesWithNoNames.includes(userFeature)
     ) {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}`;
     } else {
@@ -216,8 +219,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 parsed.files as Files[]
             );
 
-            // [1]g Update the .rdvue/routes.json file in src directory in the project
-            util.parseDynamicRoutes(userFeature);
             isProject = false;
         }
 
@@ -258,7 +259,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
         // [4] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
-        if (userFeatureName !== '' || userFeature === 'auth') {
+        if (userFeatureName !== '' || availableFeaturesWithNoNames.includes(userFeature)) {
             answers[nameKey] = userFeatureName;
         } else {
             answers = await inquirer.prompt(questions);
@@ -300,14 +301,50 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             );
         }
 
-        // [10] If executing the 'config' feature
+         // Update the .rdvue/routes.js file in src directory in the project
+        if (currentConfig.routes !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.routes, null, 1), DYNAMIC_OBJECTS.routes);
+        }
+
+         // Update the .rdvue/stores.js file in src directory in the project
+        if (currentConfig.stores !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.stores, null, 1), DYNAMIC_OBJECTS.stores);
+        }
+
+        // Update the .rdvue/options.js file in src directory in the project
+        if (currentConfig.vueOptions !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.vueOptions, null, 1), DYNAMIC_OBJECTS.options, true);
+        }
+
+        // Update the .rdvue/modules.js file in src directory in the project
+        if (currentConfig.modules !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
+        }
+
+        // [10] Install dependencies if they are required
+        if (currentConfig.packages !== undefined) {
+            const config: NpmProgrammaticConfiguration = { cwd: '' };
+
+            if (currentConfig.packages.dependencies.length > 0) {
+                config.save = true;
+                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
+            }
+
+            if (currentConfig.packages.devDependencies.length > 0) {
+                config.save = false;
+                config.saveDev = true;
+                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
+            }
+        }
+
+        // [11] If executing the 'config' feature
         if (isConfig) {
-            // [10]b Updating the '.rdvue' config file to include the project root path
+            // [11]a Updating the '.rdvue' config file to include the project root path
             if (kebabNameKey !== undefined) {
                 updateConfig(featureNameStore, directories, kebabNameKey);
             }
         } else {
-            // [10]c Create a section break
+            // [11]b Create a section break
             util.sectionBreak();
             // tslint:disable-next-line:no-console
             console.log(

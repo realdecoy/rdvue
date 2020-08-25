@@ -20,11 +20,17 @@ export enum featureType {
     store = 'store',
     project = 'project',
     services = 'services',
-    auth = 'auth'
+    auth = 'auth',
+    localization = 'localization'
 }
 
 export enum featureGroup {
     auth = 'auth'
+}
+
+export enum featuresWithNoNames {
+    auth = 'auth',
+    localization = 'localization'
 }
 
 interface Actions {
@@ -34,3 +40,10 @@ interface Actions {
 export const ACTIONS: Actions = {
     generate: ['generate', 'g']
 };
+
+export enum DYNAMIC_OBJECTS {
+    routes = 'routes',
+    stores = 'stores',
+    options = 'options',
+    modules = 'modules'
+}
