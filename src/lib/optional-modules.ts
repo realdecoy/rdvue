@@ -149,7 +149,7 @@ async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
  * Description - returns an array of feature groups avaialble for selection at project startup
  */
 function loadFeatureGroups(): Group[] {
-  const startupGroupNames = files.readMainConfig()?.customPreset?.plugins;
+  const startupGroupNames = files.readMainConfig()?.customPreset?.groups;
   const startupGroups = files.readMainConfig()?.groups
     ?.filter((g) => startupGroupNames?.includes(g.name));
 

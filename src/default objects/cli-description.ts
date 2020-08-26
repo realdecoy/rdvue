@@ -45,8 +45,15 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
             name: '',
             dependencies: [''],
             plugins: [''],
-        }
+        },
+
         ],
+        customPreset: {
+            groups: [
+                ''
+            ],
+            name: ''
+        },
         name: '',
         arguments: [
             {
