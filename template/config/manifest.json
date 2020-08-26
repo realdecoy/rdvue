@@ -2,7 +2,6 @@
   "version": 1,
   "name": "config",
   "description": "Mandatory project configuration.",
-  "singleUserPerProject": true,
   "arguments": [
     {
       "name": "projectNameKebab",
