@@ -30,7 +30,8 @@ export enum featureType {
 
 export enum featuresWithNoNames {
     auth = 'auth',
-    localization = 'localization'
+    localization = 'localization',
+    vuetify = 'vuetify'
 }
 
 interface Actions {
