@@ -32,7 +32,6 @@ export interface Config {
     installDirectory?: string;
     files?: Array<string | Files>;
     import?: Import;
-    singleUserPerProject?: boolean;
     menu?: Menu[];
     group?: boolean;
     features: Feature[];
