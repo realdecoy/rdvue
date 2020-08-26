@@ -14,7 +14,8 @@
       "page",
       "auth",
       "sm",
-      "localization"
+      "localization",
+      "vuetify"
     ]
   }
 }
