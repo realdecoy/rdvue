@@ -3,11 +3,12 @@ import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
 import npm from 'npm-programmatic';
-import { ACTIONS, DYNAMIC_OBJECTS } from '../constants/constants';
+import { ACTIONS, DYNAMIC_OBJECTS, LOG_TYPES } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
 import { fileExists, readFile, writeFile } from './files';
 import { NpmProgrammaticConfiguration } from '../types/cli';
+import { logger } from './logger';
 
 const helpOptions = ['--help', '-h'];
 
@@ -327,30 +328,32 @@ function parseDynamicObjects(jsonData: string, objectName: string, hasBrackets?:
 
 async function dependencyInstaller(script: string[], config: NpmProgrammaticConfiguration) {
   const projectroot = getProjectRoot();
+
   if (projectroot !== null) {
     config.cwd = projectroot;
 
+    logger(`[Processing Dependencies] - ${LOG_TYPES.info}`);
     await npm.install(script, config)
     .then(function(){
       if (config.save) {
-        console.log(`Successfully installed required package/s ${[...script]}`);
+        logger(`${[...script]} installed as dependency - ${LOG_TYPES.warning}`);
       }
 
       if (config.saveDev) {
-        console.log(`Successfully installed required dev package/s ${[...script]}`);
+        logger(`${[...script]} installed as devDependency - ${LOG_TYPES.warning}`);
       }
     })
     .catch(function(){
       if (config.save) {
-        console.log(`Unable to install required package/s ${[...script]}`);
+        logger(`required dependency <${[...script]}> was not installed - ${LOG_TYPES.error}`);
       }
 
       if (config.saveDev) {
-        console.log(`Unable to install required dev package/s ${[...script]}`);
+        logger(`required devDependency <${[...script]}> was not installed - ${LOG_TYPES.error}`);
       }
     });
   } else {
-    console.log('Project location not found');
+    logger(`Project location was not located - ${LOG_TYPES.error}`);
   }
 }
 

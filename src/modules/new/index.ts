@@ -337,13 +337,17 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
             if (currentConfig.packages?.dependencies?.length > 0) {
                 config.save = true;
-                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
+                currentConfig.packages.dependencies.forEach(async (dependency: string) => {
+                    await util.dependencyInstaller([dependency], config);
+                })
             }
 
             if (currentConfig.packages?.devDependencies?.length > 0) {
                 config.save = false;
                 config.saveDev = true;
-                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
+                currentConfig.packages.devDependencies.forEach(async (dependency: string) => {
+                    await util.dependencyInstaller([dependency], config);
+                })
             }
         }
 

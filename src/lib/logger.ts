@@ -24,11 +24,17 @@ const LOG_FILE_PATH = path.join(PROJECT_ROOT, 'logs', `${filename}.txt`);
 
 /**
  * This function prints the output to the user and call the function to update/create log file
- * @param log - log object to be used for showing helpful information to user and update log file
+ * @param loggingInfo - string with format <message>-<type> or swapped, to be seperated
+ * and assigned to neccesary object properties
+ *
  * @param end - boolean to check if its the end of current line
  */
-export function logger(log: Log, end = true) {
-  const chalkColor: string = log.type === LOG_TYPES.info ? 'yellow' : log.type === LOG_TYPES.error ? 'red' : 'white';
+export function logger(loggingInfo: string, end = true) {
+  const log: Log = {} as Log;
+  const seperatedLogData: string[] = loggingInfo.split('-');
+  seperatedLogData.forEach((data: string) => (Object.values(LOG_TYPES) as string[]).includes(data) ? log.type = data : log.message = data);
+
+  const chalkColor: string = log.type === LOG_TYPES.info ? 'white' : log.type === LOG_TYPES.error ? 'red' : 'yellow';
   stdout.write((chalk as any)[chalkColor](`${log.message} ${end ? EOL : ''}`));
   printLog(log);
 }
