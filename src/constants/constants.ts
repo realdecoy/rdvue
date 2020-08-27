@@ -48,3 +48,9 @@ export enum DYNAMIC_OBJECTS {
     options = 'options',
     modules = 'modules'
 }
+
+export enum LOG_TYPES {
+    info = 'info',
+    warning = 'warning',
+    error = 'error'
+  }
