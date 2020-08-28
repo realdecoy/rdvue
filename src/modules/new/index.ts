@@ -196,7 +196,8 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             !hasHelpOption &&
             !hasInvalidOption &&
             (util.actionBeingRequested(userAction) === GENERATE_ACTION ||
-                util.actionBeingRequested(userAction) === ADD_ACTION);
+                util.actionBeingRequested(userAction) === ADD_ACTION ||
+                util.actionBeingRequested(userAction) === ADD_GROUP);
 
         const isConfig = userFeature === featureType.config;
         const isStore = userFeature === featureType.store;
@@ -204,7 +205,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         const currentConfig = getFeatureConfiguration(userFeature);
         const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
         const projectName = '<project-name>';
-        const availableFeatureGroups: string[] = Object.values(featureGroup);
+        const availableFeatureGroups: string[] = OPTIONAL_MODULES.getPlugins();
 
         let featureNameStore: FeatureNameObject = {};
         let nameKey = '';
@@ -284,6 +285,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             for (const module of modulesToInstall) {
                 await OPTIONAL_MODULES.addOptionalModule(module);
             }
+            await OPTIONAL_MODULES.installDefaultPlugins();
 
             util.nextSteps(projectName);
 

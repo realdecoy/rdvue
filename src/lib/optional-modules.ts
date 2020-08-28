@@ -84,6 +84,13 @@ async function addPlugin(featureName: string) {
   }
 }
 
+async function installDefaultPlugins() {
+  const defaultPlugins = files.readMainConfig().project?.plugins;
+  for (const plugin of defaultPlugins) {
+    await addPlugin(plugin);
+  }
+}
+
 /**
  * Descriptions - Returns an array of the currently available plugins
  */
@@ -169,12 +176,13 @@ async function promptPresetOptions() {
   const template = files.readMainConfig();
 
   // Gets array of presets available
-  const presets = template?.presets?.map((preset) => {
-    const desc = preset.description;
+  const presets = template?.presets?.filter(({ plugins }) => plugins.length > 0)
+    ?.map((preset) => {
+      const desc = preset.description;
 
-    // Appends the description (if available) to the text displayed to the user
-    return desc !== undefined ? `${preset.name} (${desc})` : preset.name;
-  });
+      // Appends the description (if available) to the text displayed to the user
+      return desc !== undefined ? `${preset.name} (${desc})` : preset.name;
+    });
 
   // Get get custom preset option if available
   const customPreset = template?.customPreset?.name;
@@ -248,5 +256,6 @@ export {
   requestPresetSelection,
   handleOptionalModulesRequests,
   addPlugin,
-  getPlugins
+  getPlugins,
+  installDefaultPlugins
 };
