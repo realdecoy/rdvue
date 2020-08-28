@@ -9,7 +9,7 @@ import clear from 'clear';
 import { Section } from 'command-line-usage';
 import inquirer from 'inquirer';
 import { USAGE_TEMPLATE } from './config';
-import { isFeatureGroup, readMainConfig, readSubConfig } from './lib/files';
+import { readMainConfig, readSubConfig } from './lib/files';
 import * as util from './lib/util';
 
 import { contentPopulate, featureConfigurationAssignment, getFeatureMenu } from './lib/helper-functions';
@@ -128,9 +128,8 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
 
   for (const feature of features) {
     // [2] Check each item of list to see if its a feature group or just a feature
-    const isGroup: boolean = isFeatureGroup(feature);
     // [3] Set the index on the menu list to be modified/added
-    index = isGroup ? three : two;
+    index = two;
 
     // [4] Check if the features/ group is present on menu list and populate if isnt
     if (
@@ -162,7 +161,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   }
 
   for (const feature of requiredFeatures) {
-    const isGroup: boolean = isFeatureGroup(feature);
+    const isGroup: boolean = util.isPlugin(feature);
     index = isGroup ? three : two;
     await populateFeatureMenu(feature, true, index);
   }
@@ -219,8 +218,7 @@ export async function run(userArguments: [] | undefined) {
 
 
     // [1b] Return list of features if true and empty array if false
-    const features: string[] = mainConfig.features
-      .filter((feature) => !feature.private)
+    const features: string[] = mainConfig?.features?.filter((feature) => !feature.private)
       .map((f) => f.name);
 
     // [1c] Return value if true and empty array if false
