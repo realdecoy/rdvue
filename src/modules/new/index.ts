@@ -272,6 +272,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
       for (const module of modulesToInstall) {
         await OPTIONAL_MODULES.addPlugin(module);
       }
+      await OPTIONAL_MODULES.installDefaultPlugins();
 
       util.nextSteps(projectName);
 

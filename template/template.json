@@ -39,7 +39,9 @@
       "config",
       "store"
     ],
-    "plugins": []
+    "plugins": [
+      "auth"
+    ]
   },
   "groups": [
     {
