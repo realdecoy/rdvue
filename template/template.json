@@ -44,11 +44,11 @@
   "groups": [
     {
       "name": "auth",
-      "promptType": "list",
       "isMultipleChoice": true,
       "plugins": [
         "auth"
-      ]
+      ],
+      "question": "Which Authentication Library would you like to install?"
     }
   ],
   "presets": [
@@ -59,7 +59,7 @@
     }
   ],
   "customPreset": {
-    "plugins": [
+    "groups": [
       "auth"
     ],
     "name": "custom"
