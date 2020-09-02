@@ -89,12 +89,7 @@ function readSubConfig(command: string): Config {
   return JSON.parse(readFile(filePath)) as Config;
 }
 
-function isFeatureGroup(command: string): boolean {
-  const filePath = path.join(TEMPLATE_ROOT, `/${command}`, MANIFEST_FILE);
-  const configuration = JSON.parse(readFile(filePath)) as Config;
 
-  return configuration.group as boolean;
-}
 
 /**
  * Description: Clear temporary files at a given path
@@ -317,6 +312,5 @@ export {
   copyFiles,
   readFile,
   updateFile,
-  isFeatureGroup
 };
 

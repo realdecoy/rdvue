@@ -161,7 +161,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
   }
 
   for (const feature of requiredFeatures) {
-    const isGroup: boolean = util.isPlugin(feature);
+    const isGroup: boolean = OPTIONAL_MODULES.isPlugin(feature);
     index = isGroup ? three : two;
     await populateFeatureMenu(feature, true, index);
   }

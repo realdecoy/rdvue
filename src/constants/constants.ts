@@ -29,9 +29,7 @@ export enum featureType {
     features = 'features' // For listing feature groups
 }
 
-export enum featureGroup {
-    auth = 'auth',
-}
+
 
 export enum featuresWithNoNames {
     auth = 'auth',

@@ -33,7 +33,8 @@
   ],
   "plugins": [
     "auth",
-    "localization"
+    "localization",
+    "storybook"
   ],
   "project": {
     "features": [
@@ -41,25 +42,34 @@
       "store"
     ],
     "plugins": [
-      "storybook",
-      "auth"
+      "storybook"
     ]
   },
   "groups": [
     {
       "name": "auth",
-      "isMultipleChoice": true,
+      "isMultipleChoice": false,
       "plugins": [
         "auth"
       ],
       "question": "Which Authentication Library would you like to install?"
+    },
+    {
+      "name": "locale",
+      "isMultipleChoice": false,
+      "plugins": [
+        "localization"
+      ],
+      "question": "Which Localization Library would you like to install?"
     }
   ],
   "presets": [
     {
-      "name": "preset1",
-      "plugins": [],
-      "description": "preset 1"
+      "name": "Auth",
+      "plugins": [
+        "auth"
+      ],
+      "description": "Installs auth"
     }
   ],
   "customPreset": {

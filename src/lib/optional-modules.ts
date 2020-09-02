@@ -16,6 +16,7 @@ import { CLI_DESCRIPTION } from '..';
 import chalk from 'chalk';
 
 import * as MODULE_NEW from '../modules/new';
+import { readMainConfig } from './files';
 
 /**
  * Description - Accepts a Feature Group name, prompts user to select a module from that group
@@ -70,20 +71,43 @@ async function promptQuestionByGroup(group: Group) {
 
 /**
  * Description - Accepts the name of an optional module and adds the module to project
- * @param featureName - name of module
+ * @param plugin - name of module
  */
-async function addPlugin(featureName: string) {
-  if (util.isPlugin(featureName)) {
+async function addPlugin(plugin: string) {
+  if (isPlugin(plugin) || isDefaultPlugin(plugin)) {
     await MODULE_NEW.run(
       {
         action: ADD_ACTION,
-        feature: featureName,
+        feature: plugin,
         options: [],
       },
       CLI_DESCRIPTION);
   }
 }
 
+/**
+ * Description - Checks if the feature inputted is an optional feature
+ * @param feature - name of feature
+ */
+function isPlugin(plugin: string): boolean {
+  let found;
+  const plugins = readMainConfig()?.plugins;
+  found = plugins?.find((p) => p === plugin);
+
+  return found !== undefined ? true : false;
+}
+
+/**
+ * Description - Checks if the given plugin is a dafault Project plugin
+ * @param plugin -name of plugin
+ */
+function isDefaultPlugin(plugin: string) {
+  return files.readMainConfig().project.plugins
+    .includes(plugin);
+}
+/**
+ * Description - Installs default plugins into a newly created project
+ */
 async function installDefaultPlugins() {
   const defaultPlugins = files.readMainConfig().project?.plugins;
   for (const plugin of defaultPlugins) {
@@ -114,15 +138,14 @@ async function handleOptionalModulesRequests(operation: Command) {
     await handleAddGroup(feature);
 
   }
-  else if (action === ADD_ACTION && util.isPlugin(feature)) {
+  else if (action === ADD_ACTION && isPlugin(feature)) {
     await addPlugin(feature);
   }
   else if (action === LIST_ACTION) {
     util.displayFeatureGroupsWithPlugins();
   }
   else {
-    console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
-    throw Error(`The command entered was invalid. Please see help menu above.`);
+    thowError();
   }
 }
 
@@ -199,7 +222,8 @@ async function promptPresetOptions() {
     });
 
     // Removes description from option selected in order to get the original preset name
-    cleanedPresetChoice = preset.split('(')[0]
+    cleanedPresetChoice = preset
+      .split('(')[0]
       .trim();
   }
 
@@ -219,7 +243,8 @@ function isPresetSelected(name: string): boolean {
 }
 
 function isCustomSelected(name: string): boolean {
-  return files.readMainConfig()?.customPreset?.name === name ? true : false;
+  return files.readMainConfig()?.customPreset?.name
+    .toLocaleLowerCase() === name.toLocaleLowerCase() ? true : false;
 }
 
 /**
@@ -252,10 +277,17 @@ async function requestPresetSelection() {
   return modulesToInstall;
 }
 
+function thowError() {
+  console.log(util.displayHelp(CLI_DESCRIPTION.general.menu));
+  throw Error(`The command entered was invalid. Please see help menu above.`);
+}
+
 export {
   requestPresetSelection,
   handleOptionalModulesRequests,
   addPlugin,
   getPlugins,
-  installDefaultPlugins
+  installDefaultPlugins,
+  thowError,
+  isPlugin
 };

@@ -4,23 +4,17 @@ import figlet from 'figlet';
 import path from 'path';
 
 import npm from 'npm-programmatic';
-import { DYNAMIC_OBJECTS, featureGroupType } from '../constants/constants';
+import { Group, NpmProgrammaticConfiguration } from '../types/cli';
 
-import { TEMPLATE_ROOT } from '../config';
-
-
-import { ACTIONS, featureType, ADD_ACTION, ADD_GROUP, LIST_ACTION } from '../constants/constants';
+import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, LIST_ACTION } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
-import { NpmProgrammaticConfiguration } from '../types/cli';
 
-import { featureType } from '../constants/constants';
 import { fileExists, readFile, readMainConfig, writeFile } from './files';
-
-import { Group } from '../types/cli';
 import { getFeatureConfiguration } from './helper-functions';
 
 
+import { isPlugin } from './optional-modules';
 const helpOptions = ['--help', '-h'];
 
 function heading(): void {
@@ -114,17 +108,7 @@ function isFeatureGroupType(feature: string): boolean {
   return isGroup === undefined ? false : true;
 }
 
-/**
- * Description - Checks if the feature inputted is an optional feature
- * @param feature - name of feature
- */
-function isPlugin(plugin: string): boolean {
-  let found;
-  const plugins = readMainConfig()?.plugins;
-  found = plugins?.find((p) => p === plugin);
 
-  return found !== undefined ? true : false;
-}
 
 /**
  * Description - Accepts a string representing an ACTION and checks
@@ -159,6 +143,8 @@ function parseUserInput(args: string[], features: string[]) {
 
   // This holds the argument that is expected after <rdvue list>
   const isFeatures = 'features';
+
+
   // Magic numbers are not allowed: used to check third argument
   const argIndex = 2;
   let remainingArgs = [];
@@ -480,8 +466,7 @@ export {
   parseDynamicObjects,
   dependencyInstaller,
   getFeatureGroupByName,
-  isOptionalFeature,
-  isPlugin,
+
   displayFeatureGroupsWithPlugins,
   isOptionalModuleAction,
   isFeatureGroupType

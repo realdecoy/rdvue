@@ -16,12 +16,9 @@ import * as ROOT_CONFIG from '../../config';
 
 
 import {
-
     ADD_ACTION,
     ADD_GROUP,
-    DYNAMIC_OBJECTS
-  featureGroup,
-    featureGroupType,
+    DYNAMIC_OBJECTS,
     featuresWithNoNames,
     featureType,
     GENERATE_ACTION,
@@ -37,14 +34,7 @@ import {
 
 import * as util from '../../lib/util';
 
-import { NpmProgrammaticConfiguration } from '../../types/cli';
-
-
-
-
-
-import { CLI, Config, Group, Preset, CustomPreset } from '../../types/cli';
-
+import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
 
 import {
     Command,
@@ -205,7 +195,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         const currentConfig = getFeatureConfiguration(userFeature);
         const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
         const projectName = '<project-name>';
-        const availableFeatureGroups: string[] = OPTIONAL_MODULES.getPlugins();
+        const availablePlugins: string[] = OPTIONAL_MODULES.getPlugins();
 
         let featureNameStore: FeatureNameObject = {};
         let nameKey = '';
@@ -214,36 +204,9 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         let projectRoot: string | null;
         let directories: Directories;
 
-        // [1]b If the user used a feature group request
-        if (userAction === ADD_ACTION && availableFeatureGroups.includes(userFeature)) {
-            const parsed = files.readSubConfig(userFeature);
-
-            // [1]c Create a section break
-            util.sectionBreak();
-            // [1]d Obtaining the path of the project root
-            projectRoot = util.getProjectRoot();
-
-            // [1]e Get directory informations
-            directories = getDirectories({
-                featureNameStore,
-                currentConfig,
-                kebabNameKey,
-                isConfig,
-                isStore,
-                projectRoot,
-                userFeature
-            });
-
-            // [1]f Copy files into designated location
-            await files.copyFiles(
-                directories.sourceDir,
-                directories.installDir,
-                parsed.files as Files[]
-            );
-
-            // [1]g Update the .rdvue/routes.json file in src directory in the project
-            isProject = false;
-
+        // Checks if the user tries to use the generate action (generate or g) with a plugin
+        if ((!util.isOptionalModuleAction(userAction)) && availablePlugins.includes(userFeature)) {
+            OPTIONAL_MODULES.thowError();
         }
 
 
@@ -275,15 +238,10 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 USAGE
             );
 
-            // [2]d Adds storybook
-            await run({
-                options: userOptions, feature: featureType.storybook,
-                action: userAction
-            }, USAGE);
 
             // 2[e] Loads in optional modules after project has been setup
             for (const module of modulesToInstall) {
-                await OPTIONAL_MODULES.addOptionalModule(module);
+                await OPTIONAL_MODULES.addPlugin(module);
             }
             await OPTIONAL_MODULES.installDefaultPlugins();
 
@@ -314,56 +272,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             answers = await inquirer.prompt(questions);
         }
 
-
-        // Update the .rdvue/routes.js file in src directory in the project
-        if (currentConfig.routes !== undefined) {
-            await util.parseDynamicObjects(JSON.stringify(currentConfig.routes, null, 1), DYNAMIC_OBJECTS.routes);
-        }
-
-        // Update the .rdvue/stores.js file in src directory in the project
-        if (currentConfig.stores !== undefined) {
-            await util.parseDynamicObjects(JSON.stringify(currentConfig.stores, null, 1), DYNAMIC_OBJECTS.stores);
-        }
-
-        // Update the .rdvue/options.js file in src directory in the project
-        if (currentConfig.vueOptions !== undefined) {
-            await util.parseDynamicObjects(JSON.stringify(currentConfig.vueOptions, null, 1), DYNAMIC_OBJECTS.options, true);
-        }
-
-        // Update the .rdvue/modules.js file in src directory in the project
-        if (currentConfig.modules !== undefined) {
-            await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
-        }
-
-        // [10] Install dependencies if they are required
-        if (currentConfig.packages !== undefined) {
-            const config: NpmProgrammaticConfiguration = { cwd: '' };
-
-            if (currentConfig.packages?.dependencies?.length > 0) {
-                config.save = true;
-                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
-            }
-
-            if (currentConfig.packages?.devDependencies?.length > 0) {
-                config.save = false;
-                config.saveDev = true;
-                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
-            }
-        }
-
-        // [11] If executing the 'config' feature
-        if (isConfig) {
-            // [11]a Updating the '.rdvue' config file to include the project root path
-            if (kebabNameKey !== undefined) {
-                updateConfig(featureNameStore, directories, kebabNameKey);
-            }
-        } else {
-            // [11]b Create a section break
-            util.sectionBreak();
-            // tslint:disable-next-line:no-console
-            console.log(chalk.magenta
-                (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
-        }
 
         // [3] Getting the name key used. ex: "projectName" or "componentName"
         if (currentConfig.arguments !== undefined) {
@@ -415,6 +323,54 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         }
 
 
+        // Update the .rdvue/routes.js file in src directory in the project
+        if (currentConfig.routes !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.routes, null, 1), DYNAMIC_OBJECTS.routes);
+        }
+
+        // Update the .rdvue/stores.js file in src directory in the project
+        if (currentConfig.stores !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.stores, null, 1), DYNAMIC_OBJECTS.stores);
+        }
+
+        // Update the .rdvue/options.js file in src directory in the project
+        if (currentConfig.vueOptions !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.vueOptions, null, 1), DYNAMIC_OBJECTS.options, true);
+        }
+
+        // Update the .rdvue/modules.js file in src directory in the project
+        if (currentConfig.modules !== undefined) {
+            await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
+        }
+        // [10] Install dependencies if they are required
+        if (currentConfig.packages !== undefined) {
+            const config: NpmProgrammaticConfiguration = { cwd: '' };
+
+            if (currentConfig.packages?.dependencies?.length > 0) {
+                config.save = true;
+                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
+            }
+
+            if (currentConfig.packages?.devDependencies?.length > 0) {
+                config.save = false;
+                config.saveDev = true;
+                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
+            }
+        }
+
+        // [11] If executing the 'config' feature
+        if (isConfig) {
+            // [11]a Updating the '.rdvue' config file to include the project root path
+            if (kebabNameKey !== undefined) {
+                updateConfig(featureNameStore, directories, kebabNameKey);
+            }
+        } else {
+            // [11]b Create a section break
+            util.sectionBreak();
+            // tslint:disable-next-line:no-console
+            console.log(chalk.magenta
+                (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
+        }
 
         return true;
     } catch (err) {

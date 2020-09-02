@@ -1,6 +1,7 @@
 {
   "version": 1,
   "name": "storybook",
+  "description": "Installs Storybook feature",
   "sourceDirectory": "./",
   "installDirectory": ".storybook",
   "files": [
