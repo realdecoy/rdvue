@@ -24,9 +24,6 @@ export enum featureType {
     storybook = 'storybook',
     project = 'project',
     services = 'services',
-    auth = 'auth',
-    localization = 'localization',
-    features = 'features' // For listing feature groups
 }
 
 
