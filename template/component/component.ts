@@ -1,4 +1,4 @@
-import { StoryComponent, StoryProp, Vue } from '.storybook/modules';
+import { StoryComponent, StoryProp, Vue } from '.rdvue/storybook';
 
 @StoryComponent({
   name: '__COMPONENT__KEBAB__',
