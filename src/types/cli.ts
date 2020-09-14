@@ -74,7 +74,6 @@ interface BasePreset {
 
 // Interface for presets
 export interface Preset extends BasePreset {
-    dependencies: string[];
     plugins: string[];
 }
 

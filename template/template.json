@@ -63,19 +63,9 @@
       "question": "Which Localization Library would you like to install?"
     }
   ],
-  "presets": [
-    {
-      "name": "Auth",
-      "plugins": [
-        "auth"
-      ],
-      "description": "Installs auth"
-    }
-  ],
+  "presets": [],
   "customPreset": {
-    "groups": [
-      "auth"
-    ],
+    "groups": [],
     "name": "custom"
   }
 }

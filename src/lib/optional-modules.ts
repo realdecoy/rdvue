@@ -210,8 +210,12 @@ async function promptPresetOptions() {
   // Get get custom preset option if available
   const customPreset = template?.customPreset?.name;
 
-  if (presets !== undefined) { options = concat(presets) as []; }
-  if (customPreset !== undefined) { options = concat(options, customPreset) as []; }
+  if (presets !== undefined && presets.length > 0) {
+    options = concat(presets, customPreset) as [];
+  }
+  // if (customPreset !== undefined && presets !==) {
+  //   options = concat(options, customPreset) as [];
+  // }
 
   if (options.length > 0) {
     const { preset } = await inquirer.prompt({
@@ -222,6 +226,7 @@ async function promptPresetOptions() {
     });
 
     // Removes description from option selected in order to get the original preset name
+    // tslint:disable-next-line: no-unsafe-any
     cleanedPresetChoice = preset
       .split('(')[0]
       .trim();
@@ -248,7 +253,7 @@ function isCustomSelected(name: string): boolean {
 }
 
 /**
- * Description - Returns an array of dependencies for a given preset
+ * Description - Returns an array of plugins for a given preset
  * @param presetName - Name of preset
  */
 function loadPresetPlugins(presetName: string): string[] {

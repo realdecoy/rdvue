@@ -43,7 +43,6 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
 
         presets: [{
             name: '',
-            dependencies: [''],
             plugins: [''],
         },
 
