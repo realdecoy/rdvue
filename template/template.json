@@ -1,20 +1,71 @@
 {
   "version": 1,
   "sourceDirectory": "./",
-  "import": {
-    "required": [
+  "features": [
+    {
+      "name": "config",
+      "private": true
+    },
+    {
+      "name": "store",
+      "private": true
+    },
+    {
+      "name": "component",
+      "private": false
+    },
+    {
+      "name": "service",
+      "private": false
+    },
+    {
+      "name": "model",
+      "private": false
+    },
+    {
+      "name": "page",
+      "private": false
+    },
+    {
+      "name": "sm",
+      "private": false
+    }
+  ],
+  "plugins": [
+    "auth",
+    "localization",
+    "storybook"
+  ],
+  "project": {
+    "features": [
       "config",
-      "store",
-      "storybook"
+      "store"
     ],
-    "optional": [
-      "component",
-      "service",
-      "model",
-      "page",
-      "auth",
-      "sm",
-      "localization"
+    "plugins": [
+      "storybook"
     ]
+  },
+  "groups": [
+    {
+      "name": "auth",
+      "isMultipleChoice": false,
+      "plugins": [
+        "auth"
+      ],
+      "question": "Which Authentication Library would you like to install?"
+    },
+    {
+      "name": "locale",
+      "isMultipleChoice": false,
+      "plugins": [
+        "localization"
+      ],
+      "question": "Which Localization Library would you like to install?"
+    }
+  ],
+  "presets": [],
+  "customPreset": {
+    "groups": [],
+    "name": "custom"
   }
 }

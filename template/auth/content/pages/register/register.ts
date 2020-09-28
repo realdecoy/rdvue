@@ -1,15 +1,19 @@
-import { Component, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import User from '@/model/user';
+import AuthService from '@/services/auth';
 
 @Component({
   components: {},
-  name: 'hello-world',
+  name: 'register',
 })
-
-class HelloWorldView extends Vue {
+class Register extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
-
+  private fullname = '';
+  private email = '';
+  private password = '';
   // --------------------------------------------------------------------------
   // [Public] Constructor
   // --------------------------------------------------------------------------
@@ -26,6 +30,19 @@ class HelloWorldView extends Vue {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
+  /**
+   * GENERATED FUNCTION:
+   * This is used to register a new user
+   */
+
+  public async register(): Promise<void> {
+    const user: User = { fullname: this.fullname, email: this.email, password: this.password };
+    try {
+      await AuthService.register(user);
+    } catch (error) {
+      // Handle registration errors here.
+    }
+  }
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
   // --------------------------------------------------------------------------
@@ -40,10 +57,11 @@ class HelloWorldView extends Vue {
 
   private mounted() {
     // TODO: stuff to do when this component loads.
+
   }
 }
 
 export {
-  HelloWorldView as default,
-  HelloWorldView,
+  Register as default,
+  Register,
 };

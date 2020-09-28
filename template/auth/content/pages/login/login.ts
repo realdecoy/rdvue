@@ -1,15 +1,18 @@
-import { Component, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import User from '@/model/user';
+import AuthService from '@/services/auth';
 
 @Component({
   components: {},
-  name: 'hello-world',
+  name: 'login',
 })
-
-class HelloWorldView extends Vue {
+class Login extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
-
+  private email: string = '';
+  private password: string = '';
   // --------------------------------------------------------------------------
   // [Public] Constructor
   // --------------------------------------------------------------------------
@@ -26,6 +29,19 @@ class HelloWorldView extends Vue {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
+  /**
+   * GENERATED FUNCTION:
+   * This is used to authenticate a user
+   */
+  public async login(): Promise<void> {
+    const user: User = { email: this.email, password: this.password };
+    try {
+      await AuthService.login(user);
+    } catch (error) {
+      // Handle error is login failed here
+    }
+  }
+
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
   // --------------------------------------------------------------------------
@@ -40,10 +56,11 @@ class HelloWorldView extends Vue {
 
   private mounted() {
     // TODO: stuff to do when this component loads.
+
   }
 }
 
 export {
-  HelloWorldView as default,
-  HelloWorldView,
+  Login as default,
+  Login,
 };

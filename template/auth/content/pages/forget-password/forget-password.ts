@@ -1,14 +1,16 @@
-import { Component, Vue } from 'vue-property-decorator';
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import AuthService from '@/services/auth';
 
 @Component({
   components: {},
-  name: 'hello-world',
+  name: 'forgetpassword',
 })
-
-class HelloWorldView extends Vue {
+class ForgetPassword extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
+  private email = '';
 
   // --------------------------------------------------------------------------
   // [Public] Constructor
@@ -26,6 +28,13 @@ class HelloWorldView extends Vue {
   // [Public] Methods
   // --------------------------------------------------------------------------
 
+  public async sendResetEmail(): Promise<void> {
+    try {
+      await AuthService.sendResetEmail(this.email);
+    } catch (error) {
+      // Handle error here.
+    }
+  }
   // --------------------------------------------------------------------------
   // [Private] Event Handlers
   // --------------------------------------------------------------------------
@@ -40,10 +49,11 @@ class HelloWorldView extends Vue {
 
   private mounted() {
     // TODO: stuff to do when this component loads.
+
   }
 }
 
 export {
-  HelloWorldView as default,
-  HelloWorldView,
+  ForgetPassword as default,
+  ForgetPassword,
 };

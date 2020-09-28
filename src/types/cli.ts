@@ -32,7 +32,6 @@ export interface Config {
     installDirectory?: string;
     files?: Array<string | Files>;
     import?: Import;
-    singleUserPerProject?: boolean;
     menu?: Menu[];
     group?: boolean;
     packages?: Dependencies;
@@ -40,11 +39,48 @@ export interface Config {
     stores?: string[];
     vueOptions?: ConfigurationGenericProperty;
     modules?: ConfigurationGenericProperty;
+    features: Feature[];
+    plugins?: string[];
+    project: TemplateProject;
+    groups?: Group[];
+    presets?: Preset[];
+    customPreset?: CustomPreset;
 }
 
 // Generic string property
 export interface ConfigurationGenericProperty {
     [key: string]: string;
+
+}
+
+
+// Features interface
+interface Feature {
+    name: string;
+    private: boolean;
+}
+
+// Interface for projects section in template.json
+// TODO update this name
+interface TemplateProject {
+    features: string[];
+    plugins: string[];
+}
+// Base interface for Presets
+interface BasePreset {
+    name: string;
+    description?: string;
+}
+
+// Interface for presets
+export interface Preset extends BasePreset {
+    plugins: string[];
+}
+
+// Interface for custom preset
+export interface CustomPreset extends BasePreset {
+    groups: string[];
+
 }
 
 // Routes property for the feature being called
@@ -53,10 +89,22 @@ export interface ConfigurationRoutes {
     path: string;
     component: string;
 }
+// Interface for a feature group
+export interface Group {
+    plugins: string[];
+    name: string;
+    isMultipleChoice: boolean;
+    modules: string[];
+    question: string;
+    description: string;
+}
 // Import interface for the files being imported
 export interface Import {
     required: string[];
     optional: string[];
+    groups: Group[];
+    presets?: Preset[];
+    customPreset?: CustomPreset;
 }
 
 // Arguments content type

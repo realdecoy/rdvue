@@ -2,8 +2,8 @@
   "version": 1,
   "name": "config",
   "description": "Mandatory project configuration.",
-  "singleUserPerProject": true,
-  "arguments": [{
+  "arguments": [
+    {
       "name": "projectNameKebab",
       "type": "string",
       "description": "the name for the generated project. (e.g. my-project)"
@@ -17,7 +17,8 @@
   ],
   "sourceDirectory": "./",
   "installDirectory": "./",
-  "files": [{
+  "files": [
+    {
       "source": "meta/.rdvue/.rdvue",
       "target": ".rdvue/.rdvue"
     },
@@ -38,12 +39,18 @@
       "target": ".rdvue/options.js"
     },
     {
+      "source": "meta/.rdvue/stores.js",
+      "target": ".rdvue/stores.js"
+    },
+    {
       "source": "meta/package.json",
       "target": "package.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "core/main.ts",
@@ -113,22 +120,25 @@
       "source": "hello-world/index.ts",
       "target": "src/pages/hello-world/index.ts"
     },
-
     {
       "source": "public/index.html",
       "target": "public/index.html",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/manifest.json",
       "target": "public/manifest.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/favicon.ico",

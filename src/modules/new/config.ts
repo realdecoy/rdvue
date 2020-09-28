@@ -6,8 +6,12 @@ import {
   TEMPLATE_PROJECT_URL
 } from '../../constants/constants';
 import * as files from '../../lib/files';
-import { Arguments, Config } from '../../types/cli';
-
+import * as util from '../../lib/util';
+import { CLI_DESCRIPTION } from '../../index';
+import { Arguments, Config, Group } from '../../types/cli';
+import inquirer from 'inquirer';
+import { clear } from 'console';
+import { concat, flatten } from 'lodash';
 // tslint:disable-next-line
 async function validate(this: any, value: string): Promise<any> {
   const done = this.async();
@@ -56,9 +60,16 @@ const QUESTIONS: any[] = [
   }
 ];
 
+
+
+
+
+
+
+
 export {
   TEMPLATE_PROJECT_URL,
   OPTIONS_ALL,
   QUESTIONS,
-  parsePrompts,
+  parsePrompts
 };

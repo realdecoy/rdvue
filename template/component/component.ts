@@ -6,6 +6,8 @@ import { StoryComponent, StoryProp, Vue } from '.rdvue/storybook';
   import: '@/components/__COMPONENT__KEBAB__',
   components: {},
 })
+
+
 class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
   // Fields

@@ -23,4 +23,3 @@ export {
   preview as default,
   preview as __COMPONENT__
 };
-
