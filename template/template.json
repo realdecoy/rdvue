@@ -11,7 +11,8 @@
       "service",
       "model",
       "page",
-      "sm"
+      "sm",
+      "layout"
     ]
   }
 }
