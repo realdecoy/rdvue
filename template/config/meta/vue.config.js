@@ -25,8 +25,8 @@ module.exports = {
       [
 
         // Produces a bundle report for production build. 
-        // Opens in browser automatically.
-        new BundleAnalyzerPlugin(),
+        // Generates a report to be viewed later.
+        new BundleAnalyzerPlugin( {analyzerMode: "static"} ),
 
         // Reduce image size for assets in Production build.
         new ImageminPlugin({
