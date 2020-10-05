@@ -20,6 +20,7 @@ export interface Manifest {
     stores?: string[];
     vueOptions?: ConfigurationGenericProperty;
     modules?: ConfigurationGenericProperty;
+    projectModules?: string[];
 }
 
 export interface Dependencies {
