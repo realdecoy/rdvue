@@ -33,7 +33,8 @@
   "plugins": [
     "localization",
     "storybook",
-    "vuetify"
+    "vuetify",
+    "buefy"
   ],
   "project": {
     "features": [
@@ -59,7 +60,9 @@
       "auth",
       "sm",
       "localization",
-      "vuetify"
+      "vuetify",
+      "localization",
+      "buefy"
     ]
   },
   "groups": [{
@@ -82,7 +85,8 @@
       "name": "ui",
       "isMultipleChoice": false,
       "plugins": [
-        "vuetify"
+        "vuetify",
+        "buefy"
       ],
       "question": "Which UI Library would you like to install?"
     }

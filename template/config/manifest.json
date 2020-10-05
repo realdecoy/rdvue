@@ -261,6 +261,10 @@
     {
       "source": "modules/core/index.ts",
       "target": "src/modules/core/index.ts"
+    },
+    {
+      "source": "modules/index.ts",
+      "target": "src/modules/index.ts"
     }
   ]
 }
