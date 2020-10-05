@@ -34,7 +34,8 @@
   "plugins": [
     "auth",
     "localization",
-    "storybook"
+    "storybook",
+    "buefy"
   ],
   "project": {
     "features": [
@@ -43,6 +44,16 @@
     ],
     "plugins": [
       "storybook"
+    ],
+    "optional": [
+      "component",
+      "service",
+      "model",
+      "page",
+      "auth",
+      "sm",
+      "localization",
+      "buefy"
     ]
   },
   "groups": [
@@ -61,6 +72,14 @@
         "localization"
       ],
       "question": "Which Localization Library would you like to install?"
+    },
+    {
+      "name": "ui",
+      "isMultipleChoice": false,
+      "plugins": [
+        "buefy"
+      ],
+      "question": "Which UI Library would you like to install?"
     }
   ],
   "presets": [],

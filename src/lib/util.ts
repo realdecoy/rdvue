@@ -4,15 +4,18 @@ import figlet from 'figlet';
 import path from 'path';
 
 import npm from 'npm-programmatic';
-import { Group, NpmProgrammaticConfiguration } from '../types/cli';
-
-import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, LIST_ACTION } from '../constants/constants';
+import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, INDEX_FILE, LIST_ACTION } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
+import { Group, NpmProgrammaticConfiguration } from '../types/cli';
 import { Command } from '../types/index';
-
-import { fileExists, readFile, readMainConfig, writeFile } from './files';
+import {
+  appendToFile,
+  fileExists,
+  readFile,
+  readMainConfig,
+  writeFile
+} from './files';
 import { getFeatureConfiguration } from './helper-functions';
-
 
 import { isPlugin } from './optional-modules';
 const helpOptions = ['--help', '-h'];
@@ -47,28 +50,30 @@ function nextSteps(featureName: string): void {
 
 function hasFeature(args: string[], features: string[]): boolean {
   // Console.log(`hasCommand: ${commands}`);
-  const found = features.some((r) => args.includes(r));
+  const found = features.some(r => args.includes(r));
 
   return found;
 }
 
 function hasOptions(args: string[], options: string[]): boolean {
   // Console.log(`hasOptions: ${options}`);
-  const found = options.some((r) => args.includes(r));
+  const found = options.some(r => args.includes(r));
 
   return found;
 }
 
 function hasHelpOption(args: string[]): boolean {
   // Console.log(`hasHelpOptions: ${helpOptions}`);
-  const found = helpOptions.some((r) => args.includes(r));
+  const found = helpOptions.some(r => args.includes(r));
 
   return found;
 }
 
 function hasInvalidOption(args: string[], options: string[]): boolean {
   // Console.log(`hasInvalidOption: ${args}`);
-  const found = args.some((r) => !options.includes(r) && !helpOptions.includes(r));
+  const found = args.some(
+    r => !options.includes(r) && !helpOptions.includes(r)
+  );
 
   return found;
 }
@@ -89,8 +94,7 @@ function parseOptions(args: string[]): string[] {
  * @param name - name of the feature group
  */
 function getFeatureGroupByName(name: string): Group | undefined {
-  const feature = readMainConfig()?.groups
-    ?.find((g) => g.name === name);
+  const feature = readMainConfig()?.groups?.find(g => g.name === name);
 
   return feature;
 }
@@ -108,19 +112,14 @@ function isFeatureGroupType(feature: string): boolean {
   return isGroup === undefined ? false : true;
 }
 
-
-
 /**
  * Description - Accepts a string representing an ACTION and checks
  * if that string is a Command (ACTION) relating to optional modules
  * @param command - Name of ACTION
  */
 function isOptionalModuleAction(command: string) {
-
   const isTrue =
-    command === ADD_ACTION ||
-    command === ADD_GROUP ||
-    command === LIST_ACTION;
+    command === ADD_ACTION || command === ADD_GROUP || command === LIST_ACTION;
 
   return isTrue;
 }
@@ -138,47 +137,51 @@ function parseUserInput(args: string[], features: string[]) {
     action: '',
     feature: '',
     featureName: '',
-    options: [''],
+    options: ['']
   };
 
   // This holds the argument that is expected after <rdvue list>
   const isFeatures = 'features';
 
-
   // Magic numbers are not allowed: used to check third argument
   const argIndex = 2;
   let remainingArgs = [];
 
-
   // [1] Checking first argument <action> to see if it includes a valid actions
   // (eg. generate)
   if (args[0] !== undefined && actionBeingRequested(args[0]).length > 0) {
-
     returnObject.action = args[0];
-
-
 
     // [2] Checking second argument <feature>
     // to see if it includes a valid feature (eg. project or page)
     // OR a Plugin or a Feature Group Type
     // OR if its 'features' which was passed - 'features' is used to list optional modules/features
-    if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1])
-      || isPlugin(args[1]) || args[1] === isFeatures)) {
-
+    if (
+      args[1] !== undefined &&
+      (features.includes(args[1]) ||
+        isFeatureGroupType(args[1]) ||
+        isPlugin(args[1]) ||
+        args[1] === isFeatures)
+    ) {
       returnObject.feature = args[1];
 
       // [3] Checking third argument <feature name> eg. "test_project"
       // If the feature name entered contains '--' at the beggining of the word
       // it is assumed that they are entering an option instead and therefore, no feature name
       // has been inputed/proccessed.
-      if (args[argIndex] !== undefined && args[argIndex].substring(0, argIndex) !== '--') {
+      if (
+        args[argIndex] !== undefined &&
+        args[argIndex].substring(0, argIndex) !== '--'
+      ) {
         returnObject.featureName = args[argIndex];
       }
 
       // Remove the first <action> and second <feature> argument from array and put remaining
       // arguments into remainingArgs array
       remainingArgs = args.slice(argIndex);
-      remainingArgs.filter(userinput => userinput.substring(0, argIndex) !== '--');
+      remainingArgs.filter(
+        userinput => userinput.substring(0, argIndex) !== '--'
+      );
 
       // If there is more than one argument and none of these include the help option
       // Assume incorrect name has been inputed.
@@ -186,12 +189,17 @@ function parseUserInput(args: string[], features: string[]) {
         // TODO: Display help menu & exit
         // tslint:disable-next-line
         console.log(commandLineUsage(CLI_DESCRIPTION.general.menu));
-        throw new Error(chalk.red(`Please enter a valid feature name; See help menu above for instructions.`));
+        throw new Error(
+          chalk.red(
+            `Please enter a valid feature name; See help menu above for instructions.`
+          )
+        );
       }
 
       // [4] Checking all arguments to see if they contain any options
-      returnObject.options = args.filter(option => option.substring(0, argIndex) === '--');
-
+      returnObject.options = args.filter(
+        option => option.substring(0, argIndex) === '--'
+      );
     }
   } else {
     // [1b] If there is no action in the user input then search for a predefined feature.
@@ -207,28 +215,25 @@ function displayHelp(sections: Section[]): string {
 }
 
 function getKebabCase(str: string) {
-
   const regex = /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g;
   const match = str.match(regex);
   let result = '';
   if (match !== null) {
-    result = match.map(x => x.toLowerCase())
-      .join('-');
+    result = match.map(x => x.toLowerCase()).join('-');
   }
 
   return result;
 }
 
 function getPascalCase(str: string) {
-  const word = str.replace(/([-_][a-z0-9])/ig, ($1) => {
-    return $1.toUpperCase()
+  const word = str.replace(/([-_][a-z0-9])/gi, $1 => {
+    return $1
+      .toUpperCase()
       .replace('-', '')
       .replace('_', '');
   });
 
-  return `${word.charAt(0)
-    .toLocaleUpperCase()}${word
-      .substring(1)}`;
+  return `${word.charAt(0).toLocaleUpperCase()}${word.substring(1)}`;
 }
 
 function hasKebab(str = '') {
@@ -296,14 +301,13 @@ function getProjectRoot() {
 function checkProjectValidity(operation: Command) {
   const results = {
     isValid: false,
-    projectRoot: '',
+    projectRoot: ''
   };
   let projectRoot: string | null;
 
   if (operation.feature === 'project') {
     results.isValid = true;
   } else {
-
     projectRoot = getProjectRoot();
     if (projectRoot !== null && projectRoot !== '') {
       results.isValid = true;
@@ -311,19 +315,14 @@ function checkProjectValidity(operation: Command) {
     } else {
       results.isValid = false;
     }
-
   }
 
   return results;
 }
 
-
-
-
 // Function to iterate through the actions object
 // and check for the matching action to the users input
 function actionBeingRequested(enteredAction: string): string {
-
   // To be returned after finding the action
   let actionReturn = '';
 
@@ -345,8 +344,11 @@ function actionBeingRequested(enteredAction: string): string {
   return actionReturn;
 }
 
-
-function parseDynamicObjects(jsonData: string, objectName: string, hasBrackets?: boolean): void {
+function parseDynamicObjects(
+  jsonData: string,
+  objectName: string,
+  hasBrackets?: boolean
+): void {
   let filePathOfObjectInsideProject;
   let objectInProject;
   let objectStringToBeWritten = '';
@@ -357,7 +359,11 @@ function parseDynamicObjects(jsonData: string, objectName: string, hasBrackets?:
   // 1[b] Once inside of a project values are assigned to be used
   if (PROJECT_ROOT !== null) {
     // Allocate the location of the <OBJECT>.js file
-    filePathOfObjectInsideProject = path.join(PROJECT_ROOT, '.rdvue', `${objectName}.js`);
+    filePathOfObjectInsideProject = path.join(
+      PROJECT_ROOT,
+      '.rdvue',
+      `${objectName}.js`
+    );
 
     // Read files to be modified
     objectInProject = readFile(filePathOfObjectInsideProject);
@@ -367,46 +373,64 @@ function parseDynamicObjects(jsonData: string, objectName: string, hasBrackets?:
 
     // Remove beginning and closing brackets if its an option to be modified
     if (hasBrackets) {
-      modifiedJSONData = modifiedJSONData.substring(1, modifiedJSONData.length - 1);
+      modifiedJSONData = modifiedJSONData.substring(
+        1,
+        modifiedJSONData.length - 1
+      );
     }
 
     // Removed closers from files to append information
     const originalObjectString = objectInProject.slice(0, -2);
 
     // Append the new information and close files after changes
-    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.routes ? ']' : '}'};`;
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${
+      objectName === DYNAMIC_OBJECTS.routes ? ']' : '}'
+    };`;
   }
 
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
-  if (filePathOfObjectInsideProject !== undefined && objectStringToBeWritten !== '') {
+  if (
+    filePathOfObjectInsideProject !== undefined &&
+    objectStringToBeWritten !== ''
+  ) {
     writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
   } else {
     // console.log(feature);
   }
 }
 
-async function dependencyInstaller(script: string[], config: NpmProgrammaticConfiguration) {
+async function dependencyInstaller(
+  script: string[],
+  config: NpmProgrammaticConfiguration
+) {
   const projectroot = getProjectRoot();
   if (projectroot !== null) {
     config.cwd = projectroot;
 
-    await npm.install(script, config)
-      .then(function () {
+    await npm
+      .install(script, config)
+      .then(function() {
         if (config.save) {
-          console.log(`Successfully installed required package/s ${[...script]}`);
+          console.log(
+            `Successfully installed required package/s ${[...script]}`
+          );
         }
 
         if (config.saveDev) {
-          console.log(`Successfully installed required dev package/s ${[...script]}`);
+          console.log(
+            `Successfully installed required dev package/s ${[...script]}`
+          );
         }
       })
-      .catch(function () {
+      .catch(function() {
         if (config.save) {
           console.log(`Unable to install required package/s ${[...script]}`);
         }
 
         if (config.saveDev) {
-          console.log(`Unable to install required dev package/s ${[...script]}`);
+          console.log(
+            `Unable to install required dev package/s ${[...script]}`
+          );
         }
       });
   } else {
@@ -425,22 +449,44 @@ function displayFeatureGroupsWithPlugins() {
         console.log(commandLineUsage([{ header: group.name }] as Section));
 
         for (const module of group.plugins) {
-
           const details = getFeatureConfiguration(module);
 
-          console.log(commandLineUsage([{
-            content: [{
-              name: chalk.magenta(details?.name as string),
-              summary: details.description
-            }]
-          }]));
+          console.log(
+            commandLineUsage([
+              {
+                content: [
+                  {
+                    name: chalk.magenta(details?.name as string),
+                    summary: details.description
+                  }
+                ]
+              }
+            ])
+          );
         }
       }
     }
   }
 }
 
+async function updateDynamicImportsAndExports(
+  folderName: string,
+  featuredata: string | string[]
+) {
+  const projectroot = getProjectRoot();
 
+  if (projectroot !== null) {
+    const fileLocation = path.join(projectroot, folderName, 'src', INDEX_FILE);
+
+    if (fileExists(fileLocation)) {
+      await appendToFile(fileLocation, featuredata);
+    } else {
+      console.log(`${fileLocation} - Does not exist`);
+    }
+  } else {
+    console.log('Project location was not found');
+  }
+}
 
 export {
   heading,
@@ -462,12 +508,11 @@ export {
   isRootDirectory,
   getProjectRoot,
   actionBeingRequested,
-
   parseDynamicObjects,
   dependencyInstaller,
   getFeatureGroupByName,
-
   displayFeatureGroupsWithPlugins,
   isOptionalModuleAction,
-  isFeatureGroupType
+  isFeatureGroupType,
+  updateDynamicImportsAndExports
 };
