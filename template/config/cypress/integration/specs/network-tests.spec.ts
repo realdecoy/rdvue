@@ -137,13 +137,13 @@ context('API Testing Examples',() => {
       });
    });
 
-   // Verfying multiple aspects of cookies within the application
+   // Verifying multiple aspects of cookies within the application
    it('Validates cookies within the application', () => {
 
     // Specifying optional parameters for cy.setCookie - See https://docs.cypress.io/api/commands/setcookie.html
     const options = { expiry: 2000000001, secure: true, httpOnly: false };
 
-      // First param is the cookie name, second param is the cookie's value, third pararm is an options object
+      // First param is the cookie name, second param is the cookie's value, third param is an options object
       cy.setCookie('sessionId','secretkey123', options)
       .then(() => {
         cy.getCookie('sessionId').then((cookie) => {
