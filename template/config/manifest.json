@@ -183,6 +183,10 @@
       "target": "cypress/integration/specs/test.spec.ts"
     },
     {
+      "source": "cypress/integration/specs/network-tests.spec.ts",
+      "target": "cypress/integration/specs/network-tests.spec.ts"
+    },
+    {
       "source": "meta/babel.config.js",
       "target": "babel.config.js"
     },
