@@ -19,6 +19,10 @@
   "installDirectory": "./",
   "files": [
     {
+      "source": "meta/.rdvue/.rdvue",
+      "target": ".rdvue/.rdvue"
+    },
+    {
       "source":"meta/.rdvue/modules/icon/dist/configuration.js",
       "target":".rdvue/modules/icon/configuration.js"
     },
