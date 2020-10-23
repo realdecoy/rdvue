@@ -19,8 +19,24 @@
   "installDirectory": "./",
   "files": [
     {
-      "source": "meta/.rdvue/.rdvue",
-      "target": ".rdvue/.rdvue"
+      "source":"meta/.rdvue/modules/icon/dist/configuration.js",
+      "target":".rdvue/modules/icon/configuration.js"
+    },
+    {
+      "source":"meta/.rdvue/modules/icon/dist/index.js",
+      "target":".rdvue/modules/icon/index.js"
+    },
+    {
+      "source":"meta/.rdvue/modules/icon/dist/worker.js",
+      "target":".rdvue/modules/icon/worker.js"
+    },
+    {
+      "source": "meta/.rdvue/modules/icon/dist/types.js",
+      "target": ".rdvue/modules/icon/types.js"
+    },
+    {
+      "source":"meta/.rdvue/index.js",
+      "target":".rdvue/index.js"
     },
     {
       "source": "meta/.rdvue/routes.js",
@@ -103,6 +119,10 @@
     {
       "source": "app/index.ts",
       "target": "src/pages/app/index.ts"
+    },
+    {
+      "source":"assets/logo.png",
+      "target":"src/assets/logo/logo.png"
     },
     {
       "source": "hello-world/hello-world.scss",
