@@ -32,9 +32,9 @@
     }
   ],
   "plugins": [
-    "auth",
     "localization",
-    "storybook"
+    "storybook",
+    "pwa"
   ],
   "project": {
     "features": [
@@ -52,7 +52,7 @@
       "plugins": [
         "auth"
       ],
-      "question": "Which Authentication Library would you like to install?"
+      "question": "(INCOMPLETE. DO NOT USE) Which Authentication Library would you like to install?"
     },
     {
       "name": "locale",
@@ -61,6 +61,14 @@
         "localization"
       ],
       "question": "Which Localization Library would you like to install?"
+    },
+    {
+      "name": "pwa",
+      "isMultipleChoice": false,
+      "plugins": [
+        "pwa"
+      ],
+      "question": "What is name of your application?"
     }
   ],
   "presets": [],
