@@ -61,14 +61,6 @@
         "localization"
       ],
       "question": "Which Localization Library would you like to install?"
-    },
-    {
-      "name": "pwa",
-      "isMultipleChoice": false,
-      "plugins": [
-        "pwa"
-      ],
-      "question": "What is name of your application?"
     }
   ],
   "presets": [],
