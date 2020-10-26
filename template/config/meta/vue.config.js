@@ -6,6 +6,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const isProd = process.env.NODE_ENV === 'production';
 const { default: ImageminPlugin } = require('imagemin-webpack-plugin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
+const options = require('./.rdvue/options');
 
 module.exports = {
   chainWebpack: (config) => {
@@ -24,8 +25,8 @@ module.exports = {
       [
 
         // Produces a bundle report for production build. 
-        // Opens in browser automatically.
-        new BundleAnalyzerPlugin(),
+        // Generates a report to be viewed later.
+        new BundleAnalyzerPlugin( {analyzerMode: "static"} ),
 
         // Reduce image size for assets in Production build.
         new ImageminPlugin({
@@ -78,5 +79,7 @@ module.exports = {
         }
       }
     }
-  }
+  },
+
+  pluginOptions: options
 };

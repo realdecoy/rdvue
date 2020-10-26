@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+const rdRoutes = require('../../.rdvue/routes.js');
+const routeList = rdRoutes.default;
 
 Vue.use(Router);
 
@@ -7,6 +9,7 @@ export default new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
+    ...routeList,
     // ------------------------------------------------------------------------
     // HelloWorld Page
     // ------------------------------------------------------------------------

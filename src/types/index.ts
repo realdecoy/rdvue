@@ -1,4 +1,4 @@
-import { Config } from './cli';
+import { Config, ConfigurationRoutes, ConfigurationGenericProperty } from './cli';
 
 /*
  Please note:
@@ -6,38 +6,48 @@ import { Config } from './cli';
 */
 
 // Type based of the manifest.json file in the templates folder
-export interface Manifest{
+export interface Manifest {
     version: number;
     name: string;
     description: string;
     installDirectory: string;
     sourceDirectory: string;
     files: ManifestFiles[];
-    singleUserPerProject?: boolean;
     arguments?: ManifestArguments[];
+    group?: boolean;
+    packages?: Dependencies;
+    routes?: ConfigurationRoutes[];
+    stores?: string[];
+    vueOptions?: ConfigurationGenericProperty;
+    modules?: ConfigurationGenericProperty;
 }
 
-export interface ManifestArguments{
+export interface Dependencies {
+    dependencies: string[];
+    devDependencies: string[];
+}
+
+export interface ManifestArguments {
     name: string;
     type: string;
     description: string;
     isPrivate?: boolean;
 }
 
-export interface ManifestFiles{
+export interface ManifestFiles {
     source: string;
     target: string;
 }
 
 // Files based of the model.json files
-export interface Files{
+export interface Files {
     source: string;
     target: string;
     content?: FilesContent[];
 }
 
 // Content for the files type
-export interface FilesContent{
+export interface FilesContent {
     matchRegex: string;
     replace: string;
 }
@@ -45,7 +55,7 @@ export interface FilesContent{
 
 // Command type for the commands being input
 // used in the src/lib/util.ts & src/index.ts
-export interface Command{
+export interface Command {
     action: string;
     feature: string;
     options: string[];

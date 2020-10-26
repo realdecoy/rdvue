@@ -3,7 +3,7 @@
 // Types that determines what should be present in each default object imported
 import {
     General,
-    ModuleDescriptor
+    ModuleDescriptor,
 } from '../types/cli';
 
 /*
@@ -23,9 +23,35 @@ export const PROJECT_DEFAULT: ModuleDescriptor = {
     config: {
         version: 1,
         sourceDirectory: '',
-        import: {
-            required: [''],
-            optional: ['']
+        features: [{
+            name: '',
+            private: false
+        }],
+        plugins: [''],
+        project: {
+            features: [''],
+            plugins: ['']
+        },
+        groups: [{
+            plugins: [''],
+            name: '',
+            isMultipleChoice: false,
+            modules: [''],
+            question: '',
+            description: ''
+        }],
+
+        presets: [{
+            name: '',
+            plugins: [''],
+        },
+
+        ],
+        customPreset: {
+            groups: [
+                ''
+            ],
+            name: ''
         },
         name: '',
         arguments: [

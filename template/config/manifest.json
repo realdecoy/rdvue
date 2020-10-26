@@ -2,8 +2,8 @@
   "version": 1,
   "name": "config",
   "description": "Mandatory project configuration.",
-  "singleUserPerProject": true,
-  "arguments": [{
+  "arguments": [
+    {
       "name": "projectNameKebab",
       "type": "string",
       "description": "the name for the generated project. (e.g. my-project)"
@@ -17,17 +17,40 @@
   ],
   "sourceDirectory": "./",
   "installDirectory": "./",
-  "files": [{
-      "source": "meta/.rdvue",
-      "target": ".rdvue"
+  "files": [
+    {
+      "source": "meta/.rdvue/.rdvue",
+      "target": ".rdvue/.rdvue"
+    },
+    {
+      "source": "meta/.rdvue/routes.js",
+      "target": ".rdvue/routes.js"
+    },
+    {
+      "source": "meta/.rdvue/modules.js",
+      "target": ".rdvue/modules.js"
+    },
+    {
+      "source": "meta/.rdvue/stores.js",
+      "target": ".rdvue/stores.js"
+    },
+    {
+      "source": "meta/.rdvue/options.js",
+      "target": ".rdvue/options.js"
+    },
+    {
+      "source": "meta/.rdvue/stores.js",
+      "target": ".rdvue/stores.js"
     },
     {
       "source": "meta/package.json",
       "target": "package.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "core/main.ts",
@@ -100,18 +123,22 @@
     {
       "source": "public/index.html",
       "target": "public/index.html",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/manifest.json",
       "target": "public/manifest.json",
-      "content": [{
-        "matchRegex": "__PROJECT__NAME__KEBAB__",
-        "replace": "${projectNameKebab}"
-      }]
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "public/favicon.ico",
@@ -127,7 +154,13 @@
     },
     {
       "source": "cypress/tsconfig.json",
-      "target": "cypress/tsconfig.json"
+      "target": "cypress/tsconfig.json",
+      "content": [
+        {
+          "matchRegex": "__PROJECT__NAME__KEBAB__",
+          "replace": "${projectNameKebab}"
+        }
+      ]
     },
     {
       "source": "cypress/integration/specs/actions.spec.ts",
@@ -148,6 +181,10 @@
     {
       "source": "cypress/integration/specs/test.spec.ts",
       "target": "cypress/integration/specs/test.spec.ts"
+    },
+    {
+      "source": "cypress/integration/specs/network-tests.spec.ts",
+      "target": "cypress/integration/specs/network-tests.spec.ts"
     },
     {
       "source": "meta/babel.config.js",
@@ -196,6 +233,14 @@
     {
       "source": "theme/tailwind.css",
       "target": "src/theme/tailwind.css"
+    },
+    {
+      "source": "modules/core/vuex.ts",
+      "target": "src/modules/core/vuex.ts"
+    },
+    {
+      "source": "modules/core/index.ts",
+      "target": "src/modules/core/index.ts"
     }
   ]
 }

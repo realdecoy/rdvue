@@ -4,6 +4,7 @@ import { Component, Vue } from 'vue-property-decorator';
   components: {},
   name: 'hello-world',
 })
+
 class HelloWorldView extends Vue {
   // --------------------------------------------------------------------------
   // [Private] Fields
@@ -43,6 +44,6 @@ class HelloWorldView extends Vue {
 }
 
 export {
-    HelloWorldView as default,
-    HelloWorldView,
+  HelloWorldView as default,
+  HelloWorldView,
 };

@@ -2,11 +2,19 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
-import { ACTIONS } from '../constants/constants';
+
+import npm from 'npm-programmatic';
+import { Group, NpmProgrammaticConfiguration } from '../types/cli';
+
+import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, LIST_ACTION } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
-import { fileExists } from './files';
 
+import { fileExists, readFile, readMainConfig, writeFile } from './files';
+import { getFeatureConfiguration } from './helper-functions';
+
+
+import { isPlugin } from './optional-modules';
 const helpOptions = ['--help', '-h'];
 
 function heading(): void {
@@ -77,6 +85,47 @@ function parseOptions(args: string[]): string[] {
 }
 
 /**
+ * Description - Finds and returns the feature group that has the given name
+ * @param name - name of the feature group
+ */
+function getFeatureGroupByName(name: string): Group | undefined {
+  const feature = readMainConfig()?.groups
+    ?.find((g) => g.name === name);
+
+  return feature;
+}
+/**
+ * Checks if the feature given by the user is a feature group type
+ * @param feature - name of feature
+ */
+function isFeatureGroupType(feature: string): boolean {
+  const featureGroups = readMainConfig()?.groups;
+  let isGroup;
+  if (featureGroups !== undefined) {
+    isGroup = featureGroups.find(featureGroup => featureGroup.name === feature);
+  }
+
+  return isGroup === undefined ? false : true;
+}
+
+
+
+/**
+ * Description - Accepts a string representing an ACTION and checks
+ * if that string is a Command (ACTION) relating to optional modules
+ * @param command - Name of ACTION
+ */
+function isOptionalModuleAction(command: string) {
+
+  const isTrue =
+    command === ADD_ACTION ||
+    command === ADD_GROUP ||
+    command === LIST_ACTION;
+
+  return isTrue;
+}
+
+/**
  * Description - seperates the user input into <service> <action> <feature>
  * <featureName> [options]
  * @param args - the arguments that the user provided in the command line
@@ -89,8 +138,13 @@ function parseUserInput(args: string[], features: string[]) {
     action: '',
     feature: '',
     featureName: '',
-    options: ['']
+    options: [''],
   };
+
+  // This holds the argument that is expected after <rdvue list>
+  const isFeatures = 'features';
+
+
   // Magic numbers are not allowed: used to check third argument
   const argIndex = 2;
   let remainingArgs = [];
@@ -102,9 +156,14 @@ function parseUserInput(args: string[], features: string[]) {
 
     returnObject.action = args[0];
 
+
+
     // [2] Checking second argument <feature>
     // to see if it includes a valid feature (eg. project or page)
-    if (args[1] !== undefined && features.includes(args[1])) {
+    // OR a Plugin or a Feature Group Type
+    // OR if its 'features' which was passed - 'features' is used to list optional modules/features
+    if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1])
+      || isPlugin(args[1]) || args[1] === isFeatures)) {
 
       returnObject.feature = args[1];
 
@@ -206,7 +265,7 @@ function isRootDirectory(location: string | null = null): boolean {
 }
 
 function getProjectRoot() {
-  const configFileName = '.rdvue';
+  const configFileName = '.rdvue/.rdvue';
   const maxTraverse = 20;
 
   let currentPath = process.cwd();
@@ -258,6 +317,9 @@ function checkProjectValidity(operation: Command) {
   return results;
 }
 
+
+
+
 // Function to iterate through the actions object
 // and check for the matching action to the users input
 function actionBeingRequested(enteredAction: string): string {
@@ -283,6 +345,103 @@ function actionBeingRequested(enteredAction: string): string {
   return actionReturn;
 }
 
+
+function parseDynamicObjects(jsonData: string, objectName: string, hasBrackets?: boolean): void {
+  let filePathOfObjectInsideProject;
+  let objectInProject;
+  let objectStringToBeWritten = '';
+
+  // 1[a] Check for the root of the project
+  const PROJECT_ROOT = getProjectRoot();
+
+  // 1[b] Once inside of a project values are assigned to be used
+  if (PROJECT_ROOT !== null) {
+    // Allocate the location of the <OBJECT>.js file
+    filePathOfObjectInsideProject = path.join(PROJECT_ROOT, '.rdvue', `${objectName}.js`);
+
+    // Read files to be modified
+    objectInProject = readFile(filePathOfObjectInsideProject);
+
+    // Replace brackets & ("/`) quotations in string
+    let modifiedJSONData = jsonData.replace(/[\[\]"`]+/g, '');
+
+    // Remove beginning and closing brackets if its an option to be modified
+    if (hasBrackets) {
+      modifiedJSONData = modifiedJSONData.substring(1, modifiedJSONData.length - 1);
+    }
+
+    // Removed closers from files to append information
+    const originalObjectString = objectInProject.slice(0, -2);
+
+    // Append the new information and close files after changes
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.routes ? ']' : '}'};`;
+  }
+
+  // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
+  if (filePathOfObjectInsideProject !== undefined && objectStringToBeWritten !== '') {
+    writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
+  } else {
+    // console.log(feature);
+  }
+}
+
+async function dependencyInstaller(script: string[], config: NpmProgrammaticConfiguration) {
+  const projectroot = getProjectRoot();
+  if (projectroot !== null) {
+    config.cwd = projectroot;
+
+    await npm.install(script, config)
+      .then(function () {
+        if (config.save) {
+          console.log(`Successfully installed required package/s ${[...script]}`);
+        }
+
+        if (config.saveDev) {
+          console.log(`Successfully installed required dev package/s ${[...script]}`);
+        }
+      })
+      .catch(function () {
+        if (config.save) {
+          console.log(`Unable to install required package/s ${[...script]}`);
+        }
+
+        if (config.saveDev) {
+          console.log(`Unable to install required dev package/s ${[...script]}`);
+        }
+      });
+  } else {
+    console.log('Project location not found');
+  }
+}
+
+function displayFeatureGroupsWithPlugins() {
+  const groups = readMainConfig()?.groups;
+
+  if (groups !== undefined) {
+    console.log(chalk.green('Feature Groups'));
+
+    for (const group of groups) {
+      if (group.plugins.length > 0) {
+        console.log(commandLineUsage([{ header: group.name }] as Section));
+
+        for (const module of group.plugins) {
+
+          const details = getFeatureConfiguration(module);
+
+          console.log(commandLineUsage([{
+            content: [{
+              name: chalk.magenta(details?.name as string),
+              summary: details.description
+            }]
+          }]));
+        }
+      }
+    }
+  }
+}
+
+
+
 export {
   heading,
   sectionBreak,
@@ -302,5 +461,13 @@ export {
   checkProjectValidity,
   isRootDirectory,
   getProjectRoot,
-  actionBeingRequested
+  actionBeingRequested,
+
+  parseDynamicObjects,
+  dependencyInstaller,
+  getFeatureGroupByName,
+
+  displayFeatureGroupsWithPlugins,
+  isOptionalModuleAction,
+  isFeatureGroupType
 };

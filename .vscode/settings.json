@@ -4,8 +4,10 @@
     "source.fixAll": false,
     "source.organizeImports": false
   },
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "tslint.autoFixOnSave": false,
   "typescript.preferences.quoteStyle": "single",
-  "vetur.format.defaultFormatter.ts": "vscode-typescript"
+  "vetur.format.defaultFormatter.ts": "vscode-typescript",
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true
 }
