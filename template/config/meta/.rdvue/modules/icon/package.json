@@ -1,0 +1,28 @@
+{
+  "name": "icongen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "start": "tsc && node dist/index.js",
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/js-beautify": "^1.11.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chalk": "^4.1.0",
+    "favicons": "^6.2.0",
+    "js-beautify": "^1.13.0",
+    "log-symbols": "^4.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/favicons": "^5.5.0"
+  }
+}
