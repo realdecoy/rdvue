@@ -31,15 +31,23 @@
     }
   ],
   "plugins": [
-    "auth",
     "localization",
     "storybook",
-    "vuetify"
+    "vuetify",
+    "pwa"
   ],
   "project": {
     "features": [
       "config",
       "store"
+    ],
+    "optional": [
+      "component",
+      "service",
+      "model",
+      "page",
+      "sm",
+      "layout"
     ],
     "plugins": [
       "storybook"
@@ -61,7 +69,7 @@
       "plugins": [
         "auth"
       ],
-      "question": "Which Authentication Library would you like to install?"
+      "question": "(INCOMPLETE. DO NOT USE) Which Authentication Library would you like to install?"
     },
     {
       "name": "locale",
