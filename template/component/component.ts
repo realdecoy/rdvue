@@ -1,4 +1,4 @@
-import { StoryComponent, StoryProp, Vue } from '.storybook/modules';
+import { StoryComponent, StoryProp, Vue } from '.rdvue/storybook';
 
 @StoryComponent({
   name: '__COMPONENT__KEBAB__',
@@ -6,6 +6,8 @@ import { StoryComponent, StoryProp, Vue } from '.storybook/modules';
   import: '@/components/__COMPONENT__KEBAB__',
   components: {},
 })
+
+
 class __COMPONENT__ extends Vue {
   // --------------------------------------------------------------------------
   // Fields

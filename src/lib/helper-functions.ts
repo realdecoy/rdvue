@@ -3,7 +3,7 @@
   and also the source folder
 */
 import { CLI_DESCRIPTION } from '../index';
-import { Config, Content, Menu, ModuleDescriptor } from '../types/cli';
+import { Config, Content, Menu, ModuleDescriptor, Group } from '../types/cli';
 
 /**
  * Descripton: Based on the feature inputed the function will assign the configuration

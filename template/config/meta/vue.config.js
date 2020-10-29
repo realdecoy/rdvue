@@ -1,12 +1,13 @@
 /**
  * Extend Vue's Webpack configuration.
  */
-
+const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const isProd = process.env.NODE_ENV === 'production';
 const { default: ImageminPlugin } = require('imagemin-webpack-plugin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const options = require('./.rdvue/options');
+const { IconWebpackPlugin } = require('./.rdvue') 
 
 module.exports = {
   chainWebpack: (config) => {
@@ -16,6 +17,11 @@ module.exports = {
   },
   configureWebpack: {
     externals: {
+      resolve: {
+        alias: {
+          '.rdvue': path.resolve(__dirname, '.rdvue/'),
+        }
+      },
       // Packages to exclude. E.g. 'highlight.js'
     },
     plugins: [...(isProd ?
@@ -25,8 +31,8 @@ module.exports = {
       [
 
         // Produces a bundle report for production build. 
-        // Opens in browser automatically.
-        new BundleAnalyzerPlugin(),
+        // Generates a report to be viewed later.
+        new BundleAnalyzerPlugin( {analyzerMode: "static"} ),
 
         // Reduce image size for assets in Production build.
         new ImageminPlugin({
@@ -47,6 +53,9 @@ module.exports = {
       // DEV PLUGINS
       // ----------------------------------------------------------------------
       [
+        new IconWebpackPlugin({
+          disable: false
+        }),
         // Add plugins
       ])],
     optimization: {

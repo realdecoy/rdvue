@@ -5,6 +5,7 @@
  */
 
 import chalk from 'chalk';
+
 import { Section } from 'command-line-usage';
 import inquirer from 'inquirer';
 import path from 'path';
@@ -12,14 +13,29 @@ import process from 'process';
 import * as CONFIG from './config';
 
 import * as ROOT_CONFIG from '../../config';
-import { featureGroup, featureType, featuresWithNoNames, GENERATE_ACTION, DYNAMIC_OBJECTS } from '../../constants/constants';
+
+
+import {
+    ADD_ACTION,
+    ADD_GROUP,
+    DYNAMIC_OBJECTS,
+    featuresWithNoNames,
+    featureType,
+    GENERATE_ACTION,
+
+} from '../../constants/constants';
+
 import * as files from '../../lib/files';
+
 import {
     getFeatureConfiguration,
     getFeatureMenu
 } from '../../lib/helper-functions';
+
 import * as util from '../../lib/util';
+
 import { CLI, Config, NpmProgrammaticConfiguration } from '../../types/cli';
+
 import {
     Command,
     Directories,
@@ -28,6 +44,7 @@ import {
     GetDirectoryInput
 } from '../../types/index';
 
+import * as OPTIONAL_MODULES from '../../lib/optional-modules';
 interface Answers {
     // tslint:disable-next-line
     [key: string]: any;
@@ -104,8 +121,7 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
         isStore ||
         currInstallDir === featureType.services ||
         availableFeaturesWithNoNames.includes(userFeature)
-    )
-    {
+    ) {
         installDirectory = `src/${currInstallDir !== './' ? currInstallDir : ''}`;
     }
     else if (userFeature === featureType.storybook) {
@@ -126,7 +142,7 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
 }
 
 /**
- * Description: Updating the configuration to hace correct directory place for .rdvue file
+ * Description: Updating the configuration to have correct directory place for .rdvue file
  * @param featureNameStore - object holding both Kebab and Pascal cases of the feature name
  * @param directories - install and source directory
  * @param kebabNameKey - the kebab case of the feature name
@@ -169,14 +185,17 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         const isValidCreateRequest =
             !hasHelpOption &&
             !hasInvalidOption &&
-            util.actionBeingRequested(userAction) === GENERATE_ACTION;
+            (util.actionBeingRequested(userAction) === GENERATE_ACTION ||
+                util.actionBeingRequested(userAction) === ADD_ACTION ||
+                util.actionBeingRequested(userAction) === ADD_GROUP);
+
         const isConfig = userFeature === featureType.config;
         const isStore = userFeature === featureType.store;
         let isProject = userFeature === featureType.project;
         const currentConfig = getFeatureConfiguration(userFeature);
         const questions = CONFIG.parsePrompts(getFeatureConfiguration(userFeature));
         const projectName = '<project-name>';
-        const availableFeatureGroups: string[] = Object.values(featureGroup);
+        const availablePlugins: string[] = OPTIONAL_MODULES.getPlugins();
 
         let featureNameStore: FeatureNameObject = {};
         let nameKey = '';
@@ -185,49 +204,17 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         let projectRoot: string | null;
         let directories: Directories;
 
-        // [1] Check if the user did not use the generate action or had an overall invalid command
-        if (!isValidCreateRequest) {
-            // Show Help Menu
-            const CLIPROPERTY = getFeatureMenu(operation.feature);
-            // tslint:disable-next-line:no-console
-            console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
-
-            return true;
+        // Checks if the user tries to use the generate action (generate or g) with a plugin
+        if ((!util.isOptionalModuleAction(userAction)) && availablePlugins.includes(userFeature)) {
+            OPTIONAL_MODULES.thowError();
         }
 
-        // [1]b If the user used a feature group request
-        if (availableFeatureGroups.includes(userFeature)) {
-            const parsed = files.readSubConfig(userFeature);
-
-            // [1]c Create a section break
-            util.sectionBreak();
-
-            // [1]d Obtaining the path of the project root
-            projectRoot = util.getProjectRoot();
-
-            // [1]e Get directory informations
-            directories = getDirectories({
-                featureNameStore,
-                currentConfig,
-                kebabNameKey,
-                isConfig,
-                isStore,
-                projectRoot,
-                userFeature
-            });
-
-            // [1]f Copy files into designated location
-            await files.copyFiles(
-                directories.sourceDir,
-                directories.installDir,
-                parsed.files as Files[]
-            );
-
-            isProject = false;
-        }
 
         // [2] Check if the user requested a new project
         if (isProject) {
+
+            const modulesToInstall = await OPTIONAL_MODULES.requestPresetSelection();
+
             // [2]b Get required config
             await run(
                 {
@@ -251,16 +238,40 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 USAGE
             );
 
-            // [2]d Adds storybook
-            await run({
-                options: userOptions, feature: featureType.storybook,
-                action: userAction
-            }, USAGE);
+
+            // 2[e] Loads in optional modules after project has been setup
+            for (const module of modulesToInstall) {
+                await OPTIONAL_MODULES.addPlugin(module);
+            }
+            await OPTIONAL_MODULES.installDefaultPlugins();
 
             util.nextSteps(projectName);
 
             return true;
+
         }
+
+        // [1] Check if the user did not use the generate action/add/list
+        // or had an overall invalid command
+        if (!isValidCreateRequest) {
+            // Show Help Menu
+            const CLIPROPERTY = getFeatureMenu(operation.feature);
+            // tslint:disable-next-line:no-console
+            console.log(util.displayHelp(CLIPROPERTY.menu as Section[]));
+
+
+            return true;
+        }
+
+
+        // [4] Retrieve user response to *questions* asked.
+        // *question* eg: "Please enter the name for the generated project"
+        if (userFeatureName !== '' || availableFeaturesWithNoNames.includes(userFeature)) {
+            answers[nameKey] = userFeatureName;
+        } else {
+            answers = await inquirer.prompt(questions);
+        }
+
 
         // [3] Getting the name key used. ex: "projectName" or "componentName"
         if (currentConfig.arguments !== undefined) {
@@ -269,7 +280,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
         // [4] Retrieve user response to *questions* asked.
         // *question* eg: "Please enter the name for the generated project"
-        if (userFeatureName !== '' || availableFeaturesWithNoNames.includes(userFeature)) {
+        if (userFeatureName !== '' || userFeature === 'auth') {
             answers[nameKey] = userFeatureName;
         } else {
             answers = await inquirer.prompt(questions);
@@ -311,12 +322,13 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             );
         }
 
-         // Update the .rdvue/routes.js file in src directory in the project
+
+        // Update the .rdvue/routes.js file in src directory in the project
         if (currentConfig.routes !== undefined) {
             await util.parseDynamicObjects(JSON.stringify(currentConfig.routes, null, 1), DYNAMIC_OBJECTS.routes);
         }
 
-         // Update the .rdvue/stores.js file in src directory in the project
+        // Update the .rdvue/stores.js file in src directory in the project
         if (currentConfig.stores !== undefined) {
             await util.parseDynamicObjects(JSON.stringify(currentConfig.stores, null, 1), DYNAMIC_OBJECTS.stores);
         }
@@ -330,7 +342,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         if (currentConfig.modules !== undefined) {
             await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
         }
-
         // [10] Install dependencies if they are required
         if (currentConfig.packages !== undefined) {
             const config: NpmProgrammaticConfiguration = { cwd: '' };
