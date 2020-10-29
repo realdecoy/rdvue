@@ -1,6 +1,6 @@
 /*
  Please note:
- This file contains interface pertaning to the logging object
+ This file contains interface pertaining to the logging object
 */
 
 export interface Log {
