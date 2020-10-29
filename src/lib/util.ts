@@ -141,7 +141,7 @@ function parseUserInput(args: string[], features: string[]) {
   };
 
   // This holds the argument that is expected after <rdvue list>
-  const isFeatures = 'features';
+  const isPlugins = 'plugins';
 
   // Magic numbers are not allowed: used to check third argument
   const argIndex = 2;
