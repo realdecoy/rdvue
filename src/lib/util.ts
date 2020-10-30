@@ -142,7 +142,7 @@ function parseUserInput(args: string[], features: string[]) {
   };
 
   // This holds the argument that is expected after <rdvue list>
-  const isFeatures = 'features';
+  const isPlugins = 'plugins';
 
 
   // Magic numbers are not allowed: used to check third argument
@@ -163,7 +163,7 @@ function parseUserInput(args: string[], features: string[]) {
     // OR a Plugin or a Feature Group Type
     // OR if its 'features' which was passed - 'features' is used to list optional modules/features
     if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1])
-      || isPlugin(args[1]) || args[1] === isFeatures)) {
+      || isPlugin(args[1]) || args[1] === isPlugins)) {
 
       returnObject.feature = args[1];
 
