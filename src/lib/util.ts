@@ -10,7 +10,7 @@ import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, LIST_ACTION } from '..
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
 
-import { fileExists, readFile, readMainConfig, writeFile } from './files';
+import { readFile, readMainConfig, writeFile, directoryExists } from './files';
 import { getFeatureConfiguration } from './helper-functions';
 
 
@@ -142,7 +142,7 @@ function parseUserInput(args: string[], features: string[]) {
   };
 
   // This holds the argument that is expected after <rdvue list>
-  const isPlugins = 'plugins';
+  const isFeatures = 'features';
 
 
   // Magic numbers are not allowed: used to check third argument
@@ -163,7 +163,7 @@ function parseUserInput(args: string[], features: string[]) {
     // OR a Plugin or a Feature Group Type
     // OR if its 'features' which was passed - 'features' is used to list optional modules/features
     if (args[1] !== undefined && (features.includes(args[1]) || isFeatureGroupType(args[1])
-      || isPlugin(args[1]) || args[1] === isPlugins)) {
+      || isPlugin(args[1]) || args[1] === isFeatures)) {
 
       returnObject.feature = args[1];
 
@@ -265,7 +265,7 @@ function isRootDirectory(location: string | null = null): boolean {
 }
 
 function getProjectRoot() {
-  const configFileName = '.rdvue/.rdvue';
+  const configFolderName = '.rdvue';
   const maxTraverse = 20;
 
   let currentPath = process.cwd();
@@ -278,7 +278,7 @@ function getProjectRoot() {
     back = path.join(back, '../');
     currentTraverse += 1;
 
-    if (fileExists(path.join(currentPath, configFileName))) {
+    if (directoryExists(path.join(currentPath, configFolderName))) {
       projectRoot = currentPath;
       break;
     } else if (isRootDirectory(currentPath)) {
@@ -311,7 +311,6 @@ function checkProjectValidity(operation: Command) {
     } else {
       results.isValid = false;
     }
-
   }
 
   return results;
