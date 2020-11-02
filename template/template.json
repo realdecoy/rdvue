@@ -33,8 +33,7 @@
   ],
   "plugins": [
     "localization",
-    "storybook",
-    "pwa"
+    "storybook"
   ],
   "project": {
     "features": [

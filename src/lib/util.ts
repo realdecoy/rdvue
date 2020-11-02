@@ -10,7 +10,7 @@ import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, LIST_ACTION } from '..
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
 
-import { fileExists, readFile, readMainConfig, writeFile } from './files';
+import { readFile, readMainConfig, writeFile, directoryExists } from './files';
 import { getFeatureConfiguration } from './helper-functions';
 
 
@@ -265,7 +265,7 @@ function isRootDirectory(location: string | null = null): boolean {
 }
 
 function getProjectRoot() {
-  const configFileName = '.rdvue/.rdvue';
+  const configFolderName = '.rdvue';
   const maxTraverse = 20;
 
   let currentPath = process.cwd();
@@ -278,7 +278,7 @@ function getProjectRoot() {
     back = path.join(back, '../');
     currentTraverse += 1;
 
-    if (fileExists(path.join(currentPath, configFileName))) {
+    if (directoryExists(path.join(currentPath, configFolderName))) {
       projectRoot = currentPath;
       break;
     } else if (isRootDirectory(currentPath)) {
@@ -311,7 +311,6 @@ function checkProjectValidity(operation: Command) {
     } else {
       results.isValid = false;
     }
-
   }
 
   return results;
