@@ -1,7 +1,8 @@
 {
   "version": 1,
   "sourceDirectory": "./",
-  "features": [{
+  "features": [
+    {
       "name": "config",
       "private": true
     },
@@ -53,7 +54,8 @@
       "storybook"
      ]
   },
-  "groups": [{
+  "groups": [
+    {
       "name": "auth",
       "isMultipleChoice": false,
       "plugins": [
@@ -79,7 +81,28 @@
       "question": "Which UI Library would you like to install?"
     }
   ],
-  "presets": [],
+  "presets": [
+    {
+      "name": "Recommended",
+      "plugins": [
+        "buefy",
+        "localization",
+        "pwa",
+        "fontawesome"
+      ],
+      "description": "Buefy, Localization, FontAwesome, PWA"
+    },
+    {
+      "name": "Vuetify",
+      "plugins": [
+        "vuetify",
+        "localization",
+        "pwa",
+        "fontawesome"
+      ],
+      "description": "Vuetify, Localization, FontAwesome, PWA"
+    }
+  ],
   "customPreset": {
     "groups": [],
     "name": "custom"
