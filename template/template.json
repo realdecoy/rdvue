@@ -33,8 +33,7 @@
   "plugins": [
     "localization",
     "storybook",
-    "vuetify",
-    "pwa"
+    "vuetify"
   ],
   "project": {
     "features": [
