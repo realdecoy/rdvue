@@ -1,8 +1,7 @@
 {
   "version": 1,
   "sourceDirectory": "./",
-  "features": [
-    {
+  "features": [{
       "name": "config",
       "private": true
     },
@@ -33,27 +32,31 @@
   ],
   "plugins": [
     "localization",
-    "storybook"
+    "storybook",
+    "vuetify",
+    "pwa"
   ],
   "project": {
     "features": [
       "config",
       "store"
     ],
+    "plugins": [
+      "storybook"
+    ],
     "optional": [
       "component",
       "service",
       "model",
       "page",
+      "auth",
       "sm",
-      "layout"
-    ],
-    "plugins": [
-      "storybook"
+      "layout",
+      "localization",
+      "vuetify"
     ]
   },
-  "groups": [
-    {
+  "groups": [{
       "name": "auth",
       "isMultipleChoice": false,
       "plugins": [
@@ -68,6 +71,14 @@
         "localization"
       ],
       "question": "Which Localization Library would you like to install?"
+    },
+    {
+      "name": "ui",
+      "isMultipleChoice": false,
+      "plugins": [
+        "vuetify"
+      ],
+      "question": "Which UI Library would you like to install?"
     }
   ],
   "presets": [],
