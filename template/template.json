@@ -41,14 +41,6 @@
       "config",
       "store"
     ],
-    "optional": [
-      "component",
-      "service",
-      "model",
-      "page",
-      "sm",
-      "layout"
-    ],
     "plugins": [
       "storybook"
     ],
@@ -59,6 +51,7 @@
       "page",
       "auth",
       "sm",
+      "layout",
       "localization",
       "vuetify"
     ]
