@@ -92,7 +92,7 @@
         "pwa",
         "fontawesome"
       ],
-      "descrition": "Buefy, Localization, FontAwesome, PWA"
+      "description": "Buefy, Localization, FontAwesome, PWA"
     },
     {
       "name": "Vuetify",
@@ -102,7 +102,7 @@
         "pwa",
         "fontawesome"
       ],
-      "descrition": "Vuetify, Localization, FontAwesome, PWA"
+      "description": "Vuetify, Localization, FontAwesome, PWA"
     }
   ],
   "customPreset": {
