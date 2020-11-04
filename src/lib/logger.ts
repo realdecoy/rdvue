@@ -17,7 +17,7 @@ filename += ('-' + new Date().getUTCDate());
 filename += ('-' + new Date().getUTCFullYear());
 
 // Retreive root of project being updated
-const PROJECT_ROOT = String(getProjectRoot());
+const PROJECT_ROOT = String(getProjectRoot);
 
 // Assign path of log file
 const LOG_FILE_PATH = path.join(PROJECT_ROOT, 'logs', `${filename}.txt`);
