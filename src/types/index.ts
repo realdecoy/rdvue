@@ -21,6 +21,7 @@ export interface Manifest {
     vueOptions?: ConfigurationGenericProperty;
     modules?: ConfigurationGenericProperty;
     projectModules?: string[];
+    projectTheme?: string[];
 }
 
 export interface Dependencies {

@@ -45,6 +45,7 @@ export interface Config {
   presets?: Preset[];
   customPreset?: CustomPreset;
   projectModules?: string[];
+  projectTheme?: string[];
 }
 
 // Generic string property

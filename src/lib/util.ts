@@ -162,8 +162,7 @@ function parseUserInput(args: string[], features: string[]) {
       args[1] !== undefined &&
       (features.includes(args[1]) ||
         isFeatureGroupType(args[1]) ||
-        isPlugin(args[1]) ||
-        args[1] === isFeatures)
+        isPlugin(args[1]))
     ) {
       returnObject.feature = args[1];
 
@@ -474,12 +473,14 @@ function displayFeatureGroupsWithPlugins() {
 
 async function updateDynamicImportsAndExports(
   folderName: string,
-  featuredata: string | string[]
+  featuredata: string | string[],
+  fileName: string
 ) {
   const projectroot = getProjectRoot();
+  const SOURCE_DIRECTORY = 'src';
 
   if (projectroot !== null) {
-    const fileLocation = path.join(projectroot, folderName, 'src', INDEX_FILE);
+    const fileLocation = path.join(projectroot, SOURCE_DIRECTORY, folderName, fileName);
 
     if (fileExists(fileLocation)) {
       await appendToFile(fileLocation, featuredata);

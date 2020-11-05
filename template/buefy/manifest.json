@@ -38,5 +38,8 @@
   ],
   "projectModules": [
     "import '@/modules/core/font-awesome';"
+  ],
+  "projectTheme": [
+    "@import 'bulma';\r\n"
   ]
 }
