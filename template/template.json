@@ -43,20 +43,7 @@
     ],
     "plugins": [
       "storybook"
-    ],
-    "optional": [
-      "component",
-      "service",
-      "model",
-      "page",
-      "auth",
-      "sm",
-      "layout",
-      "localization",
-      "vuetify",
-      "localization",
-      "buefy"
-    ]
+     ]
   },
   "groups": [{
       "name": "auth",
