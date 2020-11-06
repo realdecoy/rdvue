@@ -16,40 +16,43 @@ export const spinnerIcons = ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '�
 export const UTF8 = 'utf-8';
 export const TEMPLATE_FILE = '/template.json';
 export const MANIFEST_FILE = '/manifest.json';
+export const INDEX_FILE = 'index.ts';
 export const CORE = 'core';
 
 export enum featureType {
-    config = 'config',
-    store = 'store',
-    storybook = 'storybook',
-    project = 'project',
-    services = 'services',
+  config = 'config',
+  store = 'store',
+  storybook = 'storybook',
+  project = 'project',
+  services = 'services',
+  auth = 'auth',
+  localization = 'localization',
+  buefy = 'buefy'
 }
-
-
 
 export enum featuresWithNoNames {
     auth = 'auth',
     localization = 'localization',
-    vuetify = 'vuetify'
+    vuetify = 'vuetify',
+    buefy = 'buefy'
 }
 
 interface Actions {
-    [key: string]: string[];
+  [key: string]: string[];
 }
 
 export const ACTIONS: Actions = {
-    generate: ['generate', 'g'],
-    add: ['add'],
-    'add-group': ['add-group'],
-    list: ['list']
+  generate: ['generate', 'g'],
+  add: ['add'],
+  'add-group': ['add-group'],
+  list: ['list']
 };
 
 export enum DYNAMIC_OBJECTS {
-    routes = 'routes',
-    stores = 'stores',
-    options = 'options',
-    modules = 'modules'
+  routes = 'routes',
+  stores = 'stores',
+  options = 'options',
+  modules = 'modules'
 }
 
 export enum LOG_TYPES {

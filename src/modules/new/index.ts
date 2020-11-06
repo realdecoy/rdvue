@@ -114,7 +114,8 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
 
 
     if (isConfig) {
-        installDirectory = `${featureName}${currInstallDir !== './' ? currInstallDir : ''
+        installDirectory = `${featureName}${
+            currInstallDir !== './' ? currInstallDir : ''
             }`;
     } else if (
         isStore ||
@@ -138,6 +139,36 @@ function getDirectories(directoryInput: GetDirectoryInput): Directories {
         installDir: installDirectory,
         sourceDir: sourceDirectory
     };
+}
+
+/**
+ * Description: Updating the configuration to have correct directory place for .rdvue file
+ * @param featureNameStore - object holding both Kebab and Pascal cases of the feature name
+ * @param directories - install and source directory
+ * @param kebabNameKey - the kebab case of the feature name
+ */
+function updateConfig(
+    featureNameStore: FeatureNameObject,
+    directories: Directories,
+    kebabNameKey = ''
+) {
+    let absProjectRoot = '';
+    let configFile = '';
+    let projectRootConfig: object;
+    let strProjectRootConfig = '';
+
+    absProjectRoot = path.resolve(directories.installDir);
+    configFile = path.join(absProjectRoot, '.rdvue/.rdvue');
+    projectRootConfig = {
+        projectRoot: absProjectRoot
+    };
+    strProjectRootConfig = JSON.stringify(projectRootConfig);
+
+    // Writing the project root path to the .rdvue file
+    files.writeFile(configFile, strProjectRootConfig);
+
+    // Changes the current working directory to the specific feature folder
+    process.chdir(`./${featureNameStore[kebabNameKey]}`);
 }
 
 async function run(operation: Command, USAGE: CLI): Promise<any> {
@@ -311,30 +342,36 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         if (currentConfig.modules !== undefined) {
             await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
         }
+
+        if(currentConfig.projectTheme !== undefined && currentConfig.projectTheme.length > 0) {
+          await util.updateDynamicImportsAndExports(
+            'theme',
+            currentConfig.projectTheme,
+            '_all.scss'
+          );
+        }
+
         // [10] Install dependencies if they are required
         if (currentConfig.packages !== undefined) {
             const config: NpmProgrammaticConfiguration = { cwd: '' };
 
             if (currentConfig.packages?.dependencies?.length > 0) {
                 config.save = true;
-                currentConfig.packages.dependencies.forEach(async (dependency: string) => {
-                    await util.dependencyInstaller([dependency], config);
-                })
+                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
             }
 
             if (currentConfig.packages?.devDependencies?.length > 0) {
                 config.save = false;
                 config.saveDev = true;
-                currentConfig.packages.devDependencies.forEach(async (dependency: string) => {
-                    await util.dependencyInstaller([dependency], config);
-                })
+                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
             }
         }
 
         // [11] If executing the 'config' feature
         if (isConfig) {
+            // [11]a Updating the '.rdvue' config file to include the project root path
             if (kebabNameKey !== undefined) {
-                process.chdir(`./${featureNameStore[kebabNameKey]}`);
+                updateConfig(featureNameStore, directories, kebabNameKey);
             }
         } else {
             // [11]b Create a section break
