@@ -51,7 +51,6 @@
       "layout"
     ],
     "plugins": [
-      "storybook"
      ]
   },
   "groups": [
@@ -87,20 +86,18 @@
       "plugins": [
         "buefy",
         "localization",
-        "pwa",
         "fontawesome"
       ],
-      "description": "Buefy, Localization, FontAwesome, PWA"
+      "description": "Buefy, Localization, FontAwesome"
     },
     {
       "name": "Vuetify",
       "plugins": [
         "vuetify",
         "localization",
-        "pwa",
         "fontawesome"
       ],
-      "description": "Vuetify, Localization, FontAwesome, PWA"
+      "description": "Vuetify, Localization, FontAwesome"
     }
   ],
   "customPreset": {
