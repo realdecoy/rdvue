@@ -1,0 +1,36 @@
+image: lastest:version
+
+pipelines:
+  custom:
+    deploy_to_dev:
+      - step:
+          name: Build 
+          script:            
+            - npm install 
+            - npm run serve            
+      - step:
+          name: Deploy to S3
+          deployment: production
+          script: 
+            - pipe: atlassian/aws-s3-deploy:0.4.5
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: '<AWS_DEFAULT_REGION>'
+                S3_BUCKET: '<S3-Bucket-Name>'
+    deploy_to_prod:
+      - step: 
+          name: Build
+          script:
+            - npm install 
+            - npm run serve
+      - step:
+           name: Deploy to S3 
+           deployment: production
+           script:
+                  - pipe: atlassian/aws-s3-deploy:0.4.5
+                    variables:
+                      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                      AWS_DEFAULT_REGION: '<AWS_DEFAULT_REGION>'
+                      S3_BUCKET: '<S3-Bucket-Name>'

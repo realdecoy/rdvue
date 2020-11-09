@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "name": "bitbucket-pipelines",
+  "description": "Installs pipeline-bitbucket feature",
+  "sourceDirectory": "./",
+  "installDirectory": "../",
+  "files": [
+    {
+      "source": "content/bitbucket-pipelines.yml",
+      "target": "../bitbucket-pipelines.yml"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+image: node:latest
+
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: linux-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: npm install
+    - run: npm run serve
+    - uses: shallwefootball/s3-upload-action@master
+      name: Upload S3
+      id: S3
+      with:
+        aws_key_id: ${{ secrets.AWS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+        aws_bucket: ${{ secrets.AWS_BUCKET }}
+        source_dir: 'dist'

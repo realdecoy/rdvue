@@ -33,25 +33,15 @@
   ],
   "plugins": [
     "localization",
-    "storybook",
-    "pwa"
+    "bitbucket-pipelines",
+    ".github"
   ],
   "project": {
     "features": [
       "config",
       "store"
     ],
-    "optional": [
-      "component",
-      "service",
-      "model",
-      "page",
-      "sm",
-      "layout"
-    ],
-    "plugins": [
-      "storybook"
-    ]
+    "plugins": []
   },
   "groups": [
     {
@@ -69,11 +59,28 @@
         "localization"
       ],
       "question": "Which Localization Library would you like to install?"
+    },
+    {
+      "name": ".github",
+      "isMultipleChoice": false,
+      "plugins": [
+        ".github"
+      ],
+      "question": "Which pipeline installation would you like to install?"
     }
   ],
-  "presets": [],
+  "presets": [
+    {
+      "name": "bitbucket-pipeline",
+      "plugins": [
+        "bitbucket-pipelines"
+      ]
+    }
+  ],
   "customPreset": {
-    "groups": [],
+    "groups": [
+      ".github"
+    ],
     "name": "custom"
   }
 }
