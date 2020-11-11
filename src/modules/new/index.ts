@@ -342,6 +342,15 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         if (currentConfig.modules !== undefined) {
             await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
         }
+
+        if(currentConfig.projectTheme !== undefined && currentConfig.projectTheme.length > 0) {
+          await util.updateDynamicImportsAndExports(
+            'theme',
+            currentConfig.projectTheme,
+            '_all.scss'
+          );
+        }
+
         // [10] Install dependencies if they are required
         if (currentConfig.packages !== undefined) {
             const config: NpmProgrammaticConfiguration = { cwd: '' };

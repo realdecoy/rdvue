@@ -34,7 +34,10 @@
   "plugins": [
     "localization",
     "bitbucket-pipelines",
-    ".github"
+    ".github",
+    "storybook",
+    "vuetify",
+    "buefy"
   ],
   "project": {
     "features": [
@@ -67,6 +70,15 @@
         ".github"
       ],
       "question": "Which pipeline installation would you like to install?"
+    },
+    {
+      "name": "ui",
+      "isMultipleChoice": false,
+      "plugins": [
+        "vuetify",
+        "buefy"
+      ],
+      "question": "Which UI Library would you like to install?"
     }
   ],
   "presets": [
@@ -74,7 +86,26 @@
       "name": "bitbucket-pipeline",
       "plugins": [
         "bitbucket-pipelines"
-      ]
+      ],
+       "description": "Bitbucket-pipelines"
+    },
+    {
+      "name": "Recommended",
+      "plugins": [
+        "buefy",
+        "localization",
+        "fontawesome"
+      ],
+      "description": "Buefy, Localization, FontAwesome"
+    },
+    {
+      "name": "Vuetify",
+      "plugins": [
+        "vuetify",
+        "localization",
+        "fontawesome"
+      ],
+      "description": "Vuetify, Localization, FontAwesome"
     }
   ],
   "customPreset": {
