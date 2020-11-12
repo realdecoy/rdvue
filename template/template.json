@@ -29,6 +29,10 @@
     {
       "name": "sm",
       "private": false
+    },
+    {
+      "name": "layout",
+      "private": false
     }
   ],
   "plugins": [
@@ -42,8 +46,7 @@
       "config",
       "store"
     ],
-    "plugins": [
-     ]
+    "plugins": []
   },
   "groups": [
     {
