@@ -374,11 +374,15 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 updateConfig(featureNameStore, directories, kebabNameKey);
             }
         } else {
-            // [11]b Create a section break
-            util.sectionBreak();
-            // tslint:disable-next-line:no-console
-            console.log(chalk.magenta
-                (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
+             // [11]b Create a section break
+             util.sectionBreak();
+             // tslint:disable-next-line:no-console
+             answers[nameKey] === undefined?
+                console.log(chalk.magenta
+                    (`The ${userFeature} plugin has been added to your project.`)):
+                
+                console.log(chalk.magenta
+                    (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
         }
 
         return true;
