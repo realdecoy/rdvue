@@ -378,7 +378,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
              util.sectionBreak();
              // tslint:disable-next-line:no-console
              
-             // If answer is undefined log a different output message to the CLI
+             // [12] If answer is undefined log a different output message to the CLI
              answers[nameKey] === undefined?
                 console.log(chalk.magenta
                     (`The ${userFeature} plugin has been added to your project.`)):
