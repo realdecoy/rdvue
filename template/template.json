@@ -93,7 +93,7 @@
     }
   ],
   "customPreset": {
-    "groups": [],
+    "groups": ["ui"],
     "name": "custom"
   }
 }
