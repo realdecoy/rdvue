@@ -43,8 +43,8 @@ async function handleAddGroup(groupName: string) {
  * @param group - Group to prompt by
  */
 async function promptQuestionByGroup(group: Group) {
-  const multiple = '(multiple)';
-  const single = '(single)';
+  const multiple = '(Choose One or More)';
+  const single = '(Choose One)';
   const result = Array();
   const confirmBtn = group.isMultipleChoice ? 'Press Enter to continue' : '';
 
