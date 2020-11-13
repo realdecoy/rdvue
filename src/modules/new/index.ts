@@ -344,7 +344,8 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         }
 
         if(currentConfig.projectTheme !== undefined && currentConfig.projectTheme.length > 0) {
-          await util.updateDynamicImportsAndExports(
+         
+            await util.updateDynamicImportsAndExports(
             'theme',
             currentConfig.projectTheme,
             '_all.scss'
@@ -377,9 +378,10 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             // [11]b Create a section break
             util.sectionBreak();
             // tslint:disable-next-line:no-console
+
             console.log(chalk.magenta
                 (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
-        }
+            }
 
         return true;
     } catch (err) {
