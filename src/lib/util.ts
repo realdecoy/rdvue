@@ -409,34 +409,76 @@ async function dependencyInstaller(
   if (projectroot !== null) {
     config.cwd = projectroot;
 
+    console.log('\n')
+    progressStatus(true);
     await npm
       .install(script, config)
-      .then(function() {
+      .then(async function() {
         if (config.save) {
+          await progressStatus(false);
           console.log(
-            `Successfully installed required package/s ${[...script]}`
+            `\nSuccessfully installed required package/s ${[...script]}\n`
           );
         }
 
         if (config.saveDev) {
+          await progressStatus(false);
           console.log(
-            `Successfully installed required dev package/s ${[...script]}`
+            `\nSuccessfully installed required dev package/s ${[...script]}\n`
           );
         }
       })
-      .catch(function() {
+      .catch(async function() {
+        await progressStatus(false);
         if (config.save) {
-          console.log(`Unable to install required package/s ${[...script]}`);
+          console.log(`\nUnable to install required package/s ${[...script]}\n`);
         }
 
         if (config.saveDev) {
+          await progressStatus(false);
           console.log(
-            `Unable to install required dev package/s ${[...script]}`
+            `Unable to install required dev package/s ${[...script]}\n`
           );
         }
       });
   } else {
     console.log('Project location not found');
+  }
+}
+
+async function progressStatus(finished: boolean) {
+
+  await wait(100);
+
+  const loading = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // using 10 to make the progress bar length 10 charactes, multiplying by 5 below to arrive to 100
+  for (const i of loading) {
+
+    const dots = '.'.repeat(i);
+    const left = 10 - i;
+    const empty = ' '.repeat(left);
+    const percentage = i * 10;
+
+    // need to use `process.stdout.write` becuase console.log prints a newline character
+    // \r clear the current line and then print the other characters making it looks like it refresh
+    process.stdout.write(`\rInstalling your packages [${dots}${empty}] ${percentage}%`);
+    // wait periodically to simulate a realistic loading animation
+    await wait(50);
+
+    // a step implemented to remove a glitch in the loading animation
+    if (i === 1) {
+      process.stdout.write('\r\x1b[K');
+    }
+
+    // if the generation process is complete clear the console line with the escape character
+    if (finished) {
+      process.stdout.write('\r\x1b[K');
+      break;
+    }
+  }
+
+  function wait(ms: number) {
+    return new Promise((resolve: any) => setTimeout(resolve, ms));
   }
 }
 
