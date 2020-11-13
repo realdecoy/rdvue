@@ -25,6 +25,7 @@ import {
 } from '../constants/constants';
 import { Config } from '../types/cli';
 import { FeatureNameObject, Files } from '../types/index';
+import { type } from 'os';
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -338,7 +339,9 @@ async function copyAndUpdateFiles(
 
 async function appendToFile(location: string, data: any) {
   await fs.appendFile(location, data, err => {
-    console.log(err);
+    if(err instanceof Error){
+      console.log(err);
+    }
   });
 }
 
