@@ -25,7 +25,6 @@ import {
 } from '../constants/constants';
 import { Config } from '../types/cli';
 import { FeatureNameObject, Files } from '../types/index';
-import { type } from 'os';
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
