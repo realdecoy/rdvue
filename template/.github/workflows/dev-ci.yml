@@ -19,8 +19,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - run: npm install
-    - run: npm run serve
+      - name: install dependencies
+        run: npm install
+      - name: build
+        run: npm run build
     - uses: shallwefootball/s3-upload-action@master
       name: Upload S3
       id: S3

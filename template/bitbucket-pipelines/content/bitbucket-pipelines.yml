@@ -7,7 +7,7 @@ pipelines:
           name: Build 
           script:            
             - npm install 
-            - npm run serve            
+            - npm run build           
       - step:
           name: Deploy to S3
           deployment: production
@@ -23,7 +23,7 @@ pipelines:
           name: Build
           script:
             - npm install 
-            - npm run serve
+            - npm run build
       - step:
            name: Deploy to S3 
            deployment: production
