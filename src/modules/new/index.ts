@@ -213,8 +213,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         // [2] Check if the user requested a new project
         if (isProject) {
 
-            const modulesToInstall = await OPTIONAL_MODULES.requestPresetSelection();
-
+            let modulesToInstall: Array<string>;
             // [2]b Get required config
             await run(
                 {
@@ -238,6 +237,8 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 USAGE
             );
 
+            // [2]d Optional module questions need to be asked after project name is requested.
+            modulesToInstall = await OPTIONAL_MODULES.requestPresetSelection();
 
             // 2[e] Loads in optional modules after project has been setup
             for (const module of modulesToInstall) {
