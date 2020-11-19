@@ -4,7 +4,7 @@ import figlet from 'figlet';
 import path from 'path';
 
 import npm from 'npm-programmatic';
-import { logger } from './logger';
+import logSymbols from 'log-symbols';
 import { Group, NpmProgrammaticConfiguration } from '../types/cli';
 import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, INDEX_FILE, LIST_ACTION, LOG_TYPES } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
@@ -410,34 +410,35 @@ async function dependencyInstaller(
     config.cwd = projectroot;
 
     console.log('\n')
-    progressStatus(true);
+    progressStatus();
     await npm
       .install(script, config)
-      .then(async function() {
+      .then(function() {
         if (config.save) {
-          await progressStatus(false);
+          // if the generation process is complete clear the console line with the escape character
+          process.stdout.write('\r\x1b[K');
           console.log(
-            `\nSuccessfully installed required package/s ${[...script]}\n`
+            `${logSymbols.success} Successfully installed required package/s ${[...script]}`
           );
         }
 
         if (config.saveDev) {
-          await progressStatus(false);
+          process.stdout.write('\r\x1b[K');
           console.log(
-            `\nSuccessfully installed required dev package/s ${[...script]}\n`
+            `${logSymbols.success} Successfully installed required dev package/s ${[...script]}`
           );
         }
       })
-      .catch(async function() {
-        await progressStatus(false);
+      .catch(function() {
+        process.stdout.write('\r\x1b[K');
         if (config.save) {
-          console.log(`\nUnable to install required package/s ${[...script]}\n`);
+          console.log(`${logSymbols.error} Unable to install required package/s ${[...script]}`);
         }
 
         if (config.saveDev) {
-          await progressStatus(false);
+          process.stdout.write('\r\x1b[K');
           console.log(
-            `Unable to install required dev package/s ${[...script]}\n`
+            `${logSymbols.error} Unable to install required dev package/s ${[...script]}`
           );
         }
       });
@@ -446,35 +447,19 @@ async function dependencyInstaller(
   }
 }
 
-async function progressStatus(finished: boolean) {
+async function progressStatus() {
 
-  await wait(100);
+  let x = 0;
+  const loading = ["\\", "|", "/", "-"];
 
-  const loading = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  // using 10 to make the progress bar length 10 charactes, multiplying by 5 below to arrive to 100
-  for (const i of loading) {
-
-    const dots = '.'.repeat(i);
-    const left = 10 - i;
-    const empty = ' '.repeat(left);
-    const percentage = i * 10;
-
+  for(let i = 0; i == i; i++) {
     // need to use `process.stdout.write` becuase console.log prints a newline character
     // \r clear the current line and then print the other characters making it looks like it refresh
-    process.stdout.write(`\rInstalling your packages [${dots}${empty}] ${percentage}%`);
+    process.stdout.write("\rInstalling your packages " + loading[x++]);
+    x &= 3;
+
     // wait periodically to simulate a realistic loading animation
-    await wait(50);
-
-    // a step implemented to remove a glitch in the loading animation
-    if (i === 1) {
-      process.stdout.write('\r\x1b[K');
-    }
-
-    // if the generation process is complete clear the console line with the escape character
-    if (finished) {
-      process.stdout.write('\r\x1b[K');
-      break;
-    }
+    await wait(150);
   }
 
   function wait(ms: number) {
