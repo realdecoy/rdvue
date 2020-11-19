@@ -33,6 +33,8 @@
   ],
   "plugins": [
     "localization",
+    "bitbucket-pipelines",
+    ".github",
     "storybook",
     "vuetify",
     "buefy"
@@ -42,8 +44,7 @@
       "config",
       "store"
     ],
-    "plugins": [
-     ]
+    "plugins": []
   },
   "groups": [
     {
@@ -63,6 +64,14 @@
       "question": "Which Localization Library would you like to install?"
     },
     {
+      "name": ".github",
+      "isMultipleChoice": false,
+      "plugins": [
+        ".github"
+      ],
+      "question": "Which pipeline installation would you like to install?"
+    },
+    {
       "name": "ui",
       "isMultipleChoice": false,
       "plugins": [
@@ -73,6 +82,13 @@
     }
   ],
   "presets": [
+    {
+      "name": "bitbucket-pipeline",
+      "plugins": [
+        "bitbucket-pipelines"
+      ],
+      "description": "Bitbucket-pipelines"
+    },
     {
       "name": "Recommended",
       "plugins": [
@@ -93,7 +109,9 @@
     }
   ],
   "customPreset": {
-    "groups": [],
+    "groups": [
+      ".github"
+    ],
     "name": "custom"
   }
 }

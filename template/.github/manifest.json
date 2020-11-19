@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "github-pipelines",
+  "description": "Installs github pipeline feature",
+  "sourceDirectory": "./",
+  "installDirectory": "../.github/workflows",
+  "files": [
+    {
+      "source": "workflows/dev-ci.yml",
+      "target": "../dev-ci.yml"
+    },
+    {
+      "source": "workflows/prod-ci.yml",
+      "target": "../prod-ci.yml"
+    }
+  ]
+}
