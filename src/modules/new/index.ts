@@ -265,15 +265,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         }
 
 
-        // [4] Retrieve user response to *questions* asked.
-        // *question* eg: "Please enter the name for the generated project"
-        if (userFeatureName !== '' || availableFeaturesWithNoNames.includes(userFeature)) {
-            answers[nameKey] = userFeatureName;
-        } else {
-            answers = await inquirer.prompt(questions);
-        }
-
-
         // [3] Getting the name key used. ex: "projectName" or "componentName"
         if (currentConfig.arguments !== undefined) {
             nameKey = currentConfig.arguments[0].name;
