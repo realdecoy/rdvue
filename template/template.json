@@ -46,7 +46,9 @@
       "config",
       "store"
     ],
-    "plugins": []
+    "plugins": [
+      "storybook"
+    ]
   },
   "groups": [
     {
@@ -97,6 +99,6 @@
   ],
   "customPreset": {
     "groups": [],
-    "name": "custom"
+    "name": "Custom"
   }
 }
