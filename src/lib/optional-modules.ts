@@ -160,16 +160,17 @@ async function handleOptionalModulesRequests(operation: Command) {
 async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
 
   let selectedmodules: string[] = [];
-  let step = 1;
+  let currentQuestion = 1;
   if (featureGroups !== undefined) {
     for (const group of featureGroups) {
-      group.question = `${chalk.greenBright(step.toString())}. ${group.question}`;
+      group.question = `${chalk.greenBright(currentQuestion.toString())}. ${group.question}`;
       const selections = await promptQuestionByGroup(group);
 
       selectedmodules = selections.length > 0 ? [...selectedmodules, ...selections]
         : [...selectedmodules];
+
+        currentQuestion++;
     }
-    step++;
   }
 
   return selectedmodules;
