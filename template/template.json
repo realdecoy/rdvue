@@ -29,6 +29,10 @@
     {
       "name": "sm",
       "private": false
+    },
+    {
+      "name": "layout",
+      "private": false
     }
   ],
   "plugins": [
@@ -44,8 +48,8 @@
     ],
     "plugins": [
       "storybook"
-       ]
-   },
+    ]
+  },
   "groups": [
     {
       "name": "auth",
