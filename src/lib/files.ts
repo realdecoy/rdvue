@@ -338,7 +338,9 @@ async function copyAndUpdateFiles(
 
 async function appendToFile(location: string, data: any) {
   await fs.appendFile(location, data, err => {
-    console.log(err);
+    if(err instanceof Error){
+      console.log(err);
+    }
   });
 }
 

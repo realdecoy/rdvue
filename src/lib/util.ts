@@ -4,7 +4,7 @@ import figlet from 'figlet';
 import path from 'path';
 
 import npm from 'npm-programmatic';
-import { logger } from './logger';
+import logSymbols from 'log-symbols';
 import { Group, NpmProgrammaticConfiguration } from '../types/cli';
 import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, INDEX_FILE, LIST_ACTION, LOG_TYPES } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
@@ -96,7 +96,8 @@ function parseOptions(args: string[]): string[] {
  * @param name - name of the feature group
  */
 function getFeatureGroupByName(name: string): Group | undefined {
-  const feature = readMainConfig()?.groups?.find(g => g.name === name);
+  const feature = readMainConfig()?.groups
+  ?.find(g => g.name.toLowerCase() === name.toLowerCase());
 
   return feature;
 }
@@ -108,7 +109,8 @@ function isFeatureGroupType(feature: string): boolean {
   const featureGroups = readMainConfig()?.groups;
   let isGroup;
   if (featureGroups !== undefined) {
-    isGroup = featureGroups.find(featureGroup => featureGroup.name === feature);
+    isGroup = featureGroups.find(featureGroup =>
+      featureGroup.name.toLowerCase() === feature.toLowerCase());
   }
 
   return isGroup === undefined ? false : true;
@@ -160,11 +162,11 @@ function parseUserInput(args: string[], features: string[]) {
     // OR if its 'features' which was passed - 'features' is used to list optional modules/features
     if (
       args[1] !== undefined &&
-      (features.includes(args[1]) ||
-        isFeatureGroupType(args[1]) ||
-        isPlugin(args[1]))
+      (features.includes(args[1].toLowerCase()) ||
+        isFeatureGroupType(args[1].toLowerCase()) ||
+        isPlugin(args[1].toLowerCase()))
     ) {
-      returnObject.feature = args[1];
+      returnObject.feature = args[1].toLowerCase();
 
       // [3] Checking third argument <feature name> eg. "test_project"
       // If the feature name entered contains '--' at the beggining of the word
@@ -409,34 +411,61 @@ async function dependencyInstaller(
   if (projectroot !== null) {
     config.cwd = projectroot;
 
+    console.log('\n')
+    progressStatus();
     await npm
       .install(script, config)
       .then(function() {
         if (config.save) {
+          // if the generation process is complete clear the console line with the escape character
+          process.stdout.write('\r\x1b[K');
           console.log(
-            `Successfully installed required package/s ${[...script]}`
+            `${logSymbols.success} Successfully installed required package/s ${[...script]}`
           );
         }
 
         if (config.saveDev) {
+          process.stdout.write('\r\x1b[K');
           console.log(
-            `Successfully installed required dev package/s ${[...script]}`
+            `${logSymbols.success} Successfully installed required dev package/s ${[...script]}`
           );
         }
       })
       .catch(function() {
+        process.stdout.write('\r\x1b[K');
         if (config.save) {
-          console.log(`Unable to install required package/s ${[...script]}`);
+          console.log(`${logSymbols.error} Unable to install required package/s ${[...script]}`);
         }
 
         if (config.saveDev) {
+          process.stdout.write('\r\x1b[K');
           console.log(
-            `Unable to install required dev package/s ${[...script]}`
+            `${logSymbols.error} Unable to install required dev package/s ${[...script]}`
           );
         }
       });
   } else {
     console.log('Project location not found');
+  }
+}
+
+async function progressStatus() {
+
+  let x = 0;
+  const loading = ["\\", "|", "/", "-"];
+
+  for(let i = 0; i == i; i++) {
+    // need to use `process.stdout.write` becuase console.log prints a newline character
+    // \r clear the current line and then print the other characters making it looks like it refresh
+    process.stdout.write("\rInstalling your packages " + loading[x++]);
+    x &= 3;
+
+    // wait periodically to simulate a realistic loading animation
+    await wait(150);
+  }
+
+  function wait(ms: number) {
+    return new Promise((resolve: any) => setTimeout(resolve, ms));
   }
 }
 
