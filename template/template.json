@@ -57,7 +57,7 @@
       "plugins": [
         "auth"
       ],
-      "question": "(INCOMPLETE. DO NOT USE) Which Authentication Library would you like to install?"
+      "question": "[EXPERIMENTAL] Which authentication library would you like to install?"
     },
     {
       "name": "locale",
@@ -65,7 +65,7 @@
       "plugins": [
         "localization"
       ],
-      "question": "Which Localization Library would you like to install?"
+      "question": "Which localization library would you like to install?"
     },
     {
       "name": "ui",
@@ -74,7 +74,7 @@
         "vuetify",
         "buefy"
       ],
-      "question": "Which UI Library would you like to install?"
+      "question": "Which UI library would you like to install?"
     }
   ],
   "presets": [
