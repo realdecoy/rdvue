@@ -16,6 +16,7 @@ import { CLI_DESCRIPTION } from '..';
 import chalk from 'chalk';
 
 import * as MODULE_NEW from '../modules/new';
+import { readMainConfig } from './files';
 
 /**
  * Description - Accepts a Feature Group name, prompts user to select a module from that group
@@ -90,8 +91,8 @@ async function addPlugin(plugin: string) {
  */
 function isPlugin(plugin: string): boolean {
   let found;
-  const plugins = files.readMainConfig()?.plugins;
-  found = plugins?.find((p) => p.toLowerCase() === plugin.toLowerCase());
+  const plugins = readMainConfig()?.plugins;
+  found = plugins?.find((p) => p === plugin);
 
   return found !== undefined ? true : false;
 }
@@ -102,8 +103,7 @@ function isPlugin(plugin: string): boolean {
  */
 function isDefaultPlugin(plugin: string) {
   return files.readMainConfig().project.plugins
-  .map((p)=>p.toLowerCase())
-    .includes(plugin.toLowerCase());
+    .includes(plugin);
 }
 /**
  * Description - Installs default plugins into a newly created project
@@ -214,7 +214,9 @@ async function promptPresetOptions() {
   if (presets !== undefined && presets.length > 0) {
     options = concat(presets, customPreset) as [];
   }
-
+  // if (customPreset !== undefined && presets !==) {
+  //   options = concat(options, customPreset) as [];
+  // }
 
   if (options.length > 0) {
     const { preset } = await inquirer.prompt({
@@ -241,14 +243,14 @@ async function promptPresetOptions() {
  */
 function isPresetSelected(name: string): boolean {
   const presets = files.readMainConfig()?.presets
-    ?.map((preset) => preset.name.toLowerCase());
+    ?.map((preset) => preset.name);
 
-  return presets !== undefined && presets.includes(name.toLowerCase()) ? true : false;
+  return presets !== undefined && presets.includes(name) ? true : false;
 }
 
 function isCustomSelected(name: string): boolean {
   return files.readMainConfig()?.customPreset?.name
-    .toLowerCase() === name.toLowerCase() ? true : false;
+    .toLocaleLowerCase() === name.toLocaleLowerCase() ? true : false;
 }
 
 /**
@@ -257,8 +259,7 @@ function isCustomSelected(name: string): boolean {
  */
 function loadPresetPlugins(presetName: string): string[] {
   const plugins = files.readMainConfig()?.presets
-    ?.find((preset) => preset.name.toLowerCase() === presetName.toLowerCase())
-    ?.plugins;
+    ?.find((preset) => preset.name === presetName)?.plugins;
 
   return plugins !== undefined ? plugins : [];
 }
