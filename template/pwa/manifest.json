@@ -1,0 +1,17 @@
+{
+    "version": 1,
+    "name": "pwa",
+    "group": true,
+    "description": "Adds pwa support to your application",
+    "sourceDirectory": "./",
+    "installDirectory": "./",
+    "files": [
+      {
+          "source":"./service-worker/service-worker.ts",
+          "target":"./src/service-worker.ts"
+      }
+    ],
+    "packages": {
+        "devDependencies": ["@vue/cli-plugin-pwa"]
+    }
+}
