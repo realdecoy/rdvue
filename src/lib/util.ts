@@ -96,8 +96,7 @@ function parseOptions(args: string[]): string[] {
  * @param name - name of the feature group
  */
 function getFeatureGroupByName(name: string): Group | undefined {
-  const feature = readMainConfig()?.groups
-  ?.find(g => g.name.toLowerCase() === name.toLowerCase());
+  const feature = readMainConfig()?.groups?.find(g => g.name === name);
 
   return feature;
 }
@@ -109,8 +108,7 @@ function isFeatureGroupType(feature: string): boolean {
   const featureGroups = readMainConfig()?.groups;
   let isGroup;
   if (featureGroups !== undefined) {
-    isGroup = featureGroups.find(featureGroup =>
-      featureGroup.name.toLowerCase() === feature.toLowerCase());
+    isGroup = featureGroups.find(featureGroup => featureGroup.name === feature);
   }
 
   return isGroup === undefined ? false : true;
@@ -162,11 +160,11 @@ function parseUserInput(args: string[], features: string[]) {
     // OR if its 'features' which was passed - 'features' is used to list optional modules/features
     if (
       args[1] !== undefined &&
-      (features.includes(args[1].toLowerCase()) ||
-        isFeatureGroupType(args[1].toLowerCase()) ||
-        isPlugin(args[1].toLowerCase()))
+      (features.includes(args[1]) ||
+        isFeatureGroupType(args[1]) ||
+        isPlugin(args[1]))
     ) {
-      returnObject.feature = args[1].toLowerCase();
+      returnObject.feature = args[1];
 
       // [3] Checking third argument <feature name> eg. "test_project"
       // If the feature name entered contains '--' at the beggining of the word
