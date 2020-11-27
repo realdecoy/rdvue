@@ -214,9 +214,7 @@ async function promptPresetOptions() {
   if (presets !== undefined && presets.length > 0) {
     options = concat(presets, customPreset) as [];
   }
-  // if (customPreset !== undefined && presets !==) {
-  //   options = concat(options, customPreset) as [];
-  // }
+
 
   if (options.length > 0) {
     const { preset } = await inquirer.prompt({
