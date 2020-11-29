@@ -209,7 +209,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             OPTIONAL_MODULES.thowError();
         }
 
-
         // [2] Check if the user requested a new project
         if (isProject) {
 
@@ -350,13 +349,13 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
             if (currentConfig.packages?.dependencies?.length > 0) {
                 config.save = true;
-                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
+                await util.dependencyInstaller(currentConfig.packages.dependencies, currentConfig.name, config);
             }
 
             if (currentConfig.packages?.devDependencies?.length > 0) {
                 config.save = false;
                 config.saveDev = true;
-                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
+                await util.dependencyInstaller(currentConfig.packages.devDependencies, userFeature, config);
             }
         }
 
