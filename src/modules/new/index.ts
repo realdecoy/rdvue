@@ -355,7 +355,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             if (currentConfig.packages?.devDependencies?.length > 0) {
                 config.save = false;
                 config.saveDev = true;
-                await util.dependencyInstaller(currentConfig.packages.devDependencies, userFeature, config);
+                await util.dependencyInstaller(currentConfig.packages.devDependencies, currentConfig.name, config);
             }
         }
 

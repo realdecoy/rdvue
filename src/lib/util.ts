@@ -9,7 +9,6 @@ import { Group, NpmProgrammaticConfiguration } from '../types/cli';
 import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, INDEX_FILE, LIST_ACTION, LOG_TYPES } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
-
 import cliProgress from 'cli-progress'
 import {
   appendToFile,
@@ -20,7 +19,6 @@ import {
   writeFile
 } from './files';
 import { getFeatureConfiguration } from './helper-functions';
-import log from 'npmlog'
 import { isPlugin } from './optional-modules';
 
 const helpOptions = ['--help', '-h'];
