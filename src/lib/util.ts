@@ -430,14 +430,14 @@ async function dependencyInstaller(
       .then(function() {
         if (config.save) {   
           // forces the loading status to completion by the time npm finishes installing the dependecies
-          dependencyProgressComplete(loading, 200)
+          dependencyProgressComplete(loading, 250)
           console.log(
             `${logSymbols.success} Successfully installed required package/s ${[...script]}`
           );
         }
 
         if (config.saveDev) {
-          dependencyProgressComplete(loading, 200)
+          dependencyProgressComplete(loading, 250)
           console.log(
             `${logSymbols.success} Successfully installed required dev package/s ${[...script]}`
           );
@@ -445,12 +445,12 @@ async function dependencyInstaller(
       })
       .catch(function() {
         if (config.save) {
-          dependencyProgressComplete(loading, 200)
+          dependencyProgressComplete(loading, 250)
           console.log(`${logSymbols.error} Unable to install required package/s ${[...script]}`);
         }
 
         if (config.saveDev) {
-          dependencyProgressComplete(loading, 200)
+          dependencyProgressComplete(loading, 250)
           console.log(
             `${logSymbols.error} Unable to install required dev package/s ${[...script]}`
           );
@@ -469,7 +469,7 @@ function dependencyProgressComplete(loading: cliProgress.SingleBar, completed: n
 async function dependencyProgressStatus(loading: cliProgress.SingleBar) {
 
   // starts the loading animation
-  loading.start(200, 0);
+  loading.start(250, 0);
 
   for(let i = 0; i == i; i++) {
     // update the current value in your application..
