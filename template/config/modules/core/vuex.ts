@@ -62,8 +62,7 @@ export function getMultiParamModule<StoreType extends VuexModule>(
           // just before the underlying method gets invoked.
           return (targetValue as UnknownFunction).call(this, args);
         };
-      }
-      else {
+      } else {
         result = targetValue;
       }
 

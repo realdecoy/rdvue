@@ -1,21 +1,21 @@
-import Vue from "vue";
-import VueI18n, { LocaleMessageObject, LocaleMessages } from "vue-i18n";
+import Vue from 'vue';
+import VueI18n, { LocaleMessageObject, LocaleMessages } from 'vue-i18n';
 
 Vue.use(VueI18n);
 
 // ----------------------------------------------------------------------------
 // Module Constants
 // ----------------------------------------------------------------------------
-const DEFAULT_LOCALE = "en";
+const DEFAULT_LOCALE = 'en';
 
 const SUPPORTED_LOCALES = [
   {
-    label: "English",
-    value: "en",
+    label: 'English',
+    value: 'en',
   },
   {
-    label: "Espanol (Spanish)",
-    value: "es",
+    label: 'Espanol (Spanish)',
+    value: 'es',
   },
 ];
 
@@ -53,9 +53,9 @@ function getStartingLocale() {
 
 function loadLocaleMessages() {
   const locales = require.context(
-    "../locales",
+    '../locales',
     true,
-    /[A-Za-z0-9-_,\s]\.json$/i
+    /[A-Za-z0-9-_,\s]\.json$/i,
   );
   const messages: LocaleMessages = {};
 
