@@ -417,7 +417,7 @@ async function dependencyInstaller(
     console.log('\n')    
    // initialize loading state instance
     const loading = new cliProgress.SingleBar({
-    format: `Installing ${featureName} packages [{bar}] {percentage}% | `+ colors.magenta('ETA: ') + `{eta}s | `+ colors.magenta('Duration: ') +` {duration}s` ,
+    format: `Installing ${featureName} packages [{bar}] {percentage}% | `+ colors.magenta('ETA: ') + `{eta}s | `+ colors.magenta('Duration: ') +`{duration}s` ,
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
     hideCursor: null
