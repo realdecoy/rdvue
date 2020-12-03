@@ -15,12 +15,12 @@
       "target": "config/vuetify.ts"
     },
     {
-      "source": "pages/vuetify-sample/app.vue",
-      "target": "pages/vuetify-sample/app.vue"
+      "source": "pages/vuetify-sample/vuetify-app.vue",
+      "target": "pages/vuetify-sample/vuetify-app.vue"
     },
     {
-      "source": "pages/vuetify-sample/vuetify-sample.vue",
-      "target": "pages/vuetify-sample/vuetify-sample.vue"
+      "source": "pages/vuetify-sample/vuetify-sample-component.vue",
+      "target": "pages/vuetify-sample/vuetify-sample-component.vue"
     },
     {
       "source": "theme/fonts/roboto.woff2",
@@ -39,7 +39,7 @@
     {
       "path": "'/vuetify-test'",
       "name": "'vuetify-test'",
-      "component": "`require('@/pages/vuetify-sample/app.vue').default`"
+      "component": "`require('@/pages/vuetify-sample/vuetify-app.vue').default`"
     }
   ],
   "vueOptions": {
