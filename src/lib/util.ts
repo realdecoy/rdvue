@@ -2,13 +2,14 @@ import chalk from 'chalk';
 import commandLineUsage, { Section } from 'command-line-usage';
 import figlet from 'figlet';
 import path from 'path';
-
+import colors from 'colors'
 import npm from 'npm-programmatic';
 import logSymbols from 'log-symbols';
 import { Group, NpmProgrammaticConfiguration } from '../types/cli';
 import { ACTIONS, ADD_ACTION, ADD_GROUP, DYNAMIC_OBJECTS, INDEX_FILE, LIST_ACTION, LOG_TYPES } from '../constants/constants';
 import { CLI_DESCRIPTION } from '../index';
 import { Command } from '../types/index';
+import cliProgress from 'cli-progress'
 import {
   appendToFile,
   directoryExists,
@@ -18,8 +19,8 @@ import {
   writeFile
 } from './files';
 import { getFeatureConfiguration } from './helper-functions';
-
 import { isPlugin } from './optional-modules';
+
 const helpOptions = ['--help', '-h'];
 
 function heading(): void {
@@ -402,41 +403,52 @@ function parseDynamicObjects(
 
 async function dependencyInstaller(
   script: string[],
+  featureName: string | undefined,
   config: NpmProgrammaticConfiguration
 ) {
   const projectroot = getProjectRoot();
 
   if (projectroot !== null) {
     config.cwd = projectroot;
+   
+    // new line to maintain cli output
+    console.log('\n')    
+   // initialize loading state instance
+    const loading = new cliProgress.SingleBar({
+    format: `Installing ${featureName} packages [{bar}] {percentage}% | `+ colors.magenta('ETA: ') + `{eta}s | `+ colors.magenta('Duration: ') +`{duration}s` ,
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+    hideCursor: null
+   }, cliProgress.Presets.legacy);
+ 
+    dependencyProgressStatus(loading);
 
-    console.log('\n')
-    progressStatus();
     await npm
       .install(script, config)
       .then(function() {
-        if (config.save) {
-          // if the generation process is complete clear the console line with the escape character
-          process.stdout.write('\r\x1b[K');
+        if (config.save) {   
+          // forces the loading status to completion by the time npm finishes installing the dependecies
+          dependencyProgressComplete(loading, 250)
           console.log(
             `${logSymbols.success} Successfully installed required package/s ${[...script]}`
           );
         }
 
         if (config.saveDev) {
-          process.stdout.write('\r\x1b[K');
+          dependencyProgressComplete(loading, 250)
           console.log(
             `${logSymbols.success} Successfully installed required dev package/s ${[...script]}`
           );
         }
       })
       .catch(function() {
-        process.stdout.write('\r\x1b[K');
         if (config.save) {
+          dependencyProgressComplete(loading, 250)
           console.log(`${logSymbols.error} Unable to install required package/s ${[...script]}`);
         }
 
         if (config.saveDev) {
-          process.stdout.write('\r\x1b[K');
+          dependencyProgressComplete(loading, 250)
           console.log(
             `${logSymbols.error} Unable to install required dev package/s ${[...script]}`
           );
@@ -447,23 +459,26 @@ async function dependencyInstaller(
   }
 }
 
-async function progressStatus() {
+function dependencyProgressComplete(loading: cliProgress.SingleBar, completed: number){
+  loading.update(completed)
+  loading.stop();
+}
 
-  let x = 0;
-  const loading = ["\\", "|", "/", "-"];
+async function dependencyProgressStatus(loading: cliProgress.SingleBar) {
+
+  // starts the loading animation
+  loading.start(250, 0);
 
   for(let i = 0; i == i; i++) {
-    // need to use `process.stdout.write` becuase console.log prints a newline character
-    // \r clear the current line and then print the other characters making it looks like it refresh
-    process.stdout.write("\rInstalling your packages " + loading[x++]);
-    x &= 3;
-
+    // update the current value in your application..
+    loading.update(i);
+    loading.updateETA();
     // wait periodically to simulate a realistic loading animation
     await wait(150);
   }
 
   function wait(ms: number) {
-    return new Promise((resolve: any) => setTimeout(resolve, ms));
+    return  new Promise((resolve: any) => setTimeout(resolve, ms)); 
   }
 }
 
