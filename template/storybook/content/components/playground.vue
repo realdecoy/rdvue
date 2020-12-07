@@ -16,7 +16,7 @@ export default class Playground extends Vue {
   @Prop({ type: Function })
   public source!: VueConstructor;
 
-  private readonly DEFAULT = "__undefined__";
+  private readonly DEFAULT = '__undefined__';
   private propNames: string[] = [];
   private livePreview?: Vue = undefined;
 
@@ -40,10 +40,10 @@ export default class Playground extends Vue {
   }
 
   private getType(propName: string) {
-     const typeDef = this.items[propName]?.type as
-      | { name: string }
-      | Array<Function>;
-     let typeName = (typeDef as any)?.name as string | undefined;
+    // tslint:disable-next-line:ban-types
+    const typeDef = (this.items[propName]?.type as { name: string } | Array<Function>);
+    // tslint:disable-next-line:no-any
+    let typeName = (typeDef as any)?.name as string | undefined;
     const values = StoryProp.getValues(this.source, propName);
 
     if (typeDef instanceof Array) {
@@ -51,9 +51,7 @@ export default class Playground extends Vue {
     }
 
     if (typeName === undefined) {
-      throw new Error(
-        `Either @StoryProp 'values' or @Prop 'type' must be specified for property "${propName}".`
-      );
+      throw new Error(`Either @StoryProp 'values' or @Prop 'type' must be specified for property "${propName}".`);
     }
 
     return typeName;
@@ -72,12 +70,17 @@ export default class Playground extends Vue {
       normalizedValue = this.items[propName].default;
     }
 
-     ((this.livePreview as unknown) as { [key: string]: any })[
-      propName
-    ] = normalizedValue;
+    // tslint:disable-next-line:no-any
+    (this.livePreview as unknown as { [key: string]: any })[propName] = normalizedValue;
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.border-color-1 {
+  border-color: #e2e8f0;
+}
+</style>
 
 <template>
   <div class="flex flex-row mt-16">
@@ -86,7 +89,7 @@ export default class Playground extends Vue {
         <div v-if="getValues(name) !== undefined">
           <div class="mb-2 font-bold">{{name}}</div>
           <select
-            class="border p-2 rounded-lg bg-gray-400 outline-none"
+            class="border border-color-1 p-2 rounded-lg outline-none"
             :name="name"
             @change="update(name, $event.srcElement.value)"
           >
@@ -143,7 +146,7 @@ export default class Playground extends Vue {
     <div
       style="min-height: 33vh"
       ref="render"
-      class="border border-gray-600 flex-1 p-8 rounded-lg flex items-center justify-center"
+      class="border border-color-1 flex-1 p-8 rounded-lg flex items-center justify-center"
     ></div>
   </div>
 </template>

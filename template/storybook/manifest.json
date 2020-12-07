@@ -62,10 +62,6 @@
        "target": ".storybook/stories.scss"
     },
     {
-      "source": "content/tailwind.css",
-       "target": ".storybook/tailwind.css"
-    },
-    {
       "source": "content/webpack.config.js",
        "target": ".storybook/webpack.config.js"
     },
