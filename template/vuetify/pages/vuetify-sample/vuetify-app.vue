@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import HelloWorld from './vuetify-sample.vue';
+import HelloWorld from './vuetify-sample-component.vue';
 
 export default Vue.extend({
   name: 'App',
