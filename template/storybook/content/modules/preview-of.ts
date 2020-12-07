@@ -1,6 +1,6 @@
 // @ts-ignore
 import Vue, { VueConstructor } from 'vue';
-import { StoryComponent } from '.storybook/modules';
+import { StoryComponent } from '../modules';
 import { Example, Preview } from '../components';
 import { Category } from '../modules';
 

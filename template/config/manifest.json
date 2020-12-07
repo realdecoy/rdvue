@@ -247,6 +247,10 @@
       "target": "vue.config.js"
     },
     {
+      "source": "meta/postcss.config.js",
+      "target": "postcss.config.js"
+    },
+    {
       "source": "theme/_all.scss",
       "target": "src/theme/_all.scss"
     },
