@@ -12,7 +12,6 @@
     "storybook:serve": "start-storybook -s ./public -p 8000",
     "storybook:copyres": "ncp ./public/images dist/storybook/images",
     "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css",
-    "postinstall": "patch-package",
     "lint": "npx tslint -p .",
     "lint:fix": "npx tslint --fix -p .",
     "docker": "docker run -it -p 8000:8000 -v $(pwd):/app -w /app --rm node bash -c \"npm run storybook\""
