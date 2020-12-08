@@ -15,10 +15,6 @@
     "postinstall": "patch-package",
     "lint": "npx tslint -p .",
     "lint:fix": "npx tslint --fix -p .",
-    "test:e2e:testrail": "cypress run --browser chrome --env configFile=cypress.qa",
-    "test:e2e:dev": "cypress run --browser chrome --env configFile=cypress.development",
-    "test:unit": "vue-cli-service test:unit",
-    "ci": "start-server-and-test serve http://localhost:8080 test:e2e:dev",
     "docker": "docker run -it -p 8000:8000 -v $(pwd):/app -w /app --rm node bash -c \"npm run storybook\""
   },
   "dependencies": {
