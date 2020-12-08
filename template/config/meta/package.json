@@ -14,7 +14,9 @@
     "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css",
     "lint": "npx tslint -p .",
     "lint:fix": "npx tslint --fix -p .",
-    "docker": "docker run -it -p 8000:8000 -v $(pwd):/app -w /app --rm node bash -c \"npm run storybook\""
+    "docker": "docker run -it -p 8000:8000 -v $(pwd):/app -w /app --rm node bash -c \"npm run storybook\"",
+    "test:e2e": "cypress open",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "axios": "^0.19.2",
