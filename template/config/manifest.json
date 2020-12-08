@@ -269,6 +269,18 @@
     {
       "source": "modules/index.ts",
       "target": "src/modules/index.ts"
+    },
+    {
+      "source": "theme/brand.css",
+      "target": "src/theme/brand.css"
+    },
+    {
+      "source": "theme/bulma.scss",
+      "target": "src/theme/bulma.scss"
+    },
+     {
+      "source": "theme/colors.scss",
+      "target": "src/theme/colors.scss"
     }
   ]
 }

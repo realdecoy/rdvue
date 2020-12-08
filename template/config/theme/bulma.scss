@@ -1,0 +1,91 @@
+// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+
+//Overide bulma's breakpoints to application's tailwind breakpoints
+
+/**
+	Example:
+
+	$tablet: 768px;
+	$mobile: 321px;
+	$desktop: 1280px;
+*/
+
+// Set your colors
+
+/**
+	Example:
+
+	$primary: #ff0000;
+*/
+
+// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+$colors: (
+	/**
+	Example:
+
+	"twitter": (
+		$twitter,
+		$twitter-invert,
+	),
+
+	"info": (
+		$info,
+		$info-invert,
+	)
+*/
+);
+
+// Links
+/**
+	Example:
+
+	$button-hover-color: info;
+*/
+
+// ----------------------------------------------------------------------------
+// Bulma
+// ----------------------------------------------------------------------------
+@import "~bulma/sass/utilities/_all";
+@import "~bulma/sass/base/_all";
+// ----------------------------------------------------------------------------
+@import "~bulma/sass/elements/button";
+@import "~bulma/sass/elements/icon";
+// ----------------------------------------------------------------------------
+@import "~bulma/sass/form/shared";
+@import "~bulma/sass/form/checkbox-radio";
+@import "~bulma/sass/form/input-textarea";
+@import "~bulma/sass/form/select";
+@import "~bulma/sass/form/tools";
+// ----------------------------------------------------------------------------
+@import "~bulma/sass/components/card";
+@import "~bulma/sass/components/dropdown";
+@import "~bulma/sass/components/modal";
+// ----------------------------------------------------------------------------
+// @import "~bulma/sass/grid/_all";
+// @import "~bulma/sass/layout/_all";
+// ----------------------------------------------------------------------------
+// Buefy
+// ----------------------------------------------------------------------------
+// You can load in the entire css library for buefy or only for the components being used
+// Loads the entire css lib
+@import "~buefy/src/scss/buefy";
+// ----------------------------------------------------------------------------
+// Only load components being used.
+// @import "~buefy/src/scss/utils/_all.scss";
+// @import "~buefy/src/scss/components/_checkbox.scss";
+// @import "~buefy/src/scss/components/_modal.scss";
+// @import "~buefy/src/scss/components/_radio.scss";
+// @import "~buefy/src/scss/components/_form.scss";
+// @import "~buefy/src/scss/components/_dropdown.scss";
+// @import "~buefy/src/scss/components/_icon.scss";
+// @import "~buefy/src/scss/components/_loading.scss";
+// @import "~buefy/src/scss/components/_sidebar.scss";
+// @import "~buefy/src/scss/components/_menu.scss";
+// @import "~buefy/src/scss/components/_steps.scss";
+// @import "~buefy/src/scss/components/_tooltip.scss";
+// @import "~buefy/src/scss/components/_modal.scss";
+// @import "~buefy/src/scss/components/_notices.scss";
+// @import "~buefy/src/scss/components/_upload.scss";
+// @import "~buefy/src/scss/components/_skeleton.scss";
+// @import "~buefy/src/scss/components/_switch.scss";

@@ -4,14 +4,22 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve-static": "cd dist && ws --spa index.html -z",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test:e2e": "cypress open",
-    "test:unit": "vue-cli-service test:unit",
-    "storybook:serve": "run-s storybook:tailwind storybook",
+    "build-storybook": "run-s storybook:build storybook:copyres",
+    "storybook": "run-s storybook:tailwind storybook:serve",
     "storybook:build": "build-storybook -c .storybook -o dist/storybook",
-    "storybook": "start-storybook -s ./public -p 8000 --ci storybook:tailwind",
-    "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css"
+    "storybook:serve": "start-storybook -s ./public -p 8000",
+    "storybook:copyres": "ncp ./public/images dist/storybook/images",
+    "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o .storybook/tailwind.css",
+    "postinstall": "patch-package",
+    "lint": "npx tslint -p .",
+    "lint:fix": "npx tslint --fix -p .",
+    "test:e2e:testrail": "cypress run --browser chrome --env configFile=cypress.qa",
+    "test:e2e:dev": "cypress run --browser chrome --env configFile=cypress.development",
+    "test:unit": "vue-cli-service test:unit",
+    "ci": "start-server-and-test serve http://localhost:8080 test:e2e:dev",
+    "docker": "docker run -it -p 8000:8000 -v $(pwd):/app -w /app --rm node bash -c \"npm run storybook\""
   },
   "dependencies": {
     "axios": "^0.19.2",
