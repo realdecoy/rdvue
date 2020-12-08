@@ -247,6 +247,10 @@
       "target": "vue.config.js"
     },
     {
+      "source": "meta/postcss.config.js",
+      "target": "postcss.config.js"
+    },
+    {
       "source": "theme/_all.scss",
       "target": "src/theme/_all.scss"
     },
@@ -265,6 +269,14 @@
     {
       "source": "modules/index.ts",
       "target": "src/modules/index.ts"
+    },
+    {
+      "source": "theme/brand.scss",
+      "target": "src/theme/brand.scss"
+    },
+     {
+      "source": "theme/colors.scss",
+      "target": "src/theme/colors.scss"
     }
   ]
 }
