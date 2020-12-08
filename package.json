@@ -1,6 +1,6 @@
 {
   "name": "rdvue",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.6",
   "description": "command line tool for generating and managing vue projects",
   "author": "realdecoy",
   "main": "build/main/index.js",

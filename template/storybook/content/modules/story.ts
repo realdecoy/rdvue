@@ -19,7 +19,8 @@ type StoryComponentOptions<V extends Vue> = ComponentOptions<V> & {
 type StoryPropOptions<T = unknown, U = unknown, V = unknown> = PropOptions & {
   values?: T[];
   description: string;
-  type: ConstructorOf<T> | Array<ConstructorOf<unknown>>;
+  // tslint:disable-next-line:ban-types
+  type: Function | ConstructorOf<T> | Array<ConstructorOf<unknown>>;
 };
 
 type StoryPropStore = { [key: string]: StoryPropOptions };
@@ -31,7 +32,7 @@ type StorySafe = { story: StoryComponentOptions<never>; props: StoryPropStore };
 // ----------------------------------------------------------------------------
 // Module Vars
 // ----------------------------------------------------------------------------
-const IS_DEV = process.env.NODE_ENV !== 'production';
+const IS_DEV = (process.env as { NODE_ENV: string }).NODE_ENV !== 'production';
 const storySafe = new WeakMap<object, StorySafe>();
 let storyPropAggregator: StoryPropStore = {};
 
@@ -65,7 +66,7 @@ function StoryProp<T>(options: StoryPropOptions<T>)
 
     storyPropAggregator[key] = options;
 
-    return Prop(options)(target, key);
+    Prop(options)(target, key);
   };
 }
 
@@ -118,7 +119,8 @@ function mixinStoryPropValidator(target: DecoratorTarget, key: string, options: 
 
     if (!validatePropValuesResult) {
       if (IS_DEV) {
-        console.log(`Prop ${key} was assigned out-of-bounds value ${value}.`);
+        // tslint:disable-next-line:no-console
+        console.error(`Prop ${key} was assigned out-of-bounds value ${value}.`);
       }
     }
 

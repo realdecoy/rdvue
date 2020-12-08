@@ -1,9 +1,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Example from "./example.vue";
+import Example from './example.vue';
 import Playground from './playground.vue';
 import Props from './props.vue';
-import { StoryComponent } from '.storybook/modules/story';
+import { StoryComponent } from '../modules';
 
 const safe = new WeakMap<object, PreviewData>();
 
@@ -16,8 +16,8 @@ interface VueLike {
   options: { name: string };
 }
 
-@StoryComponent({
-  name: "Preview",
+@Component({
+  name: 'Preview',
   components: {
     Props,
     Playground
@@ -32,9 +32,9 @@ export default class Preview extends Vue {
   public for: VueLike | undefined;
 
   private component: VueLike | undefined = undefined;
-  private description: string | undefined = "";
-  private importStatement = "";
-  private title = "";
+  private description: string | undefined = '';
+  private importStatement = '';
+  private title = '';
   private activeTab = 0;
   private enablePlayground = true;
   private enableApi = true;
@@ -44,7 +44,7 @@ export default class Preview extends Vue {
   // --------------------------------------------------------------------------
 
   public get importStatementPretty() {
-    return (this.importStatement ?? "").replace(
+    return (this.importStatement ?? '').replace(
       /import|from/g,
       p => `<span class="text-red-400 font-bold">${p}</span>`
     );
@@ -56,21 +56,20 @@ export default class Preview extends Vue {
 
   private mounted() {
     const component = this.resolveStoryComponent() ?? {};
-    const componentModule = StoryComponent.getImportPath(component);
+    const importPath = StoryComponent.getImportPath(component);
 
     this.component = component;
-    this.title = component.options?.name;
+    this.title = component.options.name;
     this.description = StoryComponent.getDescription(component);
     this.enablePlayground = StoryComponent.getPlaygroundEnabled(component);
     this.enableApi = StoryComponent.getApiEnabled(component);
 
-    if (componentModule !== undefined) {
-      const componentModuleStr =
-        typeof componentModule === "string"
-          ? (componentModule as string)
-          : componentModule(this.title);
+    if (importPath !== undefined) {
+      const importPathStr = typeof importPath === 'string'
+        ? importPath
+        : importPath(this.title);
 
-      this.importStatement = `import ${this.title} from '${componentModuleStr}';`;
+      this.importStatement = `import ${this.title} from '${importPathStr}';`;
     }
   }
 
@@ -80,10 +79,15 @@ export default class Preview extends Vue {
     if (this.for === undefined) {
       component = Object.values(
         this.$parent.$options.components ?? {}
-      ).find(p => StoryComponent.isDefined(p)) as VueLike;
+      )
+        .find(p => StoryComponent.isDefined(p)) as VueLike;
     } else {
       component = this.for;
     }
+
+    // If (component === undefined) {
+    //   throw new Error('Preview component must have the prop "component" set.');
+    // }
 
     return component;
   }
@@ -105,6 +109,10 @@ export default class Preview extends Vue {
     width: 100%;
   }
 }
+.import-statement {
+  background: #a5badb33;
+  border-color: #cbd5e0;
+}
 </style>
 
 <template>
@@ -125,10 +133,11 @@ export default class Preview extends Vue {
       <div v-if="importStatement">
         <div class="font-bold text-2xl mt-16">Import</div>
         <div
-          class="p-4 bg-gray-300 border border-gray-400 mt-4 rounded font-mono"
+          class="import-statement border p-4 mt-4 rounded font-mono"
           v-html="importStatementPretty"
         ></div>
       </div>
+      <!-- <div class="text-4xl mt-16">Examples</div> -->
       <div class="grid grid-flow-row gap-10 mt-24">
         <slot />
       </div>
