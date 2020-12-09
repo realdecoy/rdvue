@@ -1,10 +1,11 @@
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const path = require('path');
 
 module.exports = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '../src/'),
-      '.storybook': path.resolve(__dirname),
+      '.rdvue': path.resolve(__dirname, '../.rdvue'),
     }
   },
   module: {

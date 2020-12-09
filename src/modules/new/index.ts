@@ -209,12 +209,10 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             OPTIONAL_MODULES.thowError();
         }
 
-
         // [2] Check if the user requested a new project
         if (isProject) {
 
-            const modulesToInstall = await OPTIONAL_MODULES.requestPresetSelection();
-
+            let modulesToInstall: Array<string>;
             // [2]b Get required config
             await run(
                 {
@@ -238,6 +236,8 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 USAGE
             );
 
+            // [2]d Optional module questions need to be asked after project name is requested.
+            modulesToInstall = await OPTIONAL_MODULES.requestPresetSelection();
 
             // 2[e] Loads in optional modules after project has been setup
             for (const module of modulesToInstall) {
@@ -261,15 +261,6 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
 
 
             return true;
-        }
-
-
-        // [4] Retrieve user response to *questions* asked.
-        // *question* eg: "Please enter the name for the generated project"
-        if (userFeatureName !== '' || availableFeaturesWithNoNames.includes(userFeature)) {
-            answers[nameKey] = userFeatureName;
-        } else {
-            answers = await inquirer.prompt(questions);
         }
 
 
@@ -342,19 +333,29 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         if (currentConfig.modules !== undefined) {
             await util.parseDynamicObjects(JSON.stringify(currentConfig.modules, null, 1), DYNAMIC_OBJECTS.modules, true);
         }
+
+        if(currentConfig.projectTheme !== undefined && currentConfig.projectTheme.length > 0) {
+         
+            await util.updateDynamicImportsAndExports(
+            'theme',
+            currentConfig.projectTheme,
+            '_all.scss'
+          );
+        }
+
         // [10] Install dependencies if they are required
         if (currentConfig.packages !== undefined) {
             const config: NpmProgrammaticConfiguration = { cwd: '' };
 
             if (currentConfig.packages?.dependencies?.length > 0) {
                 config.save = true;
-                await util.dependencyInstaller(currentConfig.packages.dependencies, config);
+                await util.dependencyInstaller(currentConfig.packages.dependencies, currentConfig.name, config);
             }
 
             if (currentConfig.packages?.devDependencies?.length > 0) {
                 config.save = false;
                 config.saveDev = true;
-                await util.dependencyInstaller(currentConfig.packages.devDependencies, config);
+                await util.dependencyInstaller(currentConfig.packages.devDependencies, currentConfig.name, config);
             }
         }
 
@@ -365,11 +366,17 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 updateConfig(featureNameStore, directories, kebabNameKey);
             }
         } else {
-            // [11]b Create a section break
-            util.sectionBreak();
-            // tslint:disable-next-line:no-console
-            console.log(chalk.magenta
-                (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
+             // [11]b Create a section break
+             util.sectionBreak();
+             // tslint:disable-next-line:no-console
+             
+             // [12] If answer is undefined log a different output message to the CLI
+             answers[nameKey] === undefined?
+                console.log(chalk.magenta
+                    (`The ${userFeature} plugin has been added to your project.`)):
+                
+                console.log(chalk.magenta
+                    (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
         }
 
         return true;

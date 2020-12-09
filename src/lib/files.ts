@@ -15,10 +15,16 @@ import * as utils from './util';
 import _ from 'lodash';
 
 import { TEMPLATE_ROOT } from '../config';
-import { CORE, featureType, MANIFEST_FILE, spinnerIcons, TEMPLATE_FILE, UTF8 } from '../constants/constants';
+import {
+  CORE,
+  featureType,
+  MANIFEST_FILE,
+  spinnerIcons,
+  TEMPLATE_FILE,
+  UTF8
+} from '../constants/constants';
 import { Config } from '../types/cli';
 import { FeatureNameObject, Files } from '../types/index';
-
 
 const Spinner = CLI.Spinner;
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -40,8 +46,7 @@ function readFile(filePath: string): string {
  */
 function directoryExists(filePath: string): boolean {
   try {
-    return fs.statSync(filePath)
-      .isDirectory();
+    return fs.statSync(filePath).isDirectory();
   } catch (err) {
     // TODO: log error here
     return false;
@@ -89,8 +94,6 @@ function readSubConfig(command: string): Config {
   return JSON.parse(readFile(filePath)) as Config;
 }
 
-
-
 /**
  * Description: Clear temporary files at a given path
  * @param folderPath - the folder path for which you would like to clear temporary files
@@ -106,7 +109,11 @@ async function clearTempFiles(folderPath: string) {
  *                      to created new RegExp (old file name)
  * @param value - value to replace old filename
  */
-function replaceFileName(fileName: string, placeholder: RegExp, value: string): string {
+function replaceFileName(
+  fileName: string,
+  placeholder: RegExp,
+  value: string
+): string {
   const r = new RegExp(placeholder, 'g');
   const response = fileName.replace(r, value);
 
@@ -131,7 +138,12 @@ function writeFile(filePath: string, data: string): boolean {
   return success;
 }
 
-async function updateFile(filePath: string, file: string, placeholder: string, value: string) {
+async function updateFile(
+  filePath: string,
+  file: string,
+  placeholder: string,
+  value: string
+) {
   const r = new RegExp(placeholder, 'g');
 
   if (value !== '') {
@@ -159,16 +171,13 @@ async function readAndUpdateFeatureFiles(
   let filePath = '';
 
   // [1] Get the kebab name key from arugments
-  const kebabNameKey = (Object.keys(args)
-    .filter(f => utils.hasKebab(f)))[0];
+  const kebabNameKey = Object.keys(args).filter(f => utils.hasKebab(f))[0];
 
   // [2] Get the pascal name key from arguments
-  const pascalNameKey = (Object.keys(args)
-    .filter(f => !utils.hasKebab(f)))[0];
+  const pascalNameKey = Object.keys(args).filter(f => !utils.hasKebab(f))[0];
 
   // [3] For each file in the list
   for (const file of files) {
-
     if (typeof file === 'string') {
       continue;
     }
@@ -183,25 +192,30 @@ async function readAndUpdateFeatureFiles(
 
     // [3c] Check if the contents of the file is defined
     if (file.content !== undefined && Array.isArray(file.content)) {
-
       // [3d] For each content block in the file contnet array
       for (const contentBlock of file.content) {
-
         if (contentBlock && contentBlock.matchRegex) {
-
           // [4] Get the content at the desired file path
           const fileContent = readFile(filePath);
 
           // [5] Update the contents of the file at given filePath
-          await updateFile(filePath, fileContent, contentBlock.matchRegex,
-            (utils.hasKebab(contentBlock.replace) === true ?
-              args[kebabNameKey] : (contentBlock.replace.includes('${')) ?
-                args[pascalNameKey] : contentBlock.replace));
+          await updateFile(
+            filePath,
+            fileContent,
+            contentBlock.matchRegex,
+            utils.hasKebab(contentBlock.replace) === true
+              ? args[kebabNameKey]
+              : contentBlock.replace.includes('${')
+              ? args[pascalNameKey]
+              : contentBlock.replace
+          );
         }
       }
     } else if (file.content) {
       // tslint:disable-next-line:no-console
-      console.log(`[INTERNAL : failed to match and replace  for :${args[kebabNameKey]} files]`);
+      console.log(
+        `[INTERNAL : failed to match and replace  for :${args[kebabNameKey]} files]`
+      );
     }
   }
 }
@@ -212,9 +226,13 @@ async function readAndUpdateFeatureFiles(
  * @param destDir - directory to which files will be copied
  * @param files - files to be copied
  */
-async function copyFiles(srcDir: string, destDir: string, files: Array<string | Files>) {
-  return Promise.all(files.map(
-    async (f: Files | string) => {
+async function copyFiles(
+  srcDir: string,
+  destDir: string,
+  files: Array<string | Files>
+) {
+  return Promise.all(
+    files.map(async (f: Files | string) => {
       let source = '';
       let dest = '';
       // Get source and destination paths
@@ -222,7 +240,11 @@ async function copyFiles(srcDir: string, destDir: string, files: Array<string | 
         source = path.join(srcDir, f.source);
         dest = path.join(destDir, f.target);
       } else {
-        source = path.join(srcDir, `${srcDir.includes(featureType.config) ? CORE : ''}`, f);
+        source = path.join(
+          srcDir,
+          `${srcDir.includes(featureType.config) ? CORE : ''}`,
+          f
+        );
         dest = path.join(destDir, f);
       }
 
@@ -231,7 +253,8 @@ async function copyFiles(srcDir: string, destDir: string, files: Array<string | 
       mkdirp.sync(dirName);
 
       return copyFilePromise(source, dest);
-    }));
+    })
+  );
 }
 
 /**
@@ -239,12 +262,19 @@ async function copyFiles(srcDir: string, destDir: string, files: Array<string | 
  * @param files - filenames which need to be updated
  * @param featureName - the string used to update the name of the files
  */
-function replaceTargetFileNames(files: Array<string | Files>, featureName: string) {
+function replaceTargetFileNames(
+  files: Array<string | Files>,
+  featureName: string
+) {
   if (featureName !== '') {
     files.forEach((file: string | Files) => {
       if (typeof file !== 'string') {
         if (file.target !== file.source) {
-          file.target = replaceFileName(file.target, /(\${.*?\})/, featureName ?? '');
+          file.target = replaceFileName(
+            file.target,
+            /(\${.*?\})/,
+            featureName ?? ''
+          );
         }
       }
     });
@@ -265,11 +295,13 @@ async function copyAndUpdateFiles(
   fileList: Files[] | Array<string | Files>,
   args: FeatureNameObject
 ): Promise<boolean> {
-  const kebabNameKey = (Object.keys(args)
-    .filter(f => utils.hasKebab(f)))[0];
+  const kebabNameKey = Object.keys(args).filter(f => utils.hasKebab(f))[0];
 
   // Spinner animation
-  const status = new Spinner('updating template files from boilerplate...', spinnerIcons);
+  const status = new Spinner(
+    'updating template files from boilerplate...',
+    spinnerIcons
+  );
   status.start();
 
   replaceTargetFileNames(fileList, args[kebabNameKey]);
@@ -277,12 +309,13 @@ async function copyAndUpdateFiles(
   // Copy files from template and place in target destination
   await copyFiles(sourceDirectory, installDirectory, fileList)
     .then(() => {
-      const kebabName = args[kebabNameKey] !== undefined ? args[kebabNameKey] : '';
+      const kebabName =
+        args[kebabNameKey] !== undefined ? args[kebabNameKey] : '';
 
       // tslint:disable-next-line:no-console
       console.log(`[Processing ${kebabName} files]`);
     })
-    .catch((err) => {
+    .catch(err => {
       // TODO: Implement more contextual errors
       // tslint:disable-next-line:no-console
       console.log(err);
@@ -291,12 +324,24 @@ async function copyAndUpdateFiles(
   // Apply changes to generated files
   await readAndUpdateFeatureFiles(installDirectory, fileList, args);
   // tslint:disable-next-line:no-console
-  console.log(`[Processed ${args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''} files]`);
+  console.log(
+    `[Processed ${
+      args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''
+    } files]`
+  );
   status.stop();
 
   const promise = Promise.resolve(true);
 
   return promise;
+}
+
+async function appendToFile(location: string, data: any) {
+  await fs.appendFile(location, data, err => {
+    if(err instanceof Error){
+      console.log(err);
+    }
+  });
 }
 
 export {
@@ -312,5 +357,5 @@ export {
   copyFiles,
   readFile,
   updateFile,
+  appendToFile
 };
-

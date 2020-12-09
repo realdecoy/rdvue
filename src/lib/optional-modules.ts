@@ -43,8 +43,8 @@ async function handleAddGroup(groupName: string) {
  * @param group - Group to prompt by
  */
 async function promptQuestionByGroup(group: Group) {
-  const multiple = '(multiple)';
-  const single = '(single)';
+  const multiple = '(Choose One or More)';
+  const single = '(Choose One)';
   const result = Array();
   const confirmBtn = group.isMultipleChoice ? 'Press Enter to continue' : '';
 
@@ -160,16 +160,17 @@ async function handleOptionalModulesRequests(operation: Command) {
 async function handleFeatureGroupsQuestions(featureGroups?: Group[]) {
 
   let selectedmodules: string[] = [];
-  let step = 1;
+  let currentQuestion = 1;
   if (featureGroups !== undefined) {
     for (const group of featureGroups) {
-      group.question = `${chalk.greenBright(step.toString())}. ${group.question}`;
+      group.question = `${chalk.greenBright(currentQuestion.toString())}. ${group.question}`;
       const selections = await promptQuestionByGroup(group);
 
       selectedmodules = selections.length > 0 ? [...selectedmodules, ...selections]
         : [...selectedmodules];
+
+        currentQuestion++;
     }
-    step++;
   }
 
   return selectedmodules;
@@ -213,9 +214,7 @@ async function promptPresetOptions() {
   if (presets !== undefined && presets.length > 0) {
     options = concat(presets, customPreset) as [];
   }
-  // if (customPreset !== undefined && presets !==) {
-  //   options = concat(options, customPreset) as [];
-  // }
+
 
   if (options.length > 0) {
     const { preset } = await inquirer.prompt({

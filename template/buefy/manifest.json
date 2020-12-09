@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "name": "buefy",
+  "group": false,
+  "hasRoutes": true,
+  "hasProjectModules": true,
+  "description": "Generate files/dependencies needed for the buefy UI Library.",
+  "sourceDirectory": "./",
+  "installDirectory": "./",
+  "files": [
+    {
+      "source": "modules/core/constants.ts",
+      "target": "modules/core/constants.ts"
+    },
+    {
+      "source": "modules/core/font-awesome.ts",
+      "target": "modules/core/font-awesome.ts"
+    },
+    {
+      "source": "pages/buefy-sample/buefy-sample.vue",
+      "target": "pages/buefy-sample/buefy-sample.vue"
+    },
+    {
+      "source": "theme/bulma.scss",
+      "target": "theme/bulma.scss"
+    }
+  ],
+  "packages": {
+    "dependencies": ["buefy"],
+    "devDependencies": ["@fortawesome/fontawesome-svg-core", "@fortawesome/free-solid-svg-icons", "@fortawesome/vue-fontawesome"]
+  },
+  "routes": [
+    {
+      "path": "'/buefy-sample'",
+      "name": "'buefy-sample'",
+      "component": "`require('@/pages/buefy-sample/buefy-sample.vue').default`"
+    }
+  ],
+  "projectModules": [
+    "import '@/modules/core/font-awesome';"
+  ],
+  "projectTheme": [
+    "@import 'bulma';\r\n"
+  ]
+}
