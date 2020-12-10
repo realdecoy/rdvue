@@ -49,7 +49,7 @@
     "plugins": [
       "storybook"
     ]
-  },
+   },
   "groups": [
     {
       "name": "auth",

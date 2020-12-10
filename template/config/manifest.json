@@ -39,6 +39,26 @@
       "target":".rdvue/index.js"
     },
     {
+      "source":"meta/.rdvue/modules/icon/dist/configuration.js",
+      "target":".rdvue/modules/icon/configuration.js"
+    },
+    {
+      "source":"meta/.rdvue/modules/icon/dist/index.js",
+      "target":".rdvue/modules/icon/index.js"
+    },
+    {
+      "source":"meta/.rdvue/modules/icon/dist/worker.js",
+      "target":".rdvue/modules/icon/worker.js"
+    },
+    {
+      "source": "meta/.rdvue/modules/icon/dist/types.js",
+      "target": ".rdvue/modules/icon/types.js"
+    },
+    {
+      "source":"meta/.rdvue/index.js",
+      "target":".rdvue/index.js"
+    },
+    {
       "source": "meta/.rdvue/routes.js",
       "target": ".rdvue/routes.js"
     },
@@ -247,6 +267,10 @@
       "target": "vue.config.js"
     },
     {
+      "source": "meta/postcss.config.js",
+      "target": "postcss.config.js"
+    },
+    {
       "source": "theme/_all.scss",
       "target": "src/theme/_all.scss"
     },
@@ -265,6 +289,14 @@
     {
       "source": "modules/index.ts",
       "target": "src/modules/index.ts"
+    },
+    {
+      "source": "theme/brand.scss",
+      "target": "src/theme/brand.scss"
+    },
+     {
+      "source": "theme/colors.scss",
+      "target": "src/theme/colors.scss"
     }
   ]
 }
