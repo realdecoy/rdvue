@@ -6,70 +6,66 @@
   <br/>
 </div>
 
-# rdvue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
+# RDVue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
 
-The [rdvue](https://github.com/realdecoy/rdvue/tree/master) Command Line Interface (CLI)
-The project provides a scaffolded approach to building Single Page Applications with VueJS.
-The accompanying CLI tool provides an interactive shell interface to aid in customizing the generated template and expand the project with component modules as needed.
+[RDVue](https://github.com/realdecoy/rdvue) is an opinionated CLI for generating Vue.js projects. We do so by adopting
+a development style guide which enforces strong typing with TypeScript, standardized Component, Layout and Page models,
+and a data-layer design promoting unified consumption through Stores and Services.
 
 ## Table of Contents
 
-- [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
+- [Options](#options)
 - [Documentation](#documentation)
 
 
-
-[![NPM](https://nodei.co/npm/rdvue.png)](https://nodei.co/npm/rdvue/)
-
-## Installation
+## Usage
 
 ```bash
-npm install rdvue -g
-npm install rdvue
+npx rdvue [command]
 ```
 
-Test the CLI by running the help option
+The help menu can be accessed with the command:
 
 ```bash
 rdvue --help
 ```
 
-### Usage
+## Options
 
-```
-rdvue [command]
-
-Commands:
-  rdvue <action> <feature group> or <feature> <feature name> [options]
+```txt
+npx rdvue <action> [<feature>|<plugin>|<plugin group>] [<project-name>|<feature-name>]
 
 Actions:
-  generate  Creates new feature
-  g         Creates new feature
+  generate | g  -  Creates new Feature.
+  add           -  Add a Plugin to a project.
+  add-group     -  Add a Plugin to a project by selecting
+                   from preset groups.
 
-Features:
-  project       Generates a new Vue.js Typescript Single Page Application(SPA)
-  component     Generates a new component directory with the following main files to build and test: <component-name>.vue, <component-name>.ts, <component-name>.scss, <component-name>.spec.ts
-  page          Generates a new page directory with the following main files to build and test: <page-name>.vue, <page-name>.ts, <page-name>.scss, <page-name>.spec.ts
-  service       Generates a new service file within the services directory to integrate methods that should interact with external apis: <service-name>.ts
-  model         Generates a new model/interface within the entities directory: <interface-name>.ts
 
-Feature Group:
-  auth          Generates component directory pages/auth and auth service module in the services directory.
+Features:       -  Utilities to create repeatable project elements.
+  project       -  Scaffold a new RDVue project.
+  component     -  Generate a new Component module.
+  page          -  Generate a new Page module.
+  service       -  Generate a new Service module.layer
+  layout        -  Generate a new Page Layout.
+
+Plugin Groups:  -  Choose a plugin from preset groupings.
+  auth          -  Provides plugins which generate pages, components 
+                   and data models to support common authentication 
+                   scenarios.
+
+  ui            -  Provides plugins which add UI libraries or 
+                   functionalities.
+Plugins:
+  buefy         -  Add Buefy support to an existing project.
+  vuetify       -  Add Vuetify support to an existing project.
+  localization  -  Add i18n localization support to an existing project.
 
 Options:
-  --help        Show help                                                   [boolean]
-  -h            Show help                                                   [boolean]
+  --help | -h   -  Show help information.
 ```
 
-## Contributing
+## About
 
-The rdvue CLI is a part of the FP Frontend Practice area at RealDecoy, where contributions are welcomed, You can help us by fixing bugs, reporting bugs or improving documentation.
-
-Please read the [contributing guidelines](docs/CONTRIBUTING.md)
-
-## Documentation
-
-- [CLI Options](docs/README.md)
-- [Frequently Asked Questions](docs/FAQ.md)
+The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributions are welcome! You can help us by reporting or fixing bugs and giving us feedback on new/existing features.

@@ -39,6 +39,26 @@
       "target":".rdvue/index.js"
     },
     {
+      "source":"meta/.rdvue/modules/icon/dist/configuration.js",
+      "target":".rdvue/modules/icon/configuration.js"
+    },
+    {
+      "source":"meta/.rdvue/modules/icon/dist/index.js",
+      "target":".rdvue/modules/icon/index.js"
+    },
+    {
+      "source":"meta/.rdvue/modules/icon/dist/worker.js",
+      "target":".rdvue/modules/icon/worker.js"
+    },
+    {
+      "source": "meta/.rdvue/modules/icon/dist/types.js",
+      "target": ".rdvue/modules/icon/types.js"
+    },
+    {
+      "source":"meta/.rdvue/index.js",
+      "target":".rdvue/index.js"
+    },
+    {
       "source": "meta/.rdvue/routes.js",
       "target": ".rdvue/routes.js"
     },
