@@ -25,3 +25,7 @@
 
   - [**Localization**](localization.md)
   - [**Bundle Analysis**](bundleAnalysis.md)
+  - [**Plugin Custom Scripting**](plugincustomscripting.md#plugincustomscripting.md)
+    - [Technical Implementation](technicalimplementation.md#technicalimplementation)
+  
+  - [**Release Notes**](releasenotes.md)
