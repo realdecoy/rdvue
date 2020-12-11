@@ -2,6 +2,13 @@
  * Entry point for applcation-wide CSS.
  */
 
-@import "tailwind";
+ @import "tailwind.css";
+ @import "brand.scss";
+
+ .remove-skeleton-gap {
+   .b-skeleton {
+     margin-top: 0rem;
+   }
+ }
 
 //TODO: import additional global CSS here.
