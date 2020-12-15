@@ -1,31 +1,31 @@
-  - [**Getting started**](gettingStarted.md)
+  - [**Getting started**](GettingStarted.md)
 
-    - [Notable Files & Directories](notableFiles.md#notablefiles&directories)
-    - [Features - Introduction](features.md#rdvuefeatures)
+    - [Notable Files & Directories](NotableFiles.md#NotableFiles&Directories)
+    - [Features - Introduction](Features.md#RdvueFeatures)
 
-  - [**CLI Commands**](clicommands.md)
-  - [**Pages**](pages.md)
-  - [**Routing**](routing.md)
-  - [**Components**](components.md)
-  - [**Layouts**](layouts.md)
-  - [**Stores**](stores.md)
+  - [**CLI Commands**](CLICommands.md#CLICommands)
+  - [**Pages**](Pages.md#Pages)
+  - [**Routing**](routing.md#Routing)
+  - [**Components**](Components.md#Components)
+  - [**Layouts**](Layouts.md#Layouts)
+  - [**Stores**](Stores.md)
   - [**Services**](services.md)
-  - [**Assests & Public Folder**](assests&publicfolder.md)
-  - [**Modules & Entities**](modules&entities.md)
+  - [**Assests & Public Folder**](Assests&PublicFolder.md)
+  - [**Modules & Entities**](Modules&Entities.md)
 
   - **CSS, Styling, Fonts**
 
     - [Global Styles](globalStyles.md#globalStyles)
-    - [Tailwind](tailwind.md#tailwind)
+    - [Tailwind](Tailwind.md#tailwind)
 
   - **Testing**
 
-    - [Cypress](cypress.md#cypress)
-    - [Unit Tests - Jest](unitTests.md#unittestswithjest)
+    - [Cypress](Cypress.md#Cypress)
+    - [Unit Tests - Jest](UnitTests.md#Unittestswithjest)
 
-  - [**Localization**](localization.md)
-  - [**Bundle Analysis**](bundleAnalysis.md)
-  - [**Plugin Custom Scripting**](plugincustomscripting.md#plugincustomscripting.md)
-    - [Technical Implementation](technicalimplementation.md#technicalimplementation)
+  - [**Localization**](Localization.md)
+  - [**Bundle Analysis**](BundleAnalysis.md)
+  - [**Plugin Custom Scripting**](PluginCustomScripting.md#PluginCustomScripting)
+    - [Technical Implementation](TechnicalImplementation.md#Technicalimplementation)
   
-  - [**Release Notes**](releasenotes.md)
+  - [**Release Notes**](ReleaseNotes.md#1.0)
