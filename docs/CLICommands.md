@@ -5,11 +5,10 @@ The Rdvue command line tool (CLI) is the main entry point for getting up and run
 
 ### How to use rdvue-cli
 
-First install the global executable:
+All commands will follow the basic structure:
 
 ```
-npm install rdvue -g
-npm install rdvue
+npx rdvue [command]
 ```
 
 ### CLI Options
@@ -30,7 +29,7 @@ Click on each feature name for further details on it.
 ##### Usage
 
 ```
-$ rdvue g project <project name>
+$ npx rdvue g project <project name>
 ```
 
 The CLI will run an interactive shell asking for these options before creating a Project for you:
@@ -49,7 +48,7 @@ Pick a preset (Use arrow keys)
 ##### Usage
 
 ```
-$ rdvue g component <component name>
+$ npx rdvue g component <component name>
 ```
 
 ### _model_
@@ -57,7 +56,7 @@ $ rdvue g component <component name>
 ##### Usage
 
 ```
-$ rdvue g component <model name>
+$ npx rdvue g component <model name>
 ```
 
 ### [_service_](services.md)
@@ -65,7 +64,7 @@ $ rdvue g component <model name>
 ##### Usage
 
 ```
-$ rdvue g service <service name>
+$ npx rdvue g service <service name>
 ```
 
 ### [_page_](pages.md)
@@ -73,7 +72,7 @@ $ rdvue g service <service name>
 ##### Usage
 
 ```
-$ rdvue g page <page name>
+$ npx rdvue g page <page name>
 ```
 
 ### [_sm - store module_](stores.md)
@@ -81,7 +80,7 @@ $ rdvue g page <page name>
 ##### Usage
 
 ```
-$ rdvue g sm <sm name>
+$ npx rdvue g sm <sm name>
 ```
 
 ### [_layout_](layouts.md)
@@ -89,5 +88,5 @@ $ rdvue g sm <sm name>
 ##### Usage
 
 ```
-$ rdvue g sm <sm name>
+$ npx rdvue g sm <sm name>
 ```

@@ -28,4 +28,3 @@
   - [**Plugin Custom Scripting**](PluginCustomScripting.md#PluginCustomScripting)
     - [Technical Implementation](TechnicalImplementation.md#Technicalimplementation)
   
-  - [**Release Notes**](ReleaseNotes.md#1.0)

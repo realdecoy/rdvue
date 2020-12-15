@@ -6,62 +6,69 @@
   <br/>
 </div>
 
-# Getting Started - RDVue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
-------------------------
-This section will get you started on how to prepare your environment, install RDvue, create a project and how to run in development mode.
+# RDVue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
 
-The RDvue tool is predominantly written in node and TypeScript
+[RDVue](https://github.com/realdecoy/rdvue) is an opinionated CLI for generating Vue.js projects. We do so by adopting
+a development style guide which enforces strong typing with TypeScript, standardized Component, Layout and Page models,
+and a data-layer design promoting unified consumption through Stores and Services.
 
-Dependencies
-============
+## Table of Contents
 
-First we need to cover the basic system requirements needed for running RDvue. The Rdvue CLI has a few requirements which includes:
+- [Usage](#usage)
+- [Options](#options)
+- [Documentation](#documentation)
 
-|     |     |     |
-| --- | --- | --- |
-| **Package** | **Version** | **Source** |
-| Node | **To be confirmed with team** | [https://nodejs.org/en/download/](https://nodejs.org/en/download/) |
-| Npm | **To be confirmed with team** | [https://www.npmjs.com/get-npm](https://www.npmjs.com/get-npm) |
-| Bash | \-  | [https://www.gnu.org/software/bash/](https://www.gnu.org/software/bash/) |
 
-!> Important: For a smooth experience with running the commands throughout this documentation, configure your IDE to use bash as it’s default shell when working within an RDVue project.
+## Usage
 
-Installation
-------------
-
-After installing the dependencies mentioned above you are now ready to install RDvue. Run the <mark>following npm command</mark>
-
-```
-npm install rdvue -g
+```bash
+npx rdvue [command]
 ```
 
-Validate Installation
----------------------
+The help menu can be accessed with the command:
 
-We can confirm the successful installation of RDvue in three simple steps:
-
-### Step 1: Create a project
-
-```
-rdvue generate project <project_name>
+```bash
+rdvue --help
 ```
 
-Replace `<project_name>` with the actual name of your project.
+## Options
 
-?>Generated folders are named in kebab-case.
+```txt
+npx rdvue <action> [<feature>|<plugin>|<plugin group>] [<project-name>|<feature-name>]
 
-### Step 2: Install project dependencies
+Actions:
+  generate | g  -  Creates new Feature.
+  add           -  Add a Plugin to a project.
+  add-group     -  Add a Plugin to a project by selecting
+                   from preset groups.
 
+
+Features:       -  Utilities to create repeatable project elements.
+  project       -  Scaffold a new RDVue project.
+  component     -  Generate a new Component module.
+  page          -  Generate a new Page module.
+  service       -  Generate a new Service module.layer
+  layout        -  Generate a new Page Layout.
+
+Plugin Groups:  -  Choose a plugin from preset groupings.
+  auth          -  Provides plugins which generate pages, components 
+                   and data models to support common authentication 
+                   scenarios.
+
+  ui            -  Provides plugins which add UI libraries or 
+                   functionalities.
+Plugins:
+  buefy         -  Add Buefy support to an existing project.
+  vuetify       -  Add Vuetify support to an existing project.
+  localization  -  Add i18n localization support to an existing project.
+
+Options:
+  --help | -h   -  Show help information.
 ```
-cd <project_name>
-npm install
-```
 
-### Step 3: Serve project
+## About
 
-```
-npm run serve
-```
+The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributions are welcome! You can help us by reporting or fixing bugs and giving us feedback on new/existing features.
 
 The project will be served at [http://localhost:8080/](http://localhost:8080/) by default. This information will also be printed out in your terminal. Visiting the link the app is served on will display a default page which was created on project creation.
 
