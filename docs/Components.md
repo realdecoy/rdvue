@@ -1,7 +1,7 @@
 # Components
 --------------
 
-A Component is a conceptual grouping for Vue components which are imported by [Pages](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1298661394/Pages) and other Components.
+A Component is a conceptual grouping for Vue components which are imported by [Pages](Pages.md) and other Components.
 
 Unlike Pages, Components are never used in Routing. That would deviate from the RDVue development style guide.
 
@@ -9,9 +9,9 @@ Unlike Pages, Components are never used in Routing. That would deviate from the 
 
 * * *
 
-A Component contains all the files present for [Pages](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1298661394/Pages) with the addition of:
+A Component contains all the files present for [Pages](Pages.md) with the addition of:
 
-*   \[component\]**.story.ts**: This contains the list of stories which describe the component’s usage. This is helpful for documentation purposes in providing live examples of key ways a Component can be used through the included [Storybook](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1317470310/Storybook) preview tool.
+*   \[component\]**.story.ts**: This contains the list of stories which describe the component’s usage. This is helpful for documentation purposes in providing live examples of key ways a Component can be used through the included Storybook preview tool.
     
 
 * * *

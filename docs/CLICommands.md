@@ -43,7 +43,7 @@ Pick a preset (Use arrow keys)
 
 #### _The commands below must be run within a valid vue project._
 
-### [_component_](components.md)
+### [_component_](Components.md)
 
 ##### Usage
 
@@ -59,7 +59,7 @@ $ npx rdvue g component <component name>
 $ npx rdvue g component <model name>
 ```
 
-### [_service_](services.md)
+### [_service_](Services.md)
 
 ##### Usage
 
@@ -67,7 +67,7 @@ $ npx rdvue g component <model name>
 $ npx rdvue g service <service name>
 ```
 
-### [_page_](pages.md)
+### [_page_](Pages.md)
 
 ##### Usage
 
@@ -75,7 +75,7 @@ $ npx rdvue g service <service name>
 $ npx rdvue g page <page name>
 ```
 
-### [_sm - store module_](stores.md)
+### [_sm - store module_](Stores.md)
 
 ##### Usage
 
@@ -83,7 +83,7 @@ $ npx rdvue g page <page name>
 $ npx rdvue g sm <sm name>
 ```
 
-### [_layout_](layouts.md)
+### [_layout_](Layouts.md)
 
 ##### Usage
 

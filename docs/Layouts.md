@@ -45,6 +45,6 @@ Each generated Layout is contained within it’s own sub-folder within the **src
 *   \[layout\].**scss**: This contains the stylesheet to be applied to the Layout- and that Layout only. The styles within this file are scoped, meaning they cannot be used to target any elements except those defined directly within the \[layout\].vue template file.
     
 
-?>Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the [Theme](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1298759736/Global+Styles) directory.
+?>Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the [Theme](GlobalStyles.md) directory.
 
-*   \[layout\].**spec.ts**: This contains the unit-level tests for the Layout. Read the [testing section](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1300955187/Unit+Tests) for more details about writing tests.
+*   \[layout\].**spec.ts**: This contains the unit-level tests for the Layout. Read the [testing section](UnitTests.md) for more details about writing tests.

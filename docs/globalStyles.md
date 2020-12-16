@@ -9,7 +9,7 @@ Custom styles can be added into the project to provide global-level styling. Thi
 
 *   **Do** use global styles to apply application level defaults to HTML elements
     
-*   **Do not** use global styles to customize the imperative look/feel of specific Components. (Use [Component-level](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1300922402/Components) styles and [Tailwind](tailwind.md) for that).
+*   **Do not** use global styles to customize the imperative look/feel of specific Components. (Use [Component-level](Components.md) styles and [Tailwind](tailwind.md) for that).
     
 
 *   **Do** use global styles to override imported UI components' look and feel (Eg. to customize Buefy).

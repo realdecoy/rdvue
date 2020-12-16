@@ -3,9 +3,9 @@
 
 A Page is a conceptual grouping for Vue Components used in routing. Pages are **not** to be imported by other Pages, Components or Layouts.
 
-A special feature of Pages are that they can benefit from Layouts to automatically add a parent container with common pieces of UI/State that’s shared throughout the application - like Headers and Footers. The [Layouts](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1298857997/Layouts) section goes into more detail on this approach.
+A special feature of Pages are that they can benefit from Layouts to automatically add a parent container with common pieces of UI/State that’s shared throughout the application - like Headers and Footers. The [Layouts](Layouts.md) section goes into more detail on this approach.
 
-?> A Page needs to be added to the [Router](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1298464832/Routing) before it can be previewed within a web browser.
+?> A Page needs to be added to the [Router](Routing.md) before it can be previewed within a web browser.
 
 * * *
 
@@ -20,6 +20,6 @@ Each generated Page is contained within it’s own sub-folder within the **src/p
 *   \[page\].**scss**: This contains the SASS stylesheet to be applied to the page - and that page only. The styles within this file are scoped, meaning they cannot be used to target any elements except those defined directly within the \[page\].vue template file.
     
 
-?> Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the [Theme](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1298759736/Global+Styles) directory.
+?> Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the Theme directory.
 
-*   \[page\].**spec.ts**: This contains the unit-level tests for the page. Read the [testing section](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1300955187/Unit+Tests) for more details about writing tests.
+*   \[page\].**spec.ts**: This contains the unit-level tests for the page. Read the [testing section](UnitTests.md) for more details about writing tests.

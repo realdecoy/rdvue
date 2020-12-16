@@ -1,13 +1,11 @@
-Unit Tests with Jest
+# Unit Tests with Jest
 --------------------------------------
 
 ### Introduction
 
-Unit tests are focused on validating small bits of functionality in a software product. Unit tests can be done manually or they can be automated. If you wish to learn more about unit testing and approaches that can be taken, please see here [Unit Testing](https://realdecoy.atlassian.net/wiki/spaces/QPA/pages/732364878/Unit+Testing)
+Unit tests are focused on validating small bits of functionality in a software product. Unit tests can be done manually or they can be automated. If you wish to learn more about unit testing and approaches that can be taken.
 
 If you wish to automate your unit tests, [Jest](https://jestjs.io/) can be used. Jest is a JavaScript testing framework that can be integrated into several different JavaScript frameworks and it is very useful for certain use cases.
-
-<mark>If you wish to see examples of Jest in action, please see here → [Unit testing examples](https://realdecoy.atlassian.net/wiki/spaces/QPA/pages/1175650344/Unit+Testing+with+Jest)</mark>
 
 ### Technical
 

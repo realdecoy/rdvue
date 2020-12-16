@@ -3,10 +3,10 @@
 
 Assets are static resources which can be imported within the application. These are images, fonts, or any arbitrary piece of data your app depends on.
 
-The with the application, there are [two directories](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1300955226) which serve a similar - but distinct - purpose:
+The with the application, there are two directories which serve a similar - but distinct - purpose:
 
 *   **Assets** (/src/assets)  
-    Static resources will be compiled by Webpack (see: [Building for Production](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1317470262/Building+for+Production)) and optimized where possible. Known asset types - Images, Fonts and CSS - will automatically be optimized to balance size/quality.
+    Static resources will be compiled by Webpack and optimized where possible. Known asset types - Images, Fonts and CSS - will automatically be optimized to balance size/quality.
     
 
 ?>The **file-loade**r Webpack plugin and configuration may need to be added to the **vue.config.js** file in order to compile other file formats.

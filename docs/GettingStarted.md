@@ -66,10 +66,38 @@ Options:
   --help | -h   -  Show help information.
 ```
 
+
+## Validate Installation
+
+We can confirm the successful installation of RDvue in three simple steps:
+
+### Step 1: Create a project
+
+```
+npx rdvue generate project <project_name>
+```
+
+Replace `<project_name>` with the actual name of your project.
+
+Generated folders are named in kebab-case.
+
+### Step 2: Install project dependencies
+
+```
+cd <project_name>
+npm install
+```
+
+### Step 3: Serve project
+
+```
+npm run serve
+```
+
+The project will be served at [http://localhost:8080/](http://localhost:8080/) by default. This information will also be printed out in your terminal. Visiting the link the app is served on will display a default page which was created on project creation.
+
 ## About
 
 The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributions are welcome! You can help us by reporting or fixing bugs and giving us feedback on new/existing features.
 
-The project will be served at [http://localhost:8080/](http://localhost:8080/) by default. This information will also be printed out in your terminal. Visiting the link the app is served on will display a default page which was created on project creation.
-
-[Continue - Folder Structure](notableFiles.md)
+[Continue - Folder Structure](NotableFiles.md#NotableFiles&Directories)

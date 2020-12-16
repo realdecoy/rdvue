@@ -18,7 +18,7 @@ The **path** property specifies where the page will be accessible under the doma
 
 The **name** field provides an alternative means of identifying and navigation to defined pages programatically. This approach is preferable because the route names can be externalized into global constants and shared throughout your code for navigational consistency.
 
-The **meta** property allows specifying arbitrary data that will get passed along to the loaded Page. The CLI recognizes a sub-property called layout which it will use to attach a [Layout](https://realdecoy.atlassian.net/wiki/spaces/PFDP/pages/1298857997/Layouts) to a page.
+The **meta** property allows specifying arbitrary data that will get passed along to the loaded Page. The CLI recognizes a sub-property called layout which it will use to attach a [Layout](Layouts.md) to a page.
 
 The **component** property specifies the Page to load for the given path. Here we used the recommended approach of dynamically loading the Page component using the **import()** function.
 
