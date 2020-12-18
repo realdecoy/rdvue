@@ -24,9 +24,9 @@ Run the cli option below for a list of commands and options
 
 Click on each feature name for further details on it.
 
-### _project_
+#### _project_
 
-##### Usage
+ Usage
 
 ```
 $ npx rdvue g project <project name>
@@ -41,51 +41,51 @@ Pick a preset (Use arrow keys)
   Custom
 ```
 
-#### _The commands below must be run within a valid vue project._
+ _The commands below must be run within a valid vue project._
 
-### [_component_](Components.md)
+#### _component_
 
-##### Usage
+ Usage - [Further Details](Components.md)
 
 ```
 $ npx rdvue g component <component name>
 ```
 
-### _model_
+_model_
 
-##### Usage
+ Usage
 
 ```
 $ npx rdvue g component <model name>
 ```
 
-### [_service_](Services.md)
+#### _service_
 
-##### Usage
+Usage - [Further Details](Services.md)
 
 ```
 $ npx rdvue g service <service name>
 ```
 
-### [_page_](Pages.md)
+#### _page_
 
-##### Usage
+Usage - [Further Details](Pages.md)
 
 ```
 $ npx rdvue g page <page name>
 ```
 
-### [_sm - store module_](Stores.md)
+#### _sm - store module_ 
 
-##### Usage
+Usage - [Further Details](Stores.md)
 
 ```
 $ npx rdvue g sm <sm name>
 ```
 
-### [_layout_](Layouts.md)
+#### _layout_
 
-##### Usage
+Usage - [Further Details](Layouts.md)
 
 ```
 $ npx rdvue g sm <sm name>
