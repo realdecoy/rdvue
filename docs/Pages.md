@@ -22,4 +22,5 @@ Each generated Page is contained within it’s own sub-folder within the **src/p
 
 ?> Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the Theme directory.
 
-*   \[page\].**spec.ts**: This contains the unit-level tests for the page. Read the [testing section](UnitTests.md) for more details about writing tests.
+*   \[page\].**spec.ts**: This contains the unit-level tests for the page. Read the [testing section](Unit-Tests.md) for more details about writing tests.
+
