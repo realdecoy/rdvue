@@ -48,3 +48,4 @@ Each generated Layout is contained within it’s own sub-folder within the **src
 ?>Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the [Theme](Global-Styles.md) directory.
 
 *   \[layout\].**spec.ts**: This contains the unit-level tests for the Layout. Read the [testing section](Unit-Tests.md) for more details about writing tests.
+
