@@ -17,11 +17,11 @@ This will build production ready files for deployment, additionally spinning up 
 
 Expected terminal output:
 
-<image src="../images/bundle-image1.png">
+<image src="https://github.com/realdecoy/rdvue/blob/main/docs/images/bundle-image1.png?raw=true">
 
 Expected browser output Treemap:
 
-<image src="../images/bundle-image2.png">
+<image src="https://github.com/realdecoy/rdvue/blob/main/docs/images/bundle-image2.png?raw=true">
 
 This module will help you:
 

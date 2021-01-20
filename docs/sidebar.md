@@ -1,4 +1,4 @@
-- [**Getting Started**](/)
+- [**Getting Started**](Getting-Started.md)
 
 - [**CLI Commands**](CLI-Commands.md)
 - [**Notable Files & Directories**](Notable-files.md)
