@@ -68,6 +68,7 @@ Entities
 
 Modules
 -------
+- Holds files that represent your declarative business logic and utilities used throughout your application. These modules are not specific to any component or page and should instead represent concepts relevant to the application on a macro level.
 
 Pages
 -----
