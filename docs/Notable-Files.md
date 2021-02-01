@@ -53,9 +53,9 @@ Config
  - Stores your application’s route definitions.
 
 ### shims-tsx.d.ts
-
+- Allows the use of .tsx files. Read more about this here.
 ### shims-vue.d.ts
-
+- Needed so that a .vue single file components can be used in a Vue typescript project
 Components
 ----------
 
