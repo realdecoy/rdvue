@@ -35,34 +35,34 @@ The private is a boolean which determines whether or not the files of a feature 
 
 ```json
   "features": [
-    {
-      "name": "config",
-      "private": true
-    },
-    {
-      "name": "store",
-      "private": true
-    },
-    {
-      "name": "component",
-      "private": false
-    },
-    {
-      "name": "service",
-      "private": false
-    },
-    {
-      "name": "model",
-      "private": false
-    },
-    {
-      "name": "page",
-      "private": false
-    },
-    {
-      "name": "sm",
-      "private": false
-    }
+      {
+        "name": "config",
+        "private": true
+      },
+      {
+        "name": "store",
+        "private": true
+      },
+      {
+        "name": "component",
+        "private": false
+      },
+      {
+        "name": "service",
+        "private": false
+      },
+      {
+        "name": "model",
+        "private": false
+      },
+      {
+        "name": "page",
+        "private": false
+      },
+      {
+        "name": "sm",
+        "private": false
+      }
   ]
   ```
 
@@ -368,66 +368,67 @@ a list of files that exist in the module that needs to be copied to the install 
 
     ``` json
     "files": [
-    {
-      "source": "index.ts",
-      "target": "index.ts",
-      "content": [
-        {
-          "matchRegex": "__COMPONENT__KEBAB__",
-          "replace": "${componentNameKebab}"
-        }
-      ]
-    },
-    {
-      "source": "component.scss",
-      "target": "${componentNameKebab}.scss",
-      "content": [
-        {
-          "matchRegex": "__COMPONENT__",
-          "replace": "${componentNameKebab}"
-        }
-      ]
-    },
-    {
-      "source": "component.ts",
-      "target": "${componentNameKebab}.ts",
-      "content": [
-        {
-          "matchRegex": "__COMPONENT__KEBAB__",
-          "replace": "${componentNameKebab}"
-        },
-        {
-          "matchRegex": "__COMPONENT__",
-          "replace": "${componentName}"
-        }
-      ]
-    },
-    {
-      "source": "component.spec.js",
-      "target": "${componentNameKebab}.spec.js",
-      "content": [
-        {
-          "matchRegex": "__COMPONENT__KEBAB__",
-          "replace": "${componentNameKebab}"
-        },
-        {
-          "matchRegex": "__COMPONENT__",
-          "replace": "${componentName}"
-        }
-      ]
-    },
-    {
-      "source": "component.vue",
-      "target": "${componentNameKebab}.vue",
-      "content": [
-        {
-          "matchRegex": "__COMPONENT__",
-          "replace": "${componentNameKebab}"
-        }
-      ]
-    }
+      {
+        "source": "index.ts",
+        "target": "index.ts",
+        "content": [
+          {
+            "matchRegex": "__COMPONENT__KEBAB__",
+            "replace": "${componentNameKebab}"
+          }
+        ]
+      },
+      {
+        "source": "component.scss",
+        "target": "${componentNameKebab}.scss",
+        "content": [
+          {
+            "matchRegex": "__COMPONENT__",
+            "replace": "${componentNameKebab}"
+          }
+        ]
+      },
+      {
+        "source": "component.ts",
+        "target": "${componentNameKebab}.ts",
+        "content": [
+          {
+            "matchRegex": "__COMPONENT__KEBAB__",
+            "replace": "${componentNameKebab}"
+          },
+          {
+            "matchRegex": "__COMPONENT__",
+            "replace": "${componentName}"
+          }
+        ]
+      },
+      {
+        "source": "component.spec.js",
+        "target": "${componentNameKebab}.spec.js",
+        "content": [
+          {
+            "matchRegex": "__COMPONENT__KEBAB__",
+            "replace": "${componentNameKebab}"
+          },
+          {
+            "matchRegex": "__COMPONENT__",
+            "replace": "${componentName}"
+          }
+        ]
+      },
+      {
+        "source": "component.vue",
+        "target": "${componentNameKebab}.vue",
+        "content": [
+          {
+            "matchRegex": "__COMPONENT__",
+            "replace": "${componentNameKebab}"
+          }
+        ]
+      }
   ]
-    ```
+```
+
   _Note: files section can be a combination of both types mentioned above._
 
 ### packages
