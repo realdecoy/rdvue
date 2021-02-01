@@ -4,6 +4,7 @@
 - [**Notable Files & Directories**](Notable-Files.md)
   - [Assests & Public Folder](Assests-&-Public-Folder.md)
   - [Modules & Entities](Modules-&-Entities.md)
+-[**Template Schema**](Template-Schema.md)
 - [**Features**](Features.md)
     - [Services](Services.md)
     - [Pages](Pages.md)
