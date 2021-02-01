@@ -59,16 +59,16 @@ Config
 Components
 ----------
 
- - Holds the folders for each component generated within your application
-
-Entities
---------
-
- - This folder holds the definition of domain-specific _types & interfaces_ used across your project
+ - Holds the folders for each component generated within your application.
 
 Modules
 -------
 - Holds files that represent your declarative business logic and utilities used throughout your application. These modules are not specific to any component or page and should instead represent concepts relevant to the application on a macro level.
+
+Entities
+--------
+
+ - A subset of _modules_ (discussed above) that holds the definition of domain-specific _types & interfaces_ used across your project.
 
 Pages
 -----
