@@ -1,42 +1,57 @@
-import { AxiosResponse } from 'axios';
+
+import env from '@/config/env';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Service } from './base';
+
+// ----------------------------------------------------------------------------
+// Module Vars
+// ----------------------------------------------------------------------------
+const { APP: APP_API_URL } = env.api;
 
 class __SERVICE__ extends Service {
   // --------------------------------------------------------------------------
-  // [Private] Fields
+  // Fields
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // [Public] Constructor
+  // Constructor
   // --------------------------------------------------------------------------
   constructor() {
-    super();
+    super({
+      withCredentials: true,
+      baseURL: APP_API_URL,
+    });
   }
 
   // --------------------------------------------------------------------------
-  // [Public] Accessors
+  // Accessors
   // --------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------
-  // [Public] Methods
+  // Methods
   // --------------------------------------------------------------------------
-  public async postData(data): Promise<any> {
-    // define custom request options [NB: default config found in @/services/base]
-    const options = {};
-    return this.api
-      .post(`<endpoint-name>`, data, options)
-      .then((response: AxiosResponse<any>) => {
-        // handle response here
-        return response;
-      });
+
+
+  // --------------------------------------------------------------------------
+  // Event Handlers
+  // --------------------------------------------------------------------------
+  protected onRequest(config: AxiosRequestConfig) {
+    super.onRequest(config);
   }
 
-  // --------------------------------------------------------------------------
-  // [Private] Event Handlers
-  // --------------------------------------------------------------------------
+  protected onRequestError(error: unknown) {
+    super.onRequestError(error);
+  }
 
+  protected onResponse(response: AxiosResponse) {
+    super.onResponse(response);
+  }
+
+  protected onResponseError(error: unknown) {
+    super.onResponseError(error);
+  }
   // --------------------------------------------------------------------------
-  // [Private] Methods
+  //  Methods
   // --------------------------------------------------------------------------
 
 }
@@ -45,7 +60,7 @@ class __SERVICE__ extends Service {
 // Module Exports
 // ----------------------------------------------------------------------------
 
-const service  = new __SERVICE__();
+const service = new __SERVICE__();
 
 export {
   service as default,

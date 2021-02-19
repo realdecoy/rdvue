@@ -97,6 +97,10 @@
       "target": "src/config/env.ts"
     },
     {
+      "source": "env/process-env.ts",
+      "target": "src/config/process-env.ts"
+    },
+    {
       "source": "env/env.dev.ts",
       "target": "src/config/env.dev.ts"
     },
