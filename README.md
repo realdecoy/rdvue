@@ -12,6 +12,8 @@
 a development style guide which enforces strong typing with TypeScript, standardized Component, Layout and Page models,
 and a data-layer design promoting unified consumption through Stores and Services.
 
+NB - Only up to node 14.x is supported for 1.0.0
+
 ## Table of Contents
 
 - [Usage](#usage)
