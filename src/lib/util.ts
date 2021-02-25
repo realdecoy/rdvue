@@ -410,17 +410,16 @@ async function dependencyInstaller(
 
   if (projectroot !== null) {
     config.cwd = projectroot;
-   
-    // new line to maintain cli output
-    console.log('\n')    
+
    // initialize loading state instance
     const loading = new cliProgress.SingleBar({
-    format: `Installing ${featureName} packages [{bar}] {percentage}% | `+ colors.magenta('ETA: ') + `{eta}s | `+ colors.magenta('Duration: ') +`{duration}s` ,
+    format: `Installing ${featureName} packages [{bar}] {percentage}% | `+ colors.magenta('Duration: ') +`{duration}s` ,
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591',
+    clearOnComplete: true,
     hideCursor: null
    }, cliProgress.Presets.legacy);
- 
+
     dependencyProgressStatus(loading);
 
     await npm

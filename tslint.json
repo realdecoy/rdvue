@@ -82,7 +82,7 @@
 			"allow-trailing-lowercase"
 		],
 		"curly": true,
-		"cyclomatic-complexity": true,
+		"cyclomatic-complexity": [true, 50],
 		"deprecation": true,
 		"encoding": true,
 		"eofline": true,

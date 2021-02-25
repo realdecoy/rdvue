@@ -187,8 +187,6 @@ async function readAndUpdateFeatureFiles(
 
     // Obtaining the file name from the file path
     filename = filePath.replace(/^.*[\\\/]/, '');
-    // tslint:disable-next-line
-    console.log(chalk.yellow(` >> processing ${filename}`));
 
     // [3c] Check if the contents of the file is defined
     if (file.content !== undefined && Array.isArray(file.content)) {
@@ -311,9 +309,6 @@ async function copyAndUpdateFiles(
     .then(() => {
       const kebabName =
         args[kebabNameKey] !== undefined ? args[kebabNameKey] : '';
-
-      // tslint:disable-next-line:no-console
-      console.log(`[Processing ${kebabName} files]`);
     })
     .catch(err => {
       // TODO: Implement more contextual errors
@@ -323,12 +318,6 @@ async function copyAndUpdateFiles(
 
   // Apply changes to generated files
   await readAndUpdateFeatureFiles(installDirectory, fileList, args);
-  // tslint:disable-next-line:no-console
-  console.log(
-    `[Processed ${
-      args[kebabNameKey] !== undefined ? args[kebabNameKey] : ''
-    } files]`
-  );
   status.stop();
 
   const promise = Promise.resolve(true);

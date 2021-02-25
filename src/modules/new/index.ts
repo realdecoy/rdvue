@@ -275,6 +275,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
             answers[nameKey] = userFeatureName;
         } else {
             answers = await inquirer.prompt(questions);
+            console.log(`[answer] ${answers}`);
         }
 
         // [5] Create a section break
@@ -335,7 +336,7 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
         }
 
         if(currentConfig.projectTheme !== undefined && currentConfig.projectTheme.length > 0) {
-         
+
             await util.updateDynamicImportsAndExports(
             'theme',
             currentConfig.projectTheme,
@@ -366,17 +367,18 @@ async function run(operation: Command, USAGE: CLI): Promise<any> {
                 updateConfig(featureNameStore, directories, kebabNameKey);
             }
         } else {
-             // [11]b Create a section break
-             util.sectionBreak();
-             // tslint:disable-next-line:no-console
-             
-             // [12] If answer is undefined log a different output message to the CLI
-             answers[nameKey] === undefined?
+            // [11]b Create a section break
+            //  util.sectionBreak();
+            // tslint:disable-next-line:no-console
+
+            // [12] If answer is undefined log a different output message to the CLI
+            answers[nameKey] === undefined ?
                 console.log(chalk.magenta
                     (`The ${userFeature} plugin has been added to your project.`)):
-                
+
                 console.log(chalk.magenta
-                    (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated.`));
+                    (`The ${userFeature} "${answers[nameKey] ?? ''}" has been generated at `)
+                    +chalk.yellow(`./${directories.installDir.split('\\/')[1]}.`));
         }
 
         return true;
