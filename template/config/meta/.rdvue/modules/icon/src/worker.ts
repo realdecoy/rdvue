@@ -168,7 +168,6 @@ async function callback(error: Error, response: any) {
       } else {
         
         if(image.name === 'favicon.ico'){
-          console.log(image.name)
           fs.copyFile(iconSrcDir + image.name, fileSrcDir + image.name, (err) => {
             if(err) {
               console.log(err);
