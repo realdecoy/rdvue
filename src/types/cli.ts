@@ -121,7 +121,7 @@ export interface Menu {
   content: string | Content[];
 }
 
-// Interface fot the content type
+// Interface for the content type
 export interface Content {
   name: string;
   summary: string;

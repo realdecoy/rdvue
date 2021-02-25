@@ -1,7 +1,7 @@
 {
   "version": 1,
   "name": "service",
-  "description": "Generate a basic service.",
+  "description": "Generate a new Service module.layer",
   "arguments": [{
       "name": "serviceNameKebab",
       "type": "string",

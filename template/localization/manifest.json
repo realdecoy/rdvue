@@ -2,7 +2,7 @@
   "version": 1,
   "name": "localization",
   "group": false,
-  "description": "Generate files needed for basic localization.",
+  "description": "Add i18n localization support to an existing project.",
   "sourceDirectory": "./",
   "installDirectory": "./",
   "files": [

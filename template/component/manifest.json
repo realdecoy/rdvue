@@ -1,7 +1,7 @@
 {
   "version": 1,
   "name": "component",
-  "description": "Generate a basic component.",
+  "description": "Generate a new Component module.",
   "arguments": [
     {
       "name": "componentNameKebab",

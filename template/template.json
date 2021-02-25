@@ -15,19 +15,11 @@
       "private": false
     },
     {
-      "name": "service",
-      "private": false
-    },
-    {
-      "name": "model",
-      "private": false
-    },
-    {
       "name": "page",
       "private": false
     },
     {
-      "name": "sm",
+      "name": "service",
       "private": false
     },
     {
@@ -36,10 +28,9 @@
     }
   ],
   "plugins": [
-    "localization",
-    "storybook",
+    "buefy",
     "vuetify",
-    "buefy"
+    "localization"
   ],
   "project": {
     "features": [
@@ -65,15 +56,8 @@
       "plugins": [
         "auth"
       ],
-      "question": "[EXPERIMENTAL] Which authentication library would you like to install?"
-    },
-    {
-      "name": "locale",
-      "isMultipleChoice": false,
-      "plugins": [
-        "localization"
-      ],
-      "question": "Which localization library would you like to install?"
+      "question": "[EXPERIMENTAL] Which authentication library would you like to install?",
+      "description": "Provides plugins which generate pages, components and data models to support common authentication scenarios."
     },
     {
       "name": "ui",
@@ -82,6 +66,7 @@
         "vuetify",
         "buefy"
       ],
+      "description": "Provides plugins which add UI libraries or functionalities.",
       "question": "Which UI library would you like to install?"
     }
   ],

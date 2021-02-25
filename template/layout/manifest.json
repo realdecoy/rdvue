@@ -1,7 +1,7 @@
 {
   "version": 1,
   "name": "layout",
-  "description": "Generate a basic layout.",
+  "description": "Generate a new Page Layout.",
   "arguments": [
     {
       "name": "layoutNameKebab",

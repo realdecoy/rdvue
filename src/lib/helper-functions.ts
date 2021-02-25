@@ -5,6 +5,9 @@
 import { CLI_DESCRIPTION } from '../index';
 import { Config, Content, Menu, ModuleDescriptor, Group } from '../types/cli';
 
+
+const shortcut : string = ' - ' ;
+
 /**
  * Descripton: Based on the feature inputed the function will assign the configuration
  * @param feature - the feature which the user would like the configuration of.
@@ -36,7 +39,7 @@ export function contentPopulate(
     let menuContent: Content[];
     menuContent = objectToBePopulated[index].content as Content[];
 
-    menuContent.push({ name, summary });
+    menuContent.push({ name, shortcut , summary});
   }
 }
 

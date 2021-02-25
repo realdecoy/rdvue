@@ -1,7 +1,7 @@
 {
   "version": 1,
   "name": "page",
-  "description": "Generate a basic page.",
+  "description": "Generate a new Page module.",
   "arguments": [{
       "name": "pageNameKebab",
       "type": "string",

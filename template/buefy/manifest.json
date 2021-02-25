@@ -4,7 +4,7 @@
   "group": false,
   "hasRoutes": true,
   "hasProjectModules": true,
-  "description": "Generate files/dependencies needed for the buefy UI Library.",
+  "description": "Add Buefy support to an existing project.",
   "sourceDirectory": "./",
   "installDirectory": "./",
   "files": [

@@ -83,7 +83,7 @@ function populateFeatureGroupMenu(groups: Group[], index: number) {
         .includes('Groups:'))
     ) {
       CLI_DESCRIPTION.general.menu.splice(index, 0, {
-        header: 'Groups:',
+        header: 'Plugin Groups (Choose a plugin from preset groupings):',
         content: [],
       });
     }
@@ -139,7 +139,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
     ) {
 
       CLI_DESCRIPTION.general.menu.splice(index, 0, {
-        header: 'Features:',
+        header: `Features:`,
         content: [],
       });
     }
@@ -149,7 +149,7 @@ async function populateCLIMenu(features: string[], requiredFeatures: string[],
       contentPopulate(
         CLI_DESCRIPTION.general.menu,
         `${chalk.magenta('project')}`,
-        'Generate a new project.', index
+        'Scaffold a new RDVue project.', index
       );
     }
 
