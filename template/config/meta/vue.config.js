@@ -46,7 +46,11 @@ module.exports = {
               progressive: false
             })
           ]
-        })
+        }),
+        new IconWebpackPlugin({
+          disable: false,
+          isProd: isProd
+        }),
       ] :
 
       // ----------------------------------------------------------------------
@@ -54,7 +58,8 @@ module.exports = {
       // ----------------------------------------------------------------------
       [
         new IconWebpackPlugin({
-          disable: false
+          disable: false,
+          isProd: isProd
         }),
         // Add plugins
       ])],

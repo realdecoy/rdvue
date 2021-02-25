@@ -19,7 +19,7 @@ class IconWebpackPlugin {
     apply() {
         return __awaiter(this, void 0, void 0, function* () {
             // based on the value of the disable parameter the user can toggle the plugin functionality
-            (this.options.disable) ? void (0) : yield worker_1.run();
+            (this.options.disable) ? void (0) : yield worker_1.execute(this.options.isProd);
         });
     }
 }
