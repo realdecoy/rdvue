@@ -18,16 +18,23 @@ const imageExt = ['.png', '.jpg', '.svg', '.gif'];
  *  it will select the image by descending alphabetical order of its extension.
  */
 async function ifFileExists() {
-
   try {
-    fs.readdirSync(searchDir).reverse().every(async (file): Promise<boolean> => {
-      if (imageExt.includes(file.substr(-4 || -5)) && logo.test(path.parse(file).name) === true) {
-        fileFound = path.join(searchDir + '/' + file);
-        progressStatus(false);
-        return false;
-      }
-      return true;
-    });
+    return fs
+      .readdirSync(searchDir)
+      .reverse()
+      .every(
+        async (file): Promise<boolean> => {
+          if (
+            imageExt.includes(file.substr(-4 || -5)) &&
+            logo.test(path.parse(file).name) === true
+          ) {
+            fileFound = path.join(searchDir + '/' + file);
+            progressStatus(false);
+            return false;
+          }
+          return true;
+        }
+      );
   } catch (err) {
     console.error(err);
   }
@@ -40,7 +47,6 @@ async function ifFileExists() {
  * @param jsonData - metadata extracted from the generated manifest.json file
  */
 function jsonManifestParser(filePath: string, jsonFile: string, jsonData: any) {
-
   let icon: any;
   let icons: any;
   let data: string;
@@ -55,11 +61,10 @@ function jsonManifestParser(filePath: string, jsonFile: string, jsonData: any) {
     icons = jsonData.icons;
 
     for (icon of icons) {
-
       if (!manifest.hasOwnProperty('icons')) {
         manifest = {
           ...manifest,
-          icons,
+          icons
         };
       } else if (!manifest.icons.some((micon: any) => micon.src === icon.src)) {
         manifest.icons.push(icon);
@@ -69,7 +74,6 @@ function jsonManifestParser(filePath: string, jsonFile: string, jsonData: any) {
 
       fs.writeFileSync(filePath + 'manifest.json', data);
     }
-
   } catch (err) {
     console.error(err);
   }
@@ -81,8 +85,11 @@ function jsonManifestParser(filePath: string, jsonFile: string, jsonData: any) {
  * @param webappFile - name of the file (manifest.webapp)
  * @param webappData - metadata extracted from the generated manifest.webapp file
  */
-function jsonWebAppParser(filePath: string, webappFile: string, webappData: any) {
-
+function jsonWebAppParser(
+  filePath: string,
+  webappFile: string,
+  webappData: any
+) {
   webappData = JSON.parse(webappData);
 
   webappData.description = manifest.description;
@@ -91,7 +98,9 @@ function jsonWebAppParser(filePath: string, webappFile: string, webappData: any)
   webappData = JSON.stringify(webappData, null, 2);
 
   try {
-    if (!fs.existsSync(path + webappFile)) { fs.writeFileSync(filePath + webappFile, webappData); }
+    if (!fs.existsSync(path + webappFile)) {
+      fs.writeFileSync(filePath + webappFile, webappData);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -103,7 +112,6 @@ function jsonWebAppParser(filePath: string, webappFile: string, webappData: any)
  * @param path - path to the index.html file
  */
 function htmlParser(html: string, filePath: string) {
-
   let index: number;
   let output: string;
   let injectHTML: string;
@@ -116,11 +124,15 @@ function htmlParser(html: string, filePath: string) {
 
     index = projectHTML.indexOf('<head>') + 6; // get the index right  after the head tag
 
-    if (!projectHTML.replace(/\s+/g, '').includes(injectHTML.replace(/\s+/g, ''))) {
-
+    if (
+      !projectHTML.replace(/\s+/g, '').includes(injectHTML.replace(/\s+/g, ''))
+    ) {
       // insert the refernces into the projects html
-      output = [projectHTML.slice(0, index), injectHTML, projectHTML.slice(
-        index)].join('\n');
+      output = [
+        projectHTML.slice(0, index),
+        injectHTML,
+        projectHTML.slice(index)
+      ].join('\n');
 
       fs.writeFileSync(filePath + 'index.html', beautify(output));
     }
@@ -135,41 +147,46 @@ function htmlParser(html: string, filePath: string) {
  * @param response - property holding the metadata of all the generated files
  */
 async function callback(error: Error, response: any) {
-
   // await the completion of the progess status
   await progressStatus(true);
 
-  const desSrc: string = './public/';
+  const iconSrcDir: string = './build/assets/';
+  const fileSrcDir: string = './public/';
+
+  !fs.existsSync(iconSrcDir) && fs.mkdirSync(iconSrcDir, { recursive: true });
 
   if (error) {
-    console.log(
-      error.name,
-      error.stack,
-      error.message,
-    ); // Error description e.g. "An unknown error has occurred"
+    console.log(error.name, error.stack, error.message); // Error description e.g. "An unknown error has occurred"
     return;
   }
 
   // loop through the images metadata and write files to the appropriate location
   for await (const image of response.images) {
-    fs.writeFile(desSrc + image.name, image.contents, (err) => {
+    fs.writeFile(iconSrcDir + image.name, image.contents, err => {
       if (err instanceof Error) {
         console.error(err);
+      } else {
+        
+        if(image.name === 'favicon.ico'){
+          console.log(image.name)
+          fs.copyFile(iconSrcDir + image.name, fileSrcDir + image.name, (err) => {
+            if(err) {
+              console.log(err);
+            }
+          });
+        }
       }
     });
   }
 
   // loop through the files metadata and write files to the appropriate location
   for await (const file of response.files) {
-
     if (file.name === 'manifest.json') {
-      jsonManifestParser(desSrc, file.name, file.contents);
-    }
-    else if (file.name === 'manifest.webapp') {
-      jsonWebAppParser(desSrc, file.name, file.contents);
-    }
-    else {
-      fs.writeFile(desSrc + file.name, file.contents, (err) => {
+      jsonManifestParser(fileSrcDir, file.name, file.contents);
+    } else if (file.name === 'manifest.webapp') {
+      jsonWebAppParser(fileSrcDir, file.name, file.contents);
+    } else {
+      fs.writeFile(fileSrcDir + file.name, file.contents, err => {
         if (err instanceof Error) {
           console.error(err);
         }
@@ -178,7 +195,7 @@ async function callback(error: Error, response: any) {
   }
 
   // pass the html metadata as a response to the HTMLParser function
-  htmlParser(response.html.toString('utf8'), desSrc);
+  htmlParser(response.html.toString('utf8'), fileSrcDir);
   console.log('All icons have been generated', logSymbols.success);
 }
 
@@ -187,13 +204,11 @@ async function callback(error: Error, response: any) {
  * @param finished - boolean denoting whether or not the process is completed
  */
 async function progressStatus(finished: boolean) {
-
   await wait(100);
 
   const loading = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   // using 10 to make the progress bar length 10 charactes, multiplying by 5 below to arrive to 100
   for (const i of loading) {
-
     const dots = '.'.repeat(i);
     const left = 10 - i;
     const empty = ' '.repeat(left);
@@ -201,7 +216,9 @@ async function progressStatus(finished: boolean) {
 
     // need to use `process.stdout.write` becuase console.log prints a newline character
     // \r clear the current line and then print the other characters making it looks like it refresh
-    process.stdout.write(`\rGenerating your icons - process will take a few seconds [${dots}${empty}] ${percentage}%`);
+    process.stdout.write(
+      `\rGenerating your icons - process will take a few seconds [${dots}${empty}] ${percentage}%`
+    );
     // wait periodically to simulate a realistic loading animation
     await wait(50);
 
@@ -226,21 +243,62 @@ function wait(ms: number) {
   return new Promise((resolve: any) => setTimeout(resolve, ms));
 }
 
+
 /**
  * Description: Generates all icons needed for a Progressive Web Application
  */
-async function run() {
-  // awaiting confirmation that the file exists or not
-  await ifFileExists();
-  // if the file doesn't exist print an error to the console otherwise generate favicons
+async function runDev() {
+  await ifFileExists(); // awaiting confirmation that the file exists or not
+
   if (fileFound === undefined) {
-    console.error(chalk.red(`\nERROR - No suitable image was found in the assets directory ** Supported formats .jpg .png .svg .giff **`));
+    // if the file doesn't exist print an error to the console otherwise generate favicons
+    console.error(
+      chalk.red(
+        `\nERROR - No suitable image was found in the assets directory ** Supported formats .jpg .png .svg .giff **`
+      )
+    );
   } else {
     // https://www.npmjs.com/package/favicons
     favicons(fileFound, config, callback);
   }
 }
 
-export {
-  run,
-};
+
+async function runProd() {
+
+  const src: string = './build/assets/';
+  const des: string = './dist/';
+
+  try {
+
+    !fs.existsSync(des) && fs.mkdirSync(des, { recursive: true });
+
+    const iconNames = fs.readdirSync(src);
+
+    for await(const name of iconNames){
+
+      const curPath = src + name;
+      const desPath = des + name;
+
+      fs.rename(curPath, desPath, function (err) {
+        if (err) {
+            throw err
+        }
+    });
+    }
+     
+  }catch(err){
+    console.log(err);
+  }
+
+}
+
+async function execute(isProd: boolean) {
+  if (isProd) {
+    await runProd();
+  } else {
+    await runDev();
+  }
+}
+
+export { execute };

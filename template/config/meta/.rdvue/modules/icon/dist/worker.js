@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.run = void 0;
+exports.execute = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const chalk_1 = __importDefault(require("chalk"));
@@ -40,8 +40,12 @@ const imageExt = ['.png', '.jpg', '.svg', '.gif'];
 function ifFileExists() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            fs_1.default.readdirSync(searchDir).reverse().every((file) => __awaiter(this, void 0, void 0, function* () {
-                if (imageExt.includes(file.substr(-4 || -5)) && logo.test(path_1.default.parse(file).name) === true) {
+            return fs_1.default
+                .readdirSync(searchDir)
+                .reverse()
+                .every((file) => __awaiter(this, void 0, void 0, function* () {
+                if (imageExt.includes(file.substr(-4 || -5)) &&
+                    logo.test(path_1.default.parse(file).name) === true) {
                     fileFound = path_1.default.join(searchDir + '/' + file);
                     progressStatus(false);
                     return false;
@@ -120,7 +124,11 @@ function htmlParser(html, filePath) {
         index = projectHTML.indexOf('<head>') + 6; // get the index right  after the head tag
         if (!projectHTML.replace(/\s+/g, '').includes(injectHTML.replace(/\s+/g, ''))) {
             // insert the refernces into the projects html
-            output = [projectHTML.slice(0, index), injectHTML, projectHTML.slice(index)].join('\n');
+            output = [
+                projectHTML.slice(0, index),
+                injectHTML,
+                projectHTML.slice(index)
+            ].join('\n');
             fs_1.default.writeFileSync(filePath + 'index.html', beautify(output));
         }
     }
@@ -138,7 +146,9 @@ function callback(error, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // await the completion of the progess status
         yield progressStatus(true);
-        const desSrc = './public/';
+        const iconSrcDir = './build/assets/';
+        const fileSrcDir = './public/';
+        !fs_1.default.existsSync(iconSrcDir) && fs_1.default.mkdirSync(iconSrcDir, { recursive: true });
         if (error) {
             console.log(error.name, error.stack, error.message); // Error description e.g. "An unknown error has occurred"
             return;
@@ -147,9 +157,19 @@ function callback(error, response) {
             // loop through the images metadata and write files to the appropriate location
             for (var _c = __asyncValues(response.images), _d; _d = yield _c.next(), !_d.done;) {
                 const image = _d.value;
-                fs_1.default.writeFile(desSrc + image.name, image.contents, (err) => {
+                fs_1.default.writeFile(iconSrcDir + image.name, image.contents, err => {
                     if (err instanceof Error) {
                         console.error(err);
+                    }
+                    else {
+                        if (image.name === 'favicon.ico') {
+                            console.log(image.name);
+                            fs_1.default.copyFile(iconSrcDir + image.name, fileSrcDir + image.name, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -166,13 +186,13 @@ function callback(error, response) {
             for (var _e = __asyncValues(response.files), _f; _f = yield _e.next(), !_f.done;) {
                 const file = _f.value;
                 if (file.name === 'manifest.json') {
-                    jsonManifestParser(desSrc, file.name, file.contents);
+                    jsonManifestParser(fileSrcDir, file.name, file.contents);
                 }
                 else if (file.name === 'manifest.webapp') {
-                    jsonWebAppParser(desSrc, file.name, file.contents);
+                    jsonWebAppParser(fileSrcDir, file.name, file.contents);
                 }
                 else {
-                    fs_1.default.writeFile(desSrc + file.name, file.contents, (err) => {
+                    fs_1.default.writeFile(fileSrcDir + file.name, file.contents, err => {
                         if (err instanceof Error) {
                             console.error(err);
                         }
@@ -188,7 +208,7 @@ function callback(error, response) {
             finally { if (e_2) throw e_2.error; }
         }
         // pass the html metadata as a response to the HTMLParser function
-        htmlParser(response.html.toString('utf8'), desSrc);
+        htmlParser(response.html.toString('utf8'), fileSrcDir);
         console.log('All icons have been generated', log_symbols_1.default.success);
     });
 }
@@ -233,12 +253,11 @@ function wait(ms) {
 /**
  * Description: Generates all icons needed for a Progressive Web Application
  */
-function run() {
+function runDev() {
     return __awaiter(this, void 0, void 0, function* () {
-        // awaiting confirmation that the file exists or not
-        yield ifFileExists();
-        // if the file doesn't exist print an error to the console otherwise generate favicons
+        yield ifFileExists(); // awaiting confirmation that the file exists or not
         if (fileFound === undefined) {
+            // if the file doesn't exist print an error to the console otherwise generate favicons
             console.error(chalk_1.default.red(`\nERROR - No suitable image was found in the assets directory ** Supported formats .jpg .png .svg .giff **`));
         }
         else {
@@ -247,5 +266,48 @@ function run() {
         }
     });
 }
-exports.run = run;
+function runProd() {
+    var e_3, _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const src = './build/assets/';
+        const des = './dist/';
+        try {
+            !fs_1.default.existsSync(des) && fs_1.default.mkdirSync(des, { recursive: true });
+            const iconNames = fs_1.default.readdirSync(src);
+            try {
+                for (var iconNames_1 = __asyncValues(iconNames), iconNames_1_1; iconNames_1_1 = yield iconNames_1.next(), !iconNames_1_1.done;) {
+                    const name = iconNames_1_1.value;
+                    const curPath = src + name;
+                    const desPath = des + name;
+                    fs_1.default.rename(curPath, desPath, function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                }
+            }
+            catch (e_3_1) { e_3 = { error: e_3_1 }; }
+            finally {
+                try {
+                    if (iconNames_1_1 && !iconNames_1_1.done && (_a = iconNames_1.return)) yield _a.call(iconNames_1);
+                }
+                finally { if (e_3) throw e_3.error; }
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    });
+}
+function execute(isProd) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (isProd) {
+            yield runProd();
+        }
+        else {
+            yield runDev();
+        }
+    });
+}
+exports.execute = execute;
 //# sourceMappingURL=worker.js.map
