@@ -45,7 +45,7 @@ class Store extends VuexModule {
   }
 }
 
-const App = getMultiParamModule<Store>(Store, MODULE_NAME, (store as any));
+const App = getMultiParamModule<Store>(Store, MODULE_NAME, store);
 
 export {
   App,

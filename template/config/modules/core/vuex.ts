@@ -46,7 +46,7 @@ export function MultiParamAction<V>(options: ActionDecoratorParams = {}) {
 export function getMultiParamModule<StoreType extends VuexModule>(
   moduleClass: ConstructorOf<StoreType>,
   moduleName: string,
-  store: Store<StoreType>,
+  store: Store<unknown>,
 ) {
   return new Proxy<StoreType>(getModule(moduleClass, store), {
     // tslint:disable-next-line:no-any
