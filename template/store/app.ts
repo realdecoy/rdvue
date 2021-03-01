@@ -22,7 +22,7 @@ class Store extends VuexModule {
 
   @MultiParamAction()
   public initializeFooBar() {
-    return this.setFooBar('Hello World');
+    this.setFooBar('Hello World');
   }
 
   @MultiParamAction()
