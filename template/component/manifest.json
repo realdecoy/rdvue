@@ -1,0 +1,94 @@
+{
+  "version": 1,
+  "name": "component",
+  "description": "Generate a basic component.",
+  "arguments": [
+    {
+      "name": "componentNameKebab",
+      "type": "string",
+      "description": "the name for the generated component. (e.g. my-component)"
+    },
+    {
+      "name": "componentName",
+      "type": "string",
+      "description": "the name for the generated component.",
+      "isPrivate": true
+    }
+  ],
+  "sourceDirectory": "./",
+  "installDirectory": "components",
+  "files": [
+    {
+      "source": "index.ts",
+      "target": "index.ts",
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "component.scss",
+      "target": "${componentNameKebab}.scss",
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "component.ts",
+      "target": "${componentNameKebab}.ts",
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        },
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
+    },
+    {
+      "source": "component.spec.js",
+      "target": "${componentNameKebab}.spec.js",
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        },
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
+    },
+    {
+      "source": "component.vue",
+      "target": "${componentNameKebab}.vue",
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentNameKebab}"
+        }
+      ]
+    },
+      {
+      "source": "component.stories.ts",
+      "target": "${componentNameKebab}.stories.ts",
+      "content": [
+        {
+          "matchRegex": "__COMPONENT__KEBAB__",
+          "replace": "${componentNameKebab}"
+        },
+        {
+          "matchRegex": "__COMPONENT__",
+          "replace": "${componentName}"
+        }
+      ]
+    }
+  ]
+}

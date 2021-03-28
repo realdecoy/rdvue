@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "sourceDirectory": "./",
+  "features": [
+    {
+      "name": "config",
+      "private": true
+    },
+    {
+      "name": "store",
+      "private": true
+    },
+    {
+      "name": "component",
+      "private": false
+    },
+    {
+      "name": "service",
+      "private": false
+    },
+    {
+      "name": "model",
+      "private": false
+    },
+    {
+      "name": "page",
+      "private": false
+    },
+    {
+      "name": "sm",
+      "private": false
+    },
+    {
+      "name": "layout",
+      "private": false
+    }
+  ],
+  "plugins": [
+    "localization",
+    "storybook",
+    "vuetify",
+    "buefy"
+  ],
+  "project": {
+    "features": [
+      "config",
+      "store"
+    ],
+    "optional": [
+      "component",
+      "service",
+      "model",
+      "page",
+      "sm",
+      "layout"
+    ],
+    "plugins": [
+      "storybook"
+    ]
+   },
+  "groups": [
+    {
+      "name": "auth",
+      "isMultipleChoice": false,
+      "plugins": [
+        "auth"
+      ],
+      "question": "[EXPERIMENTAL] Which authentication library would you like to install?"
+    },
+    {
+      "name": "locale",
+      "isMultipleChoice": false,
+      "plugins": [
+        "localization"
+      ],
+      "question": "Which localization library would you like to install?"
+    },
+    {
+      "name": "ui",
+      "isMultipleChoice": false,
+      "plugins": [
+        "vuetify",
+        "buefy"
+      ],
+      "question": "Which UI library would you like to install?"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recommended",
+      "plugins": [
+        "buefy",
+        "localization",
+        "fontawesome"
+      ],
+      "description": "Buefy, Localization, FontAwesome"
+    },
+    {
+      "name": "Vuetify",
+      "plugins": [
+        "vuetify",
+        "localization",
+        "fontawesome"
+      ],
+      "description": "Vuetify, Localization, FontAwesome"
+    }
+  ],
+  "customPreset": {
+    "groups": [],
+    "name": "Custom"
+  }
+}

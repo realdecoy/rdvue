@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "name": "model",
+  "description": "Generate a basic model.",
+  "arguments": [{
+      "name": "modelNameKebab",
+      "type": "string",
+      "description": "the name of the generated model. (e.g. user-data)"
+    },
+    {
+      "name": "modelName",
+      "type": "string",
+      "description": "the name of the generated model.",
+      "isPrivate": true
+    }
+  ],
+  "sourceDirectory": "./",
+  "installDirectory": "entities",
+  "files": [{
+    "source": "model.ts",
+    "target": "${modelNameKebab}.ts",
+    "content": [{
+      "matchRegex": "__MODEL__",
+      "replace": "${modelName}"
+    }]
+  }]
+}

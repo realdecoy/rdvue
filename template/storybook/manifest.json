@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "name": "storybook",
+  "description": "Installs Storybook feature",
+  "sourceDirectory": "./",
+  "installDirectory": "/",
+  "files": [
+    {
+      "source": "content/components/example.vue",
+      "target": ".rdvue/storybook/components/example.vue"
+    },
+    {
+      "source": "content/components/index.ts",
+      "target": ".rdvue/storybook/components/index.ts"
+    },
+    {
+      "source": "content/components/playground.vue",
+      "target": ".rdvue/storybook/components/playground.vue"
+    },
+    {
+      "source": "content/components/props.vue",
+      "target": ".rdvue/storybook/components/props.vue"
+    },
+    {
+      "source": "content/components/preview.vue",
+      "target": ".rdvue/storybook/components/preview.vue"
+    },
+    {
+      "source": "content/modules/constants.ts",
+      "target": ".rdvue/storybook/modules/constants.ts"
+    },
+    {
+      "source": "content/modules/index.ts",
+      "target": ".rdvue/storybook/modules/index.ts"
+    },
+    {
+      "source": "content/modules/preview-of.ts",
+      "target": ".rdvue/storybook/modules/preview-of.ts"
+    },
+    {
+      "source": "content/addons.js",
+       "target": ".storybook/addons.js"
+    },
+    {
+      "source": "content/config.js",
+       "target": ".storybook/config.js"
+    },
+    {
+      "source": "content/logo.svg",
+       "target": ".storybook/logo.svg"
+    },
+    {
+      "source": "content/main.js",
+       "target": ".storybook/main.js"
+    },
+    {
+      "source": "content/preview-head.html",
+       "target": ".storybook/preview-head.html"
+    },
+    {
+      "source": "content/stories.scss",
+       "target": ".storybook/stories.scss"
+    },
+    {
+      "source": "content/webpack.config.js",
+       "target": ".storybook/webpack.config.js"
+    },
+    {
+      "source": "content/modules/story.ts",
+      "target": ".rdvue/storybook/modules/story.ts"
+    },
+    {
+      "source": "content/modules/constants.ts",
+      "target": ".rdvue/storybook/modules/constants.ts"
+    },
+    {
+      "source": "content/index.ts",
+      "target": ".rdvue/storybook/index.ts"
+    }
+  ],
+  "packages": {
+    "devDependencies": [
+      "@storybook/addon-links",
+      "@storybook/addon-options",
+      "@storybook/preset-scss",
+      "@storybook/preset-typescript",
+      "@storybook/vue",
+      "@types/storybook__vue",
+      "babel-preset-vue",
+      "npm-run-all"
+    ],
+    "scripts": {
+      "build-storybook": "run-s storybook:build storybook:copyres",
+      "storybook": "run-s storybook:tailwind storybook:serve",
+      "storybook:build": "build-storybook -c .storybook -o dist/storybook",
+      "storybook:serve": "start-storybook -s ./public -p 8000 --ci",
+      "storybook:copyres": "ncp ./public/images dist/storybook/images",
+      "storybook:tailwind": "npx tailwindcss build src/theme/tailwind.css -o tailwind.css"
+    }
+  }
+}

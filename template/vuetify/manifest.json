@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "name": "vuetify",
+  "group": false,
+  "description": "Generate files/dependences needed for the vuetify UI Group.",
+  "sourceDirectory": "./",
+  "installDirectory": "./",
+  "files": [
+    {
+      "source": "config/shims-vuetify.d.ts",
+      "target": "config/shims-vuetify.d.ts"
+    },
+    {
+      "source": "config/vuetify.ts",
+      "target": "config/vuetify.ts"
+    },
+    {
+      "source": "pages/vuetify-sample/vuetify-app.vue",
+      "target": "pages/vuetify-sample/vuetify-app.vue"
+    },
+    {
+      "source": "pages/vuetify-sample/vuetify-sample-component.vue",
+      "target": "pages/vuetify-sample/vuetify-sample-component.vue"
+    },
+    {
+      "source": "theme/fonts/roboto.woff2",
+      "target": "theme/fonts/roboto.woff2"
+    },
+    {
+      "source": "theme/roboto.css",
+      "target": "theme/roboto.css"
+    }
+  ],
+  "packages": {
+    "dependencies": ["vuetify"],
+    "devDependencies": ["@mdi/font", "sass", "vue-cli-plugin-vuetify", "vue-template-compiler", "vuetify-loader"]
+  },
+  "routes": [
+    {
+      "path": "'/vuetify-test'",
+      "name": "'vuetify-test'",
+      "component": "`require('@/pages/vuetify-sample/vuetify-app.vue').default`"
+    }
+  ],
+  "vueOptions": {
+    "transpileDependencies": [
+      "'vuetify'"
+    ]
+  },
+  "modules": {
+    "vuetify": "`require('@/config/vuetify').default`"
+  }
+}

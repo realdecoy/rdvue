@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "name": "layout",
+  "description": "Generate a basic layout.",
+  "arguments": [
+    {
+      "name": "layoutNameKebab",
+      "type": "string",
+      "description": "the name for the generated layout. (e.g. hello-world)"
+    },
+    {
+      "name": "layoutName",
+      "type": "string",
+      "description": "the name for the generated layout.",
+      "isPrivate": true
+    }
+  ],
+  "sourceDirectory": "./",
+  "installDirectory": "layouts",
+  "files": [
+    {
+      "source": "layout.spec.ts",
+      "target": "${layoutNameKebab}.spec.ts",
+      "content": [
+        {
+          "matchRegex": "__LAYOUT__KEBAB__",
+          "replace": "${layoutNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "index.ts",
+      "target": "index.ts",
+      "content": [
+        {
+          "matchRegex": "__LAYOUT__KEBAB__",
+          "replace": "${layoutNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "layout.scss",
+      "target": "${layoutNameKebab}.scss",
+      "content": [
+        {
+          "matchRegex": "__LAYOUT__",
+          "replace": "${layoutNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "layout.ts",
+      "target": "${layoutNameKebab}.ts",
+      "content": [
+        {
+          "matchRegex": "__LAYOUT__KEBAB__",
+          "replace": "${layoutNameKebab}"
+        },
+        {
+          "matchRegex": "__LAYOUT__",
+          "replace": "${layoutName}"
+        }
+      ]
+    },
+    {
+      "source": "layout.vue",
+      "target": "${layoutNameKebab}.vue",
+      "content": [
+        {
+          "matchRegex": "__LAYOUT__",
+          "replace": "${layoutNameKebab}"
+        }
+      ]
+    },
+    {
+      "source": "layout.vue",
+      "target": "${layoutNameKebab}.vue",
+      "content": [
+        {
+          "matchRegex": "__LAYOUT__",
+          "replace": "${layoutNameKebab}"
+        }
+      ]
+    }
+  ]
+}
