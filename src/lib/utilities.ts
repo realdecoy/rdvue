@@ -4,24 +4,16 @@ import {Lookup} from '../lib/types'
 import {getProjectRoot} from './files'
 
 /**
- * Description: determine if string is in kebab case (e.g. my-project-name)
- * @param value - a string value
- */
-function isKebabCase(value: string): boolean {
-  return true
-}
-
-/**
  * Description: determine if string is valid JSON string
  * @param value - a string value
  */
 function isJsonString(value: string) {
-    try {
-        JSON.parse(value)
-    } catch (e) {
-        return false
-    }
-    return true
+  try {
+    JSON.parse(value)
+  } catch (error) {
+    return false
+  }
+  return true
 }
 
 /**
@@ -42,8 +34,8 @@ function hasKebab(value = ''): boolean {
  * @param value - a string value
  */
 function toKebabCase(value: string): string {
-  return value
-  && (value.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) as [string])
+  return value &&
+  (value.match(/[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g) as [string])
   .map(x => x.toLowerCase())
   .join('-')
 }
@@ -54,7 +46,7 @@ function toKebabCase(value: string): string {
  */
 function toPascalCase(value: string): string {
   return value
-  .split(/[\-_ ]+/)
+  .split(/[-_ ]+/)
   .join(' ')
   .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase())
   .split(' ')
@@ -69,7 +61,7 @@ function validateProjectName(value: any) {
   const isString = typeof value === 'string'
   const isNull = value === null || value.length === 0
   // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null 
+  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null
   const isValidProjectName = isString && charactersMatch
   let resultMessage
 
@@ -90,7 +82,7 @@ function validatePageName(value: any) {
   const isString = typeof value === 'string'
   const isNull = value === null || value.length === 0
   // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null 
+  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null
   const isValidPageName = isString && charactersMatch
   let resultMessage
 
@@ -108,10 +100,10 @@ function validatePageName(value: any) {
  * @param value - a string value
  */
 async function parseProjectName(args: Lookup): Promise<string> {
-  let projectName = args['name']
+  let projectName = args.name
   // if no project name is provided in command then prompt user
   if (!projectName) {
-    let responses: any = await inquirer.prompt([{
+    const responses: any = await inquirer.prompt([{
       name: 'name',
       default: 'my-rdvue-project',
       message: 'Enter a project name: ',
@@ -128,10 +120,10 @@ async function parseProjectName(args: Lookup): Promise<string> {
  * @param value - a string value
  */
 async function parsePageName(args: Lookup): Promise<string> {
-  let projectName = args['name']
+  let projectName = args.name
   // if no page name is provided in command then prompt user
   if (!projectName) {
-    let responses: any = await inquirer.prompt([{
+    const responses: any = await inquirer.prompt([{
       name: 'name',
       default: 'hello-world',
       message: 'Enter a page name: ',
@@ -149,11 +141,10 @@ async function parsePageName(args: Lookup): Promise<string> {
 function checkProjectValidity() {
   const results = {
     isValid: false,
-    projectRoot: ''
+    projectRoot: '',
   }
-  let projectRoot: string | null
 
-  projectRoot = getProjectRoot()
+  const projectRoot: string | null = getProjectRoot()
   if (projectRoot !== null && projectRoot !== '') {
     results.isValid = true
     results.projectRoot = projectRoot

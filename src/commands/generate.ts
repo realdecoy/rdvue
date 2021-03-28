@@ -36,9 +36,11 @@ export default class Generate extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-      case 'existing-project': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`); break
-      case 'file-not-changed': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`); break
-      default: throw new Error(customErrorMessage)
+    case 'existing-project': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+      break
+    case 'file-not-changed': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+      break
+    default: throw new Error(customErrorMessage)
     }
 
     // exit with status code

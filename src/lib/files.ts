@@ -41,7 +41,7 @@ function directoryExists(filePath: string): boolean {
 function fileExists(filePath: string): boolean {
   try {
     return fs.existsSync(filePath)
-  } catch (err) {
+  } catch (error) {
     // TODO: log error here
     return false
   }
@@ -67,8 +67,8 @@ function writeFile(filePath: string, data: string): boolean {
     fs.writeFileSync(filePath, data)
   } catch (error) {
     // eslint:disable-next-line:no-console
-    console.log('Failed to write to file')
     success = false
+    throw new Error('failed to write to file')
   }
 
   return success
@@ -91,14 +91,13 @@ async function replaceInFiles(files: string | string[], from: RegExp, to: string
   try {
     replaceResults = await replace(options)
     failedFiles = replaceResults
-    .filter((result: { file: string, hasChanged: boolean }) => !result.hasChanged)
-    .map((result: { file: string, hasChanged: boolean }) => result.file)
+    .filter((result: { file: string; hasChanged: boolean }) => !result.hasChanged)
+    .map((result: { file: string; hasChanged: boolean }) => result.file)
     result = failedFiles.length === 0
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error(
-      JSON.stringify({ 
-        code: 'file-not-changed', 
+      JSON.stringify({
+        code: 'file-not-changed',
         message: error.message,
       })
     )
@@ -186,7 +185,6 @@ async function copyFiles(
   )
 }
 
-
 /**
  * Description: Write changes to a file
  * @param filePath - location of file to be updated
@@ -253,18 +251,18 @@ async function readAndUpdateFeatureFiles(
             filePath,
             fileContent,
             contentBlock.matchRegex,
-            hasKebab(contentBlock.replace) === true
-              ? kebabName
-              : contentBlock.replace.includes('${')
-              ? pascalName
-              : contentBlock.replace
+            hasKebab(contentBlock.replace) === true ?
+              kebabName :
+              contentBlock.replace.includes('${') ?
+                pascalName :
+                contentBlock.replace
           )
         }
       }
     } else if (file.content) {
       throw new Error(
-        JSON.stringify({ 
-          code: 'failed-match-and-replace', 
+        JSON.stringify({
+          code: 'failed-match-and-replace',
           message: `failed to match and replace  for :${kebabName} files`,
         })
       )
@@ -292,7 +290,7 @@ function isRootDirectory(location: string | null = null): boolean {
     }
   } catch (e) {
     // tslint:disable-next-line:no-console
-    console.warn('Error checking root directory')
+    throw new Error('Error checking root directory')
     isRoot = true
   }
 
@@ -332,10 +330,12 @@ function getProjectRoot() {
 }
 
 export {
-    readConfigFile,
-    replaceInFiles,
-    replaceTargetFileNames,
-    readAndUpdateFeatureFiles,
-    copyFiles,
-    getProjectRoot,
+  readConfigFile,
+  replaceInFiles,
+  replaceTargetFileNames,
+  readAndUpdateFeatureFiles,
+  copyFiles,
+  getProjectRoot,
+  fileExists,
+  writeFile,
 }

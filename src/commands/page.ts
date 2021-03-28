@@ -34,9 +34,11 @@ export default class Page extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-      case 'project-invalid': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`); break
-      case 'failed-match-and-replace': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`); break
-      default: throw new Error(customErrorMessage)
+    case 'project-invalid': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+      break
+    case 'failed-match-and-replace': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+      break
+    default: throw new Error(customErrorMessage)
     }
 
     // exit with status code
