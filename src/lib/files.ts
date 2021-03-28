@@ -42,7 +42,6 @@ function fileExists(filePath: string): boolean {
   try {
     return fs.existsSync(filePath)
   } catch (error) {
-    // TODO: log error here
     return false
   }
 }
@@ -75,7 +74,7 @@ function writeFile(filePath: string, data: string): boolean {
 }
 
 /**
- * Description: Read file located at specified filePath
+ * Description: Replace content in list of files based on configs passed in
  * @param filePath - a path to a file
  */
 async function replaceInFiles(files: string | string[], from: RegExp, to: string): Promise<boolean> {
