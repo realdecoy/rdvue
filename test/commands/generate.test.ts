@@ -1,10 +1,17 @@
 import {expect, test} from '@oclif/test'
+const rimraf = require('rimraf')
+
+const testProjectName = 'rdv-hello-world'
 
 describe('generate', () => {
   test
   .stdout()
-  .command(['generate','hello-world'])
-  .it('runs generate hello-world', ctx => {
-    expect(ctx.stdout).to.contain('[rdvue2] Project ready')
+  .command(['generate', testProjectName])
+  .do(() => {
+    // cleanup generated files
+    rimraf.sync(testProjectName)
+  })
+  .it(`runs generate ${testProjectName}`, ctx => {
+    expect(ctx.stdout).to.contain(`[rdvue] ${testProjectName} is ready`)
   })
 })
