@@ -48,50 +48,50 @@ npx rdvue -v|--version|version
 ## Options
 <!-- options -->
 
-* [`rdvue generate [NAME]`](#rdvue-generate-name)
-* [`rdvue page [NAME]`](#rdvue-page-file)
-* [`rdvue help [COMMAND]`](#rdvue-help-command)
+* [`rdvue generate [name]`](#rdvue-generate-name)
+* [`rdvue page [name]`](#rdvue-page-file)
+* [`rdvue help [command]`](#rdvue-help-command)
 
-### `rdvue generate [NAME]`
+### `rdvue generate [name]`
 
 Create a new rdvue project
 
 ```
 USAGE
-  $ rdvue generate [NAME]
+  $ rdvue generate [name]
 
 OPTIONS
-  -h, --help       show CLI help
+  -h, --help  show CLI help
 ```
 
 
-### `rdvue page [NAME]`
+### `rdvue page [name]`
 
 create page for rdvue project
 
 ```
 USAGE
-  $ rdvue page [NAME]
+  $ rdvue page [name]
 
 OPTIONS
-  -h, --help       show CLI help
+  -h, --help  show CLI help
 ```
 
 _See code: [src/commands/page.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/page.ts)_
 
-### `rdvue help [COMMAND]`
+### `rdvue help [command]`
 
 display help for rdvue
 
 ```
 USAGE
-  $ rdvue help [COMMAND]
+  $ rdvue help [command]
 
 ARGUMENTS
-  COMMAND  command to show help for
+  command  command to show help for
 
 OPTIONS
-  --all  see all commands in CLI
+  --all    see all commands in CLI
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
@@ -100,3 +100,9 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2
 ## About
 
 The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributions are welcome! You can help us by reporting or fixing bugs and giving us feedback on new/existing features.
+
+## Dev Instructions
+
+* clone repo
+* checkout rdvue-rebuild branch
+* npm link
