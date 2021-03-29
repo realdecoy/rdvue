@@ -48,12 +48,27 @@ npx rdvue -v|--version|version
 ## Options
 <!-- options -->
 
+* [`rdvue component [name]`](#rdvue-component-name)
 * [`rdvue generate [name]`](#rdvue-generate-name)
 * [`rdvue page [name]`](#rdvue-page-name)
 * [`rdvue service [name]`](#rdvue-service-name)
 * [`rdvue sm [name]`](#rdvue-sm-name)
 * [`rdvue help [command]`](#rdvue-help-command)
 
+
+### `rdvue component [name]`
+
+create component for rdvue project
+
+```
+USAGE
+  $ rdvue component [name]
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/component.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/component.ts)_
 ### `rdvue generate [name]`
 
 Create a new rdvue project
