@@ -51,6 +51,7 @@ npx rdvue -v|--version|version
 * [`rdvue generate [name]`](#rdvue-generate-name)
 * [`rdvue page [name]`](#rdvue-page-name)
 * [`rdvue service [name]`](#rdvue-service-name)
+* [`rdvue sm [name]`](#rdvue-sm-name)
 * [`rdvue help [command]`](#rdvue-help-command)
 
 ### `rdvue generate [name]`
@@ -79,6 +80,34 @@ OPTIONS
 ```
 
 _See code: [src/commands/page.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/page.ts)_
+
+### `rdvue service [name]`
+
+create service for rdvue project
+
+```
+USAGE
+  $ rdvue service [name]
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/service.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/service.ts)_
+
+### `rdvue sm [name]`
+
+create store module for rdvue project
+
+```
+USAGE
+  $ rdvue sm [name]
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/sm.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/sm.ts)_
 
 ### `rdvue help [command]`
 
