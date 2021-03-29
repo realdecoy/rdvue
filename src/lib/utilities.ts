@@ -78,12 +78,12 @@ function validateProjectName(value: any) {
  * Description: determine if string is valid project name
  * @param value - a string value
  */
-function validatePageName(value: any) {
+ function validatePageName(value: any) {
   const isString = typeof value === 'string'
   const isNull = value === null || value.length === 0
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null
-  const isValidPageName = isString && charactersMatch
+  const isValidArgName = isString && charactersMatch
   let resultMessage
 
   if (isNull) {
@@ -92,7 +92,28 @@ function validatePageName(value: any) {
     resultMessage = `${chalk.red('')} Use letters, numbers and '-' for page names (e.g. page-name)`
   }
 
-  return isValidPageName ? true : resultMessage
+  return isValidArgName ? true : resultMessage
+}
+
+/**
+ * Description: determine if string is valid project name
+ * @param value - a string value
+ */
+ function validateServiceName(value: any) {
+  const isString = typeof value === 'string'
+  const isNull = value === null || value.length === 0
+  // characters in value are limited to alphanumeric characters and hyphens or underscores
+  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null
+  const isValidArgName = isString && charactersMatch
+  let resultMessage
+
+  if (isNull) {
+    resultMessage = `${chalk.red('')} A service name is required`
+  } else if (!charactersMatch) {
+    resultMessage = `${chalk.red('')} Use letters, numbers and '-' for service names (e.g. service-name)`
+  }
+
+  return isValidArgName ? true : resultMessage
 }
 
 /**
@@ -100,9 +121,9 @@ function validatePageName(value: any) {
  * @param value - a string value
  */
 async function parseProjectName(args: Lookup): Promise<string> {
-  let projectName = args.name
+  let argName = args.name
   // if no project name is provided in command then prompt user
-  if (!projectName) {
+  if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
       default: 'my-rdvue-project',
@@ -110,9 +131,9 @@ async function parseProjectName(args: Lookup): Promise<string> {
       type: 'input',
       validate: validateProjectName,
     }])
-    projectName = responses.name
+    argName = responses.name
   }
-  return projectName as string
+  return argName as string
 }
 
 /**
@@ -120,9 +141,9 @@ async function parseProjectName(args: Lookup): Promise<string> {
  * @param value - a string value
  */
 async function parsePageName(args: Lookup): Promise<string> {
-  let projectName = args.name
+  let argName = args.name
   // if no page name is provided in command then prompt user
-  if (!projectName) {
+  if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
       default: 'hello-world',
@@ -130,9 +151,29 @@ async function parsePageName(args: Lookup): Promise<string> {
       type: 'input',
       validate: validatePageName,
     }])
-    projectName = responses.name
+    argName = responses.name
   }
-  return projectName as string
+  return argName as string
+}
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param value - a string value
+ */
+async function parseServiceName(args: Lookup): Promise<string> {
+  let argName = args.name
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: 'auth-service',
+      message: 'Enter a service name: ',
+      type: 'input',
+      validate: validateServiceName,
+    }])
+    argName = responses.name
+  }
+  return argName as string
 }
 
 /**
@@ -161,6 +202,7 @@ export {
   toPascalCase,
   parseProjectName,
   parsePageName,
+  parseServiceName,
   isJsonString,
   checkProjectValidity,
 }

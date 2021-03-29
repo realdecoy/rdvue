@@ -49,7 +49,8 @@ npx rdvue -v|--version|version
 <!-- options -->
 
 * [`rdvue generate [name]`](#rdvue-generate-name)
-* [`rdvue page [name]`](#rdvue-page-file)
+* [`rdvue page [name]`](#rdvue-page-name)
+* [`rdvue service [name]`](#rdvue-service-name)
 * [`rdvue help [command]`](#rdvue-help-command)
 
 ### `rdvue generate [name]`

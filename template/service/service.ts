@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { Service } from './base';
+import { BaseService } from './_base';
 
-class __SERVICE__ extends Service {
+class __SERVICE__ extends BaseService {
   // --------------------------------------------------------------------------
   // [Private] Fields
   // --------------------------------------------------------------------------
@@ -10,7 +10,9 @@ class __SERVICE__ extends Service {
   // [Public] Constructor
   // --------------------------------------------------------------------------
   constructor() {
-    super();
+    super({
+      baseURL: ''
+    });
   }
 
   // --------------------------------------------------------------------------
@@ -20,12 +22,13 @@ class __SERVICE__ extends Service {
   // --------------------------------------------------------------------------
   // [Public] Methods
   // --------------------------------------------------------------------------
-  public async postData(data): Promise<any> {
+  public async postData(data: string): Promise<any> {
     // define custom request options [NB: default config found in @/services/base]
     const options = {};
+
     return this.api
       .post(`<endpoint-name>`, data, options)
-      .then((response: AxiosResponse<any>) => {
+      .then((response: AxiosResponse) => {
         // handle response here
         return response;
       });
