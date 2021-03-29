@@ -75,7 +75,28 @@ function validateProjectName(value: any) {
 }
 
 /**
- * Description: determine if string is valid project name
+ * Description: determine if string is valid component name
+ * @param value - a string value
+ */
+function validateComponentName(value: any) {
+  const isString = typeof value === 'string'
+  const isNull = value === null || value.length === 0
+  // characters in value are limited to alphanumeric characters and hyphens or underscores
+  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null
+  const isValidComponentName = isString && charactersMatch
+  let resultMessage
+
+  if (isNull) {
+    resultMessage = `${chalk.red('')} A project name is required`
+  } else if (!charactersMatch) {
+    resultMessage = `${chalk.red('')} Use letters, numbers and '-' for project names (e.g. my-project-name)`
+  }
+
+  return isValidComponentName ? true : resultMessage
+}
+
+/**
+ * Description: determine if string is valid page name
  * @param value - a string value
  */
  function validatePageName(value: any) {
@@ -96,7 +117,7 @@ function validateProjectName(value: any) {
 }
 
 /**
- * Description: determine if string is valid project name
+ * Description: determine if string is valid service name
  * @param value - a string value
  */
  function validateServiceName(value: any) {
@@ -117,7 +138,7 @@ function validateProjectName(value: any) {
 }
 
 /**
- * Description: determine if string is valid project name
+ * Description: determine if string is valid store module name
  * @param value - a string value
  */
  function validateStoreModuleName(value: any) {
@@ -135,6 +156,26 @@ function validateProjectName(value: any) {
   }
 
   return isValidArgName ? true : resultMessage
+}
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param value - a string value
+ */
+ async function parseComponentName(args: Lookup): Promise<string> {
+  let argName = args.name
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: 'auth-service',
+      message: 'Enter a service name: ',
+      type: 'input',
+      validate: validateComponentName,
+    }])
+    argName = responses.name
+  }
+  return argName as string
 }
 
 /**
@@ -241,6 +282,7 @@ export {
   hasKebab,
   toKebabCase,
   toPascalCase,
+  parseComponentName,
   parseProjectName,
   parsePageName,
   parseServiceName,
