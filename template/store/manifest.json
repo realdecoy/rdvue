@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "name": "sm",
+  "name": "store",
   "description": "Generate a basic Vuex Store module.",
   "arguments": [{
       "name": "storeModuleNameKebab",
