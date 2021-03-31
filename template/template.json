@@ -3,14 +3,6 @@
   "sourceDirectory": "./",
   "features": [
     {
-      "name": "config",
-      "private": true
-    },
-    {
-      "name": "store",
-      "private": true
-    },
-    {
       "name": "component",
       "private": false
     },
@@ -27,7 +19,7 @@
       "private": false
     },
     {
-      "name": "sm",
+      "name": "store",
       "private": false
     },
     {
@@ -41,23 +33,6 @@
     "vuetify",
     "buefy"
   ],
-  "project": {
-    "features": [
-      "config",
-      "store"
-    ],
-    "optional": [
-      "component",
-      "service",
-      "model",
-      "page",
-      "sm",
-      "layout"
-    ],
-    "plugins": [
-      "storybook"
-    ]
-   },
   "groups": [
     {
       "name": "auth",

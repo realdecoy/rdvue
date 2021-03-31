@@ -1,21 +1,21 @@
 import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
-import {Files} from '../lib/types'
-import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileNames} from '../lib/files'
-import {checkProjectValidity, parseServiceName, toKebabCase, toPascalCase, isJsonString} from '../lib/utilities'
-import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../lib/constants'
+import {Files} from '../../lib/types'
+import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileNames} from '../../lib/files'
+import {checkProjectValidity, parseComponentName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
+import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
 
-const TEMPLATE_FOLDERS = ['service']
-export default class Service extends Command {
-  static description = 'create a new rdvue service'
+const TEMPLATE_FOLDERS = ['component']
+export default class Component extends Command {
+  static description = 'add a new rdvue component'
 
   static flags = {
     help: flags.help({char: 'h'}),
   }
 
   static args = [
-    {name: 'name', desciption: 'name of generated service'},
+    {name: 'name', desciption: 'name of new component'},
   ]
 
   // override Command class error handler
@@ -46,7 +46,7 @@ export default class Service extends Command {
   }
 
   async run() {
-    const {args} = this.parse(Service)
+    const {args} = this.parse(Component)
     const folderList = TEMPLATE_FOLDERS
     const configs = folderList.map(folder => {
       return {
@@ -63,29 +63,29 @@ export default class Service extends Command {
       throw new Error(
         JSON.stringify({
           code: 'project-invalid',
-          message: `service command must be run in an existing ${chalk.yellow('rdvue')} project`,
+          message: `component command must be run in an existing ${chalk.yellow('rdvue')} project`,
         })
       )
     }
 
-    // retrieve service name
-    const serviceName = await parseServiceName(args)
-    // parse kebab and pascal case of serviceName
-    const serviceNameKebab = toKebabCase(serviceName)
-    const serviceNamePascal = toPascalCase(serviceName)
+    // retrieve component name
+    const componentName = await parseComponentName(args)
+    // parse kebab and pascal case of componentName
+    const componentNameKebab = toKebabCase(componentName)
+    const componentNamePascal = toPascalCase(componentName)
 
     configs.forEach(async config => {
       const files: Array<string | Files> = config.manifest.files
       // replace file names in config with kebab case equivalent
-      replaceTargetFileNames(files, serviceNameKebab)
+      replaceTargetFileNames(files, componentNameKebab)
       sourceDirectory = path.join(TEMPLATE_ROOT, config.name, config.manifest.sourceDirectory)
-      installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory)
+      installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory, componentNameKebab)
 
-      // copy and update files for service being generated
+      // copy and update files for component being added
       await copyFiles(sourceDirectory, installDirectory, files)
-      await readAndUpdateFeatureFiles(installDirectory, files, serviceNameKebab, serviceNamePascal)
+      await readAndUpdateFeatureFiles(installDirectory, files, componentNameKebab, componentNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} created service ${serviceNameKebab}`)
+    this.log(`${chalk.blue('[rdvue]')} created component ${componentNameKebab}`)
   }
 }

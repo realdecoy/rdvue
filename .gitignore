@@ -5,4 +5,5 @@
 /lib
 /tmp
 /yarn.lock
+/test-projects
 node_modules

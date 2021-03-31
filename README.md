@@ -24,6 +24,7 @@ and a data-layer design promoting unified consumption through Stores and Service
 
 * [Usage](#usage)
 * [Options](#options)
+* [Documentation](https://realdecoy.github.io/rdvue/)
 <!-- tocstop -->
 
 ## Usage
@@ -36,7 +37,7 @@ npx rdvue [command]
 The help menu can be accessed with the command:
 
 ```bash
-rdvue --help
+npx rdvue --help
 ```
 The current version of rdvue can be retrieved with the command:
 
@@ -46,101 +47,22 @@ npx rdvue -v|--version|version
 <!-- usagestop -->
 
 ## Options
-<!-- options -->
+```txt
+npx rdvue [<action>|<action>:[<feature>] [<project-name>|<feature-name>]
 
-* [`rdvue component [name]`](#rdvue-component-name)
-* [`rdvue generate [name]`](#rdvue-generate-name)
-* [`rdvue page [name]`](#rdvue-page-name)
-* [`rdvue service [name]`](#rdvue-service-name)
-* [`rdvue sm [name]`](#rdvue-sm-name)
-* [`rdvue help [command]`](#rdvue-help-command)
+Actions:
+  create-project -  Create a new rdvue project.
+  add            -  Add a feature to a project.
 
+Features:        -  Utilities to create repeatable project elements.
+  component      -  add a new Component module.
+  page           -  add a new Page module.
+  service        -  add a new Service module.
+  store          -  add a new Store module.
 
-### `rdvue component [name]`
-
-create component for rdvue project
-
+Options:
+  --help | -h    -  Show help information.
 ```
-USAGE
-  $ rdvue component [name]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src/commands/component.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/component.ts)_
-### `rdvue generate [name]`
-
-Create a new rdvue project
-
-```
-USAGE
-  $ rdvue generate [name]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-
-### `rdvue page [name]`
-
-create page for rdvue project
-
-```
-USAGE
-  $ rdvue page [name]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src/commands/page.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/page.ts)_
-
-### `rdvue service [name]`
-
-create service for rdvue project
-
-```
-USAGE
-  $ rdvue service [name]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src/commands/service.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/service.ts)_
-
-### `rdvue sm [name]`
-
-create store module for rdvue project
-
-```
-USAGE
-  $ rdvue sm [name]
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src/commands/sm.ts](https://github.com/realdecoy/rdvue/blob/v0.0.0/src/commands/sm.ts)_
-
-### `rdvue help [command]`
-
-display help for rdvue
-
-```
-USAGE
-  $ rdvue help [command]
-
-ARGUMENTS
-  command  command to show help for
-
-OPTIONS
-  --all    see all commands in CLI
-```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
-<!-- optionsstop -->
 
 ## About
 

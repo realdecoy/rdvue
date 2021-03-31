@@ -1,21 +1,21 @@
 import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
-import {Files} from '../lib/types'
-import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileNames} from '../lib/files'
-import {checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, isJsonString} from '../lib/utilities'
-import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../lib/constants'
+import {Files} from '../../lib/types'
+import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileNames} from '../../lib/files'
+import {checkProjectValidity, parsePageName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
+import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
 
-const TEMPLATE_FOLDERS = ['sm']
-export default class StoreModule extends Command {
-  static description = 'create a new rdvue store module'
+const TEMPLATE_FOLDERS = ['page']
+export default class Page extends Command {
+  static description = 'add a new rdvue page'
 
   static flags = {
     help: flags.help({char: 'h'}),
   }
 
   static args = [
-    {name: 'name', desciption: 'name of generated store module'},
+    {name: 'name', desciption: 'name of new page'},
   ]
 
   // override Command class error handler
@@ -46,7 +46,7 @@ export default class StoreModule extends Command {
   }
 
   async run() {
-    const {args} = this.parse(StoreModule)
+    const {args} = this.parse(Page)
     const folderList = TEMPLATE_FOLDERS
     const configs = folderList.map(folder => {
       return {
@@ -63,29 +63,29 @@ export default class StoreModule extends Command {
       throw new Error(
         JSON.stringify({
           code: 'project-invalid',
-          message: `sm command must be run in an existing ${chalk.yellow('rdvue')} project`,
+          message: `page command must be run in an existing ${chalk.yellow('rdvue')} project`,
         })
       )
     }
 
-    // retrieve storeModule name
-    const storeModuleName = await parseStoreModuleName(args)
-    // parse kebab and pascal case of storeModuleName
-    const storeModuleNameKebab = toKebabCase(storeModuleName)
-    const storeModuleNamePascal = toPascalCase(storeModuleName)
+    // retrieve page name
+    const pageName = await parsePageName(args)
+    // parse kebab and pascal case of pageName
+    const pageNameKebab = toKebabCase(pageName)
+    const pageNamePascal = toPascalCase(pageName)
 
     configs.forEach(async config => {
       const files: Array<string | Files> = config.manifest.files
       // replace file names in config with kebab case equivalent
-      replaceTargetFileNames(files, storeModuleNameKebab)
+      replaceTargetFileNames(files, pageNameKebab)
       sourceDirectory = path.join(TEMPLATE_ROOT, config.name, config.manifest.sourceDirectory)
-      installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory)
+      installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory, pageNameKebab)
 
-      // copy and update files for storeModule being generated
+      // copy and update files for page being added
       await copyFiles(sourceDirectory, installDirectory, files)
-      await readAndUpdateFeatureFiles(installDirectory, files, storeModuleNameKebab, storeModuleNamePascal)
+      await readAndUpdateFeatureFiles(installDirectory, files, pageNameKebab, pageNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} created store module ${storeModuleNameKebab}`)
+    this.log(`${chalk.blue('[rdvue]')} created page ${pageNameKebab}`)
   }
 }

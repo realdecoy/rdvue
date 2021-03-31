@@ -1,21 +1,27 @@
 {
   "version": 1,
-  "name": "store",
-  "description": "Generate a basic Vuex Store.",
-  "singleUsePerProject": true,
+  "name": "sm",
+  "description": "Generate a basic Vuex Store module.",
+  "arguments": [{
+      "name": "storeModuleNameKebab",
+      "type": "string",
+      "description": "The name in Kebab-case for the generated store module. (e.g. user-data)"
+    },
+    {
+      "name": "storeModuleName",
+      "type": "string",
+      "description": "the name for the generated store module.",
+      "isPrivate": true
+    }
+  ],
   "sourceDirectory": "./",
   "installDirectory": "store",
-  "files": [
-    "index.ts",
-    {
-      "source": "./app.ts",
-      "target": "./app.ts",
-      "content": [
-        {
-          "matchRegex": "__STORE__",
-          "replace": "app"
-        }
-      ]
-    }
-  ]
+  "files": [{
+    "source": "module.ts",
+    "target": "${storeModuleNameKebab}.ts",
+    "content": [{
+      "matchRegex": "__STORE_MODULE__",
+      "replace": "${storeModuleName}"
+    }]
+  }]
 }

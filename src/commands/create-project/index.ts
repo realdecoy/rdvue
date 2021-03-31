@@ -1,15 +1,15 @@
 import shell from 'shelljs'
 import chalk from 'chalk'
 import {Command, flags} from '@oclif/command'
-import {toKebabCase, parseProjectName, isJsonString, checkProjectValidity} from '../lib/utilities'
-import {replaceInFiles} from '../lib/files'
+import {toKebabCase, parseProjectName, isJsonString, checkProjectValidity} from '../../lib/utilities'
+import {replaceInFiles} from '../../lib/files'
 import {
   TEMPLATE_REPO,
   TEMPLATE_VERSION,
   TEMPLATE_PROJECT_NAME_REGEX,
-  TEMPLATE_REPLACEMENT_FILES} from '../lib/constants'
+  TEMPLATE_REPLACEMENT_FILES} from '../../lib/constants';
 
-export default class Generate extends Command {
+export default class CreateProject extends Command {
   static description = 'create a new rdvue project'
 
   static flags = {
@@ -17,7 +17,7 @@ export default class Generate extends Command {
   }
 
   static args = [
-    {name: 'name', desciption: 'name of generated project'},
+    {name: 'name', desciption: 'name of created project'},
   ]
 
   // override Command class error handler
@@ -48,7 +48,7 @@ export default class Generate extends Command {
   }
 
   async run() {
-    const {args} = this.parse(Generate)
+    const {args} = this.parse(CreateProject)
     const template: string = TEMPLATE_REPO
     const tag: string = TEMPLATE_VERSION
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX
