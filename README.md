@@ -19,6 +19,9 @@ and a data-layer design promoting unified consumption through Stores and Service
 [![Downloads/week](https://img.shields.io/npm/dw/rdvue.svg)](https://npmjs.org/package/rdvue)
 [![License](https://img.shields.io/npm/l/rdvue.svg)](https://github.com/realdecoy/rdvue/blob/main/package.json)
 
+&nbsp;
+&nbsp;
+&nbsp;
 <!-- toc -->
 ## Table of Contents
 
@@ -26,6 +29,10 @@ and a data-layer design promoting unified consumption through Stores and Service
 * [Options](#options)
 * [Documentation](https://realdecoy.github.io/rdvue/)
 <!-- tocstop -->
+
+&nbsp;
+&nbsp;
+&nbsp;
 
 ## Usage
 <!-- usage -->
@@ -46,6 +53,10 @@ npx rdvue -v|--version|version
 ```
 <!-- usagestop -->
 
+&nbsp;
+&nbsp;
+&nbsp;
+
 ## Options
 ```txt
 npx rdvue [<action>|<action>:[<feature>] [<project-name>|<feature-name>]
@@ -64,9 +75,17 @@ Options:
   --help | -h    -  Show help information.
 ```
 
+&nbsp;
+&nbsp;
+&nbsp;
+
 ## About
 
 The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributions are welcome! You can help us by reporting or fixing bugs and giving us feedback on new/existing features.
+
+&nbsp;
+&nbsp;
+&nbsp;
 
 ## Dev Instructions
 

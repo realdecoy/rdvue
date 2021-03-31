@@ -8,7 +8,7 @@ import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['page']
 export default class Page extends Command {
-  static description = 'add a new rdvue page'
+  static description = 'add a new Page module.'
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -86,6 +86,6 @@ export default class Page extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, pageNameKebab, pageNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} created page ${pageNameKebab}`)
+    this.log(`${chalk.blue('[rdvue]')} new page module added: ${pageNameKebab}`)
   }
 }

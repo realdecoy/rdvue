@@ -4,11 +4,11 @@ import chalk from 'chalk'
 import {Files} from '../../lib/types'
 import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileNames} from '../../lib/files'
 import {checkProjectValidity, parseComponentName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
+import {CLI_COMMANDS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['component']
 export default class Component extends Command {
-  static description = 'add a new rdvue component'
+  static description = 'add a new Component module.'
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -63,7 +63,7 @@ export default class Component extends Command {
       throw new Error(
         JSON.stringify({
           code: 'project-invalid',
-          message: `component command must be run in an existing ${chalk.yellow('rdvue')} project`,
+          message: `${CLI_COMMANDS.AddComponent} command must be run in an existing ${chalk.yellow('rdvue')} project`,
         })
       )
     }
@@ -86,6 +86,6 @@ export default class Component extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, componentNameKebab, componentNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} created component ${componentNameKebab}`)
+    this.log(`${chalk.blue('[rdvue]')} new component module added: ${componentNameKebab}`)
   }
 }

@@ -73,7 +73,7 @@ export default class CreateProject extends Command {
     // update files to be replaced with project name reference
     filesToReplace = filesToReplace.map(p => `${projectName}/${p}`)
 
-    this.log(`${chalk.blue('[rdvue]')} creating project ${chalk.magenta('-->')} ${projectName}`)
+    this.log(`${chalk.blue('[rdvue]')} creating project${chalk.magenta(':')} ${projectName}`)
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName} -q -c advice.detachedHead=false`)
@@ -90,7 +90,7 @@ export default class CreateProject extends Command {
         })
       )
     } else {
-      this.log(`${chalk.blue('[rdvue]')} ${projectName} is ready`)
+      this.log(`${chalk.blue('[rdvue]')} ${projectName} is ready!`)
     }
 
     // Output final instructions to user

@@ -8,7 +8,7 @@ import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['service']
 export default class Service extends Command {
-  static description = 'add a new rdvue service'
+  static description = 'add a new Service module.'
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -86,6 +86,6 @@ export default class Service extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, serviceNameKebab, serviceNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} created service ${serviceNameKebab}`)
+    this.log(`${chalk.blue('[rdvue]')} new service module added: ${serviceNameKebab}`)
   }
 }

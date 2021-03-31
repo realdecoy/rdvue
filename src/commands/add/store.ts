@@ -6,9 +6,9 @@ import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileN
 import {checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
 import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
 
-const TEMPLATE_FOLDERS = ['sm']
+const TEMPLATE_FOLDERS = ['store']
 export default class StoreModule extends Command {
-  static description = 'add a new rdvue store module'
+  static description = 'add a new Store module.'
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -86,6 +86,6 @@ export default class StoreModule extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, storeModuleNameKebab, storeModuleNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} created store module ${storeModuleNameKebab}`)
+    this.log(`${chalk.blue('[rdvue]')} new store module added: ${storeModuleNameKebab}`)
   }
 }
