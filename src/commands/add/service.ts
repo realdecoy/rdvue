@@ -1,10 +1,10 @@
 import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
-import {Files} from '../../lib/types'
-import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileNames} from '../../lib/files'
+import {Files} from '../../modules'
+import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files'
 import {checkProjectValidity, parseServiceName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import {TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
+import { CLI_COMMANDS } from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['service']
 export default class Service extends Command {
@@ -15,7 +15,7 @@ export default class Service extends Command {
   }
 
   static args = [
-    {name: 'name', desciption: 'name of new service'},
+    {name: 'name', description: 'name of new service'},
   ]
 
   // override Command class error handler
@@ -34,9 +34,9 @@ export default class Service extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'project-invalid': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+    case 'project-invalid': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
       break
-    case 'failed-match-and-replace': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+    case 'failed-match-and-replace': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
       break
     default: throw new Error(customErrorMessage)
     }
@@ -46,27 +46,24 @@ export default class Service extends Command {
   }
 
   async run() {
-    const {args} = this.parse(Service)
-    const folderList = TEMPLATE_FOLDERS
-    const configs = folderList.map(folder => {
-      return {
-        name: folder,
-        manifest: readConfigFile(`/${folder}/${TEMPLATE_CONFIG_FILENAME}`),
-      }
-    })
-    let sourceDirectory: string
-    let installDirectory: string
     const {isValid: isValidProject, projectRoot} = checkProjectValidity()
-
     // block command unless being run within an rdvue project
     if (isValidProject === false) {
       throw new Error(
         JSON.stringify({
           code: 'project-invalid',
-          message: `service command must be run in an existing ${chalk.yellow('rdvue')} project`,
+          message: `${CLI_COMMANDS.AddService} command must be run in an existing ${chalk.yellow('rdvue')} project`,
         })
       )
     }
+
+    const {args} = this.parse(Service)
+    const folderList = TEMPLATE_FOLDERS
+    let sourceDirectory: string
+    let installDirectory: string
+
+    // parse config files required for scaffolding this module
+    const configs = parseModuleConfig(folderList, projectRoot)
 
     // retrieve service name
     const serviceName = await parseServiceName(args)
@@ -78,7 +75,7 @@ export default class Service extends Command {
       const files: Array<string | Files> = config.manifest.files
       // replace file names in config with kebab case equivalent
       replaceTargetFileNames(files, serviceNameKebab)
-      sourceDirectory = path.join(TEMPLATE_ROOT, config.name, config.manifest.sourceDirectory)
+      sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
       installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory)
 
       // copy and update files for service being added
@@ -86,6 +83,6 @@ export default class Service extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, serviceNameKebab, serviceNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} new service module added: ${serviceNameKebab}`)
+    this.log(`${chalk.yellow('[rdvue]')} new service module added: ${serviceNameKebab}`)
   }
 }

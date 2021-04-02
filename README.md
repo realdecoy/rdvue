@@ -59,11 +59,12 @@ npx rdvue -v|--version|version
 
 ## Options
 ```txt
-npx rdvue [<action>|<action>:[<feature>] [<project-name>|<feature-name>]
+Usage:
+  npx rdvue [<action>|<action>:<feature>] [<project-name>|<feature-name>]
 
 Actions:
-  create-project -  Create a new rdvue project.
-  add            -  Add a feature to a project.
+  create-project -  Scaffold a new rdvue project.
+  add:<feature>  -  Add a feature to a project.
 
 Features:        -  Utilities to create repeatable project elements.
   component      -  add a new Component module.

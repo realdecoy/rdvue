@@ -3,10 +3,10 @@ import bluebirdPromise from 'bluebird'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import util from 'util'
-import {Files} from '../lib/types'
-import {TEMPLATE_ROOT} from './constants'
+import {Files} from '../modules'
 const replace = require('replace-in-file')
 import {hasKebab} from './utilities'
+import { TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants'
 
 const UTF8 = 'utf-8'
 const fs = bluebirdPromise.promisifyAll(fileSystem)
@@ -49,10 +49,23 @@ function fileExists(filePath: string): boolean {
 /**
  *  Description: Read main config file to determine options the tool can take
  */
-function readConfigFile(templateFilePath: string): any {
-  const filePath = path.join(TEMPLATE_ROOT, templateFilePath)
-
+function readConfigFile(filePath: string): any {
   return JSON.parse(readFile(filePath))
+}
+
+/**
+ *  Description: parse config files required for scaffolding this module
+ */
+function parseModuleConfig(folderList: string[], projectRoot: string) {
+  return folderList.map(folder => {
+    const moduleTemplatePath = path.join(projectRoot, TEMPLATE_ROOT, folder)
+    const configFilePath = path.join(moduleTemplatePath, TEMPLATE_CONFIG_FILENAME)
+    return {
+      name: folder,
+      moduleTemplatePath,
+      manifest: readConfigFile(configFilePath),
+    }
+  })
 }
 
 /**
@@ -329,7 +342,7 @@ function getProjectRoot() {
 }
 
 export {
-  readConfigFile,
+  parseModuleConfig,
   replaceInFiles,
   replaceTargetFileNames,
   readAndUpdateFeatureFiles,

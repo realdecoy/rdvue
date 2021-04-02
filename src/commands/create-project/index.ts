@@ -17,7 +17,7 @@ export default class CreateProject extends Command {
   }
 
   static args = [
-    {name: 'name', desciption: 'name of created project'},
+    {name: 'name', description: 'name of created project'},
   ]
 
   // override Command class error handler
@@ -36,9 +36,9 @@ export default class CreateProject extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'existing-project': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+    case 'existing-project': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
       break
-    case 'file-not-changed': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+    case 'file-not-changed': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
       break
     default: throw new Error(customErrorMessage)
     }
@@ -73,7 +73,7 @@ export default class CreateProject extends Command {
     // update files to be replaced with project name reference
     filesToReplace = filesToReplace.map(p => `${projectName}/${p}`)
 
-    this.log(`${chalk.blue('[rdvue]')} creating project${chalk.magenta(':')} ${projectName}`)
+    this.log(`${chalk.yellow('[rdvue]')} creating project${chalk.magenta(':')} ${projectName}`)
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName} -q -c advice.detachedHead=false`)
@@ -90,7 +90,7 @@ export default class CreateProject extends Command {
         })
       )
     } else {
-      this.log(`${chalk.blue('[rdvue]')} ${projectName} is ready!`)
+      this.log(`${chalk.yellow('[rdvue]')} ${projectName} is ready!`)
     }
 
     // Output final instructions to user

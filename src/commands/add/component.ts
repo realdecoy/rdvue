@@ -1,10 +1,10 @@
 import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
-import {Files} from '../../lib/types'
-import {copyFiles, readAndUpdateFeatureFiles, readConfigFile, replaceTargetFileNames} from '../../lib/files'
+import {Files} from '../../modules'
+import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files'
 import {checkProjectValidity, parseComponentName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import {CLI_COMMANDS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from '../../lib/constants'
+import {CLI_COMMANDS} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['component']
 export default class Component extends Command {
@@ -15,7 +15,7 @@ export default class Component extends Command {
   }
 
   static args = [
-    {name: 'name', desciption: 'name of new component'},
+    {name: 'name', description: 'name of new component'},
   ]
 
   // override Command class error handler
@@ -34,9 +34,9 @@ export default class Component extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'project-invalid': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+    case 'project-invalid': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
       break
-    case 'failed-match-and-replace': this.log(`${chalk.red(['[rdvue]'])} ${customErrorMessage}`)
+    case 'failed-match-and-replace': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
       break
     default: throw new Error(customErrorMessage)
     }
@@ -46,18 +46,7 @@ export default class Component extends Command {
   }
 
   async run() {
-    const {args} = this.parse(Component)
-    const folderList = TEMPLATE_FOLDERS
-    const configs = folderList.map(folder => {
-      return {
-        name: folder,
-        manifest: readConfigFile(`/${folder}/${TEMPLATE_CONFIG_FILENAME}`),
-      }
-    })
-    let sourceDirectory: string
-    let installDirectory: string
     const {isValid: isValidProject, projectRoot} = checkProjectValidity()
-
     // block command unless being run within an rdvue project
     if (isValidProject === false) {
       throw new Error(
@@ -67,6 +56,14 @@ export default class Component extends Command {
         })
       )
     }
+
+    const {args} = this.parse(Component)
+    const folderList = TEMPLATE_FOLDERS
+    let sourceDirectory: string
+    let installDirectory: string
+
+    // parse config files required for scaffolding this module
+    const configs = parseModuleConfig(folderList, projectRoot)
 
     // retrieve component name
     const componentName = await parseComponentName(args)
@@ -78,7 +75,7 @@ export default class Component extends Command {
       const files: Array<string | Files> = config.manifest.files
       // replace file names in config with kebab case equivalent
       replaceTargetFileNames(files, componentNameKebab)
-      sourceDirectory = path.join(TEMPLATE_ROOT, config.name, config.manifest.sourceDirectory)
+      sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
       installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory, componentNameKebab)
 
       // copy and update files for component being added
@@ -86,6 +83,6 @@ export default class Component extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, componentNameKebab, componentNamePascal)
     })
 
-    this.log(`${chalk.blue('[rdvue]')} new component module added: ${componentNameKebab}`)
+    this.log(`${chalk.yellow('[rdvue]')} new component module added: ${componentNameKebab}`)
   }
 }

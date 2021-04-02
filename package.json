@@ -55,7 +55,13 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "rdvue"
+    "helpClass": "./lib/help",
+    "bin": "rdvue",
+    "topics": {
+      "add": {
+        "description": "manage favorite apps"
+      }
+    }
   },
   "config": {
     "commitizen": {
