@@ -1,6 +1,6 @@
-import chalk from 'chalk'
 import * as inquirer from 'inquirer'
 import {Lookup} from '../modules'
+import { CLI_STATE } from './constants'
 import {getProjectRoot} from './files'
 
 /**
@@ -66,9 +66,9 @@ function validateProjectName(value: any) {
   let resultMessage
 
   if (isNull) {
-    resultMessage = `${chalk.red('')} A project name is required`
+    resultMessage = `${CLI_STATE.Error} A project name is required`
   } else if (!charactersMatch) {
-    resultMessage = `${chalk.red('')} Use letters, numbers and '-' for project names (e.g. my-project-name)`
+    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for project names (e.g. my-project-name)`
   }
 
   return isValidProjectName ? true : resultMessage
@@ -87,9 +87,9 @@ function validateComponentName(value: any) {
   let resultMessage
 
   if (isNull) {
-    resultMessage = `${chalk.red('')} A component name is required`
+    resultMessage = `${CLI_STATE.Error} A component name is required`
   } else if (!charactersMatch) {
-    resultMessage = `${chalk.red('')} Use letters, numbers and '-' for component names (e.g. my-component-name)`
+    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for component names (e.g. my-component-name)`
   }
 
   return isValidComponentName ? true : resultMessage
@@ -108,9 +108,9 @@ function validateComponentName(value: any) {
   let resultMessage
 
   if (isNull) {
-    resultMessage = `${chalk.red('')} A page name is required`
+    resultMessage = `${CLI_STATE.Error} A page name is required`
   } else if (!charactersMatch) {
-    resultMessage = `${chalk.red('')} Use letters, numbers and '-' for page names (e.g. page-name)`
+    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for page names (e.g. page-name)`
   }
 
   return isValidArgName ? true : resultMessage
@@ -129,9 +129,9 @@ function validateComponentName(value: any) {
   let resultMessage
 
   if (isNull) {
-    resultMessage = `${chalk.red('')} A service name is required`
+    resultMessage = `${CLI_STATE.Error} A service name is required`
   } else if (!charactersMatch) {
-    resultMessage = `${chalk.red('')} Use letters, numbers and '-' for service names (e.g. service-name)`
+    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for service names (e.g. service-name)`
   }
 
   return isValidArgName ? true : resultMessage
@@ -150,9 +150,9 @@ function validateComponentName(value: any) {
   let resultMessage
 
   if (isNull) {
-    resultMessage = `${chalk.red('')} A store module name is required`
+    resultMessage = `${CLI_STATE.Error} A store module name is required`
   } else if (!charactersMatch) {
-    resultMessage = `${chalk.red('')} Use letters, numbers and '-' for store module names (e.g. auth-store)`
+    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for store module names (e.g. auth-store)`
   }
 
   return isValidArgName ? true : resultMessage

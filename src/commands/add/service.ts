@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import {Files} from '../../modules'
 import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files'
 import {checkProjectValidity, parseServiceName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import { CLI_COMMANDS } from '../../lib/constants'
+import { CLI_COMMANDS, CLI_STATE } from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['service']
 export default class Service extends Command {
@@ -34,9 +34,11 @@ export default class Service extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'project-invalid': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
+    case 'project-invalid': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
-    case 'failed-match-and-replace': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
+    case 'failed-match-and-replace': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'missing-template-file': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
     default: throw new Error(customErrorMessage)
     }
@@ -83,6 +85,6 @@ export default class Service extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, serviceNameKebab, serviceNamePascal)
     })
 
-    this.log(`${chalk.yellow('[rdvue]')} new service module added: ${serviceNameKebab}`)
+    this.log(`${CLI_STATE.Success} new service module added: ${serviceNameKebab}`)
   }
 }

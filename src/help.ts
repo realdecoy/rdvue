@@ -9,7 +9,7 @@ export default class MyHelpClass extends Help {
     // or showCommandHelp
     showRootHelp(): void {
         console.log(`
-        npx ${chalk.yellow('rdvue')} <action> [<project-name>|<feature-name>]
+        npx ${chalk.blue('rdvue')} <action> [<project-name>|<feature-name>]
 
         Actions:
             create-project -  Scaffold a new rdvue project.
@@ -67,11 +67,6 @@ export default class MyHelpClass extends Help {
             return `\n\t    ${arg.name}${Array(numOfSpaces + 1).join(' ')}- ${arg.description}`
         })
 
-        // parse option names
-        const optionNames = commandFlags
-        .filter((flag) => !flag.hidden)
-        .map((flag) => ` ${flag.name}` )
-
         // parse option config list
         const optionList = commandFlags
         .filter((flag) => !flag.hidden)
@@ -83,7 +78,7 @@ export default class MyHelpClass extends Help {
 
         console.log(`
         Usage:
-            npx ${chalk.yellow('rdvue')} ${commandId} ${argNames}
+            npx ${chalk.blue('rdvue')} ${commandId} ${argNames}
 
         Arguments:${argsList}    
         

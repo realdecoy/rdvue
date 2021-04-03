@@ -1,4 +1,4 @@
-import path from 'path'
+import chalk from 'chalk'
 
 export const TEMPLATE_ROOT = '.rdvue/template'
 export const TEMPLATE_REPO = 'https://github.com/realdecoy/rdvue-1.0-fixes'
@@ -11,6 +11,7 @@ export const enum CLI_COMMANDS {
   AddPage = 'add:page',
   AddService = 'add:service',
   AddStore = 'add:store',
+  AddModule = 'add',
 }
 export const TEMPLATE_REPLACEMENT_FILES = [
   'package.json',
@@ -18,3 +19,10 @@ export const TEMPLATE_REPLACEMENT_FILES = [
   'public/index.html',
   'public/manifest.json',
 ]
+
+export const CLI_STATE = {
+  Info: `${chalk.blue('[rdvue]')}`,
+  Error: `${chalk.red('[rdvue]')}`,
+  Warning: `${chalk.yellow('[rdvue]')}`,
+  Success: `${chalk.green('[rdvue]')}`,
+}

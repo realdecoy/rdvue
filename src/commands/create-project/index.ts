@@ -2,12 +2,13 @@ import shell from 'shelljs'
 import chalk from 'chalk'
 import {Command, flags} from '@oclif/command'
 import {toKebabCase, parseProjectName, isJsonString, checkProjectValidity} from '../../lib/utilities'
-import {replaceInFiles} from '../../lib/files'
+import {replaceInFiles, checkIfFolderExists} from '../../lib/files'
 import {
   TEMPLATE_REPO,
   TEMPLATE_VERSION,
   TEMPLATE_PROJECT_NAME_REGEX,
-  TEMPLATE_REPLACEMENT_FILES} from '../../lib/constants';
+  TEMPLATE_REPLACEMENT_FILES,
+  CLI_STATE} from '../../lib/constants';
 
 export default class CreateProject extends Command {
   static description = 'create a new rdvue project'
@@ -36,9 +37,11 @@ export default class CreateProject extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'existing-project': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
+    case 'existing-project': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
-    case 'file-not-changed': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
+    case 'existing-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'file-not-changed': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
     default: throw new Error(customErrorMessage)
     }
@@ -55,7 +58,6 @@ export default class CreateProject extends Command {
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES
     let projectName: string
     const {isValid: isValidProject} = checkProjectValidity()
-
     // block command if being run within an rdvue project
     if (isValidProject) {
       throw new Error(
@@ -70,10 +72,13 @@ export default class CreateProject extends Command {
     projectName = await parseProjectName(args)
     // convert project name to kebab case
     projectName = toKebabCase(projectName)
+    // verify that project folder doesnt already exist
+    checkIfFolderExists(projectName)
+
     // update files to be replaced with project name reference
     filesToReplace = filesToReplace.map(p => `${projectName}/${p}`)
 
-    this.log(`${chalk.yellow('[rdvue]')} creating project${chalk.magenta(':')} ${projectName}`)
+    this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`)
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName} -q -c advice.detachedHead=false`)
@@ -86,14 +91,14 @@ export default class CreateProject extends Command {
       throw new Error(
         JSON.stringify({
           code: 'file-not-changed',
-          message: `${chalk.red('[rdvue]')} udpating your project failed`,
+          message: `updating your project failed`,
         })
       )
     } else {
-      this.log(`${chalk.yellow('[rdvue]')} ${projectName} is ready!`)
+      this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
     }
 
     // Output final instructions to user
-    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${projectName}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} npm run serve`)
+    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} npm run serve`)
   }
 }

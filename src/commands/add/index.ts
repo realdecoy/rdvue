@@ -20,11 +20,6 @@ export default class Add extends Command {
     const commandArgs = Add.args;
     const commandFlags = Object.values(Add.flags);
 
-    // parse argument names
-    const argNames = commandArgs
-    .filter((arg) => !arg.hidden)
-    .map((arg) => `<${arg.name}>` )
-
     // parse argument config list
     const argsList = commandArgs
     .filter((arg) => !arg.hidden)
@@ -33,11 +28,6 @@ export default class Add extends Command {
         const numOfSpaces = maxSpaces - arg.name.length
         return `\n\t    ${arg.name}${Array(numOfSpaces + 1).join(' ')}- ${arg.description}`
     })
-
-    // parse option names
-    const optionNames = commandFlags
-    .filter((flag) => !flag.hidden)
-    .map((flag) => ` ${flag.name}` )
 
     // parse option config list
     const optionList = commandFlags
@@ -48,9 +38,9 @@ export default class Add extends Command {
         return `\n\t    --${flag.name} | -${flag.char}${Array(numOfSpaces + 1).join(' ')}- ${flag.description}`
     })
 
-    console.log(`
+    this.log(`
         Usage:
-            npx ${chalk.yellow('rdvue')} ${commandId}:<feature>
+            npx ${chalk.blue('rdvue')} ${commandId}:<feature>
 
         Features:${argsList}    
         

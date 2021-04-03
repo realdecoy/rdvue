@@ -3,6 +3,7 @@ import bluebirdPromise from 'bluebird'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import util from 'util'
+import chalk from 'chalk'
 import {Files} from '../modules'
 const replace = require('replace-in-file')
 import {hasKebab} from './utilities'
@@ -22,7 +23,7 @@ function readFile(filePath: string): string {
 }
 
 /**
- * Description: Determine whether or not the given file path is a
+ * Description: Determine whether or not the given path is a
  *              directory which exists
  * @param filePath - a path to a file
  */
@@ -50,6 +51,15 @@ function fileExists(filePath: string): boolean {
  *  Description: Read main config file to determine options the tool can take
  */
 function readConfigFile(filePath: string): any {
+  const isExistingFile = fileExists(filePath)
+  if (isExistingFile === false) {
+    throw new Error(
+      JSON.stringify({
+        code: 'missing-template-file',
+        message: `template file not found, run ${chalk.whiteBright('npx rdvue repair')} to continue`,
+      })
+    )
+  }
   return JSON.parse(readFile(filePath))
 }
 
@@ -341,7 +351,45 @@ function getProjectRoot() {
   return projectRoot
 }
 
+/**
+ * Description: Determine whether or not the given file path is a
+ *              directory which exists
+ * @param folderPath - a path to a folder
+ */
+ function checkIfFolderExists(folderPath: string) {  
+  const isExistingFolder = directoryExists(folderPath)
+  // block command if project folder already exists
+  if (isExistingFolder === true) {
+    throw new Error(
+      JSON.stringify({
+        code: 'existing-folder',
+        message: `folder named ${chalk.whiteBright(folderPath)} already exists`,
+      })
+    )
+  }
+}
+
+/**
+ * Description: Determine whether or not the given folder path is a
+ *              directory which exists
+ * @param folderPath - a path to a folder
+ */
+function verifyTemplateFolderExists(folderPath: string) {  
+  const isExistingFolder = directoryExists(folderPath)
+  // block command if project folder already exists
+  if (isExistingFolder === false) {
+    throw new Error(
+      JSON.stringify({
+        code: 'missing-template-folder',
+        message: `template folder not found, run ${chalk.whiteBright('npx rdvue repair')} to continue`,
+      })
+    )
+  }
+}
+
 export {
+  verifyTemplateFolderExists,
+  checkIfFolderExists,
   parseModuleConfig,
   replaceInFiles,
   replaceTargetFileNames,

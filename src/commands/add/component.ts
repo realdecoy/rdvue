@@ -2,9 +2,9 @@ import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
 import {Files} from '../../modules'
-import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files'
+import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames, verifyTemplateFolderExists} from '../../lib/files'
 import {checkProjectValidity, parseComponentName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import {CLI_COMMANDS} from '../../lib/constants'
+import {CLI_COMMANDS, CLI_STATE} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['component']
 export default class Component extends Command {
@@ -34,9 +34,13 @@ export default class Component extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'project-invalid': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
+    case 'project-invalid': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
-    case 'failed-match-and-replace': this.log(`${chalk.red('[rdvue]')} ${customErrorMessage}`)
+    case 'failed-match-and-replace': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'missing-template-file': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'missing-template-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
     default: throw new Error(customErrorMessage)
     }
@@ -77,12 +81,11 @@ export default class Component extends Command {
       replaceTargetFileNames(files, componentNameKebab)
       sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
       installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory, componentNameKebab)
-
       // copy and update files for component being added
       await copyFiles(sourceDirectory, installDirectory, files)
       await readAndUpdateFeatureFiles(installDirectory, files, componentNameKebab, componentNamePascal)
     })
 
-    this.log(`${chalk.yellow('[rdvue]')} new component module added: ${componentNameKebab}`)
+    this.log(`${CLI_STATE.Success} new component module added: ${componentNameKebab}`)
   }
 }

@@ -1,17 +1,22 @@
 import {expect, test} from '@oclif/test'
-// const rimraf = require('rimraf')
+import { CLI_COMMANDS } from '../../src/lib/constants'
 
 const testProjectName = 'rdv-hello-world'
 
-describe('create-project', () => {
+describe(CLI_COMMANDS.CreateProject, () => {
   test
   .stdout()
-  .command(['create-project', testProjectName])
-  // .do(() => {
-  //   // cleanup create-projectd files
-  //   rimraf.sync(testProjectName)
-  // })
-  .it(`runs create-project ${testProjectName}`, ctx => {
+  .command([CLI_COMMANDS.CreateProject, testProjectName])
+  .it(`runs ${CLI_COMMANDS.CreateProject} ${testProjectName}`, ctx => {
     expect(ctx.stdout).to.contain(`[rdvue] ${testProjectName} is ready!`)
+  })
+  
+  test
+  .stdout()
+  .do(() => process.chdir(testProjectName))
+  .command([CLI_COMMANDS.CreateProject, testProjectName])
+  .do(() => process.chdir('../'))
+  .it(`runs ${CLI_COMMANDS.CreateProject} ${testProjectName}`, ctx => {
+    expect(ctx.stdout).to.contain(`[rdvue] you are already in an existing rdvue project`)
   })
 })
