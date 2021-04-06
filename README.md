@@ -60,20 +60,24 @@ npx rdvue -v|--version|version
 ## Options
 ```txt
 Usage:
-  npx rdvue [<action>|<action>:<feature>] [<project-name>|<feature-name>]
+  npx rdvue <action> [<project-name>|<feature-name>]
 
 Actions:
-  create-project -  Scaffold a new rdvue project.
-  add:<feature>  -  Add a feature to a project.
+    create-project   -  Scaffold a new rdvue project
+    add:<feature>    -  Add a feature to a project
+    plugin:<library> -  Inject a utility to extend project functionality
+    
+Features:          -  Utilities to create repeatable project elements
+    component        -  add a new Component module
+    page             -  add a new Page module
+    service          -  add a new Service module
+    store            -  add a new Store module
 
-Features:        -  Utilities to create repeatable project elements.
-  component      -  add a new Component module.
-  page           -  add a new Page module.
-  service        -  add a new Service module.
-  store          -  add a new Store module.
-
+Libraries:         -  Utilities to extend project functionality
+    buefy            - lightweigth UI components for Vuejs
+    
 Options:
-  --help | -h    -  Show help information.
+    --help | -h      -  Show help information
 ```
 
 &nbsp;

@@ -12,6 +12,7 @@ export const enum CLI_COMMANDS {
   AddService = 'add:service',
   AddStore = 'add:store',
   AddModule = 'add',
+  PluginBuefy = 'plugin:buefy',
 }
 export const TEMPLATE_REPLACEMENT_FILES = [
   'package.json',

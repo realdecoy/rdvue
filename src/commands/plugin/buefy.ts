@@ -1,22 +1,21 @@
+import shell from 'shelljs'
 import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
 import {Files} from '../../modules'
-import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files'
-import {checkProjectValidity, parseComponentName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
+import {copyFiles, parseModuleConfig} from '../../lib/files'
+import {checkProjectValidity, isJsonString} from '../../lib/utilities'
 import {CLI_COMMANDS, CLI_STATE} from '../../lib/constants'
 
-const TEMPLATE_FOLDERS = ['component']
-export default class Component extends Command {
-  static description = 'add a new Component module.'
+const TEMPLATE_FOLDERS = ['buefy']
+export default class Buefy extends Command {
+  static description = 'lightweigth UI components for Vuejs'
 
   static flags = {
     help: flags.help({char: 'h'}),
   }
 
-  static args = [
-    {name: 'name', description: 'name of new component'},
-  ]
+  static args = []
 
   // override Command class error handler
   async catch(error: Error) {
@@ -36,8 +35,6 @@ export default class Component extends Command {
     switch (customErrorCode) {
     case 'project-invalid': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
-    case 'failed-match-and-replace': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-      break
     case 'missing-template-file': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
     case 'missing-template-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
@@ -56,36 +53,33 @@ export default class Component extends Command {
       throw new Error(
         JSON.stringify({
           code: 'project-invalid',
-          message: `${CLI_COMMANDS.AddComponent} command must be run in an existing ${chalk.yellow('rdvue')} project`,
+          message: `${CLI_COMMANDS.PluginBuefy} command must be run in an existing ${chalk.yellow('rdvue')} project`,
         })
       )
     }
 
-    const {args} = this.parse(Component)
     const folderList = TEMPLATE_FOLDERS
     let sourceDirectory: string
     let installDirectory: string
 
     // parse config files required for scaffolding this module
     const configs = parseModuleConfig(folderList, projectRoot)
+    const config = configs[0]
+    const files: Array<string | Files> = config.manifest.files
+    const dependencies = config.manifest.packages.dependencies.toString().split(',').join(' ')
+    const devDependencies = config.manifest.packages.devDependencies.toString().split(',').join(' ')
 
-    // retrieve component name
-    const componentName = await parseComponentName(args)
-    // parse kebab and pascal case of componentName
-    const componentNameKebab = toKebabCase(componentName)
-    const componentNamePascal = toPascalCase(componentName)
+    // install dev dependencies
+    await shell.exec(`npm install --save-dev ${devDependencies} --silent`)
+    // install dependencies
+    await shell.exec(`npm install --save ${dependencies} --silent`)
+    
+    sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
+    installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory)
 
-    configs.forEach(async config => {
-      const files: Array<string | Files> = config.manifest.files
-      // replace file names in config with kebab case equivalent
-      replaceTargetFileNames(files, componentNameKebab)
-      sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
-      installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory, componentNameKebab)
-      // copy and update files for component being added
-      await copyFiles(sourceDirectory, installDirectory, files)
-      await readAndUpdateFeatureFiles(installDirectory, files, componentNameKebab, componentNamePascal)
-    })
+    // copy files for plugin being added
+    await copyFiles(sourceDirectory, installDirectory, files)
 
-    this.log(`${CLI_STATE.Success} new component module added: ${componentNameKebab}`)
+    this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
   }
 }
