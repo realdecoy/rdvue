@@ -81,7 +81,7 @@ export default class CreateProject extends Command {
     this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`)
 
     // retrieve project files from template source
-    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName} -q -c advice.detachedHead=false`)
+    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, {silent: true})
     // remove git folder reference to base project
     await shell.exec(`rm -rf ${projectName}/.git`)
     // find and replace project name references

@@ -42,7 +42,7 @@ export default class Add extends Command {
         Usage:
             npx ${chalk.blue('rdvue')} ${commandId}:<feature>
 
-        Features:${argsList}    
+        Features: \t - Utilities to create repeatable project elements${argsList}    
         
         Options:${optionList}
     `)
