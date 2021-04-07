@@ -7,7 +7,7 @@ import chalk from 'chalk'
 import {Files} from '../modules'
 const replace = require('replace-in-file')
 import {hasKebab} from './utilities'
-import { TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants'
+import { DYNAMIC_OBJECTS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants'
 
 const UTF8 = 'utf-8'
 const fs = bluebirdPromise.promisifyAll(fileSystem)
@@ -387,7 +387,71 @@ function verifyTemplateFolderExists(folderPath: string) {
   }
 }
 
+
+/**
+ * Description: Inject dynamic objects into project files
+ * @param jsonData - stringified json data from file
+ * @param objectName - property name to be injected
+ * @param hasBrackets - injected object has brackets
+ */
+function parseDynamicObjects(
+  jsonData: string,
+  objectName: string,
+  hasBrackets?: boolean
+): void {
+  let filePathOfObjectInsideProject;
+  let objectInProject;
+  let objectStringToBeWritten = '';
+
+  // 1[a] Check for the root of the project
+  const PROJECT_ROOT = getProjectRoot();
+
+  // 1[b] Once inside of a project values are assigned to be used
+  if (PROJECT_ROOT !== null) {
+    // Allocate the location of the <OBJECT>.js file
+    filePathOfObjectInsideProject = path.join(
+      PROJECT_ROOT,
+      '.rdvue',
+      `${objectName}.js`
+    );
+
+    // Read files to be modified
+    objectInProject = readFile(filePathOfObjectInsideProject);
+
+    // Replace brackets & ("/`) quotations in string
+    let modifiedJSONData = jsonData.replace(/[\[\]"`]+/g, '');
+
+    // Remove beginning and closing brackets if its an option to be modified
+    if (hasBrackets) {
+      modifiedJSONData = modifiedJSONData.substring(
+        1,
+        modifiedJSONData.length - 1
+      );
+    }
+
+    // Removed closers from files to append information
+    const originalObjectString = objectInProject.slice(0, -2);
+
+    // Append the new information and close files after changes
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${
+      objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'
+    };`;
+  }
+
+  // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
+  if (
+    filePathOfObjectInsideProject !== undefined &&
+    objectStringToBeWritten !== ''
+  ) {
+    writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
+  } else {
+    // console.log(feature);
+  }
+}
+
+
 export {
+  parseDynamicObjects,
   verifyTemplateFolderExists,
   checkIfFolderExists,
   parseModuleConfig,

@@ -6,9 +6,9 @@ import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
 import {Files} from '../../modules'
-import {copyFiles, parseModuleConfig} from '../../lib/files'
+import {copyFiles, parseDynamicObjects, parseModuleConfig} from '../../lib/files'
 import {checkProjectValidity, isJsonString} from '../../lib/utilities'
-import {CLI_COMMANDS, CLI_STATE} from '../../lib/constants'
+import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['localization']
 export default class Localization extends Command {
@@ -73,6 +73,10 @@ export default class Localization extends Command {
     const files: Array<string | Files> = config.manifest.files
     const dependencies = config.manifest.packages.dependencies.toString().split(',').join(' ')
     const devDependencies = config.manifest.packages.devDependencies.toString().split(',').join(' ')
+
+    await parseDynamicObjects(JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
+    await parseDynamicObjects(JSON.stringify(config.manifest.vueOptions, null, 1), DYNAMIC_OBJECTS.Options, true);
+    await parseDynamicObjects(JSON.stringify(config.manifest.modules, null, 1), DYNAMIC_OBJECTS.Modules, true);
 
     try {
       // // install dev dependencies
