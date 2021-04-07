@@ -13,6 +13,8 @@ export const enum CLI_COMMANDS {
   AddStore = 'add:store',
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
+  PluginLocalization = 'plugin:localization',
+  PluginLibrary = 'plugin',
 }
 export const TEMPLATE_REPLACEMENT_FILES = [
   'package.json',

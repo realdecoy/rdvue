@@ -1,4 +1,7 @@
 import shell from 'shelljs'
+import cli from 'cli-ux'
+const util = require('util');
+const exec = util.promisify(shell.exec);
 import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
@@ -7,8 +10,8 @@ import {copyFiles, parseModuleConfig} from '../../lib/files'
 import {checkProjectValidity, isJsonString} from '../../lib/utilities'
 import {CLI_COMMANDS, CLI_STATE} from '../../lib/constants'
 
-const TEMPLATE_FOLDERS = ['buefy']
-export default class Buefy extends Command {
+const TEMPLATE_FOLDERS = ['localization']
+export default class Localization extends Command {
   static description = 'lightweigth UI components for Vuejs'
 
   static flags = {
@@ -38,6 +41,8 @@ export default class Buefy extends Command {
     case 'missing-template-file': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
     case 'missing-template-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'dependency-install-error': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
       break
     default: throw new Error(customErrorMessage)
     }
@@ -69,11 +74,26 @@ export default class Buefy extends Command {
     const dependencies = config.manifest.packages.dependencies.toString().split(',').join(' ')
     const devDependencies = config.manifest.packages.devDependencies.toString().split(',').join(' ')
 
-    // install dev dependencies
-    await shell.exec(`npm install --save-dev ${devDependencies} --silent`)
-    // install dependencies
-    await shell.exec(`npm install --save ${dependencies} --silent`)
-    
+    try {
+      // // install dev dependencies
+      cli.action.start(`${CLI_STATE.Info} installing dev dependencies`)
+      const { stdout: devDepStdout, stderr: devDepStderr, code: devDepCode } = await exec(`npm install --save-dev ${devDependencies}`, { silent: true })
+      cli.action.stop()
+
+      // // install dependencies
+      cli.action.start(`${CLI_STATE.Info} installing dependencies`)
+      const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`npm install --save ${dependencies}`, { silent: true })
+      cli.action.stop()
+
+    } catch(error) {
+      throw new Error(
+        JSON.stringify({
+          code: 'dependency-install-error',
+          message: `${this.id?.split(':')[1]} dependencies failed to install`,
+        })
+      )
+    }
+
     sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
     installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory)
 
