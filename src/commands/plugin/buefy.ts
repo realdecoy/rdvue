@@ -10,8 +10,8 @@ import {copyFiles, parseModuleConfig} from '../../lib/files'
 import {checkProjectValidity, isJsonString} from '../../lib/utilities'
 import {CLI_COMMANDS, CLI_STATE} from '../../lib/constants'
 
-const TEMPLATE_FOLDERS = ['localization']
-export default class Localization extends Command {
+const TEMPLATE_FOLDERS = ['buefy']
+export default class Buefy extends Command {
   static description = 'lightweigth UI components for Vuejs'
 
   static flags = {
