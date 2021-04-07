@@ -449,8 +449,49 @@ function parseDynamicObjects(
   }
 }
 
+/**
+ * Description: append a string to the end of a file
+ * @param location - file location
+ * @param objectName - data to be appended
+ */
+async function appendToFile(location: string, data: any) {
+  await fs.appendFile(location, data, err => {
+    if(err instanceof Error){
+      console.log(err);
+    }
+  });
+}
+
+/**
+ * Description: 
+ * @param folderName - 
+ * @param featuredata - 
+ * @param fileName - 
+ */
+async function updateDynamicImportsAndExports(
+  folderName: string,
+  featuredata: string | string[],
+  fileName: string
+) {
+  const projectroot = getProjectRoot();
+  const SOURCE_DIRECTORY = 'src';
+
+  if (projectroot !== null) {
+    const fileLocation = path.join(projectroot, SOURCE_DIRECTORY, folderName, fileName);
+
+    if (fileExists(fileLocation)) {
+      await appendToFile(fileLocation, featuredata);
+    } else {
+      console.log(`${fileLocation} - Does not exist`);
+    }
+  } else {
+    console.log('Project location was not found');
+  }
+}
+
 
 export {
+  updateDynamicImportsAndExports,
   parseDynamicObjects,
   verifyTemplateFolderExists,
   checkIfFolderExists,

@@ -6,7 +6,7 @@ import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
 import {Files} from '../../modules'
-import {copyFiles, parseDynamicObjects, parseModuleConfig} from '../../lib/files'
+import {copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports} from '../../lib/files'
 import {checkProjectValidity, isJsonString} from '../../lib/utilities'
 import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
 
@@ -75,6 +75,7 @@ export default class Buefy extends Command {
     const devDependencies = config.manifest.packages.devDependencies.toString().split(',').join(' ')
     
     await parseDynamicObjects(JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
+    await updateDynamicImportsAndExports('theme', config.manifest.projectTheme, '_all.scss');
 
     try {
       // // install dev dependencies
