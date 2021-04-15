@@ -4,9 +4,9 @@ import path from 'path'
 import mkdirp from 'mkdirp'
 import util from 'util'
 import chalk from 'chalk'
-import {Files} from '../modules'
+import { Files } from '../modules'
 const replace = require('replace-in-file')
-import {hasKebab} from './utilities'
+import { hasKebab } from './utilities'
 import { DYNAMIC_OBJECTS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants'
 
 const UTF8 = 'utf-8'
@@ -113,8 +113,8 @@ async function replaceInFiles(files: string | string[], from: RegExp, to: string
   try {
     replaceResults = await replace(options)
     failedFiles = replaceResults
-    .filter((result: { file: string; hasChanged: boolean }) => !result.hasChanged)
-    .map((result: { file: string; hasChanged: boolean }) => result.file)
+      .filter((result: { file: string; hasChanged: boolean }) => !result.hasChanged)
+      .map((result: { file: string; hasChanged: boolean }) => result.file)
     result = failedFiles.length === 0
   } catch (error) {
     throw new Error(
@@ -356,7 +356,7 @@ function getProjectRoot() {
  *              directory which exists
  * @param folderPath - a path to a folder
  */
- function checkIfFolderExists(folderPath: string) {  
+function checkIfFolderExists(folderPath: string) {
   const isExistingFolder = directoryExists(folderPath)
   // block command if project folder already exists
   if (isExistingFolder === true) {
@@ -374,7 +374,7 @@ function getProjectRoot() {
  *              directory which exists
  * @param folderPath - a path to a folder
  */
-function verifyTemplateFolderExists(folderPath: string) {  
+function verifyTemplateFolderExists(folderPath: string) {
   const isExistingFolder = directoryExists(folderPath)
   // block command if project folder already exists
   if (isExistingFolder === false) {
@@ -433,9 +433,8 @@ function parseDynamicObjects(
     const originalObjectString = objectInProject.slice(0, -2);
 
     // Append the new information and close files after changes
-    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${
-      objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'
-    };`;
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'
+      };`;
   }
 
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
@@ -447,19 +446,6 @@ function parseDynamicObjects(
   } else {
     // console.log(feature);
   }
-}
-
-/**
- * Description: append a string to the end of a file
- * @param location - file location
- * @param objectName - data to be appended
- */
-async function appendToFile(location: string, data: any) {
-  await fs.appendFile(location, data, err => {
-    if(err instanceof Error){
-      console.log(err);
-    }
-  });
 }
 
 /**
@@ -478,9 +464,14 @@ async function updateDynamicImportsAndExports(
 
   if (projectroot !== null) {
     const fileLocation = path.join(projectroot, SOURCE_DIRECTORY, folderName, fileName);
-
     if (fileExists(fileLocation)) {
-      await appendToFile(fileLocation, featuredata);
+      if (typeof featuredata === 'string') {
+        fs.appendFileSync(fileLocation, featuredata);
+      } else {
+        featuredata.forEach((data) => {
+          fs.appendFileSync(fileLocation, data);
+        })
+      }
     } else {
       console.log(`${fileLocation} - Does not exist`);
     }
