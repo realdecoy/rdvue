@@ -73,10 +73,6 @@ export default class Buefy extends Command {
     const files: Array<string | Files> = config.manifest.files
     const dependencies = config.manifest.packages.dependencies.toString().split(',').join(' ')
 
-    await parseDynamicObjects(JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
-    updateDynamicImportsAndExports('theme', config.manifest.projectTheme, '_all.scss');
-    updateDynamicImportsAndExports('modules/core', config.manifest.moduleImports, 'index.ts');
-
     try {
       // install dependencies
       cli.action.start(`${CLI_STATE.Info} installing dependencies`)
@@ -95,8 +91,11 @@ export default class Buefy extends Command {
     sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
     installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory)
 
-    // copy files for plugin being added
+    // copy and update files for plugin being added
     await copyFiles(sourceDirectory, installDirectory, files)
+    await parseDynamicObjects(JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
+    updateDynamicImportsAndExports('theme', config.manifest.projectTheme, '_all.scss');
+    updateDynamicImportsAndExports('modules/core', config.manifest.moduleImports, 'index.ts');
 
     this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
   }
