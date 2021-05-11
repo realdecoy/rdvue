@@ -1,5 +1,6 @@
 import {expect, test} from '@oclif/test'
 import { CLI_COMMANDS } from '../../src/lib/constants'
+import { exec } from 'child_process'
 
 const testProjectName = 'rdv-plugin-buefy-test'
 
@@ -20,4 +21,12 @@ describe(CLI_COMMANDS.PluginBuefy, () => {
   .it(`runs rdvue ${CLI_COMMANDS.PluginBuefy}`, ctx => {
     expect(ctx.stdout).to.contain(`[rdvue] plugin added: ${CLI_COMMANDS.PluginBuefy.split(':')[1]}`)
   })
+
+  after(() => {
+    exec(`rm -r ${testProjectName}`, (error) => {
+       if(error) {
+         console.log(`error: ${error.message}`);
+       }
+    })
+ })
 })

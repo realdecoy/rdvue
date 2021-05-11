@@ -1,5 +1,6 @@
 import {expect, test} from '@oclif/test'
 import { CLI_COMMANDS } from '../../src/lib/constants'
+import { exec } from 'child_process'
 
 const testProjectName = 'rdv-store-module-test'
 const testStoreName = 'auth-store'
@@ -21,4 +22,12 @@ describe(CLI_COMMANDS.AddStore, () => {
   .it(`runs rdvue ${CLI_COMMANDS.AddStore} ${testStoreName}`, ctx => {
     expect(ctx.stdout).to.contain(`[rdvue] new store module added: ${testStoreName}`)
   })
+
+  after(() => {
+    exec(`rm -r ${testProjectName}`, (error) => {
+       if(error) {
+         console.log(`error: ${error.message}`);
+       }
+    })
+ })
 })
