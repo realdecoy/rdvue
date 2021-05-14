@@ -1,7 +1,7 @@
 import shell from 'shelljs'
 import chalk from 'chalk'
 import {Command, flags} from '@oclif/command'
-import {toKebabCase, parseProjectName, isJsonString, checkProjectValidity} from '../../lib/utilities'
+import {toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets} from '../../lib/utilities'
 import {replaceInFiles, checkIfFolderExists} from '../../lib/files'
 import {
   TEMPLATE_REPO,
@@ -19,6 +19,7 @@ export default class CreateProject extends Command {
 
   static args = [
     {name: 'name', description: 'name of created project'},
+    {name: 'preset', description: 'name of plugin preset'},
   ]
 
   // override Command class error handler
@@ -57,6 +58,7 @@ export default class CreateProject extends Command {
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES
     let projectName: string
+    let presetName: string
     const {isValid: isValidProject} = checkProjectValidity()
     // block command if being run within an rdvue project
     if (isValidProject) {
@@ -70,6 +72,8 @@ export default class CreateProject extends Command {
 
     // retrieve project name
     projectName = await parseProjectName(args)
+    // retrieve project preset
+    presetName = await parseProjectPresets(args)
     // convert project name to kebab case
     projectName = toKebabCase(projectName)
     // verify that project folder doesnt already exist
