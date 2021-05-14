@@ -4,6 +4,7 @@ import { exec } from 'child_process'
 
 const testProjectName = 'rdv-component-test'
 const testComponentName = 'hello-world'
+const badComponentName = 'he%20-2world'
 
 describe(CLI_COMMANDS.AddComponent, () => {
   test
@@ -22,6 +23,13 @@ describe(CLI_COMMANDS.AddComponent, () => {
   .it(`runs rdvue ${CLI_COMMANDS.AddComponent} ${testComponentName}`, ctx => {
     expect(ctx.stdout).to.contain(`[rdvue] new component module added: ${testComponentName}`)
   });
+
+  test
+  .stdout()
+  .command([CLI_COMMANDS.AddComponent, badComponentName])
+  .it('tries to run create component with a poorly formatted command', ctx => {
+    expect(ctx.stdout).to.contain(`Error: command ${CLI_COMMANDS.AddComponent} not found`)
+  })
 
   after(() => {
     exec(`rm -r ${testProjectName}`, (error) => {

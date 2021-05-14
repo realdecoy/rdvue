@@ -8,4 +8,11 @@ describe(`${CLI_COMMANDS.AddModule} module`, () => {
   .it(`runs rdvue ${CLI_COMMANDS.AddModule} --help`, ctx => {
     expect(ctx.stdout).to.contain(`npx rdvue add:<feature>`)
   })
+
+  test
+  .stdout()
+  .command([CLI_COMMANDS.PoorHelpCommand])
+  .it(`runs poorly formatted rdvue ${CLI_COMMANDS.PoorHelpCommand} -help command`, ctx => {
+    expect(ctx.error).to.contain(`Error: command -help not found`)
+  })
 })

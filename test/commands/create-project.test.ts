@@ -23,12 +23,12 @@ describe(CLI_COMMANDS.CreateProject, () => {
     expect(ctx.stdout).to.contain(`[rdvue] you are already in an existing rdvue project`)
   })
 
-  // test
-  // .stdout()
-  // .command([CLI_COMMANDS.CreateProject, badProjectName])
-  // .it('tries to run create project with a poorly formatted command', ctx => {
-  //   expect(ctx.stdout).to.contain(`Error: command ${CLI_COMMANDS.CreateProject} not found`)
-  // })
+  test
+  .stdout()
+  .command([CLI_COMMANDS.CreateProject, badProjectName])
+  .it('tries to run create project with a poorly formatted command', ctx => {
+    expect(ctx.stdout).to.contain(`Error: command ${CLI_COMMANDS.CreateProject} not found`)
+  })
 
   after(() => {
      exec(`rm -r ${testProjectName}`, (error) => {

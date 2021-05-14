@@ -22,6 +22,7 @@ export const enum CLI_COMMANDS {
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
   PluginLibrary = 'plugin',
+  PoorHelpCommand = 'add -help'
 }
 export const TEMPLATE_REPLACEMENT_FILES = [
   'package.json',
