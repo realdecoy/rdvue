@@ -213,10 +213,9 @@ async function parseProjectName(args: Lookup): Promise<string> {
       message: 'Pick a preset: ',
       type: 'list',
       choices: [
-        'buefy & localization (default)',
+        'buefy & localization (recommended)',
         'vuetify & localization',
-        'manually select plugins',
-        'skip'
+        'skip presets'
       ],
     }])
     argName = responses.name
