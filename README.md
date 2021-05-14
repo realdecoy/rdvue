@@ -66,6 +66,7 @@ Actions:
     create-project   -  Scaffold a new rdvue project
     add:<feature>    -  Add a feature to a project
     plugin:<library> -  Inject a utility to extend project functionality
+    upgrade          -  Specify the rdvue template version for a project
     
 Features:          -  Utilities to create repeatable project elements
     component        -  add a new Component module
