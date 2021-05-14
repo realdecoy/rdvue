@@ -209,7 +209,7 @@ function validateVersionName(value: any) {
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
-      default: '@latest',
+      default: 'latest',
       message: 'Enter a version: ',
       type: 'input',
       validate: validateVersionName,
