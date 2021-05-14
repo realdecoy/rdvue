@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer'
 import {Lookup} from '../modules'
-import { CLI_STATE } from './constants'
+import { CLI_STATE, TEMPLATE_VERSION } from './constants'
 import {getProjectRoot} from './files'
 
 /**
@@ -209,7 +209,7 @@ function validateVersionName(value: any) {
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
-      default: 'latest',
+      default: TEMPLATE_VERSION,
       message: 'Enter a version: ',
       type: 'input',
       validate: validateVersionName,
