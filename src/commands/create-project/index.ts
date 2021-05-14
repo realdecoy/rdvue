@@ -80,8 +80,6 @@ export default class CreateProject extends Command {
 
     this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`)
 
-    //Intialise a git repo
-    await shell.exec(`git init`, {silent: true})
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, {silent: true})
     // remove git folder reference to base project
