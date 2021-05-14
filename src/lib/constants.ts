@@ -13,6 +13,7 @@ export const enum DYNAMIC_OBJECTS {
 }
 export const enum CLI_COMMANDS {
   CreateProject = 'create-project',
+  Upgrade = 'upgrade',
   AddComponent = 'add:component',
   AddPage = 'add:page',
   AddService = 'add:service',
