@@ -198,6 +198,32 @@ async function parseProjectName(args: Lookup): Promise<string> {
   return argName as string
 }
 
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param value - a string value
+ */
+ async function parseProjectPresets(args: Lookup): Promise<string> {
+  let argName = args.preset
+  // if no project name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'preset',
+      default: 0,
+      message: 'Pick a preset: ',
+      type: 'list',
+      choices: [
+        'buefy & localization (default)',
+        'vuetify & localization',
+        'manually select plugins',
+        'skip'
+      ],
+    }])
+    argName = responses.name
+  }
+  return argName as string
+}
+
 /**
  * Description: parse project or prompt user to provide name for project
  * @param value - a string value
@@ -284,6 +310,7 @@ export {
   toPascalCase,
   parseComponentName,
   parseProjectName,
+  parseProjectPresets,
   parsePageName,
   parseServiceName,
   parseStoreModuleName,
