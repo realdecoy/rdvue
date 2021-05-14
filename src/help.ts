@@ -15,6 +15,7 @@ export default class MyHelpClass extends Help {
             create-project   -  Scaffold a new rdvue project
             add              -  Add a feature to a project
             plugin           -  Inject a utility to extend project functionality
+            upgrade          -  Specify the rdvue template version for a project
             
         Options:
             --help | -h      -  Show help information`
