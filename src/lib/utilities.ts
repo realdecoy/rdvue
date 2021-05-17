@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer'
 import {Lookup} from '../modules'
-import { CLI_STATE } from './constants'
+import { CLI_STATE, TEMPLATE_VERSION } from './constants'
 import {getProjectRoot} from './files'
 
 /**
@@ -78,7 +78,7 @@ function validateProjectName(value: any) {
  * Description: determine if string is valid component name
  * @param value - a string value
  */
-function validateComponentName(value: any) {
+ function validateComponentName(value: any) {
   const isString = typeof value === 'string'
   const isNull = value === null || value.length === 0
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -93,6 +93,27 @@ function validateComponentName(value: any) {
   }
 
   return isValidComponentName ? true : resultMessage
+}
+
+/**
+ * Description: determine if string is valid version name
+ * @param value - a string value
+ */
+function validateVersionName(value: any) {
+  const isString = typeof value === 'string'
+  const isNull = value === null || value.length === 0
+  // characters in value are limited to alphanumeric characters and hyphens or underscores
+  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null
+  const isValidVersionName = isString && charactersMatch
+  let resultMessage
+
+  if (isNull) {
+    resultMessage = `${CLI_STATE.Error} A version name is required`
+  } else if (!charactersMatch) {
+    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for version names (e.g. my-version-name)`
+  }
+
+  return isValidVersionName ? true : resultMessage
 }
 
 /**
@@ -172,6 +193,26 @@ function validateComponentName(value: any) {
       message: 'Enter a component name: ',
       type: 'input',
       validate: validateComponentName,
+    }])
+    argName = responses.name
+  }
+  return argName as string
+}
+
+/**
+ * Description: parse project or prompt user to provide name for template version
+ * @param value - a string value
+ */
+ async function parseVersionName(args: Lookup): Promise<string> {
+  let argName = args.name
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: TEMPLATE_VERSION,
+      message: 'Enter a version: ',
+      type: 'input',
+      validate: validateVersionName,
     }])
     argName = responses.name
   }
@@ -283,6 +324,7 @@ export {
   toKebabCase,
   toPascalCase,
   parseComponentName,
+  parseVersionName,
   parseProjectName,
   parsePageName,
   parseServiceName,
