@@ -1,2 +1,3 @@
-coverage
-**/templates
+/lib
+/template
+/_rdv*

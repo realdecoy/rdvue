@@ -12,14 +12,32 @@
 a development style guide which enforces strong typing with TypeScript, standardized Component, Layout and Page models,
 and a data-layer design promoting unified consumption through Stores and Services.
 
+
+
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/rdvue.svg)](https://npmjs.org/package/rdvue)
+[![Downloads/week](https://img.shields.io/npm/dw/rdvue.svg)](https://npmjs.org/package/rdvue)
+[![License](https://img.shields.io/npm/l/rdvue.svg)](https://github.com/realdecoy/rdvue/blob/main/package.json)
+
+&nbsp;
+&nbsp;
+&nbsp;
+<!-- toc -->
 ## Table of Contents
 
-- [Usage](#usage)
-- [Options](#options)
-- [Documentation](https://realdecoy.github.io/rdvue/)
+* [Usage](#usage)
+* [Options](#options)
+* [Documentation](https://realdecoy.github.io/rdvue/)
+* [Dev Instructions](#Development)
+* [Testing](#Testing)
+<!-- tocstop -->
 
+&nbsp;
+&nbsp;
+&nbsp;
 
 ## Usage
+<!-- usage -->
 
 ```bash
 npx rdvue [command]
@@ -28,44 +46,70 @@ npx rdvue [command]
 The help menu can be accessed with the command:
 
 ```bash
-rdvue --help
+npx rdvue --help
 ```
+The current version of rdvue can be retrieved with the command:
+
+```bash
+npx rdvue -v|--version|version
+```
+<!-- usagestop -->
+
+&nbsp;
+&nbsp;
+&nbsp;
 
 ## Options
-
 ```txt
-npx rdvue <action> [<feature>|<plugin>|<plugin group>] [<project-name>|<feature-name>]
+Usage:
+  npx rdvue <action>
 
 Actions:
-  generate | g  -  Creates new Feature.
-  add           -  Add a Plugin to a project.
-  add-group     -  Add a Plugin to a project by selecting
-                   from preset groups.
-
-
-Features:       -  Utilities to create repeatable project elements.
-  project       -  Scaffold a new RDVue project.
-  component     -  Generate a new Component module.
-  page          -  Generate a new Page module.
-  service       -  Generate a new Service module.layer
-  layout        -  Generate a new Page Layout.
-
-Plugin Groups:  -  Choose a plugin from preset groupings.
-  auth          -  Provides plugins which generate pages, components 
-                   and data models to support common authentication 
-                   scenarios.
-
-  ui            -  Provides plugins which add UI libraries or 
-                   functionalities.
-Plugins:
-  buefy         -  Add Buefy support to an existing project.
-  vuetify       -  Add Vuetify support to an existing project.
-  localization  -  Add i18n localization support to an existing project.
-
+    create-project   -  Scaffold a new rdvue project
+    add              -  Add a feature to a project
+    plugin           -  Inject a utility to extend project functionality
+    upgrade          -  Specify the rdvue template version for a project
+  
 Options:
-  --help | -h   -  Show help information.
+    --help | -h      -  Show help information
 ```
+
+&nbsp;
+&nbsp;
+&nbsp;
 
 ## About
 
 The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributions are welcome! You can help us by reporting or fixing bugs and giving us feedback on new/existing features.
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+## Development
+
+```bash
+git checkout rdvue-rebuild
+npm install
+npm link
+```
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+## Testing
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+### Run Test Suite
+```bash
+npm run test
+```
+
+### Creating Tests
+- create a ```<module-name>.test.ts``` file in the ```/test``` folder
+- using ```chai``` assertion syntax, describe your unit test cases
+- visit the oclif [testing documentation](https://oclif.io/docs/testing) to see more details
