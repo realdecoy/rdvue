@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer'
 import { Lookup } from '../modules'
-import { CLI_STATE, TEMPLATE_VERSION } from './constants'
+import { CLI_STATE, TEMPLATE_VERSION, PLUGIN_PRESET_LIST } from './constants'
 import { getProjectRoot } from './files'
 
 /**
@@ -252,13 +252,9 @@ async function parseProjectPresets(args: Lookup): Promise<string> {
       default: 0,
       message: 'Pick a preset: ',
       type: 'list',
-      choices: [
-        'buefy & localization (recommended)',
-        'vuetify & localization',
-        'skip presets'
-      ],
+      choices: PLUGIN_PRESET_LIST,
     }])
-    argName = responses.name
+    argName = responses.preset
   }
   return argName as string
 }

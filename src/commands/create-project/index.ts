@@ -1,6 +1,9 @@
 import shell from 'shelljs'
 import chalk from 'chalk'
 import { Command, flags } from '@oclif/command'
+import Buefy from '../plugin/buefy'
+import Localization from '../plugin/localization'
+import { exec } from 'child_process'
 import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities'
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files'
 import {
@@ -8,7 +11,8 @@ import {
   TEMPLATE_VERSION,
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
-  CLI_STATE
+  CLI_STATE,
+  PLUGIN_PRESET_LIST
 } from '../../lib/constants';
 
 export default class CreateProject extends Command {
@@ -99,9 +103,14 @@ export default class CreateProject extends Command {
           message: `updating your project failed`,
         })
       )
-    } else {
-      this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
+    } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 0)) { // buefy & localization
+      await Buefy.run(['--forceProject', projectName])
+      await Localization.run(['--forceProject', projectName])
+    } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 1)) { // Vuetify & localization
+      await Localization.run(['--forceProject', projectName])
     }
+
+    this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
 
     // Output final instructions to user
     this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} npm run serve`)

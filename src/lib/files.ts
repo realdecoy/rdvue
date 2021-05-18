@@ -67,6 +67,7 @@ function readConfigFile(filePath: string): any {
  *  Description: parse config files required for scaffolding this module
  */
 function parseModuleConfig(folderList: string[], projectRoot: string) {
+
   return folderList.map(folder => {
     const moduleTemplatePath = path.join(projectRoot, TEMPLATE_ROOT, folder)
     const configFilePath = path.join(moduleTemplatePath, TEMPLATE_CONFIG_FILENAME)
@@ -390,11 +391,13 @@ function verifyTemplateFolderExists(folderPath: string) {
 
 /**
  * Description: Inject dynamic objects into project files
+ * @param projectRoot - 
  * @param jsonData - stringified json data from file
  * @param objectName - property name to be injected
  * @param hasBrackets - injected object has brackets
  */
 function parseDynamicObjects(
+  projectRoot: string,
   jsonData: string,
   objectName: string,
   hasBrackets?: boolean
@@ -404,13 +407,13 @@ function parseDynamicObjects(
   let objectStringToBeWritten = '';
 
   // 1[a] Check for the root of the project
-  const PROJECT_ROOT = getProjectRoot();
+  // const projectRoot = getProjectRoot();
 
   // 1[b] Once inside of a project values are assigned to be used
-  if (PROJECT_ROOT !== null) {
+  if (projectRoot !== null) {
     // Allocate the location of the <OBJECT>.js file
     filePathOfObjectInsideProject = path.join(
-      PROJECT_ROOT,
+      projectRoot,
       '.rdvue',
       `${objectName}.js`
     );
@@ -450,20 +453,22 @@ function parseDynamicObjects(
 
 /**
  * Description: 
+ * @param projectRoot - 
  * @param folderName - 
  * @param featuredata - 
  * @param fileName - 
  */
 async function updateDynamicImportsAndExports(
+  projectRoot: string,
   folderName: string,
   featuredata: string | string[],
   fileName: string
 ) {
-  const projectroot = getProjectRoot();
+  // const projectRoot = getprojectRoot();
   const SOURCE_DIRECTORY = 'src';
 
-  if (projectroot !== null) {
-    const fileLocation = path.join(projectroot, SOURCE_DIRECTORY, folderName, fileName);
+  if (projectRoot !== null) {
+    const fileLocation = path.join(projectRoot, SOURCE_DIRECTORY, folderName, fileName);
     if (fileExists(fileLocation)) {
       if (typeof featuredata === 'string') {
         fs.appendFileSync(fileLocation, featuredata);

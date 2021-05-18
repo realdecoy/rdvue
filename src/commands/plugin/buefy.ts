@@ -16,6 +16,7 @@ export default class Buefy extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    forceProject: flags.string({ hidden: true }),
   }
 
   static args = []
@@ -52,15 +53,23 @@ export default class Buefy extends Command {
   }
 
   async run() {
-    const { isValid: isValidProject, projectRoot } = checkProjectValidity()
+    const { flags } = this.parse(Buefy)
+    const projectName = flags.forceProject
+    const hasProjectName = projectName !== undefined
+    const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : ''
+
+    let { isValid: isValidProject, projectRoot } = checkProjectValidity()
     // block command unless being run within an rdvue project
-    if (isValidProject === false) {
+    if (isValidProject === false && !hasProjectName) {
       throw new Error(
         JSON.stringify({
           code: 'project-invalid',
           message: `${CLI_COMMANDS.PluginBuefy} command must be run in an existing ${chalk.yellow('rdvue')} project`,
         })
       )
+    } else if (hasProjectName) {
+      const x = await exec(`cd ${projectName} && pwd`, { silent: true })
+      projectRoot = x.trim();
     }
 
     const folderList = TEMPLATE_FOLDERS
@@ -75,15 +84,15 @@ export default class Buefy extends Command {
 
     try {
       // install dependencies
-      cli.action.start(`${CLI_STATE.Info} installing dependencies`)
-      const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`npm install --save ${dependencies}`, { silent: true })
+      cli.action.start(`${CLI_STATE.Info} installing buefy dependencies`)
+      const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true })
       cli.action.stop()
 
     } catch (error) {
       throw new Error(
         JSON.stringify({
           code: 'dependency-install-error',
-          message: `${this.id?.split(':')[1]} dependencies failed to install`,
+          message: `${this.id?.split(':')[1]} buefy dependencies failed to install`,
         })
       )
     }
@@ -93,9 +102,9 @@ export default class Buefy extends Command {
 
     // copy and update files for plugin being added
     await copyFiles(sourceDirectory, installDirectory, files)
-    await parseDynamicObjects(JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
-    updateDynamicImportsAndExports('theme', config.manifest.projectTheme, '_all.scss');
-    updateDynamicImportsAndExports('modules/core', config.manifest.moduleImports, 'index.ts');
+    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
+    updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss');
+    updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts');
 
     this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
   }

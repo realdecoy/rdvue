@@ -23,6 +23,11 @@ export const enum CLI_COMMANDS {
   PluginLocalization = 'plugin:localization',
   PluginLibrary = 'plugin',
 }
+export const PLUGIN_PRESET_LIST = [
+  'buefy & localization (recommended)',
+  'vuetify & localization',
+  'skip presets'
+];
 export const TEMPLATE_REPLACEMENT_FILES = [
   'package.json',
   '.rdvue/.rdvue',
