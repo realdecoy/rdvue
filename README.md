@@ -28,6 +28,8 @@ and a data-layer design promoting unified consumption through Stores and Service
 * [Usage](#usage)
 * [Options](#options)
 * [Documentation](https://realdecoy.github.io/rdvue/)
+* [Dev Instructions](#Development)
+* [Testing](#Testing)
 <!-- tocstop -->
 
 &nbsp;
@@ -60,22 +62,14 @@ npx rdvue -v|--version|version
 ## Options
 ```txt
 Usage:
-  npx rdvue <action> [<project-name>|<feature-name>]
+  npx rdvue <action>
 
 Actions:
     create-project   -  Scaffold a new rdvue project
-    add:<feature>    -  Add a feature to a project
-    plugin:<library> -  Inject a utility to extend project functionality
-    
-Features:          -  Utilities to create repeatable project elements
-    component        -  add a new Component module
-    page             -  add a new Page module
-    service          -  add a new Service module
-    store            -  add a new Store module
-
-Libraries:         -  Utilities to extend project functionality
-    buefy            - lightweigth UI components for Vuejs
-    
+    add              -  Add a feature to a project
+    plugin           -  Inject a utility to extend project functionality
+    upgrade          -  Specify the rdvue template version for a project
+  
 Options:
     --help | -h      -  Show help information
 ```
@@ -92,10 +86,30 @@ The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributio
 &nbsp;
 &nbsp;
 
-## Dev Instructions
+## Development
 
 ```bash
 git checkout rdvue-rebuild
 npm install
 npm link
 ```
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+## Testing
+
+&nbsp;
+&nbsp;
+&nbsp;
+
+### Run Test Suite
+```bash
+npm run test
+```
+
+### Creating Tests
+- create a ```<module-name>.test.ts``` file in the ```/test``` folder
+- using ```chai``` assertion syntax, describe your unit test cases
+- visit the oclif [testing documentation](https://oclif.io/docs/testing) to see more details

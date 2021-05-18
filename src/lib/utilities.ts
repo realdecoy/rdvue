@@ -1,7 +1,7 @@
 import * as inquirer from 'inquirer'
-import {Lookup} from '../modules'
-import { CLI_STATE } from './constants'
-import {getProjectRoot} from './files'
+import { Lookup } from '../modules'
+import { CLI_STATE, TEMPLATE_VERSION } from './constants'
+import { getProjectRoot } from './files'
 
 /**
  * Description: determine if string is valid JSON string
@@ -35,9 +35,9 @@ function hasKebab(value = ''): boolean {
  */
 function toKebabCase(value: string): string {
   return value &&
-  (value.match(/[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g) as [string])
-  .map(x => x.toLowerCase())
-  .join('-')
+    (value.match(/[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g) as [string])
+      .map(x => x.toLowerCase())
+      .join('-')
 }
 
 /**
@@ -46,11 +46,11 @@ function toKebabCase(value: string): string {
  */
 function toPascalCase(value: string): string {
   return value
-  .split(/[-_ ]+/)
-  .join(' ')
-  .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase())
-  .split(' ')
-  .join('')
+    .split(/[-_ ]+/)
+    .join(' ')
+    .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase())
+    .split(' ')
+    .join('')
 }
 
 /**
@@ -96,10 +96,31 @@ function validateComponentName(value: any) {
 }
 
 /**
+ * Description: determine if string is valid version name
+ * @param value - a string value
+ */
+function validateVersionName(value: any) {
+  const isString = typeof value === 'string'
+  const isNull = value === null || value.length === 0
+  // characters in value are limited to alphanumeric characters and hyphens or underscores
+  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null
+  const isValidVersionName = isString && charactersMatch
+  let resultMessage
+
+  if (isNull) {
+    resultMessage = `${CLI_STATE.Error} A version name is required`
+  } else if (!charactersMatch) {
+    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for version names (e.g. my-version-name)`
+  }
+
+  return isValidVersionName ? true : resultMessage
+}
+
+/**
  * Description: determine if string is valid page name
  * @param value - a string value
  */
- function validatePageName(value: any) {
+function validatePageName(value: any) {
   const isString = typeof value === 'string'
   const isNull = value === null || value.length === 0
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -120,7 +141,7 @@ function validateComponentName(value: any) {
  * Description: determine if string is valid service name
  * @param value - a string value
  */
- function validateServiceName(value: any) {
+function validateServiceName(value: any) {
   const isString = typeof value === 'string'
   const isNull = value === null || value.length === 0
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -141,7 +162,7 @@ function validateComponentName(value: any) {
  * Description: determine if string is valid store module name
  * @param value - a string value
  */
- function validateStoreModuleName(value: any) {
+function validateStoreModuleName(value: any) {
   const isString = typeof value === 'string'
   const isNull = value === null || value.length === 0
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -162,7 +183,7 @@ function validateComponentName(value: any) {
  * Description: parse project or prompt user to provide name for project
  * @param value - a string value
  */
- async function parseComponentName(args: Lookup): Promise<string> {
+async function parseComponentName(args: Lookup): Promise<string> {
   let argName = args.name
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -198,12 +219,31 @@ async function parseProjectName(args: Lookup): Promise<string> {
   return argName as string
 }
 
+/**
+ * Description: parse project or prompt user to provide name for template version
+ * @param value - a string value
+ */
+async function parseVersionName(args: Lookup): Promise<string> {
+  let argName = args.name
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: TEMPLATE_VERSION,
+      message: 'Enter a version: ',
+      type: 'input',
+      validate: validateVersionName,
+    }])
+    argName = responses.name
+  }
+  return argName as string
+}
 
 /**
  * Description: parse project or prompt user to provide name for project
  * @param value - a string value
  */
- async function parseProjectPresets(args: Lookup): Promise<string> {
+async function parseProjectPresets(args: Lookup): Promise<string> {
   let argName = args.preset
   // if no project name is provided in command then prompt user
   if (!argName) {
@@ -310,6 +350,7 @@ export {
   parseComponentName,
   parseProjectName,
   parseProjectPresets,
+  parseVersionName,
   parsePageName,
   parseServiceName,
   parseStoreModuleName,

@@ -1,25 +1,26 @@
 import shell from 'shelljs'
 import chalk from 'chalk'
-import {Command, flags} from '@oclif/command'
-import {toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets} from '../../lib/utilities'
-import {replaceInFiles, checkIfFolderExists} from '../../lib/files'
+import { Command, flags } from '@oclif/command'
+import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities'
+import { replaceInFiles, checkIfFolderExists } from '../../lib/files'
 import {
   TEMPLATE_REPO,
   TEMPLATE_VERSION,
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
-  CLI_STATE} from '../../lib/constants';
+  CLI_STATE
+} from '../../lib/constants';
 
 export default class CreateProject extends Command {
   static description = 'create a new rdvue project'
 
   static flags = {
-    help: flags.help({char: 'h'}),
+    help: flags.help({ char: 'h' }),
   }
 
   static args = [
-    {name: 'name', description: 'name of created project'},
-    {name: 'preset', description: 'name of plugin preset'},
+    { name: 'name', description: 'name of created project' },
+    { name: 'preset', description: 'name of plugin preset' },
   ]
 
   // override Command class error handler
@@ -38,13 +39,13 @@ export default class CreateProject extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'existing-project': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-      break
-    case 'existing-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-      break
-    case 'file-not-changed': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-      break
-    default: throw new Error(customErrorMessage)
+      case 'existing-project': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+        break
+      case 'existing-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+        break
+      case 'file-not-changed': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+        break
+      default: throw new Error(customErrorMessage)
     }
 
     // exit with status code
@@ -52,14 +53,14 @@ export default class CreateProject extends Command {
   }
 
   async run() {
-    const {args} = this.parse(CreateProject)
+    const { args } = this.parse(CreateProject)
     const template: string = TEMPLATE_REPO
     const tag: string = TEMPLATE_VERSION
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES
     let projectName: string
     let presetName: string
-    const {isValid: isValidProject} = checkProjectValidity()
+    const { isValid: isValidProject } = checkProjectValidity()
     // block command if being run within an rdvue project
     if (isValidProject) {
       throw new Error(
@@ -85,7 +86,7 @@ export default class CreateProject extends Command {
     this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`)
 
     // retrieve project files from template source
-    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, {silent: true})
+    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, { silent: true })
     // remove git folder reference to base project
     await shell.exec(`rm -rf ${projectName}/.git`)
     // find and replace project name references
