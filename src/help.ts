@@ -22,7 +22,6 @@ export default class MyHelpClass extends Help {
         )
     }
 
-
     showTopicHelp(topic: Topic) {
         const name = topic.name
         const depth = name.split(':').length

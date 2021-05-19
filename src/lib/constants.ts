@@ -22,7 +22,9 @@ export const enum CLI_COMMANDS {
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
   PluginLibrary = 'plugin',
+  PoorHelpCommand = 'add -help'
 }
+
 export const PLUGIN_PRESET_LIST = [
   'buefy & localization (recommended)',
   'vuetify & localization',

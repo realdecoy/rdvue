@@ -67,7 +67,6 @@ function readConfigFile(filePath: string): any {
  *  Description: parse config files required for scaffolding this module
  */
 function parseModuleConfig(folderList: string[], projectRoot: string) {
-
   return folderList.map(folder => {
     const moduleTemplatePath = path.join(projectRoot, TEMPLATE_ROOT, folder)
     const configFilePath = path.join(moduleTemplatePath, TEMPLATE_CONFIG_FILENAME)
