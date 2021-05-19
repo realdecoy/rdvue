@@ -109,6 +109,8 @@ export default class CreateProject extends Command {
     } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 1)) { // Vuetify & localization
       await Localization.run(['--forceProject', projectName])
     }
+    // initialize a git folder in the created project
+    await shell.exec(`cd ${projectName} && git init`, { silent: true })
 
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
 
