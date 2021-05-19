@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import { Command, flags } from '@oclif/command'
 import Buefy from '../plugin/buefy'
 import Localization from '../plugin/localization'
-import { exec } from 'child_process'
+import Vuetify from '../plugin/vuetify'
 import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities'
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files'
 import {
@@ -105,9 +105,12 @@ export default class CreateProject extends Command {
       )
     } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 0)) { // buefy & localization
       await Buefy.run(['--forceProject', projectName])
-      await Localization.run(['--forceProject', projectName])
+      // TODO: uncomment once localization plugin is fixed
+      // await Localization.run(['--forceProject', projectName])
     } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 1)) { // Vuetify & localization
-      await Localization.run(['--forceProject', projectName])
+      await Vuetify.run(['--forceProject', projectName])
+      // TODO: uncomment once localization plugin is fixed
+      // await Localization.run(['--forceProject', projectName])
     }
 
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)

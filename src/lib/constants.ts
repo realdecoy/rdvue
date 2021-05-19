@@ -21,6 +21,7 @@ export const enum CLI_COMMANDS {
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
+  PluginVuetify = 'plugin:vuetify',
   PluginLibrary = 'plugin',
   PoorHelpCommand = 'add -help'
 }
