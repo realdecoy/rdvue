@@ -12,8 +12,8 @@ export const enum DYNAMIC_OBJECTS {
   Modules = 'modules',
 }
 export const enum CLI_COMMANDS {
-  BadCreateProject = 'create-proj',
   CreateProject = 'create-project',
+  Upgrade = 'upgrade',
   AddComponent = 'add:component',
   AddPage = 'add:page',
   AddService = 'add:service',
@@ -22,8 +22,12 @@ export const enum CLI_COMMANDS {
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
   PluginLibrary = 'plugin',
-  PoorHelpCommand = 'add -help'
 }
+export const PLUGIN_PRESET_LIST = [
+  'buefy & localization (recommended)',
+  'vuetify & localization',
+  'skip presets'
+];
 export const TEMPLATE_REPLACEMENT_FILES = [
   'package.json',
   '.rdvue/.rdvue',

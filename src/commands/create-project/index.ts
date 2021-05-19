@@ -1,24 +1,30 @@
 import shell from 'shelljs'
 import chalk from 'chalk'
-import {Command, flags} from '@oclif/command'
-import {toKebabCase, parseProjectName, isJsonString, checkProjectValidity} from '../../lib/utilities'
-import {replaceInFiles, checkIfFolderExists} from '../../lib/files'
+import { Command, flags } from '@oclif/command'
+import Buefy from '../plugin/buefy'
+import Localization from '../plugin/localization'
+import { exec } from 'child_process'
+import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities'
+import { replaceInFiles, checkIfFolderExists } from '../../lib/files'
 import {
   TEMPLATE_REPO,
   TEMPLATE_VERSION,
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
-  CLI_STATE} from '../../lib/constants';
+  CLI_STATE,
+  PLUGIN_PRESET_LIST
+} from '../../lib/constants';
 
 export default class CreateProject extends Command {
   static description = 'create a new rdvue project'
 
   static flags = {
-    help: flags.help({char: 'h'}),
+    help: flags.help({ char: 'h' }),
   }
 
   static args = [
-    {name: 'name', description: 'name of created project'},
+    { name: 'name', description: 'name of created project' },
+    { name: 'preset', description: 'name of plugin preset' },
   ]
 
   // override Command class error handler
@@ -37,13 +43,13 @@ export default class CreateProject extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-    case 'existing-project': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-      break
-    case 'existing-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-      break
-    case 'file-not-changed': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-      break
-    default: throw new Error(customErrorMessage)
+      case 'existing-project': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+        break
+      case 'existing-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+        break
+      case 'file-not-changed': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+        break
+      default: throw new Error(customErrorMessage)
     }
 
     // exit with status code
@@ -51,13 +57,14 @@ export default class CreateProject extends Command {
   }
 
   async run() {
-    const {args} = this.parse(CreateProject)
+    const { args } = this.parse(CreateProject)
     const template: string = TEMPLATE_REPO
     const tag: string = TEMPLATE_VERSION
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES
     let projectName: string
-    const {isValid: isValidProject} = checkProjectValidity()
+    let presetName: string
+    const { isValid: isValidProject } = checkProjectValidity()
     // block command if being run within an rdvue project
     if (isValidProject) {
       throw new Error(
@@ -70,6 +77,8 @@ export default class CreateProject extends Command {
 
     // retrieve project name
     projectName = await parseProjectName(args)
+    // retrieve project preset
+    presetName = await parseProjectPresets(args)
     // convert project name to kebab case
     projectName = toKebabCase(projectName)
     // verify that project folder doesnt already exist
@@ -80,10 +89,8 @@ export default class CreateProject extends Command {
 
     this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`)
 
-    //Intialise a git repo
-    await shell.exec(`git init`, {silent: true})
     // retrieve project files from template source
-    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, {silent: true})
+    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, { silent: true })
     // remove git folder reference to base project
     await shell.exec(`rm -rf ${projectName}/.git`)
     // find and replace project name references
@@ -96,9 +103,14 @@ export default class CreateProject extends Command {
           message: `updating your project failed`,
         })
       )
-    } else {
-      this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
+    } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 0)) { // buefy & localization
+      await Buefy.run(['--forceProject', projectName])
+      await Localization.run(['--forceProject', projectName])
+    } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 1)) { // Vuetify & localization
+      await Localization.run(['--forceProject', projectName])
     }
+
+    this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
 
     // Output final instructions to user
     this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} npm run serve`)
