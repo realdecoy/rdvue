@@ -12,7 +12,7 @@ import { CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS } from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['localization']
 export default class Localization extends Command {
-  static description = 'lightweigth UI components for Vuejs'
+  static description = 'adds i18bn localiztion'
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -47,9 +47,6 @@ export default class Localization extends Command {
         break
       default: throw new Error(customErrorMessage)
     }
-
-    // exit with status code
-    // this.exit(1)
   }
 
   async run() {
@@ -68,8 +65,8 @@ export default class Localization extends Command {
         })
       )
     } else if (hasProjectName) {
-      const x = await exec(`cd ${projectName} && pwd`, { silent: true })
-      projectRoot = x.trim();
+      const dir = await exec(`cd ${projectName} && pwd`, { silent: true })
+      projectRoot = dir.trim();
     }
 
     const folderList = TEMPLATE_FOLDERS
