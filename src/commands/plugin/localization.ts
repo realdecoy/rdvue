@@ -12,7 +12,7 @@ import { CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS } from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['localization']
 export default class Localization extends Command {
-  static description = 'adds i18bn localiztion'
+  static description = 'adds i18bn localization'
 
   static flags = {
     help: flags.help({ char: 'h' }),
