@@ -68,14 +68,14 @@ export default class Buefy extends Command {
         })
       )
     } else if (hasProjectName) {
-      const x = await exec(`cd ${projectName} && pwd`, { silent: true })
+      const x = await exec(`cd ${projectName} && cd`, { silent: true })
       projectRoot = x.trim();
     }
 
     const folderList = TEMPLATE_FOLDERS
     let sourceDirectory: string
     let installDirectory: string
-
+    
     // parse config files required for scaffolding this module
     const configs = parseModuleConfig(folderList, projectRoot)
     const config = configs[0]

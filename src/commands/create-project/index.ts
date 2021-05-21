@@ -105,12 +105,10 @@ export default class CreateProject extends Command {
       )
     } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 0)) { // buefy & localization
       await Buefy.run(['--forceProject', projectName])
-      // TODO: uncomment once localization plugin is fixed
-      // await Localization.run(['--forceProject', projectName])
+      await Localization.run(['--forceProject', projectName])
     } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 1)) { // Vuetify & localization
       await Vuetify.run(['--forceProject', projectName])
-      // TODO: uncomment once localization plugin is fixed
-      // await Localization.run(['--forceProject', projectName])
+      await Localization.run(['--forceProject', projectName])
     }
     // initialize a git folder in the created project
     await shell.exec(`cd ${projectName} && git init`, { silent: true })

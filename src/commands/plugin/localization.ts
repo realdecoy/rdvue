@@ -65,7 +65,7 @@ export default class Localization extends Command {
         })
       )
     } else if (hasProjectName) {
-      const dir = await exec(`cd ${projectName} && pwd`, { silent: true })
+      const dir = await exec(`cd ${projectName} && cd`, { silent: true })
       projectRoot = dir.trim();
     }
 

@@ -68,7 +68,7 @@ export default class Vuetify extends Command {
         })
       )
     } else if (hasProjectName) {
-      const x = await exec(`cd ${projectName} && pwd`, { silent: true })
+      const x = await exec(`cd ${projectName} && cd`, { silent: true })
       projectRoot = x.trim();
     }
 
