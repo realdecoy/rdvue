@@ -112,6 +112,8 @@ export default class CreateProject extends Command {
       // TODO: uncomment once localization plugin is fixed
       // await Localization.run(['--forceProject', projectName])
     }
+    // initialize a git folder in the created project
+    await shell.exec(`cd ${projectName} && git init`, { silent: true })
 
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
 
