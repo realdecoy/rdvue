@@ -17,6 +17,7 @@ export default class Vuetify extends Command {
   static flags = {
     help: flags.help({ char: 'h' }),
     forceProject: flags.string({ hidden: true }),
+    skipInstall: flags.boolean({ hidden: true }),
   }
 
   static args = []
@@ -55,6 +56,7 @@ export default class Vuetify extends Command {
   async run() {
     const { flags } = this.parse(Vuetify)
     const projectName = flags.forceProject
+    const skipInstallStep = flags.skipInstall === true
     const hasProjectName = projectName !== undefined
     const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : ''
 
@@ -68,8 +70,8 @@ export default class Vuetify extends Command {
         })
       )
     } else if (hasProjectName) {
-      const x = await exec(`cd ${projectName} && pwd`, { silent: true })
-      projectRoot = x.trim();
+      const dir = await exec(`cd ${projectName} && pwd`, { silent: true })
+      projectRoot = dir.trim();
     }
 
     const folderList = TEMPLATE_FOLDERS
@@ -83,28 +85,26 @@ export default class Vuetify extends Command {
     const dependencies = config.manifest.packages.dependencies.toString().split(',').join(' ')
     const devDependencies = config.manifest.packages.devDependencies.toString().split(',').join(' ')
 
-    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
-    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.vueOptions, null, 1), DYNAMIC_OBJECTS.Options, true);
-    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.modules, null, 1), DYNAMIC_OBJECTS.Modules, true);
+    if (skipInstallStep === false) {
+      try {
+        // // install dev dependencies
+        cli.action.start(`${CLI_STATE.Info} installing vuetify dev dependencies`)
+        const { stdout: devDepStdout, stderr: devDepStderr, code: devDepCode } = await exec(`${preInstallCommand} npm install --save-dev ${devDependencies}`, { silent: true })
+        cli.action.stop()
 
-    try {
-      // // install dev dependencies
-      cli.action.start(`${CLI_STATE.Info} installing vuetify dev dependencies`)
-      const { stdout: devDepStdout, stderr: devDepStderr, code: devDepCode } = await exec(`${preInstallCommand} npm install --save-dev ${devDependencies}`, { silent: true })
-      cli.action.stop()
+        // // install dependencies
+        cli.action.start(`${CLI_STATE.Info} installing vuetify dependencies`)
+        const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true })
+        cli.action.stop()
 
-      // // install dependencies
-      cli.action.start(`${CLI_STATE.Info} installing vuetify dependencies`)
-      const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true })
-      cli.action.stop()
-
-    } catch (error) {
-      throw new Error(
-        JSON.stringify({
-          code: 'dependency-install-error',
-          message: `${this.id?.split(':')[1]} vuetify dependencies failed to install`,
-        })
-      )
+      } catch (error) {
+        throw new Error(
+          JSON.stringify({
+            code: 'dependency-install-error',
+            message: `${this.id?.split(':')[1]} vuetify dependencies failed to install`,
+          })
+        )
+      }
     }
 
     sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
@@ -112,6 +112,9 @@ export default class Vuetify extends Command {
 
     // copy files for plugin being added
     await copyFiles(sourceDirectory, installDirectory, files)
+    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
+    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.vueOptions, null, 1), DYNAMIC_OBJECTS.Options, true);
+    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.modules, null, 1), DYNAMIC_OBJECTS.Modules, true);
 
     this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
   }
