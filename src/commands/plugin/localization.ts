@@ -53,7 +53,7 @@ export default class Localization extends Command {
   async run() {
     const { flags } = this.parse(Localization)
     const projectName = flags.forceProject
-    const skipInstallStep = flags.skipInstall
+    const skipInstallStep = flags.skipInstall === true
     const hasProjectName = projectName !== undefined
     const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : ''
 
@@ -113,6 +113,8 @@ export default class Localization extends Command {
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.vueOptions, null, 1), DYNAMIC_OBJECTS.Options, true);
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.modules, null, 1), DYNAMIC_OBJECTS.Modules, true);
 
-    this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
+    if (skipInstallStep === false) {
+      this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
+    }
   }
 }

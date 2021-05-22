@@ -107,6 +107,8 @@ export default class Buefy extends Command {
     updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss');
     updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts');
 
-    this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
+    if (skipInstallStep === false) {
+      this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
+    }
   }
 }
