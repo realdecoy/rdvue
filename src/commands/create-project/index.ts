@@ -107,7 +107,7 @@ export default class CreateProject extends Command {
       await Buefy.run(['--forceProject', projectName, '--skipInstall'])
       await Localization.run(['--forceProject', projectName, '--skipInstall'])
     } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 1)) { // Vuetify & localization
-      await Vuetify.run(['--forceProject', projectName, '--skip-install'])
+      await Vuetify.run(['--forceProject', projectName, '--skipInstall'])
       await Localization.run(['--forceProject', projectName, '--skipInstall'])
     }
     // initialize a git folder in the created project
