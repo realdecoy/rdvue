@@ -17,6 +17,7 @@ export default class Buefy extends Command {
   static flags = {
     help: flags.help({ char: 'h' }),
     forceProject: flags.string({ hidden: true }),
+    skipInstall: flags.boolean({ hidden: true }),
   }
 
   static args = []
@@ -47,14 +48,12 @@ export default class Buefy extends Command {
         break
       default: throw new Error(customErrorMessage)
     }
-
-    // exit with status code
-    // this.exit(1)
   }
 
   async run() {
     const { flags } = this.parse(Buefy)
     const projectName = flags.forceProject
+    const skipInstallStep = flags.skipInstall === true
     const hasProjectName = projectName !== undefined
     const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : ''
 
@@ -68,8 +67,8 @@ export default class Buefy extends Command {
         })
       )
     } else if (hasProjectName) {
-      const x = await exec(`cd ${projectName} && pwd`, { silent: true })
-      projectRoot = x.trim();
+      const dir = await exec(`cd ${projectName} && pwd`, { silent: true })
+      projectRoot = dir.trim();
     }
 
     const folderList = TEMPLATE_FOLDERS
@@ -82,19 +81,21 @@ export default class Buefy extends Command {
     const files: Array<string | Files> = config.manifest.files
     const dependencies = config.manifest.packages.dependencies.toString().split(',').join(' ')
 
-    try {
-      // install dependencies
-      cli.action.start(`${CLI_STATE.Info} installing buefy dependencies`)
-      const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true })
-      cli.action.stop()
+    if (skipInstallStep === false) {
+      try {
+        // install dependencies
+        cli.action.start(`${CLI_STATE.Info} installing buefy dependencies`)
+        const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true })
+        cli.action.stop()
 
-    } catch (error) {
-      throw new Error(
-        JSON.stringify({
-          code: 'dependency-install-error',
-          message: `${this.id?.split(':')[1]} buefy dependencies failed to install`,
-        })
-      )
+      } catch (error) {
+        throw new Error(
+          JSON.stringify({
+            code: 'dependency-install-error',
+            message: `${this.id?.split(':')[1]} buefy dependencies failed to install`,
+          })
+        )
+      }
     }
 
     sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
