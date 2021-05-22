@@ -116,6 +116,8 @@ export default class Vuetify extends Command {
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.vueOptions, null, 1), DYNAMIC_OBJECTS.Options, true);
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.modules, null, 1), DYNAMIC_OBJECTS.Modules, true);
 
-    this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
+    if (skipInstallStep === false) {
+      this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
+    }
   }
 }
