@@ -1,6 +1,6 @@
 import {expect, test} from '@oclif/test'
-import { CLI_COMMANDS } from '../../src/lib/constants'
-import { exec } from 'child_process'
+import {CLI_COMMANDS} from '../../src/lib/constants'
+import {exec} from 'child_process'
 
 const testProjectName = 'rdv-plugin-buefy-test'
 
@@ -23,10 +23,11 @@ describe(CLI_COMMANDS.PluginBuefy, () => {
   })
 
   after(() => {
-    exec(`rm -r ${testProjectName}`, (error) => {
-       if(error) {
-         console.log(`error: ${error.message}`);
-       }
+    exec(`rm -r ${testProjectName}`, error => {
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.log(`error: ${error.message}`)
+      }
     })
- })
+  })
 })
