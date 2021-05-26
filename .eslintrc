@@ -2,14 +2,5 @@
   "extends": [
     "oclif",
     "oclif-typescript"
-  ],
-  "rules": {
-    "quotes": [
-      "error",
-      "single",
-      {
-        "allowTemplateLiterals": true
-      }
-    ]
-  }
+  ]
 }
