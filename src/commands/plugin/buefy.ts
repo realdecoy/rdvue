@@ -9,7 +9,7 @@ import {Files} from '../../modules'
 import {copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports} from '../../lib/files'
 import {checkProjectValidity, isJsonString} from '../../lib/utilities'
 import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
-import {injectLinesIntoMain} from '../../lib/plugins'
+import {injectImportsIntoMain} from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['buefy']
 export default class Buefy extends Command {
@@ -102,8 +102,9 @@ export default class Buefy extends Command {
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes)
     updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss')
     updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts')
-    if (config.manifest[DYNAMIC_OBJECTS.Modules]) {
-      injectLinesIntoMain(projectRoot, config.manifest[DYNAMIC_OBJECTS.Modules])
+    if (config.manifest.main) {
+      const {imports: mainImports} = config.manifest.main
+      injectImportsIntoMain(projectRoot, mainImports)
     }
 
     this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)
