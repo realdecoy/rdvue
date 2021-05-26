@@ -329,7 +329,7 @@ function isRootDirectory(location: string | null = null): boolean {
         isRoot = true
       }
     }
-  } catch (e) {
+  } catch (error) {
     // tslint:disable-next-line:no-console
     throw new Error('Error checking root directory')
   }
@@ -467,7 +467,11 @@ function parseDynamicObjects(
 }
 
 /**
- * Injects the content into the targetted file.
+ * Injects the content into the targetted file. You can control where the
+ * the content is injected by specifying the index in the options argument.
+ * You can also use a method to dynamically determine the index. If the index
+ * is not defined, this method will inject the content at the start of the file.
+ *
  * @param {string} targetPath full path to the file you are injecting into
  * @param {string} content The content to inject
  * @param {InjectOptions?} options see InjectOptions type
@@ -477,12 +481,15 @@ function inject(targetPath: string, content: string, options?: InjectOptions): v
   let index = options?.index ?? 0
 
   let targetContent = fs.readFileSync(targetPath, {encoding})
-  const lines = targetContent.split(/\r?\n/g).reverse()
+  const lines = targetContent.split(/\r?\n/g)
+
   if (typeof index === 'function') {
-    index = index(lines)
+    index = index(lines.slice())
   }
-  lines[index] += content
-  targetContent = lines.reverse().join('\n')
+
+  lines.splice(index, 0, content)
+  targetContent = lines.join('\n')
+
   fs.writeFileSync(targetPath, targetContent, {encoding})
 }
 

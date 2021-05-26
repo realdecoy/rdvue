@@ -6,9 +6,10 @@ import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
 import {Files} from '../../modules'
-import {copyFiles, inject, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports} from '../../lib/files'
+import {copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports} from '../../lib/files'
 import {checkProjectValidity, isJsonString} from '../../lib/utilities'
 import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
+import {injectLinesIntoMain} from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['buefy']
 export default class Buefy extends Command {
@@ -79,7 +80,6 @@ export default class Buefy extends Command {
     const config = configs[0]
     const files: Array<string | Files> = config.manifest.files
     const dependencies = config.manifest.packages.dependencies.toString().split(',').join(' ')
-
     try {
       // install dependencies
       cli.action.start(`${CLI_STATE.Info} installing buefy dependencies`)
@@ -102,14 +102,8 @@ export default class Buefy extends Command {
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes)
     updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss')
     updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts')
-
-    if (config.manifest.mainContents) {
-      const ext = 'ts'
-      const mainPath = path.join(projectRoot, 'src', `main.${ext}`)
-      const contents = Array.isArray(config.manifest.mainContents) ? config.manifest.mainContents.join('') : config.manifest.mainContents
-      inject(mainPath, contents, {
-        index: lines => lines.findIndex(line => line.startsWith('import')),
-      })
+    if (config.manifest[DYNAMIC_OBJECTS.Modules]) {
+      injectLinesIntoMain(projectRoot, config.manifest[DYNAMIC_OBJECTS.Modules])
     }
 
     this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)

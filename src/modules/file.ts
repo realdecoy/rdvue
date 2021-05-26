@@ -10,6 +10,12 @@ export interface FilesContent {
 }
 
 export type InjectOptions = {
-  index?: (lines: string[]) => number | number;
+  index?: number | ((lines: string[]) => number);
   encoding?: string;
+}
+
+export type ModuleConfig = {
+  name: string;
+  moduleTemplatePath: string;
+  manifest: any;
 }
