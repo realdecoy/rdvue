@@ -1,6 +1,6 @@
 import * as inquirer from 'inquirer'
 import { Lookup } from '../modules'
-import { CLI_STATE, TEMPLATE_VERSION, PLUGIN_PRESET_LIST } from './constants'
+import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants'
 import { getProjectRoot } from './files'
 
 /**
@@ -229,7 +229,7 @@ async function parseVersionName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
-      default: TEMPLATE_VERSION,
+      default: TEMPLATE_TAG,
       message: 'Enter a version: ',
       type: 'input',
       validate: validateVersionName,

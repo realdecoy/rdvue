@@ -12,6 +12,8 @@ import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
 import {injectImportsIntoMain, injectModulesIntoMain} from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['vuetify']
+const TEMPLATE_MIN_VERSION_SUPPORTED = 2
+
 export default class Vuetify extends Command {
   static description = 'lightweigth UI components for Vuejs'
 
@@ -115,7 +117,8 @@ export default class Vuetify extends Command {
     await copyFiles(sourceDirectory, installDirectory, files)
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.vueOptions, null, 1), DYNAMIC_OBJECTS.Options, true);
-    if (config.manifest.main) {
+    
+    if (config.manifest.version >= TEMPLATE_MIN_VERSION_SUPPORTED) {
       const {imports: mainImports, modules: mainModules} = config.manifest.main
       injectImportsIntoMain(projectRoot, mainImports)
       try {
