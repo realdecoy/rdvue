@@ -1,14 +1,15 @@
 import shell from 'shelljs'
 import cli from 'cli-ux'
-const util = require('util');
-const exec = util.promisify(shell.exec);
-import { Command, flags } from '@oclif/command'
+const util = require('util')
+const exec = util.promisify(shell.exec)
+import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
-import { Files } from '../../modules'
-import { copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports } from '../../lib/files'
-import { checkProjectValidity, isJsonString } from '../../lib/utilities'
-import { CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS } from '../../lib/constants'
+import {Files} from '../../modules'
+import {copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports} from '../../lib/files'
+import {checkProjectValidity, isJsonString} from '../../lib/utilities'
+import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
+import {injectImportsIntoMain} from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['buefy']
 export default class Buefy extends Command {
@@ -38,26 +39,29 @@ export default class Buefy extends Command {
 
     // handle errors thrown with known error codes
     switch (customErrorCode) {
-      case 'project-invalid': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-        break
-      case 'missing-template-file': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-        break
-      case 'missing-template-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-        break
-      case 'dependency-install-error': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
-        break
-      default: throw new Error(customErrorMessage)
+    case 'project-invalid': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'missing-template-file': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'missing-template-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    case 'dependency-install-error': this.log(`${CLI_STATE.Error} ${customErrorMessage}`)
+      break
+    default: throw new Error(customErrorMessage)
     }
   }
 
   async run() {
-    const { flags } = this.parse(Buefy)
+    const {flags} = this.parse(Buefy)
     const projectName = flags.forceProject
     const skipInstallStep = flags.skipInstall === true
     const hasProjectName = projectName !== undefined
     const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : ''
 
-    let { isValid: isValidProject, projectRoot } = checkProjectValidity()
+    const projectValidity = checkProjectValidity()
+    const {isValid: isValidProject} = projectValidity
+    let {projectRoot} = projectValidity
+
     // block command unless being run within an rdvue project
     if (isValidProject === false && !hasProjectName) {
       throw new Error(
@@ -72,8 +76,6 @@ export default class Buefy extends Command {
     }
 
     const folderList = TEMPLATE_FOLDERS
-    let sourceDirectory: string
-    let installDirectory: string
 
     // parse config files required for scaffolding this module
     const configs = parseModuleConfig(folderList, projectRoot)
@@ -98,14 +100,18 @@ export default class Buefy extends Command {
       }
     }
 
-    sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
-    installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory)
+    const sourceDirectory: string = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
+    const installDirectory: string = path.join(projectRoot, 'src', config.manifest.installDirectory)
 
     // copy and update files for plugin being added
     await copyFiles(sourceDirectory, installDirectory, files)
-    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
-    updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss');
-    updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts');
+    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes)
+    updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss')
+    updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts')
+    if (config.manifest.main) {
+      const {imports: mainImports} = config.manifest.main
+      injectImportsIntoMain(projectRoot, mainImports)
+    }
 
     if (skipInstallStep === false) {
       this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)

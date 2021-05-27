@@ -1,14 +1,15 @@
 import shell from 'shelljs'
 import cli from 'cli-ux'
-const util = require('util');
-const exec = util.promisify(shell.exec);
-import { Command, flags } from '@oclif/command'
+const util = require('util')
+const exec = util.promisify(shell.exec)
+import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
-import { Files } from '../../modules'
-import { copyFiles, parseDynamicObjects, parseModuleConfig } from '../../lib/files'
-import { checkProjectValidity, isJsonString } from '../../lib/utilities'
-import { CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS } from '../../lib/constants'
+import {Files} from '../../modules'
+import {copyFiles, parseDynamicObjects, parseModuleConfig} from '../../lib/files'
+import {checkProjectValidity, isJsonString} from '../../lib/utilities'
+import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
+import {injectImportsIntoMain, injectModulesIntoMain} from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['vuetify']
 export default class Vuetify extends Command {
@@ -114,7 +115,19 @@ export default class Vuetify extends Command {
     await copyFiles(sourceDirectory, installDirectory, files)
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.vueOptions, null, 1), DYNAMIC_OBJECTS.Options, true);
-    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.modules, null, 1), DYNAMIC_OBJECTS.Modules, true);
+    if (config.manifest.main) {
+      const {imports: mainImports, modules: mainModules} = config.manifest.main
+      injectImportsIntoMain(projectRoot, mainImports)
+      try {
+        injectModulesIntoMain(projectRoot, mainModules)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      }
+    } else {
+      // FP-414: backwards compatibility
+      await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.modules, null, 1), DYNAMIC_OBJECTS.Modules, true)
+    }
 
     if (skipInstallStep === false) {
       this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`)

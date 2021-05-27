@@ -29,8 +29,9 @@ export const enum CLI_COMMANDS {
 export const PLUGIN_PRESET_LIST = [
   'buefy & localization (recommended)',
   'vuetify & localization',
-  'skip presets'
-];
+  'skip presets',
+]
+
 export const TEMPLATE_REPLACEMENT_FILES = [
   'package.json',
   '.rdvue/.rdvue',
