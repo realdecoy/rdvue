@@ -12,6 +12,8 @@ import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants'
 import {injectImportsIntoMain} from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['buefy']
+const TEMPLATE_MIN_VERSION_SUPPORTED = 2
+
 export default class Buefy extends Command {
   static description = 'lightweigth UI components for Vuejs'
 
@@ -108,7 +110,7 @@ export default class Buefy extends Command {
     await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes)
     updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss')
     updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts')
-    if (config.manifest.main) {
+    if (config.manifest.version >= TEMPLATE_MIN_VERSION_SUPPORTED) {
       const {imports: mainImports} = config.manifest.main
       injectImportsIntoMain(projectRoot, mainImports)
     }

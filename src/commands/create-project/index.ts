@@ -8,7 +8,7 @@ import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, pars
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files'
 import {
   TEMPLATE_REPO,
-  TEMPLATE_VERSION,
+  TEMPLATE_TAG,
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
   CLI_STATE,
@@ -59,7 +59,7 @@ export default class CreateProject extends Command {
   async run() {
     const { args } = this.parse(CreateProject)
     const template: string = TEMPLATE_REPO
-    const tag: string = TEMPLATE_VERSION
+    const tag: string = TEMPLATE_TAG
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES
     let projectName: string
