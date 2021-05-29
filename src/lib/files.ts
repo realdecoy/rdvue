@@ -61,7 +61,7 @@ function readConfigFile(filePath: string): any {
     throw new Error(
       JSON.stringify({
         code: 'missing-template-file',
-        message: `template file not found, run ${chalk.whiteBright('npx rdvue repair')} to continue`,
+        message: `template file not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
       })
     )
   }
@@ -402,7 +402,7 @@ function verifyTemplateFolderExists(folderPath: string) {
     throw new Error(
       JSON.stringify({
         code: 'missing-template-folder',
-        message: `template folder not found, run ${chalk.whiteBright('npx rdvue repair')} to continue`,
+        message: `template folder not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
       })
     )
   }
