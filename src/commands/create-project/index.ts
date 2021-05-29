@@ -110,8 +110,8 @@ export default class CreateProject extends Command {
       await Vuetify.run(['--forceProject', projectName, '--skipInstall'])
       await Localization.run(['--forceProject', projectName, '--skipInstall'])
     }
-    // initialize a git folder in the created project
-    await shell.exec(`cd ${projectName} && git init`, { silent: true })
+    // initialize git in the created project
+    await shell.exec(`cd ${projectName} && git init && git add . && git commit -m "Setup: first commit" && git branch -M main`, { silent: true })
 
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`)
 
