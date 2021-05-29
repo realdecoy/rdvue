@@ -2,10 +2,8 @@ import shell from 'shelljs'
 import {Command, flags} from '@oclif/command'
 import path from 'path'
 import chalk from 'chalk'
-import {Files} from '../../modules'
-import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceInFiles, replaceTargetFileNames} from '../../lib/files'
-import {checkProjectValidity, parseVersionName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import {CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT} from '../../lib/constants'
+import {checkProjectValidity, parseVersionName, isJsonString} from '../../lib/utilities'
+import {CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['component']
 export default class Upgrade extends Command {
@@ -60,7 +58,7 @@ export default class Upgrade extends Command {
     const template: string = TEMPLATE_REPO
 
     // // retrieve component name
-    const versionName = await parseVersionName(args)
+    const versionName = args.name ?? TEMPLATE_TAG
     const temporaryProjectFolder = path.join(projectRoot, 'node_modules', '_temp');
     const templateSourcePath = path.join(temporaryProjectFolder, TEMPLATE_ROOT);
     const templateDestinationPath = path.join(projectRoot, '.rdvue');
