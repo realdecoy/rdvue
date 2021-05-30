@@ -1,43 +1,43 @@
-import {Command, flags} from '@oclif/command';
+import { Command, flags } from '@oclif/command';
 import chalk from 'chalk';
 
 export default class Add extends Command {
   static description = 'add a new module'
 
   static flags = {
-    help: flags.help({name: 'help', char: 'h', hidden: false}),
+    help: flags.help({ name: 'help', char: 'h', hidden: false }),
   }
 
   static args = [
-    {name: 'component', description: 'component module', hidden: false},
-    {name: 'page', description: 'page module', hidden: false},
-    {name: 'service', description: 'service module', hidden: false},
-    {name: 'store', description: 'store module', hidden: false},
+    { name: 'component', description: 'component module', hidden: false },
+    { name: 'page', description: 'page module', hidden: false },
+    { name: 'service', description: 'service module', hidden: false },
+    { name: 'store', description: 'store module', hidden: false },
   ]
 
-  showHelp () {
+  showHelp(): void {
     const commandId = Add.id;
     const commandArgs = Add.args;
     const commandFlags = Object.values(Add.flags);
 
     // parse argument config list
     const argsList = commandArgs
-      .filter((arg) => !arg.hidden)
-      .map((arg) => {
+      .filter(arg => !arg.hidden)
+      .map(arg => {
         const maxSpaces = 15;
         const numOfSpaces = maxSpaces - arg.name.length;
 
-        return `\n\t    ${arg.name}${Array(numOfSpaces + 1).join(' ')}- ${arg.description}`;
+        return `\n\t    ${arg.name}${new Array(numOfSpaces + 1).join(' ')}- ${arg.description}`;
       });
 
     // parse option config list
     const optionList = commandFlags
-      .filter((flag) => !flag.hidden)
-      .map((flag) => {
+      .filter(flag => !flag.hidden)
+      .map(flag => {
         const maxSpaces = 8;
         const numOfSpaces = maxSpaces - flag.name.length;
 
-        return `\n\t    --${flag.name} | -${flag.char}${Array(numOfSpaces + 1).join(' ')}- ${flag.description}`;
+        return `\n\t    --${flag.name} | -${flag.char}${new Array(numOfSpaces + 1).join(' ')}- ${flag.description}`;
       });
 
     this.log(`
@@ -50,7 +50,8 @@ export default class Add extends Command {
     `);
   }
 
-  async run () {
+  // eslint-disable-next-line require-await
+  async run(): Promise<void> {
     this.showHelp();
   }
 }

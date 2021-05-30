@@ -1,7 +1,7 @@
 /* global after */
-import {expect, test} from '@oclif/test';
-import {CLI_COMMANDS} from '../../src/lib/constants';
-import {exec} from 'child_process';
+import { expect, test } from '@oclif/test';
+import { CLI_COMMANDS } from '../../src/lib/constants';
+import { exec } from 'child_process';
 
 const testProjectName = 'rdv-component-test';
 const testComponentName = 'hello-world';
@@ -35,6 +35,7 @@ describe(CLI_COMMANDS.AddComponent, () => {
   after(() => {
     exec(`rm -r ${testProjectName}`, error => {
       if (error) {
+        // eslint-disable-next-line no-console
         console.log(`error: ${error.message}`);
       }
     });

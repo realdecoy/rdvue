@@ -1,4 +1,5 @@
-import {expect, test} from '@oclif/test';
+/* global after */
+import { expect, test } from '@oclif/test';
 import { CLI_COMMANDS } from '../../src/lib/constants';
 import { exec } from 'child_process';
 
@@ -31,10 +32,10 @@ describe(CLI_COMMANDS.AddService, () => {
       expect(ctx.stdout).to.contain(`Error: command ${CLI_COMMANDS.AddService} not found`);
     });
 
-
   after(() => {
-    exec(`rm -r ${testProjectName}`, (error) => {
-      if(error) {
+    exec(`rm -r ${testProjectName}`, error => {
+      if (error) {
+        // eslint-disable-next-line no-console
         console.log(`error: ${error.message}`);
       }
     });

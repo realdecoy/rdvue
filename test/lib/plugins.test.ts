@@ -1,9 +1,8 @@
-
 /* global beforeEach, afterEach */
 import sinon from 'sinon';
 import fs from 'fs';
-import {injectImportsIntoMain, injectModulesIntoMain} from '../../src/lib/plugins';
-import {expect} from 'chai';
+import { injectImportsIntoMain, injectModulesIntoMain } from '../../src/lib/plugins';
+import { expect } from 'chai';
 
 describe('lib/plugins.injectImportsIntoMain', () => {
   const line1 = 'import \'@/theme/_all.scss\';';

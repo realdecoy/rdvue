@@ -2,14 +2,14 @@ import shell from 'shelljs';
 import cli from 'cli-ux';
 const util = require('util');
 const exec = util.promisify(shell.exec);
-import {Command, flags} from '@oclif/command';
+import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
-import {Files} from '../../modules';
-import {copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports} from '../../lib/files';
-import {checkProjectValidity, isJsonString} from '../../lib/utilities';
-import {CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS} from '../../lib/constants';
-import {injectImportsIntoMain} from '../../lib/plugins';
+import { Files } from '../../modules';
+import { copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports } from '../../lib/files';
+import { checkProjectValidity, isJsonString } from '../../lib/utilities';
+import { CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS } from '../../lib/constants';
+import { injectImportsIntoMain } from '../../lib/plugins';
 
 const TEMPLATE_FOLDERS = ['buefy'];
 const TEMPLATE_MIN_VERSION_SUPPORTED = 2;
@@ -26,7 +26,8 @@ export default class Buefy extends Command {
   static args = []
 
   // override Command class error handler
-  async catch (error: Error) {
+  // eslint-disable-next-line require-await
+  async catch(error: Error): Promise<any> {
     const errorMessage = error.message;
     const isValidJSON = isJsonString(errorMessage);
     const parsedError = isValidJSON ? JSON.parse(errorMessage) : {};
@@ -53,16 +54,16 @@ export default class Buefy extends Command {
     }
   }
 
-  async run () {
-    const {flags} = this.parse(Buefy);
+  async run(): Promise<void> {
+    const { flags } = this.parse(Buefy);
     const projectName = flags.forceProject;
     const skipInstallStep = flags.skipInstall === true;
     const hasProjectName = projectName !== undefined;
     const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : '';
 
     const projectValidity = checkProjectValidity();
-    const {isValid: isValidProject} = projectValidity;
-    let {projectRoot} = projectValidity;
+    const { isValid: isValidProject } = projectValidity;
+    let { projectRoot } = projectValidity;
 
     // block command unless being run within an rdvue project
     if (isValidProject === false && !hasProjectName) {
@@ -70,7 +71,7 @@ export default class Buefy extends Command {
         JSON.stringify({
           code: 'project-invalid',
           message: `${CLI_COMMANDS.PluginBuefy} command must be run in an existing ${chalk.yellow('rdvue')} project`,
-        })
+        }),
       );
     } else if (hasProjectName) {
       const dir = path.join(process.cwd(), projectName ?? '');
@@ -93,13 +94,12 @@ export default class Buefy extends Command {
         cli.action.start(`${CLI_STATE.Info} installing buefy dependencies`);
         await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true });
         cli.action.stop();
-
       } catch (error) {
         throw new Error(
           JSON.stringify({
             code: 'dependency-install-error',
             message: `${this.id?.split(':')[1]} buefy dependencies failed to install`,
-          })
+          }),
         );
       }
     } else {
@@ -117,7 +117,7 @@ export default class Buefy extends Command {
     updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss');
     updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts');
     if (config.manifest.version >= TEMPLATE_MIN_VERSION_SUPPORTED) {
-      const {imports: mainImports} = config.manifest.main;
+      const { imports: mainImports } = config.manifest.main;
       injectImportsIntoMain(projectRoot, mainImports);
     }
 

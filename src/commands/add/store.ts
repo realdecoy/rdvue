@@ -1,9 +1,9 @@
-import {Command, flags} from '@oclif/command';
+import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
-import {Files} from '../../modules';
-import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files';
-import {checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities';
+import { Files } from '../../modules';
+import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from '../../lib/files';
+import { checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, isJsonString } from '../../lib/utilities';
 import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 
 const TEMPLATE_FOLDERS = ['store'];
@@ -11,15 +11,16 @@ export default class StoreModule extends Command {
   static description = 'add a new Store module.'
 
   static flags = {
-    help: flags.help({char: 'h'}),
+    help: flags.help({ char: 'h' }),
   }
 
   static args = [
-    {name: 'name', description: 'name of new store module'},
+    { name: 'name', description: 'name of new store module' },
   ]
 
   // override Command class error handler
-  async catch (error: Error) {
+  // eslint-disable-next-line require-await
+  async catch(error: Error): Promise<any> {
     const errorMessage = error.message;
     const isValidJSON = isJsonString(errorMessage);
     const parsedError = isValidJSON ? JSON.parse(errorMessage) : {};
@@ -49,8 +50,8 @@ export default class StoreModule extends Command {
     // this.exit(1)
   }
 
-  async run () {
-    const {isValid: isValidProject, projectRoot} = checkProjectValidity();
+  async run(): Promise<void> {
+    const { isValid: isValidProject, projectRoot } = checkProjectValidity();
 
     // block command unless being run within an rdvue project
     if (isValidProject === false) {
@@ -58,18 +59,18 @@ export default class StoreModule extends Command {
         JSON.stringify({
           code: 'project-invalid',
           message: `${CLI_COMMANDS.AddStore} command must be run in an existing ${chalk.yellow('rdvue')} project`,
-        })
+        }),
       );
     }
 
-    const {args} = this.parse(StoreModule);
+    const { args } = this.parse(StoreModule);
     const folderList = TEMPLATE_FOLDERS;
     let sourceDirectory: string;
     let installDirectory: string;
 
     // parse config files required for scaffolding this module
     const configs = parseModuleConfig(folderList, projectRoot);
-    
+
     // retrieve storeModule name
     const storeModuleName = await parseStoreModuleName(args);
     // parse kebab and pascal case of storeModuleName

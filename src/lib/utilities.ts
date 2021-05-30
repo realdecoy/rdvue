@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import * as inquirer from 'inquirer';
 import { Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
@@ -5,23 +6,25 @@ import { getProjectRoot } from './files';
 
 /**
  * Description: determine if string is valid JSON string
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {boolean} -
  */
-function isJsonString (value: string) {
+function isJsonString(value: string): boolean {
   try {
     JSON.parse(value);
   } catch (error) {
     return false;
   }
-  
+
   return true;
 }
 
 /**
  * Description: check if string has a substring 'kebab' in it
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {boolean} -
  */
-function hasKebab (value = ''): boolean {
+function hasKebab(value = ''): boolean {
   let result = false;
   if (value.match(/kebab/gi) !== null) {
     result = true;
@@ -32,9 +35,10 @@ function hasKebab (value = ''): boolean {
 
 /**
  * Description: convert a string to kebab case (e.g. my-project-name)
- * @param value - a string value
+ * @param {string} value - a
+ * @returns {string} - string value
  */
-function toKebabCase (value: string): string {
+function toKebabCase(value: string): string {
   return value &&
     (value.match(/[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g) ?? [''])
       .map(x => x.toLowerCase())
@@ -43,9 +47,10 @@ function toKebabCase (value: string): string {
 
 /**
  * Description: convert a string to kebab case (e.g. my-project-name)
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {string} -
  */
-function toPascalCase (value: string): string {
+function toPascalCase(value: string): string {
   return value
     .split(/[-_ ]+/)
     .join(' ')
@@ -56,9 +61,10 @@ function toPascalCase (value: string): string {
 
 /**
  * Description: determine if string is valid project name
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {any} -
  */
-function validateProjectName (value: any) {
+function validateProjectName(value: any) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -77,9 +83,10 @@ function validateProjectName (value: any) {
 
 /**
  * Description: determine if string is valid component name
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {any} -
  */
-function validateComponentName (value: any) {
+function validateComponentName(value: any) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -98,9 +105,10 @@ function validateComponentName (value: any) {
 
 /**
  * Description: determine if string is valid version name
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {any} -
  */
-function validateVersionName (value: any) {
+function validateVersionName(value: any) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -119,9 +127,10 @@ function validateVersionName (value: any) {
 
 /**
  * Description: determine if string is valid page name
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {any} -
  */
-function validatePageName (value: any) {
+function validatePageName(value: any) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -140,9 +149,10 @@ function validatePageName (value: any) {
 
 /**
  * Description: determine if string is valid service name
- * @param value - a string value
+ * @param {string} value - a string value
+ * @returns {any} -
  */
-function validateServiceName (value: any) {
+function validateServiceName(value: any) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -161,9 +171,10 @@ function validateServiceName (value: any) {
 
 /**
  * Description: determine if string is valid store module name
- * @param value - a string value
+ * @param {string | null} value - a string value
+ * @returns {any} -
  */
-function validateStoreModuleName (value: any) {
+function validateStoreModuleName(value: any) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -182,9 +193,10 @@ function validateStoreModuleName (value: any) {
 
 /**
  * Description: parse project or prompt user to provide name for project
- * @param value - a string value
+ * @param {Lookup} args - a string value
+ * @returns {string} -
  */
-async function parseComponentName (args: Lookup): Promise<string> {
+async function parseComponentName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -197,15 +209,16 @@ async function parseComponentName (args: Lookup): Promise<string> {
     }]);
     argName = responses.name;
   }
-  
+
   return argName;
 }
 
 /**
  * Description: parse project or prompt user to provide name for project
- * @param value - a string value
+ * @param {string} args - a string value
+ * @returns {Lookup} -
  */
-async function parseProjectName (args: Lookup): Promise<string> {
+async function parseProjectName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no project name is provided in command then prompt user
   if (!argName) {
@@ -218,15 +231,16 @@ async function parseProjectName (args: Lookup): Promise<string> {
     }]);
     argName = responses.name;
   }
-  
+
   return argName;
 }
 
 /**
  * Description: parse project or prompt user to provide name for template version
- * @param value - a string value
+ * @param {Lookup} args - a string value
+ * @returns {string} -
  */
-async function parseVersionName (args: Lookup): Promise<string> {
+async function parseVersionName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -239,15 +253,16 @@ async function parseVersionName (args: Lookup): Promise<string> {
     }]);
     argName = responses.name;
   }
-  
+
   return argName;
 }
 
 /**
  * Description: parse project or prompt user to provide name for project
- * @param value - a string value
+ * @param {Lookup} args - a string value
+ * @returns {string} -
  */
-async function parseProjectPresets (args: Lookup): Promise<string> {
+async function parseProjectPresets(args: Lookup): Promise<string> {
   let argName = args.preset;
   // if no project name is provided in command then prompt user
   if (!argName) {
@@ -260,15 +275,16 @@ async function parseProjectPresets (args: Lookup): Promise<string> {
     }]);
     argName = responses.preset;
   }
-  
+
   return argName;
 }
 
 /**
  * Description: parse project or prompt user to provide name for project
- * @param value - a string value
+ * @param {Lookup} args - a string value
+ * @returns {string} -
  */
-async function parsePageName (args: Lookup): Promise<string> {
+async function parsePageName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -281,15 +297,16 @@ async function parsePageName (args: Lookup): Promise<string> {
     }]);
     argName = responses.name;
   }
-  
+
   return argName;
 }
 
 /**
  * Description: parse project or prompt user to provide name for project
- * @param value - a string value
+ * @param {Lookup} args - a string value
+ * @returns {string} -
  */
-async function parseServiceName (args: Lookup): Promise<string> {
+async function parseServiceName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -302,15 +319,16 @@ async function parseServiceName (args: Lookup): Promise<string> {
     }]);
     argName = responses.name;
   }
-  
+
   return argName;
 }
 
 /**
  * Description: parse project or prompt user to provide name for project
- * @param value - a string value
+ * @param {Lookup} args - a string value
+ * @returns {string} -
  */
-async function parseStoreModuleName (args: Lookup): Promise<string> {
+async function parseStoreModuleName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -323,14 +341,15 @@ async function parseStoreModuleName (args: Lookup): Promise<string> {
     }]);
     argName = responses.name;
   }
-  
+
   return argName;
 }
 
 /**
  * Description: determine if command is ran within a valid rdvue project
+ * @returns {any} -
  */
-function checkProjectValidity () {
+function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
   const results = {
     isValid: false,
     projectRoot: '',

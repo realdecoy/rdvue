@@ -12,7 +12,7 @@ import {
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
   CLI_STATE,
-  PLUGIN_PRESET_LIST
+  PLUGIN_PRESET_LIST,
 } from '../../lib/constants';
 
 export default class CreateProject extends Command {
@@ -28,7 +28,8 @@ export default class CreateProject extends Command {
   ]
 
   // override Command class error handler
-  async catch (error: Error) {
+  // eslint-disable-next-line require-await
+  async catch(error: Error): Promise<any> {
     const errorMessage = error.message;
     const isValidJSON = isJsonString(errorMessage);
     const parsedError = isValidJSON ? JSON.parse(errorMessage) : {};
@@ -56,7 +57,7 @@ export default class CreateProject extends Command {
     // this.exit(1)
   }
 
-  async run () {
+  async run(): Promise<void> {
     const { args } = this.parse(CreateProject);
     const template: string = TEMPLATE_REPO;
     const tag: string = TEMPLATE_TAG;
@@ -71,7 +72,7 @@ export default class CreateProject extends Command {
         JSON.stringify({
           code: 'existing-project',
           message: `you are already in an existing ${chalk.yellow('rdvue')} project`,
-        })
+        }),
       );
     }
 
@@ -100,8 +101,8 @@ export default class CreateProject extends Command {
       throw new Error(
         JSON.stringify({
           code: 'file-not-changed',
-          message: `updating your project failed`,
-        })
+          message: 'updating your project failed',
+        }),
       );
     } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 0)) { // buefy & localization
       await Buefy.run(['--forceProject', projectName, '--skipInstall']);

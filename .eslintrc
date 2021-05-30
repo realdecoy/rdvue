@@ -67,7 +67,7 @@
 		"prefer-template": 2,
 		"radix": 2,
 		"no-else-return": 2,
-		"object-curly-spacing": 2,
+		"object-curly-spacing": ["error", "always"],
 		"space-before-function-paren": 2,
 		"space-within-parens": 0,
 		"no-eq-null": 2,

@@ -1,8 +1,8 @@
 /* global beforeEach, afterEach */
 import sinon from 'sinon';
 import fs from 'fs';
-import {inject} from '../../src/lib/files';
-import {expect} from 'chai';
+import { inject } from '../../src/lib/files';
+import { expect } from 'chai';
 
 describe('lib/files.inject', () => {
   const content = 'import foo from \'bar\'';
@@ -32,7 +32,7 @@ describe('lib/files.inject', () => {
 
     inject(targetPath, content, options);
 
-    expect(readFileSyncStub.getCall(0).args[1]).to.include({encoding: options.encoding});
+    expect(readFileSyncStub.getCall(0).args[1]).to.include({ encoding: options.encoding });
   });
 
   it('options - alternative numeric index', () => {

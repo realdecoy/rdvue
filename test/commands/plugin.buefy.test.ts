@@ -1,6 +1,7 @@
-import {expect, test} from '@oclif/test';
-import {CLI_COMMANDS} from '../../src/lib/constants';
-import {exec} from 'child_process';
+/* global after */
+import { expect, test } from '@oclif/test';
+import { CLI_COMMANDS } from '../../src/lib/constants';
+import { exec } from 'child_process';
 
 const testProjectName = 'rdv-plugin-buefy-test';
 
