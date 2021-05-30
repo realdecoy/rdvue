@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import {Files} from '../../modules'
 import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files'
 import {checkProjectValidity, parsePageName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import { CLI_COMMANDS, CLI_STATE } from '../../lib/constants'
+import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['page']
 export default class Page extends Command {
@@ -87,6 +87,7 @@ export default class Page extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, pageNameKebab, pageNamePascal)
     })
 
-    this.log(`${CLI_STATE.Success} new page module added: ${pageNameKebab}`)
+    this.log(`${CLI_STATE.Success} page added: ${pageNameKebab}`)
+    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.blueBright(DOCUMENTATION_LINKS.Page)}\n`)
   }
 }

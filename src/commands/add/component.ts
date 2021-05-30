@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import {Files} from '../../modules'
 import {copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames} from '../../lib/files'
 import {checkProjectValidity, parseComponentName, toKebabCase, toPascalCase, isJsonString} from '../../lib/utilities'
-import {CLI_COMMANDS, CLI_STATE} from '../../lib/constants'
+import {CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS} from '../../lib/constants'
 
 const TEMPLATE_FOLDERS = ['component']
 export default class Component extends Command {
@@ -86,6 +86,7 @@ export default class Component extends Command {
       await readAndUpdateFeatureFiles(installDirectory, files, componentNameKebab, componentNamePascal)
     })
 
-    this.log(`${CLI_STATE.Success} new component module added: ${componentNameKebab}`)
+    this.log(`${CLI_STATE.Success} component added: ${componentNameKebab}`)
+    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.blueBright(DOCUMENTATION_LINKS.Component)}\n`)
   }
 }
