@@ -1,0 +1,23 @@
+name: Lint
+#executes lint checks on PRs to the main branch
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v1
+
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      
+      - name: npm install
+        run: npm install
+
+      - name: run lint checks
+        run: npm run lint
