@@ -70,7 +70,7 @@ export default class Localization extends Command {
         })
       )
     } else if (hasProjectName) {
-      const dir = await exec(`cd ${projectName} && pwd`, { silent: true })
+      const dir = path.join(process.cwd(), projectName ?? '');
       projectRoot = dir.trim();
     }
 
