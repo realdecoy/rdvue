@@ -89,7 +89,6 @@ The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributio
 ## Development
 
 ```bash
-git checkout rdvue-rebuild
 npm install
 npm link
 ```
@@ -100,11 +99,7 @@ npm link
 
 ## Testing
 
-&nbsp;
-&nbsp;
-&nbsp;
-
-### Run Test Suite
+### Run Unit Test Suite
 ```bash
 npm run test
 ```
