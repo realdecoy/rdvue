@@ -27,6 +27,14 @@ export const enum CLI_COMMANDS {
   PoorHelpCommand = 'add -help'
 }
 
+export const enum DOCUMENTATION_LINKS {
+  Rdvue = 'https://realdecoy.github.io/rdvue/#/',
+  Component = 'https://realdecoy.github.io/rdvue/#/Components',
+  Page = 'https://realdecoy.github.io/rdvue/#/Pages',
+  Service = 'https://realdecoy.github.io/rdvue/#/Services',
+  Store = 'https://realdecoy.github.io/rdvue/#/Stores',
+}
+
 export const PLUGIN_PRESET_LIST = [
   'Buefy & Localization (recommended)',
   'Vuetify & Localization',
