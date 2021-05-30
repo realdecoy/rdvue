@@ -89,7 +89,7 @@ export default class Buefy extends Command {
       try {
         // install dependencies
         cli.action.start(`${CLI_STATE.Info} installing buefy dependencies`)
-        const { stdout: depStdout, stderr: depStderr, code: depCode } = await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true })
+        await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true })
         cli.action.stop()
 
       } catch (error) {
@@ -100,6 +100,10 @@ export default class Buefy extends Command {
           })
         )
       }
+    } else {
+      cli.action.start(`${CLI_STATE.Info} adding buefy dependencies`)
+      await exec(`cd ${projectName} && npx add-dependencies ${dependencies}`, { silent: true });
+      cli.action.stop()
     }
 
     const sourceDirectory: string = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory)
