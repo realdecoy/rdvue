@@ -1,26 +1,26 @@
-import fileSystem from 'fs'
-import bluebirdPromise from 'bluebird'
-import path from 'path'
-import mkdirp from 'mkdirp'
-import util from 'util'
-import chalk from 'chalk'
-import {Files, InjectOptions} from '../modules'
-const replace = require('replace-in-file')
-import {hasKebab} from './utilities'
-import {DYNAMIC_OBJECTS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from './constants'
+import fileSystem from 'fs';
+import bluebirdPromise from 'bluebird';
+import path from 'path';
+import mkdirp from 'mkdirp';
+import util from 'util';
+import chalk from 'chalk';
+import {Files, InjectOptions} from '../modules';
+const replace = require('replace-in-file');
+import {hasKebab} from './utilities';
+import {DYNAMIC_OBJECTS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT} from './constants';
 
-const UTF8 = 'utf-8'
-const fs = bluebirdPromise.promisifyAll(fileSystem)
-const copyFilePromise = util.promisify(fs.copyFile)
-const getDirName = path.dirname
+const UTF8 = 'utf-8';
+const fs = bluebirdPromise.promisifyAll(fileSystem);
+const copyFilePromise = util.promisify(fs.copyFile);
+const getDirName = path.dirname;
 
 /**
  * Description: Read file located at specified filePath
  * @param {string} filePath - a path to a file
  * @returns {string} -
  */
-function readFile(filePath: string): string {
-  return fs.readFileSync(filePath, UTF8)
+function readFile (filePath: string): string {
+  return fs.readFileSync(filePath, UTF8);
 }
 
 /**
@@ -29,11 +29,11 @@ function readFile(filePath: string): string {
  * @param {string} filePath - a path to a file
  * @returns {boolean} -
  */
-function directoryExists(filePath: string): boolean {
+function directoryExists (filePath: string): boolean {
   try {
-    return fs.statSync(filePath).isDirectory()
+    return fs.statSync(filePath).isDirectory();
   } catch (error) {
-    return false
+    return false;
   }
 }
 
@@ -42,11 +42,11 @@ function directoryExists(filePath: string): boolean {
  * @param {string} filePath - a path to a file
  * @returns {boolean} -
  */
-function fileExists(filePath: string): boolean {
+function fileExists (filePath: string): boolean {
   try {
-    return fs.existsSync(filePath)
+    return fs.existsSync(filePath);
   } catch (error) {
-    return false
+    return false;
   }
 }
 
@@ -55,17 +55,18 @@ function fileExists(filePath: string): boolean {
  * @param {string} filePath -
  * @returns {any} -
  */
-function readConfigFile(filePath: string): any {
-  const isExistingFile = fileExists(filePath)
+function readConfigFile (filePath: string): any {
+  const isExistingFile = fileExists(filePath);
   if (isExistingFile === false) {
     throw new Error(
       JSON.stringify({
         code: 'missing-template-file',
         message: `template file not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
       })
-    )
+    );
   }
-  return JSON.parse(readFile(filePath))
+  
+  return JSON.parse(readFile(filePath));
 }
 
 /**
@@ -74,16 +75,17 @@ function readConfigFile(filePath: string): any {
  * @param {string} projectRoot -
  * @returns {any} -
  */
-function parseModuleConfig(folderList: string[], projectRoot: string) {
+function parseModuleConfig (folderList: string[], projectRoot: string) {
   return folderList.map(folder => {
-    const moduleTemplatePath = path.join(projectRoot, TEMPLATE_ROOT, folder)
-    const configFilePath = path.join(moduleTemplatePath, TEMPLATE_CONFIG_FILENAME)
+    const moduleTemplatePath = path.join(projectRoot, TEMPLATE_ROOT, folder);
+    const configFilePath = path.join(moduleTemplatePath, TEMPLATE_CONFIG_FILENAME);
+    
     return {
       name: folder,
       moduleTemplatePath,
       manifest: readConfigFile(configFilePath),
-    }
-  })
+    };
+  });
 }
 
 /**
@@ -92,17 +94,17 @@ function parseModuleConfig(folderList: string[], projectRoot: string) {
  * @param {string} data - data written to file
  * @returns {boolean} -
  */
-function writeFile(filePath: string, data: string): boolean {
-  let success = true
+function writeFile (filePath: string, data: string): boolean {
+  let success = true;
   try {
-    fs.writeFileSync(filePath, data)
+    fs.writeFileSync(filePath, data);
   } catch (error) {
     // eslint:disable-next-line:no-console
-    success = false
-    throw new Error('failed to write to file')
+    success = false;
+    throw new Error('failed to write to file');
   }
 
-  return success
+  return success;
 }
 
 /**
@@ -112,32 +114,32 @@ function writeFile(filePath: string, data: string): boolean {
  * @param {string} to -
  * @returns {Promise<boolean>} -
  */
-async function replaceInFiles(files: string | string[], from: RegExp, to: string): Promise<boolean> {
-  let result = false
-  let replaceResults
-  let failedFiles
+async function replaceInFiles (files: string | string[], from: RegExp, to: string): Promise<boolean> {
+  let result = false;
+  let replaceResults;
+  let failedFiles;
   const options = {
     files,
     from,
     to,
-  }
+  };
 
   try {
-    replaceResults = await replace(options)
+    replaceResults = await replace(options);
     failedFiles = replaceResults
-    .filter((result: { file: string; hasChanged: boolean }) => !result.hasChanged)
-    .map((result: { file: string; hasChanged: boolean }) => result.file)
-    result = failedFiles.length === 0
+      .filter((result: { file: string; hasChanged: boolean }) => !result.hasChanged)
+      .map((result: { file: string; hasChanged: boolean }) => result.file);
+    result = failedFiles.length === 0;
   } catch (error) {
     throw new Error(
       JSON.stringify({
         code: 'file-not-changed',
         message: error.message,
       })
-    )
+    );
   }
 
-  return result
+  return result;
 }
 
 /**
@@ -148,15 +150,15 @@ async function replaceInFiles(files: string | string[], from: RegExp, to: string
  * @param {string} value - value to replace old filename
  * @returns {string} -
  */
-function replaceFileName(
+function replaceFileName (
   fileName: string,
   placeholder: RegExp,
   value: string
 ): string {
-  const r = new RegExp(placeholder, 'g')
-  const response = fileName.replace(r, value)
+  const r = new RegExp(placeholder, 'g');
+  const response = fileName.replace(r, value);
 
-  return response
+  return response;
 }
 
 /**
@@ -165,7 +167,7 @@ function replaceFileName(
  * @param {string} featureName - the string used to update the name of the files
  * @returns {void} -
  */
-function replaceTargetFileNames(
+function replaceTargetFileNames (
   files: Array<string | Files>,
   featureName: string
 ): void {
@@ -177,10 +179,10 @@ function replaceTargetFileNames(
             file.target,
             /(\${.*?\})/,
             featureName ?? ''
-          )
+          );
         }
       }
-    })
+    });
   }
 }
 
@@ -191,35 +193,35 @@ function replaceTargetFileNames(
  * @param {Array<string|Files>} files - files to be copied
  * @returns {Promise<any>} -
  */
-async function copyFiles(
+async function copyFiles (
   srcDir: string,
   destDir: string,
   files: Array<string | Files>
 ) {
   return Promise.all(
     files.map(async (f: Files | string) => {
-      let source = ''
-      let dest = ''
+      let source = '';
+      let dest = '';
       // Get source and destination paths
       if (typeof f === 'string') {
         source = path.join(
           srcDir,
           `${srcDir.includes('config') ? 'core' : ''}`,
           f
-        )
-        dest = path.join(destDir, f)
+        );
+        dest = path.join(destDir, f);
       } else {
-        source = path.join(srcDir, f.source)
-        dest = path.join(destDir, f.target)
+        source = path.join(srcDir, f.source);
+        dest = path.join(destDir, f.target);
       }
 
       // Create all the necessary directories if they dont exist
-      const dirName = getDirName(dest)
-      mkdirp.sync(dirName)
+      const dirName = getDirName(dest);
+      mkdirp.sync(dirName);
 
-      return copyFilePromise(source, dest)
+      return copyFilePromise(source, dest);
     })
-  )
+  );
 }
 
 /**
@@ -230,19 +232,17 @@ async function copyFiles(
  * @param {string} value - value to replace content in file
  * @returns {Promise<void>} -
  */
-async function updateFile(
+async function updateFile (
   filePath: string,
   file: string,
   placeholder: string,
   value: string
 ): Promise<void> {
-  const r = new RegExp(placeholder, 'g')
+  const r = new RegExp(placeholder, 'g');
 
   if (value !== '') {
-    const newValue = file.replace(r, value)
-    // tslint:disable-next-line:no-console
-
-    fs.writeFileSync(filePath, newValue, UTF8)
+    const newValue = file.replace(r, value);
+    fs.writeFileSync(filePath, newValue, UTF8);
   }
 }
 
@@ -256,26 +256,26 @@ async function updateFile(
  * @param {string} pascalName - name of feature in pascal case
  * @returns {Promise<void>} -
  */
-async function readAndUpdateFeatureFiles(
+async function readAndUpdateFeatureFiles (
   destDir: string,
   files: Files[] | Array<string | Files>,
   kebabName: string,
   pascalName: string,
 ) {
-  let filename = ''
-  let filePath = ''
+  let filename = '';
+  let filePath = '';
 
   // [3] For each file in the list
   for (const file of files) {
     if (typeof file === 'string') {
-      continue
+      continue;
     }
 
     // [3b] Add the target file to the path of the desired destination directory
-    filePath = path.join(destDir, file.target)
+    filePath = path.join(destDir, file.target);
 
     // Obtaining the file name from the file path
-    filename = filePath.replace(/^.*[\\\/]/, '')
+    filename = filePath.replace(/^.*[\\\/]/, '');
 
     // [3c] Check if the contents of the file is defined
     if (file.content !== undefined && Array.isArray(file.content)) {
@@ -283,7 +283,7 @@ async function readAndUpdateFeatureFiles(
       for (const contentBlock of file.content) {
         if (contentBlock && contentBlock.matchRegex) {
           // [4] Get the content at the desired file path
-          const fileContent = readFile(filePath)
+          const fileContent = readFile(filePath);
 
           // [5] Update the contents of the file at given filePath
           await updateFile(
@@ -295,7 +295,7 @@ async function readAndUpdateFeatureFiles(
               contentBlock.replace.includes('${') ?
                 pascalName :
                 contentBlock.replace
-          )
+          );
         }
       }
     } else if (file.content) {
@@ -304,7 +304,7 @@ async function readAndUpdateFeatureFiles(
           code: 'failed-match-and-replace',
           message: `failed to match and replace  for :${kebabName} files`,
         })
-      )
+      );
     }
   }
 }
@@ -314,60 +314,59 @@ async function readAndUpdateFeatureFiles(
  * @param {string|null} location defaults to null
  * @returns {boolean} -
  */
-function isRootDirectory(location: string | null = null): boolean {
-  let isRoot = false
+function isRootDirectory (location: string | null = null): boolean {
+  let isRoot = false;
   try {
-    let paths = []
-    let testLocation = location
+    let paths = [];
+    let testLocation = location;
     if (location === null) {
-      testLocation = process.cwd()
+      testLocation = process.cwd();
     }
 
     if (testLocation !== null) {
-      paths = testLocation.split(path.sep)
+      paths = testLocation.split(path.sep);
       if (paths.length > 0 && paths[1] === '') {
-        isRoot = true
+        isRoot = true;
       }
     }
   } catch (error) {
-    // tslint:disable-next-line:no-console
-    throw new Error('Error checking root directory')
+    throw new Error('Error checking root directory');
   }
 
-  return isRoot
+  return isRoot;
 }
 
 /**
  * Description: determine the root of the current project
  * @returns {string} -
  */
-function getProjectRoot() {
-  const configFolderName = '.rdvue'
-  const maxTraverse = 20
+function getProjectRoot () {
+  const configFolderName = '.rdvue';
+  const maxTraverse = 20;
 
-  let currentPath = process.cwd()
-  let currentTraverse = 0
-  let projectRoot = null
-  let back = './'
+  let currentPath = process.cwd();
+  let currentTraverse = 0;
+  let projectRoot = null;
+  let back = './';
 
   while (true) {
-    currentPath = path.join(process.cwd(), back)
-    back = path.join(back, '../')
-    currentTraverse += 1
+    currentPath = path.join(process.cwd(), back);
+    back = path.join(back, '../');
+    currentTraverse += 1;
 
     if (directoryExists(path.join(currentPath, configFolderName))) {
-      projectRoot = currentPath
-      break
+      projectRoot = currentPath;
+      break;
     } else if (isRootDirectory(currentPath)) {
-      projectRoot = null
-      break
+      projectRoot = null;
+      break;
     } else if (currentTraverse > maxTraverse) {
-      projectRoot = null
-      break
+      projectRoot = null;
+      break;
     }
   }
 
-  return projectRoot
+  return projectRoot;
 }
 
 /**
@@ -376,8 +375,8 @@ function getProjectRoot() {
  * @param {string} folderPath - a path to a folder
  * @returns {void} -
  */
-function checkIfFolderExists(folderPath: string) {
-  const isExistingFolder = directoryExists(folderPath)
+function checkIfFolderExists (folderPath: string) {
+  const isExistingFolder = directoryExists(folderPath);
   // block command if project folder already exists
   if (isExistingFolder === true) {
     throw new Error(
@@ -385,7 +384,7 @@ function checkIfFolderExists(folderPath: string) {
         code: 'existing-folder',
         message: `folder named ${chalk.whiteBright(folderPath)} already exists`,
       })
-    )
+    );
   }
 }
 
@@ -395,8 +394,8 @@ function checkIfFolderExists(folderPath: string) {
  * @param {string} folderPath - a path to a folder
  * @returns {void} -
  */
-function verifyTemplateFolderExists(folderPath: string) {
-  const isExistingFolder = directoryExists(folderPath)
+function verifyTemplateFolderExists (folderPath: string) {
+  const isExistingFolder = directoryExists(folderPath);
   // block command if project folder already exists
   if (isExistingFolder === false) {
     throw new Error(
@@ -404,7 +403,7 @@ function verifyTemplateFolderExists(folderPath: string) {
         code: 'missing-template-folder',
         message: `template folder not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
       })
-    )
+    );
   }
 }
 
@@ -416,15 +415,15 @@ function verifyTemplateFolderExists(folderPath: string) {
  * @param {boolean?} hasBrackets - injected object has brackets
  * @returns {void} -
  */
-function parseDynamicObjects(
+function parseDynamicObjects (
   projectRoot: string,
   jsonData: string,
   objectName: string,
   hasBrackets?: boolean
 ): void {
-  let filePathOfObjectInsideProject
-  let objectInProject
-  let objectStringToBeWritten = ''
+  let filePathOfObjectInsideProject;
+  let objectInProject;
+  let objectStringToBeWritten = '';
 
   // 1[b] Once inside of a project values are assigned to be used
   if (projectRoot !== null) {
@@ -433,28 +432,28 @@ function parseDynamicObjects(
       projectRoot,
       '.rdvue',
       `${objectName}.js`
-    )
+    );
 
     // Read files to be modified
-    objectInProject = readFile(filePathOfObjectInsideProject)
+    objectInProject = readFile(filePathOfObjectInsideProject);
 
     // Replace brackets & ("/`) quotations in string
-    let modifiedJSONData = jsonData.replace(/[\[\]"`]+/g, '')
+    let modifiedJSONData = jsonData.replace(/[\[\]"`]+/g, '');
 
     // Remove beginning and closing brackets if its an option to be modified
     if (hasBrackets) {
       modifiedJSONData = modifiedJSONData.substring(
         1,
         modifiedJSONData.length - 1
-      )
+      );
     }
 
     // Removed closers from files to append information
-    const originalObjectString = objectInProject.slice(0, -2)
+    const originalObjectString = objectInProject.slice(0, -2);
 
     // Append the new information and close files after changes
     objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'
-    };`
+    };`;
   }
 
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
@@ -462,7 +461,7 @@ function parseDynamicObjects(
     filePathOfObjectInsideProject !== undefined &&
     objectStringToBeWritten !== ''
   ) {
-    writeFile(filePathOfObjectInsideProject, objectStringToBeWritten)
+    writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
   }
 }
 
@@ -476,21 +475,21 @@ function parseDynamicObjects(
  * @param {string} content The content to inject
  * @param {InjectOptions?} options see InjectOptions type
  */
-function inject(targetPath: string, content: string, options?: InjectOptions): void {
-  const encoding = options?.encoding ?? 'utf-8'
-  let index = options?.index ?? 0
+function inject (targetPath: string, content: string, options?: InjectOptions): void {
+  const encoding = options?.encoding ?? 'utf-8';
+  let index = options?.index ?? 0;
 
-  let targetContent = fs.readFileSync(targetPath, {encoding})
-  const lines = targetContent.split(/\r?\n/g)
+  let targetContent = fs.readFileSync(targetPath, {encoding});
+  const lines = targetContent.split(/\r?\n/g);
 
   if (typeof index === 'function') {
-    index = index(lines.slice())
+    index = index(lines.slice());
   }
 
-  lines.splice(index, 0, content)
-  targetContent = lines.join('\n')
+  lines.splice(index, 0, content);
+  targetContent = lines.join('\n');
 
-  fs.writeFileSync(targetPath, targetContent, {encoding})
+  fs.writeFileSync(targetPath, targetContent, {encoding});
 }
 
 /**
@@ -501,30 +500,30 @@ function inject(targetPath: string, content: string, options?: InjectOptions): v
  * @param {string} fileName -
  * @returns {void}
  */
-async function updateDynamicImportsAndExports(
+async function updateDynamicImportsAndExports (
   projectRoot: string,
   folderName: string,
   featuredata: string | string[],
   fileName: string
 ) {
-  const SOURCE_DIRECTORY = 'src'
+  const SOURCE_DIRECTORY = 'src';
 
   if (projectRoot === null) {
     // eslint-disable-next-line no-console
-    console.log('Project location was not found')
+    console.log('Project location was not found');
   } else {
-    const fileLocation = path.join(projectRoot, SOURCE_DIRECTORY, folderName, fileName)
+    const fileLocation = path.join(projectRoot, SOURCE_DIRECTORY, folderName, fileName);
     if (fileExists(fileLocation)) {
       if (typeof featuredata === 'string') {
-        fs.appendFileSync(fileLocation, featuredata)
+        fs.appendFileSync(fileLocation, featuredata);
       } else {
         featuredata.forEach(data => {
-          fs.appendFileSync(fileLocation, data)
-        })
+          fs.appendFileSync(fileLocation, data);
+        });
       }
     } else {
       // eslint-disable-next-line no-console
-      console.log(`${fileLocation} - Does not exist`)
+      console.log(`${fileLocation} - Does not exist`);
     }
   }
 }
@@ -543,4 +542,4 @@ export {
   fileExists,
   writeFile,
   inject,
-}
+};

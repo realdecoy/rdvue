@@ -5,6 +5,7 @@
   "bin": {
     "rdvue": "./bin/run"
   },
+  "type": "module",
   "bugs": "https://github.com/realdecoy/rdvue/issues",
   "dependencies": {
     "@oclif/command": "^1.8.0",
@@ -28,12 +29,14 @@
     "@types/node": "^10.17.55",
     "@types/shelljs": "^0.8.8",
     "@types/sinon": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "babel-eslint": "^10.1.0",
     "chai": "^4.3.4",
-    "eslint": "^5.16.0",
+    "eslint": "^7.27.0",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.1.0",
     "globby": "^10.0.2",
-    "mocha": "^5.2.0",
+    "mocha": "^8.4.0",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.2",
     "sinon": "^11.1.0",
@@ -76,7 +79,7 @@
   },
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
-    "posttest[disabled]": "npm run lint",
+    "posttest": "npm run lint",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\" --forbid-only ",
