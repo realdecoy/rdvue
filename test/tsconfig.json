@@ -1,9 +1,13 @@
 {
+  "declaration": false,
   "extends": "../tsconfig",
+  "isolatedModules": true,
   "compilerOptions": {
+    "sourceMap": true,
     "noEmit": true
   },
-  "references": [
-    {"path": ".."},
+  "include": [
+    "./**/*",
+    "../src/**/*"
   ]
 }
