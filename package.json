@@ -76,7 +76,7 @@
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
     "posttest": "npm run lint",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "customPackage": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\" --forbid-only ",
     "lint": "eslint . --ext .ts --config .eslintrc"
