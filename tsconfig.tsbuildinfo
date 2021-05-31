@@ -257,7 +257,7 @@
         "affectsGlobalScope": false
       },
       "./src/help.ts": {
-        "version": "4283f562c5e2707a95e6e2c0ae29bd21516bca7e4d351a982c119370f42496c9",
+        "version": "1312e52c1fc2f7fad5698c5072ca266c81f79d672acfa521017537b97926bd37",
         "signature": "74fb944108655c5ecae7af90ae2b85cd3f0dd550a2dbc020d47b4be93e1f3e0c",
         "affectsGlobalScope": false
       },
