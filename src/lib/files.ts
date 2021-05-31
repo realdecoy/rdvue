@@ -3,7 +3,7 @@ import fileSystem from 'fs';
 import bluebirdPromise from 'bluebird';
 import path from 'path';
 import mkdirp from 'mkdirp';
-import util from 'util';
+const util = require('util');
 import chalk from 'chalk';
 import { Files, InjectOptions } from '../modules';
 const replace = require('replace-in-file');
