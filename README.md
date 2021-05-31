@@ -22,7 +22,7 @@ and a data-layer design promoting unified consumption through Stores and Service
 &nbsp;
 &nbsp;
 &nbsp;
-<!-- toc -->
+<!-- custom-toc -->
 ## Table of Contents
 
 * [Usage](#usage)
@@ -30,14 +30,14 @@ and a data-layer design promoting unified consumption through Stores and Service
 * [Documentation](https://realdecoy.github.io/rdvue/)
 * [Dev Instructions](#Development)
 * [Testing](#Testing)
-<!-- tocstop -->
+<!-- custom-tocstop -->
 
 &nbsp;
 &nbsp;
 &nbsp;
 
 ## Usage
-<!-- usage -->
+<!-- custom-usage -->
 
 ```bash
 npx rdvue [command]
@@ -53,7 +53,7 @@ The current version of rdvue can be retrieved with the command:
 ```bash
 npx rdvue -v|--version|version
 ```
-<!-- usagestop -->
+<!-- custom-usagestop -->
 
 &nbsp;
 &nbsp;
