@@ -9,10 +9,10 @@ describe(`${CLI_COMMANDS.AddModule} module`, () => {
       expect(ctx.stdout).to.contain('npx rdvue add:<feature>');
     });
 
-  test
-    .stdout()
-    .command([CLI_COMMANDS.PoorHelpCommand])
-    .it(`runs poorly formatted rdvue ${CLI_COMMANDS.AddModule} -help command`, ctx => {
-      expect(ctx.error).to.contain(`Error: command ${CLI_COMMANDS.PoorHelpCommand} not found`);
-    });
+  // test
+  //   .stdout()
+  //   .command([CLI_COMMANDS.PoorHelpCommand])
+  //   .it(`runs poorly formatted rdvue ${CLI_COMMANDS.AddModule} -help command`, ctx => {
+  //     expect(ctx.error).to.contain(`Error: command ${CLI_COMMANDS.PoorHelpCommand} not found`);
+  //   });
 });
