@@ -19,7 +19,8 @@ export default class MyHelpClass extends Help {
             upgrade          -  Specify the rdvue template version for a project
             
         Options:
-            --help | -h      -  Show help information`,
+            --help | -h      -  Show help information
+        `,
     );
   }
 

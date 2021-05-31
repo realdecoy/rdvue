@@ -13,11 +13,15 @@
     "bluebird": "^3.7.2",
     "chalk": "^4.1.0",
     "cli-ux": "^5.5.1",
+    "fs": "0.0.1-security",
     "git-user-name": "^2.0.0",
     "inquirer": "^8.1.0",
+    "mkdirp": "^1.0.4",
+    "path": "^0.12.7",
     "replace-in-file": "^6.2.0",
     "shelljs": "^0.8.4",
-    "tslib": "^1.14.1"
+    "tslib": "^1.14.1",
+    "util": "^0.12.4"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
