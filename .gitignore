@@ -8,3 +8,4 @@
 /test-projects
 node_modules
 /rdv-*
+oclif.manifest.json
