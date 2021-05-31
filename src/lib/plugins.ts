@@ -1,5 +1,5 @@
-import {inject} from './files'
-import path from 'path'
+import { inject } from './files';
+import path from 'path';
 
 /**
  * Private helper method for finding index of last import statement.
@@ -9,9 +9,10 @@ import path from 'path'
  */
 function findIndexOfLastImportStatement(lines: string []): number {
   const index = lines.slice()
-  .reverse()
-  .findIndex(line => line.trimStart().startsWith('import'))
-  return (index === -1) ? 0 : lines.length - index
+    .reverse()
+    .findIndex(line => line.trimStart().startsWith('import'));
+
+  return (index === -1) ? 0 : lines.length - index;
 }
 
 /**
@@ -21,11 +22,12 @@ function findIndexOfLastImportStatement(lines: string []): number {
  * @throws error if the vue initializer is not found.
  */
 function findIndexOfVueConstructor(lines: string[]): number {
-  const index = lines.findIndex(line => line.trimStart().startsWith('new Vue'))
+  const index = lines.findIndex(line => line.trimStart().startsWith('new Vue'));
   if (index === -1) {
-    throw new Error('Vue initializer was not defined in main.ts.')
+    throw new Error('Vue initializer was not defined in main.ts.');
   }
-  return index + 1
+
+  return index + 1;
 }
 
 /**
@@ -34,8 +36,9 @@ function findIndexOfVueConstructor(lines: string[]): number {
  * @returns {string} returns the path
  */
 function getMainPath(projectRoot: string): string {
-  const ext = 'ts'
-  return path.join(projectRoot, 'src', `main.${ext}`)
+  const ext = 'ts';
+
+  return path.join(projectRoot, 'src', `main.${ext}`);
 }
 
 /**
@@ -44,11 +47,11 @@ function getMainPath(projectRoot: string): string {
  * @param {string | string[]} lines the lines to inject
  */
 function injectImportsIntoMain(projectRoot: string, lines: string | string[]): void {
-  const mainPath = getMainPath(projectRoot)
-  const contents = Array.isArray(lines) ? lines.join('') : lines.slice()
+  const mainPath = getMainPath(projectRoot);
+  const contents = Array.isArray(lines) ? lines.join('') : lines.slice();
   inject(mainPath, contents, {
     index: findIndexOfLastImportStatement,
-  })
+  });
 }
 
 /**
@@ -57,14 +60,14 @@ function injectImportsIntoMain(projectRoot: string, lines: string | string[]): v
  * @param {strings} lines the lines to inject
  */
 function injectModulesIntoMain(projectRoot: string, lines: string | string[]): void {
-  const mainPath = getMainPath(projectRoot)
-  const contents = (Array.isArray(lines) ? lines.join(',\n') : lines.slice()) + ','
+  const mainPath = getMainPath(projectRoot);
+  const contents = `${Array.isArray(lines) ? lines.join(',\n') : lines.slice()},`;
   inject(mainPath, contents, {
     index: findIndexOfVueConstructor,
-  })
+  });
 }
 
 export {
   injectImportsIntoMain,
   injectModulesIntoMain,
-}
+};

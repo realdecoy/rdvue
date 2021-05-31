@@ -1,5 +1,5 @@
-import { Command, flags } from '@oclif/command'
-import chalk from 'chalk'
+import { Command, flags } from '@oclif/command';
+import chalk from 'chalk';
 
 export default class Plugin extends Command {
   static description = 'add a new module'
@@ -15,34 +15,36 @@ export default class Plugin extends Command {
     { name: 'storybook', description: '[coming soon] UI component explorer for frontend devs', hidden: true },
   ]
 
-  showHelp() {
+  showHelp(): void {
     const commandId = Plugin.id;
     const commandArgs = Plugin.args;
     const commandFlags = Object.values(Plugin.flags);
 
     // parse argument config list
     const argsList = commandArgs
-      .filter((arg) => !arg.hidden)
-      .map((arg) => {
+      .filter(arg => !arg.hidden)
+      .map(arg => {
         const maxSpaces = 15;
-        const numOfSpaces = maxSpaces - arg.name.length
-        return `\n\t    ${arg.name}${Array(numOfSpaces + 1).join(' ')}- ${arg.description}`
+        const numOfSpaces = maxSpaces - arg.name.length;
+
+        return `\n\t    ${arg.name}${new Array(numOfSpaces + 1).join(' ')}- ${arg.description}`;
       })
       .toString()
       .split(',')
-      .join('')
+      .join('');
 
     // parse option config list
     const optionList = commandFlags
-      .filter((flag) => !flag.hidden)
-      .map((flag) => {
+      .filter(flag => !flag.hidden)
+      .map(flag => {
         const maxSpaces = 8;
-        const numOfSpaces = maxSpaces - flag.name.length
-        return `\n\t    --${flag.name} | -${flag.char}${Array(numOfSpaces + 1).join(' ')}- ${flag.description}`
+        const numOfSpaces = maxSpaces - flag.name.length;
+
+        return `\n\t    --${flag.name} | -${flag.char}${new Array(numOfSpaces + 1).join(' ')}- ${flag.description}`;
       })
       .toString()
       .split(',')
-      .join('')
+      .join('');
 
     this.log(`
         Usage:
@@ -51,10 +53,11 @@ export default class Plugin extends Command {
         Libraries: \t - Utilities to extend project functionality${argsList}    
         
         Options:${optionList}
-    `)
+    `);
   }
 
-  async run() {
+  // eslint-disable-next-line require-await
+  async run(): Promise<void> {
     this.showHelp();
   }
 }
