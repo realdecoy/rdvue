@@ -1,6 +1,6 @@
 import shell from 'shelljs';
 import cli from 'cli-ux';
-const util = require('util');
+import util from 'util';
 const exec = util.promisify(shell.exec);
 import { Command, flags } from '@oclif/command';
 import path from 'path';
