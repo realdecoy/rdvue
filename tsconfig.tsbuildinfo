@@ -1007,7 +1007,7 @@
         "affectsGlobalScope": false
       },
       "./src/lib/files.ts": {
-        "version": "d5b240fe4fb70e664858c898665b2cdee0778c4b74fcd45f6ef4f93e640203aa",
+        "version": "24b7950eb9ea4005323a6d35323cab98b64d91f292a8b94a7e20901b9b576f5a",
         "signature": "a90855a207e5a4aab8c6c6a5dd806c4eae342e90f8b913c5ebfcf3a2d70b37fe",
         "affectsGlobalScope": false
       },
@@ -2246,7 +2246,6 @@
         "./node_modules/@types/mkdirp/index.d.ts",
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/path.d.ts",
-        "./node_modules/@types/node/util.d.ts",
         "./node_modules/chalk/index.d.ts",
         "./src/lib/constants.ts",
         "./src/lib/utilities.ts",
