@@ -12,7 +12,7 @@ describe(`${CLI_COMMANDS.AddModule} module`, () => {
   test
     .stdout()
     .command([CLI_COMMANDS.PoorHelpCommand])
-    .it(`runs poorly formatted rdvue ${CLI_COMMANDS.PoorHelpCommand} -help command`, ctx => {
-      expect(ctx.error).to.contain('Error: command -help not found');
+    .it(`runs poorly formatted rdvue ${CLI_COMMANDS.AddModule} -help command`, ctx => {
+      expect(ctx.error).to.contain(`Error: command ${CLI_COMMANDS.PoorHelpCommand} not found`);
     });
 });

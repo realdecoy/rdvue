@@ -1,7 +1,7 @@
 {
 	"extends": [
-	"oclif",
-	"oclif-typescript"
+		"oclif",
+		"oclif-typescript"
 	],
 	"env": {
 		"es6": true,

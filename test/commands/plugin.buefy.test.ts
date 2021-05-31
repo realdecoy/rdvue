@@ -3,6 +3,8 @@ import { expect, test } from '@oclif/test';
 import { CLI_COMMANDS } from '../../src/lib/constants';
 import { exec } from 'child_process';
 
+const skipPresets = '--skipPresets';
+const withBuefy = '--withBuefy';
 const testProjectName = 'rdv-plugin-buefy-test';
 
 describe(CLI_COMMANDS.PluginBuefy, () => {
@@ -15,7 +17,7 @@ describe(CLI_COMMANDS.PluginBuefy, () => {
 
   test
     .stdout()
-    .command([CLI_COMMANDS.CreateProject, testProjectName])
+    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets, withBuefy])
     .do(() => process.chdir(testProjectName))
     .command([CLI_COMMANDS.PluginBuefy])
     .do(() => process.chdir('../'))

@@ -27,7 +27,7 @@ enum CLI_COMMANDS_ENUM {
   PluginLocalization = 'plugin:localization',
   PluginVuetify = 'plugin:vuetify',
   PluginLibrary = 'plugin',
-  PoorHelpCommand = 'add -help'
+  PoorHelpCommand = 'add-help'
 }
 export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 

@@ -20,6 +20,10 @@ export default class CreateProject extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    skipPresets: flags.boolean({ hidden: true }),
+    withBuefy: flags.boolean({ hidden: true }),
+    withLocalization: flags.boolean({ hidden: true }),
+    withVuetify: flags.boolean({ hidden: true }),
   }
 
   static args = [
@@ -58,10 +62,15 @@ export default class CreateProject extends Command {
   }
 
   async run(): Promise<void> {
-    const { args } = this.parse(CreateProject);
+    const { args, flags } = this.parse(CreateProject);
     const template: string = TEMPLATE_REPO;
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
+    const skipPresetsStep = flags.skipPresets === true;
+    const withBuefy = flags.withBuefy === true;
+    const withVuetify = flags.withVuetify === true;
+    const withLocalization = flags.withLocalization === true;
+
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES;
     let projectName: string;
     let presetName: string = '';
@@ -79,7 +88,8 @@ export default class CreateProject extends Command {
     // retrieve project name
     projectName = await parseProjectName(args);
     // retrieve project preset
-    presetName = await parseProjectPresets(args);
+    // on skip preset flag set presetName to skip presets
+    presetName = skipPresetsStep ? PLUGIN_PRESET_LIST[2] : await parseProjectPresets(args);
     // convert project name to kebab case
     projectName = toKebabCase(projectName);
     // verify that project folder doesnt already exist
@@ -97,6 +107,11 @@ export default class CreateProject extends Command {
     // find and replace project name references
     const success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
 
+    const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
+    const shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
+    const shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
+    const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
+
     if (success === false) {
       throw new Error(
         JSON.stringify({
@@ -104,13 +119,18 @@ export default class CreateProject extends Command {
           message: 'updating your project failed',
         }),
       );
-    } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 0)) { // buefy & localization
-      await Buefy.run(['--forceProject', projectName, '--skipInstall']);
-      await Localization.run(['--forceProject', projectName, '--skipInstall']);
-    } else if (presetName && (PLUGIN_PRESET_LIST.indexOf(presetName) === 1)) { // Vuetify & localization
-      await Vuetify.run(['--forceProject', projectName, '--skipInstall']);
-      await Localization.run(['--forceProject', projectName, '--skipInstall']);
+    } else {
+      if (shouldInstallBuefy === true) { // buefy
+        await Buefy.run(['--forceProject', projectName, '--skipInstall']);
+      }
+      if (shouldInstallVuetify) { // Vuetify
+        await Vuetify.run(['--forceProject', projectName, '--skipInstall']);
+      }
+      if (shouldInstallLocalization === true) { // localization
+        await Localization.run(['--forceProject', projectName, '--skipInstall']);
+      }
     }
+
     // initialize git in the created project
     await shell.exec(`cd ${projectName} && git init && git add . && git commit -m "Setup: first commit" && git branch -M main`, { silent: true });
 
