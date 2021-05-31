@@ -87,6 +87,6 @@ export default class Service extends Command {
     });
 
     this.log(`${CLI_STATE.Success} service added: ${serviceNameKebab}`);
-    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.blueBright(DOCUMENTATION_LINKS.Service)}\n`);
+    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Service)}\n`);
   }
 }

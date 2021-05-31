@@ -89,6 +89,6 @@ export default class Page extends Command {
     });
 
     this.log(`${CLI_STATE.Success} page added: ${pageNameKebab}`);
-    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.blueBright(DOCUMENTATION_LINKS.Page)}\n`);
+    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Page)}\n`);
   }
 }

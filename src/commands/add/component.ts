@@ -88,6 +88,6 @@ export default class Component extends Command {
     });
 
     this.log(`${CLI_STATE.Success} component added: ${componentNameKebab}`);
-    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.blueBright(DOCUMENTATION_LINKS.Component)}\n`);
+    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Component)}\n`);
   }
 }
