@@ -9,6 +9,7 @@ import { Files, InjectOptions } from '../modules';
 const replace = require('replace-in-file');
 import { hasKebab } from './utilities';
 import { DYNAMIC_OBJECTS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
+import { log } from '../lib/stdout';
 
 const UTF8 = 'utf-8';
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -76,7 +77,7 @@ function readConfigFile(filePath: string): any {
  * @param {string} projectRoot -
  * @returns {[any]} -
  */
-function parseModuleConfig(folderList: string[], projectRoot: string): {name: string, moduleTemplatePath: string, manifest: any}[] {
+function parseModuleConfig(folderList: string[], projectRoot: string): { name: string, moduleTemplatePath: string, manifest: any }[] {
   return folderList.map(folder => {
     const moduleTemplatePath = path.join(projectRoot, TEMPLATE_ROOT, folder);
     const configFilePath = path.join(moduleTemplatePath, TEMPLATE_CONFIG_FILENAME);
@@ -100,7 +101,6 @@ function writeFile(filePath: string, data: string): boolean {
   try {
     fs.writeFileSync(filePath, data);
   } catch (error) {
-    // eslint:disable-next-line:no-console
     success = false;
     throw new Error('failed to write to file');
   }
@@ -451,8 +451,7 @@ function parseDynamicObjects(
     const originalObjectString = objectInProject.slice(0, -2);
 
     // Append the new information and close files after changes
-    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'
-    };`;
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'};`;
   }
 
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
@@ -508,8 +507,7 @@ async function updateDynamicImportsAndExports(
   const SOURCE_DIRECTORY = 'src';
 
   if (projectRoot === null) {
-    // eslint-disable-next-line no-console
-    console.log('Project location was not found');
+    log('Project location was not found');
   } else {
     const fileLocation = path.join(projectRoot, SOURCE_DIRECTORY, folderName, fileName);
     if (fileExists(fileLocation)) {
@@ -521,8 +519,7 @@ async function updateDynamicImportsAndExports(
         });
       }
     } else {
-      // eslint-disable-next-line no-console
-      console.log(`${fileLocation} - Does not exist`);
+      log(`${fileLocation} - Does not exist`);
     }
   }
 }

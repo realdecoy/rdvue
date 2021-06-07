@@ -13,6 +13,12 @@ import { injectImportsIntoMain, injectModulesIntoMain } from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['vuetify'];
 const TEMPLATE_MIN_VERSION_SUPPORTED = 2;
+const CUSTOM_ERROR_CODES = [
+  'project-invalid',
+  'missing-template-file',
+  'missing-template-folder',
+  'dependency-install-error',
+];
 
 export default class Vuetify extends Command {
   static description = 'lightweigth UI components for Vuejs'
@@ -26,8 +32,7 @@ export default class Vuetify extends Command {
   static args = []
 
   // override Command class error handler
-  // eslint-disable-next-line require-await
-  async catch(error: Error): Promise<any> {
+  catch(error: Error): Promise<any> {
     const errorMessage = error.message;
     const isValidJSON = isJsonString(errorMessage);
     const parsedError = isValidJSON ? JSON.parse(errorMessage) : {};
@@ -41,20 +46,13 @@ export default class Vuetify extends Command {
     }
 
     // handle errors thrown with known error codes
-    switch (customErrorCode) {
-      case 'project-invalid': this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
-        break;
-      case 'missing-template-file': this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
-        break;
-      case 'missing-template-folder': this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
-        break;
-      case 'dependency-install-error': this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
-        break;
-      default: throw new Error(customErrorMessage);
+    if (CUSTOM_ERROR_CODES.includes(customErrorCode)) {
+      this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
+    } else {
+      throw new Error(customErrorMessage);
     }
 
-    // exit with status code
-    // this.exit(1)
+    return Promise.resolve();
   }
 
   async run(): Promise<void> {
@@ -135,8 +133,7 @@ export default class Vuetify extends Command {
       try {
         injectModulesIntoMain(projectRoot, mainModules);
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+        this.error(error);
       }
     } else {
       // FP-414: backwards compatibility
