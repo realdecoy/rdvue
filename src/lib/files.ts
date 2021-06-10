@@ -264,6 +264,7 @@ async function readAndUpdateFeatureFiles(
   pascalName: string,
 ): Promise<void> {
   let filePath = '';
+  const promisedUpdates = [];
 
   // [3] For each file in the list
   for (const file of files) {
@@ -281,10 +282,8 @@ async function readAndUpdateFeatureFiles(
         if (contentBlock && contentBlock.matchRegex) {
           // [4] Get the content at the desired file path
           const fileContent = readFile(filePath);
-
           // [5] Update the contents of the file at given filePath
-          // eslint-disable-next-line no-await-in-loop
-          await updateFile(
+          promisedUpdates.push(updateFile(
             filePath,
             fileContent,
             contentBlock.matchRegex,
@@ -293,7 +292,7 @@ async function readAndUpdateFeatureFiles(
               contentBlock.replace.includes('${') ?
                 pascalName :
                 contentBlock.replace,
-          );
+          ));
         }
       }
     } else if (file.content) {
@@ -305,6 +304,7 @@ async function readAndUpdateFeatureFiles(
       );
     }
   }
+  await Promise.all(promisedUpdates);
 }
 
 /**
