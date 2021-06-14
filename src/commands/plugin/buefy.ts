@@ -6,10 +6,11 @@ import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
 import { Files } from '../../modules';
-import { copyFiles, parseDynamicObjects, parseModuleConfig, updateDynamicImportsAndExports } from '../../lib/files';
+import { copyFiles, inject, parseModuleConfig, updateDynamicImportsAndExports } from '../../lib/files';
 import { checkProjectValidity, isJsonString } from '../../lib/utilities';
-import { CLI_COMMANDS, CLI_STATE, DYNAMIC_OBJECTS } from '../../lib/constants';
+import { CLI_COMMANDS, CLI_STATE } from '../../lib/constants';
 import { injectImportsIntoMain } from '../../lib/plugins';
+import { Route } from '../../modules/manifest';
 
 const TEMPLATE_FOLDERS = ['buefy'];
 const TEMPLATE_MIN_VERSION_SUPPORTED = 2;
@@ -110,10 +111,30 @@ export default class Buefy extends Command {
 
     const sourceDirectory: string = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory);
     const installDirectory: string = path.join(projectRoot, 'src', config.manifest.installDirectory);
+    const routePath: string = path.join(projectRoot, 'src', 'config', 'router.ts');
 
     // copy and update files for plugin being added
     await copyFiles(sourceDirectory, installDirectory, files);
-    await parseDynamicObjects(projectRoot, JSON.stringify(config.manifest.routes, null, 1), DYNAMIC_OBJECTS.Routes);
+    const { routes }: { routes: Array<Route> } = config.manifest;
+    if (routes && routes.length > 0) {
+      const formattedContent: string = JSON.stringify(routes, null, 2)
+        .replace(/(?<!\\)"/g, '')     // remove escaped quotes added by JSON.stringify
+        .replace(/[\\]+"/g, '"')      // remove extra escaping slashes from escaped double quotes
+        .replace(/^\s*\[\n/, '')      // remove the array notation from the start of the string
+        .replace(/\s*\]$/, '')        // remove the array notation from the end of the string
+        .replace(/^(\s*)/gm, '$1  '); // add extra spaces to align injected code with existing code
+      const content = `${formattedContent},`;
+      inject(routePath, content, {
+        index: (lines, file) => {
+          const index = lines.findIndex(line => line.trim().startsWith('routes: ['));
+          if (index < 0) {
+            throw new Error(`Could not find routes in ${file}`);
+          }
+
+          return index + 1;
+        },
+      });
+    }
     updateDynamicImportsAndExports(projectRoot, 'theme', config.manifest.projectTheme, '_all.scss');
     updateDynamicImportsAndExports(projectRoot, 'modules/core', config.manifest.moduleImports, 'index.ts');
     if (config.manifest.version >= TEMPLATE_MIN_VERSION_SUPPORTED) {

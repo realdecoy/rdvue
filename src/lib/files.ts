@@ -76,7 +76,7 @@ function readConfigFile(filePath: string): any {
  * @param {string} projectRoot -
  * @returns {[any]} -
  */
-function parseModuleConfig(folderList: string[], projectRoot: string): {name: string, moduleTemplatePath: string, manifest: any}[] {
+function parseModuleConfig(folderList: string[], projectRoot: string): { name: string, moduleTemplatePath: string, manifest: any }[] {
   return folderList.map(folder => {
     const moduleTemplatePath = path.join(projectRoot, TEMPLATE_ROOT, folder);
     const configFilePath = path.join(moduleTemplatePath, TEMPLATE_CONFIG_FILENAME);
@@ -451,8 +451,7 @@ function parseDynamicObjects(
     const originalObjectString = objectInProject.slice(0, -2);
 
     // Append the new information and close files after changes
-    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'
-    };`;
+    objectStringToBeWritten = `${originalObjectString}${modifiedJSONData.trim()},${objectName === DYNAMIC_OBJECTS.Routes ? ']' : '}'};`;
   }
 
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
@@ -482,7 +481,7 @@ function inject(targetPath: string, content: string, options?: InjectOptions): v
   const lines = targetContent.split(/\r?\n/g);
 
   if (typeof index === 'function') {
-    index = index(lines.slice());
+    index = index(lines.slice(), targetPath);
   }
 
   lines.splice(index, 0, content);
