@@ -103,7 +103,7 @@ export default class CreateProject extends Command {
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, { silent: true });
     // remove git folder reference to base project
-    await shell.exec(`rm -rf ${projectName}/.git`);
+    await shell.exec(`npx rimraf ${projectName}/.git`);
     // find and replace project name references
     const success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
 
