@@ -6,7 +6,7 @@ import { exec } from 'child_process';
 const skipPresets = '--skipPresets';
 const testProjectName = 'rdv-component-test';
 const testComponentName = 'hello-world';
-// const badComponentName = 'he%20-2world';
+const { log } = console;
 
 describe(CLI_COMMANDS.AddComponent, () => {
   test
@@ -26,20 +26,10 @@ describe(CLI_COMMANDS.AddComponent, () => {
       expect(ctx.stdout).to.contain(`[rdvue] component added: ${testComponentName}`);
     });
 
-  // test
-  //   .stdout()
-  //   .do(() => process.chdir(testProjectName))
-  //   .command([CLI_COMMANDS.AddComponent, badComponentName])
-  //   .do(() => process.chdir('../'))
-  //   .it('tries to run create component with a poorly formatted command', ctx => {
-  //     expect(ctx.stdout).to.contain(`Error: command ${CLI_COMMANDS.AddComponent} not found`);
-  //   });
-
   after(() => {
     exec(`rm -r ${testProjectName}`, error => {
       if (error) {
-        // eslint-disable-next-line no-console
-        console.log(`error: ${error.message}`);
+        log(`error: ${error.message}`);
       }
     });
   });

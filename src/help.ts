@@ -1,6 +1,7 @@
 import Help from '@oclif/plugin-help';
 import { Command, Topic } from '@oclif/config';
 import chalk from 'chalk';
+import { log } from './lib/stdout';
 
 export default class MyHelpClass extends Help {
   // acts as a 'router'
@@ -8,8 +9,7 @@ export default class MyHelpClass extends Help {
   // calls one of showRootHelp, showTopicHelp,
   // or showCommandHelp
   showRootHelp(): void {
-    // eslint-disable-next-line no-console
-    console.log(`
+    log(`
         npx ${chalk.blue('rdvue')} <action>
 
         Actions:
@@ -31,21 +31,16 @@ export default class MyHelpClass extends Help {
     const subTopics = this.sortedTopics.filter(t => t.name.startsWith(`${name}:`) && t.name.split(':').length === depth + 1);
     const commands = this.sortedCommands.filter(c => c.id.startsWith(`${name}:`) && c.id.split(':').length === depth + 1);
 
-    // eslint-disable-next-line no-console
-    console.log(this.formatTopic(topic));
+    log(this.formatTopic(topic));
 
     if (subTopics.length > 0) {
-      // eslint-disable-next-line no-console
-      console.log(this.formatTopics(subTopics));
-      // eslint-disable-next-line no-console
-      console.log('');
+      log(this.formatTopics(subTopics));
+      log('');
     }
 
     if (commands.length > 0) {
-      // eslint-disable-next-line no-console
-      console.log(this.formatCommands(commands));
-      // eslint-disable-next-line no-console
-      console.log('');
+      log(this.formatCommands(commands));
+      log('');
     }
   }
 
@@ -80,8 +75,7 @@ export default class MyHelpClass extends Help {
         return `\n\t    --${flag.name} | -${flag.char}${new Array(numOfSpaces + 1).join(' ')}- ${flag.description}`;
       });
 
-    // eslint-disable-next-line no-console
-    console.log(`
+    log(`
         Usage:
             npx ${chalk.blue('rdvue')} ${commandId} ${argNames}
 

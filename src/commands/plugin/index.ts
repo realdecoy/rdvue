@@ -56,8 +56,9 @@ export default class Plugin extends Command {
     `);
   }
 
-  // eslint-disable-next-line require-await
-  async run(): Promise<void> {
+  run(): Promise<void> {
     this.showHelp();
+
+    return Promise.resolve();
   }
 }
