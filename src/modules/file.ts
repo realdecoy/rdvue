@@ -1,16 +1,16 @@
 export interface FilesContent {
-    matchRegex: string;
-    replace: string;
+  matchRegex: string;
+  replace: string;
 }
 
 export interface Files {
-    source: string;
-    target: string;
-    content?: FilesContent[];
+  source: string;
+  target: string;
+  content?: FilesContent[];
 }
 
 export type InjectOptions = {
-  index?: number | ((lines: string[]) => number);
+  index?: number | ((lines: string[], filePath: string) => number);
   encoding?: string;
 }
 

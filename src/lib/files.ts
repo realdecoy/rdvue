@@ -481,7 +481,7 @@ function inject(targetPath: string, content: string, options?: InjectOptions): v
   const lines = targetContent.split(/\r?\n/g);
 
   if (typeof index === 'function') {
-    index = index(lines.slice());
+    index = index(lines.slice(), targetPath);
   }
 
   lines.splice(index, 0, content);
