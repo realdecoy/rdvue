@@ -13,6 +13,8 @@ import {
   TEMPLATE_REPLACEMENT_FILES,
   CLI_STATE,
   PLUGIN_PRESET_LIST,
+  MOBILE_TEMPLATE_REPLACEMENT_FILES,
+  MOBILE_TEMPLATE_REPO,
 } from '../../lib/constants';
 
 const CUSTOM_ERROR_CODES = [
@@ -30,6 +32,7 @@ export default class CreateProject extends Command {
     withBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
     withVuetify: flags.boolean({ hidden: true }),
+    mobile: flags.boolean({ hidden: true }),
   }
 
   static args = [
@@ -63,15 +66,16 @@ export default class CreateProject extends Command {
 
   async run(): Promise<void> {
     const { args, flags } = this.parse(CreateProject);
-    const template: string = TEMPLATE_REPO;
-    const tag: string = TEMPLATE_TAG;
-    const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
+    const isMobile = flags.mobile === true;
     const skipPresetsStep = flags.skipPresets === true;
     const withBuefy = flags.withBuefy === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
+    const template: string = isMobile ? MOBILE_TEMPLATE_REPO : TEMPLATE_REPO;
+    const tag: string = TEMPLATE_TAG;
+    const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
 
-    let filesToReplace = TEMPLATE_REPLACEMENT_FILES;
+    let filesToReplace = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES : TEMPLATE_REPLACEMENT_FILES;
     let projectName: string;
     let presetName: string = '';
     const { isValid: isValidProject } = checkProjectValidity();
@@ -98,7 +102,7 @@ export default class CreateProject extends Command {
     // update files to be replaced with project name reference
     filesToReplace = filesToReplace.map(p => `${projectName}/${p}`);
 
-    this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`);
+    this.log(`${CLI_STATE.Info} creating ${isMobile ? 'mobile' : ''} project ${chalk.whiteBright(projectName)}`);
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, { silent: true });
@@ -108,8 +112,8 @@ export default class CreateProject extends Command {
     const success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
-    const shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
-    const shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
+    const shouldInstallBuefy = !isMobile && (presetIndex === 0 || withBuefy === true);
+    const shouldInstallVuetify = !isMobile && (presetIndex === 1 || withVuetify === true);
     const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
 
     if (success === false) {
@@ -137,6 +141,6 @@ export default class CreateProject extends Command {
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`);
 
     // Output final instructions to user
-    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} npm run serve`);
+    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ${isMobile ? 'ns run android/ios' : 'npm run serve'}`);
   }
 }

@@ -2,6 +2,7 @@ import chalk from 'chalk';
 
 export const TEMPLATE_ROOT = '.rdvue/template';
 export const TEMPLATE_REPO = 'https://github.com/realdecoy/rdvue-template';
+export const MOBILE_TEMPLATE_REPO = 'https://github.com/ttaylor92/nativescript-vue-ts';
 export const TEMPLATE_TAG = 'main'; // replace this with the appropriate release tag in the template repo
 export const TEMPLATE_PROJECT_NAME_REGEX = /__PROJECT_NAME__/g;
 export const TEMPLATE_VERSIONS_SUPPORTED = [2];
@@ -51,6 +52,13 @@ export const TEMPLATE_REPLACEMENT_FILES = [
   '.rdvue/.rdvue',
   'public/index.html',
   'public/manifest.json',
+];
+
+export const MOBILE_TEMPLATE_REPLACEMENT_FILES = [
+  'package.json',
+  'package-lock.json',
+  '.rdvue/.rdvue',
+  'nativescript.config.ts',
 ];
 
 export const CLI_STATE = {
