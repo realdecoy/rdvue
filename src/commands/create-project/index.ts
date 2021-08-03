@@ -4,7 +4,7 @@ import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
 import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
-import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
+import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase } from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
@@ -15,6 +15,7 @@ import {
   PLUGIN_PRESET_LIST,
   MOBILE_TEMPLATE_REPLACEMENT_FILES,
   MOBILE_TEMPLATE_REPO,
+  MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE,
 } from '../../lib/constants';
 
 const CUSTOM_ERROR_CODES = [
@@ -67,7 +68,7 @@ export default class CreateProject extends Command {
   async run(): Promise<void> {
     const { args, flags } = this.parse(CreateProject);
     const isMobile = flags.mobile === true;
-    const skipPresetsStep = flags.skipPresets === true;
+    const skipPresetsStep = flags.skipPresets === true || isMobile;
     const withBuefy = flags.withBuefy === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
@@ -76,6 +77,7 @@ export default class CreateProject extends Command {
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
 
     let filesToReplace = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES : TEMPLATE_REPLACEMENT_FILES;
+    let filesToReplacePascalCase = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE : [];
     let projectName: string;
     let presetName: string = '';
     const { isValid: isValidProject } = checkProjectValidity();
@@ -109,7 +111,14 @@ export default class CreateProject extends Command {
     // remove git folder reference to base project
     await shell.exec(`npx rimraf ${projectName}/.git`);
     // find and replace project name references
-    const success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
+    let success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
+
+    // update files with pascalcase
+    if (isMobile) {
+      const projectNamePascalCase = toPascalCase(projectName);
+      filesToReplacePascalCase = filesToReplacePascalCase.map(p => `${projectName}/${p}`);
+      success = await replaceInFiles(filesToReplacePascalCase, replaceRegex, `${projectNamePascalCase}`);
+    }
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
     const shouldInstallBuefy = !isMobile && (presetIndex === 0 || withBuefy === true);

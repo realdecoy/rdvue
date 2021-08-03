@@ -58,6 +58,9 @@ export const MOBILE_TEMPLATE_REPLACEMENT_FILES = [
   'package.json',
   'package-lock.json',
   '.rdvue/.rdvue',
+];
+
+export const MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE = [
   'nativescript.config.ts',
 ];
 
