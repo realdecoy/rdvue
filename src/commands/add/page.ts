@@ -2,7 +2,7 @@ import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
 import { Files } from '../../modules';
-import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from '../../lib/files';
+import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames, updateNativeRoutes } from '../../lib/files';
 import { checkProjectValidity, parsePageName, toKebabCase, toPascalCase, isJsonString } from '../../lib/utilities';
 import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 
@@ -85,6 +85,10 @@ export default class Page extends Command {
       // copy and update files for page being added
       await copyFiles(sourceDirectory, installDirectory, files);
       await readAndUpdateFeatureFiles(installDirectory, files, pageNameKebab, pageNamePascal);
+
+      if (config.manifest.mobile) {
+        updateNativeRoutes(projectRoot, pageNamePascal, pageName, config.manifest.mobileRoutes);
+      }
     });
 
     this.log(`${CLI_STATE.Success} page added: ${pageNameKebab}`);
