@@ -19,9 +19,15 @@ Services are focused classed designed to interact with web API endpoints. As a g
 *   Each service has access to the following protected memebers:
     
 
-| **Member** | **Description** |
-| --- | --- |
-| api (field)  <br>type: Axios | Helper to invoke web APIs. Individual service methods need only specify their endpoint paths relative to the registered root domain. |
-| onRequest(request: AxiosRequestConfig) => void | Invoked before requests are sent to the web API endpoint. |
-| onResponse(response: AxiosResponse) => void | Invoked before responses are handled by a Service’s methods. |
-| onError(data: any) | Invoked for errors during request or response. |
+| **Member**                                     | **Description**                                                                                                                      |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| api (field)  <br>type: Axios                   | Helper to invoke web APIs. Individual service methods need only specify their endpoint paths relative to the registered root domain. |
+| onRequest(request: AxiosRequestConfig) => void | Invoked before requests are sent to the web API endpoint.                                                                            |
+| onResponse(response: AxiosResponse) => void    | Invoked before responses are handled by a Service’s methods.                                                                         |
+| onError(data: any)                             | Invoked for errors during request or response.                                                                                       |
+
+### Mobile (TBA)
+
+* * *
+
+?> RDVue's new native mobile template will affect services.
