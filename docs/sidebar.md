@@ -1,4 +1,5 @@
 - [**Getting Started**](Getting-Started.md)
+  - [Getting Started with Mobile](v2/Getting-Started-With-Mobile.md) 
 
 - [**CLI Commands**](CLI-Commands.md)
   - [CLI Commands v2](v2/CLI-Commands.md) 
