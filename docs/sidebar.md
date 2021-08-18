@@ -24,6 +24,7 @@
 
   - [Cypress](Cypress.md)
   - [Unit Tests - Jest](Unit-Tests.md)
+  - [Native Mobile Testing](v2/Native-Mobile-Testing.md)
 
 - [**Localization**](Localization.md)
 - [**Bundle Analysis**](Bundle-Analysis.md)
