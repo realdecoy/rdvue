@@ -24,3 +24,7 @@ Each generated Page is contained within it’s own sub-folder within the **src/p
 
 *   \[page\].**spec.ts**: This contains the unit-level tests for the page. Read the [testing section](Unit-Tests.md) for more details about writing tests.
 
+* * *
+### Mobile (TBA)
+
+?> RDVue's new native mobile template will affect Pages.

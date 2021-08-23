@@ -49,3 +49,7 @@ Each generated Layout is contained within it’s own sub-folder within the **src
 
 *   \[layout\].**spec.ts**: This contains the unit-level tests for the Layout. Read the [testing section](Unit-Tests.md) for more details about writing tests.
 
+* * *
+### Mobile (TBA)
+
+?> RDVue's new native mobile template will affect Pages.
