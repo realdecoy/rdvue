@@ -16,18 +16,16 @@ npx rdvue [command]
 
 Run the cli option below for a list of commands and options
 
-|              |                         |
-| ------------ | ----------------------- |
 | **Option**   | **Description**         |
+| ------------ |:----------------------- |
 | \--h, --help | Displays the help menu. |
 
 ## CLI Commands
 
 RDVue includes the following sub-commands:
 
-|                                   |                                                  |
-| --------------------------------- | ------------------------------------------------ |
 | **Command**                       | **Description**                                  |
+| --------------------------------- |:------------------------------------------------ |
 | [create-project](#create-project) | Scaffold a new rdvue project                     |
 | [add](#add)                       | Add a feature to a project                       |
 | [plugin](#plugin)                 | Inject a utility to extend project functionality |
@@ -43,10 +41,11 @@ Usage
 ```
 $ npx rdvue create-project <options> <project name>
 ```
+
 Options
-|            |                                                                 |
-| ---------- | --------------------------------------------------------------- |
+
 | **Option** | **Description**                                                 |
+| ---------- |:--------------------------------------------------------------- |
 | --mobile   | Uses the rdvue mobile template instead of the standard template |
 
 
