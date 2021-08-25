@@ -27,6 +27,6 @@
   - [Native Mobile Testing](v2/Native-Mobile-Testing.md)
 
 - [**Localization**](Localization.md)
-- [**Bundle Analysis**](Bundle-Analysis.md)
+- [**Bundle Analysis**](Bundle-Analysis.md) 
+- [**Image Optimization**](Image-Optimization.md)
 - [**Plugin Custom Scripting**](Plugin-Custom-Scripting.md)
-  
