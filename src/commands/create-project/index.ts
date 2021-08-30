@@ -8,6 +8,8 @@ import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, pars
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
+  DESIGN_TEMPLATE_REPO,
+  DESIGN_TEMPLATE_FOLDER,
   TEMPLATE_TAG,
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
@@ -30,6 +32,7 @@ export default class CreateProject extends Command {
     withBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
     withVuetify: flags.boolean({ hidden: true }),
+    withDesignSystem: flags.boolean({ hidden: true }),
   }
 
   static args = [
@@ -64,12 +67,15 @@ export default class CreateProject extends Command {
   async run(): Promise<void> {
     const { args, flags } = this.parse(CreateProject);
     const template: string = TEMPLATE_REPO;
+    const designTemplate: string = DESIGN_TEMPLATE_REPO;
+    const designTemplateFolder: string = DESIGN_TEMPLATE_FOLDER;
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
     const skipPresetsStep = flags.skipPresets === true;
     const withBuefy = flags.withBuefy === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
+    const withDesignSystem = flags.withDesignSystem === true;
 
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES;
     let projectName: string;
@@ -111,6 +117,7 @@ export default class CreateProject extends Command {
     const shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
     const shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
     const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
+    const shouldInstallDesignSystem = withDesignSystem === true;
 
     if (success === false) {
       throw new Error(
@@ -129,6 +136,13 @@ export default class CreateProject extends Command {
       if (shouldInstallLocalization === true) { // localization
         await Localization.run(['--forceProject', projectName, '--skipInstall']);
       }
+    }
+
+    if (shouldInstallDesignSystem === true) {
+      // retrieve project files from template source
+      await shell.exec(`git clone ${designTemplate} --depth 1 --branch ${tag} ${projectName}/${designTemplateFolder}`, { silent: true });
+      // remove git folder reference to base project
+      await shell.exec(`npx rimraf ${projectName}/${designTemplateFolder}/.git`);
     }
 
     // initialize git in the created project
