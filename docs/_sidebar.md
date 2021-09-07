@@ -1,5 +1,6 @@
 - [**Getting Started**](Getting-Started.md)
-  - [Mobile](Getting-Started-With-Mobile.md)
+  - [Native Mobile](Getting-Started-With-Mobile.md)
+
 - [**CLI Commands**](CLI-Commands.md)
 
 - [**Notable Files & Directories**](Notable-Files.md)
@@ -19,11 +20,12 @@
 - **CSS, Styling, Fonts**
   - [Global Styles](Global-Styles.md)
   - [Tailwind](Tailwind.md)
+    - [Native Mobile](Tailwind-NativeScript.md)
 
 - **Testing**
   - [Cypress](Cypress.md)
   - [Unit Tests - Jest](Unit-Tests.md)
-  - [Native Mobile Testing](Native-Mobile-Testing.md)
+  - [Native Mobile](Native-Mobile-Testing.md)
 
 - [**Localization**](Localization.md)
 
