@@ -20,12 +20,15 @@
 - **CSS, Styling, Fonts**
   - [Global Styles](Global-Styles.md)
   - [Tailwind](Tailwind.md)
-    - [Native Mobile](Tailwind-NativeScript.md)
+    - [Native Mobile](Native-Mobile-Tailwind.md)
 
 - **Testing**
   - [Cypress](Cypress.md)
   - [Unit Tests - Jest](Unit-Tests.md)
   - [Native Mobile](Native-Mobile-Testing.md)
+
+- **Deploying**
+  - [Native Mobile](Native-Mobile-Deploying.md)
 
 - [**Localization**](Localization.md)
 
