@@ -81,4 +81,20 @@ npm run serve
 
 The project will be served at [http://localhost:8080/](http://localhost:8080/) by default. This information will also be printed out in your terminal. Visiting the link the app is served on will display a default page which was created on project creation.
 
-[Continue - Folder Structure](Notable-Files.md#Notable-Files-&-Directories)
+## Next Steps
+
+### Generating a Page
+
+```
+rdvue generate page <page_name>
+rdvue g page <page_name>
+```
+
+Each generated Page gets its own dedicated folder. The folder will be given the name of the page. This folder is located at /src/pages/<page\_name> .
+
+### Generating a Component
+
+```
+rdvue generate component <component_name>
+rdvue g component <component _name>
+```
