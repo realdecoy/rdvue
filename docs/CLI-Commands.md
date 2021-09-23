@@ -37,15 +37,8 @@ create-project will scaffold a new project for you, using one of the presets sel
 
 Usage
 ```
-$ npx rdvue create-project <options> <project name>
+$ npx rdvue create-project <project name>
 ```
-
-Options
-
-| **Option** | **Description**                                                 |
-| ---------- | :-------------------------------------------------------------- |
-| --mobile   | Uses the rdvue mobile template instead of the standard template |
-
 
 * * *
 
