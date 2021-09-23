@@ -4,7 +4,7 @@ This section will provide a brief introduction to generating features inside a p
 
 Reading through this section will get you comfortable with the CLI.
 
-An indepth look at the command used in this section, along with all available commands, can be found in the [CLI Commands section](clicommands.md).
+An in depth look at the command used in this section, along with all available commands, can be found in [CLI Commands](CLI-Commands.md#cli-commands-1).
 
 RDvue provides an elegant way for generating features.
 
@@ -37,9 +37,9 @@ Services are focused classed designed to interact with web API endpoints. As a g
 
 A Page is a conceptual grouping for Vue Components used in routing. Pages are **not** to be imported by other Pages, Components or Layouts.
 
-A special feature of Pages are that they can benefit from Layouts to automatically add a parent container with common pieces of UI/State that’s shared throughout the application - like Headers and Footers. The [Layouts](Layouts.md) section goes into more detail on this approach.
+A special feature of Pages are that they can benefit from Layouts to automatically add a parent container with common pieces of UI/State that’s shared throughout the application - like Headers and Footers. The [Layouts](#layouts) section goes into more detail on this approach.
 
-?> A Page needs to be added to the [Router](Routing.md) before it can be previewed within a web browser.
+?> A Page needs to be added to the [Router](#routing) before it can be previewed within a web browser.
 
 ### Technical
 
@@ -54,7 +54,7 @@ Each generated Page is contained within it’s own sub-folder within the **src/p
 
 ?> Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the Theme directory.
 
-*   \[page\].**spec.ts**: This contains the unit-level tests for the page. Read the [testing section](Unit-Tests.md) for more details about writing tests.
+*   \[page\].**spec.ts**: This contains the unit-level tests for the page. Read the [testing section](Testing.md#unit-tests-with-jest) for more details about writing tests.
 
 ## Routing
 
@@ -71,11 +71,11 @@ Below is an example of a Route definition for a sample Login page:
 },
 ```
 
-The **path** property specifies where the page will be accessible under the domain, for example: http://localhost:8080**/login**.
+The **path** property specifies where the page will be accessible under the domain, for example: localhost:8080**/login**.
 
 The **name** field provides an alternative means of identifying and navigation to defined pages programatically. This approach is preferable because the route names can be externalized into global constants and shared throughout your code for navigational consistency.
 
-The **meta** property allows specifying arbitrary data that will get passed along to the loaded Page. The CLI recognizes a sub-property called layout which it will use to attach a [Layout](Layouts.md) to a page.
+The **meta** property allows specifying arbitrary data that will get passed along to the loaded Page. The CLI recognizes a sub-property called layout which it will use to attach a [Layout](#layouts) to a page.
 
 The **component** property specifies the Page to load for the given path. Here we used the recommended approach of dynamically loading the Page component using the **import()** function.
 
@@ -87,13 +87,13 @@ The comment within the import statement is a directive for the Webpack pre-proce
 
 ## Components
 
-A Component is a conceptual grouping for Vue components which are imported by [Pages](Pages.md) and other Components.
+A Component is a conceptual grouping for Vue components which are imported by [Pages](#pages) and other Components.
 
 Unlike Pages, Components are never used in Routing. That would deviate from the RDVue development style guide.
 
 ### Technical
 
-A Component contains all the files present for [Pages](Pages.md) with the addition of:
+A Component contains all the files present for [Pages](#pages) with the addition of:
 
 *   \[component\]**.story.ts**: This contains the list of stories which describe the component’s usage. This is helpful for documentation purposes in providing live examples of key ways a Component can be used through the included Storybook preview tool.
     
@@ -172,9 +172,9 @@ Each generated Layout is contained within it’s own sub-folder within the **src
 *   \[layout\].**scss**: This contains the stylesheet to be applied to the Layout- and that Layout only. The styles within this file are scoped, meaning they cannot be used to target any elements except those defined directly within the \[layout\].vue template file.
     
 
-?>Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the [Theme](Global-Styles.md) directory.
+?>Scoped CSS may seem weird at first because regular CSS operates with global impunity, however it is a great approach for compartmentalizing styles so they do not jump their intended scope and affect other elements. Global level styles can be added in the [Theme](Theming.md#global-styles) directory.
 
-*   \[layout\].**spec.ts**: This contains the unit-level tests for the Layout. Read the [testing section](Unit-Tests.md) for more details about writing tests.
+*   \[layout\].**spec.ts**: This contains the unit-level tests for the Layout. Read the [testing section](Testing.md#unit-tests-with-jest) for more details about writing tests.
 
 ## Stores
 

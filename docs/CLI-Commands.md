@@ -50,10 +50,10 @@ Usage
 $ npx rdvue add:<feature> <name>
 ```
 Features
-* [component](../Components.md)
-* [page](../Pages.md)
-* [service](../Services.md)
-* [store](../Stores.md)
+* [component](Features.md#components)
+* [page](Features.md#pages)
+* [service](Features.md#services)
+* [store](Features.md#stores)
 
 
 * * *
@@ -68,7 +68,7 @@ $ npx rdvue plugin:<library>
 
 Libraries
 * buefy
-* [localization](../Localization.md)
+* [localization](Features.md#localization)
 * vuetify
 
 
