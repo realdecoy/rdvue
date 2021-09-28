@@ -1,18 +1,18 @@
 # Deploying Native Mobile Applications
 
-Use the following steps to set up a deployment workflow.
+Deploying your app to the mobile market is not difficult, but also not easy. Before releasing your app to the public, it must be reviewed and approved by the app market's owner. The review process can take anywhere from a day to an indeterminate amount of time. Having a reliable pipeline in place when deploying your app can help reduce the risk of a failed deployment.
 
-## Link Azure Pipeline to VCS []()
+## Link Azure Pipeline to VCS
 
-1. Sign into your developer Azure portal account.
-2. Go to projects (by default this should be your homepage).
-3. If you don't have a pipeline already setup, point to where your code exists whether bitbucket / github / etc
-4. Authorize access
+1. Sign in to your developer Azure portal account.
+2. Go to projects, which should be your default homepage.
+3. If you don't have a pipeline already set up, create one. Make sure it points to where your code exists in Bitbucket/Github/etc
+4. Authorize who can access the pipeline.
 5. Navigate to your pipeline file in your repository.
 
 ##  Define Variables
 
-1. Select pipeline.
+1. On Azure, Select pipeline.
 2. Click the edit option.
 3. Click variables on the top right.
 4. Input the variable name and the value.
@@ -26,7 +26,7 @@ Use the following steps to set up a deployment workflow.
 
 ## Add Secure Files
 
-1. Under pipelines, select library
+1. On Azure, under pipelines, select library
 2. On the nav panel, select secure files.
 3. Click the + icon and then upload the secure file.
    
