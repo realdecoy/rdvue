@@ -1,27 +1,24 @@
-# Tailwindcss Support for Native Mobile
+# Theming
 
-The RDVue Mobile template includes support with tailwindcss, however some features may not be available or have changed in the Native Mobile environment.
+## Tailwindcss
 
-## Unsupported Features
-The following have been explicitly listed as not being supported with NativeScript/tailwind.
+The RDVue Mobile template includes support with Tailwindcss. Some features may not be available or have changed in the Native Mobile environment.
+
+### Unsupported Features
+NativeScript/tailwind does not support the following:
 
 * units: max-content, min-content, vh, vw
 * pseudo-selectors: :focus-within, :hover
 * @media
 * properties: tw-ring, tw-shadow, tw-ordinal, tw-slashed-zero, tw-numeric
 
-## Converted Features
-The following are supported but are converted to another value.
+### Converted Features
+NativeScript/tailwind supports the following but converts them to another value.
 
 * units: rem, em → px (value * 16)
 
-## Unconfirmed Features
-The following are known to exist for native mobile development but have not been confirmed if they are supported with Tailwindcss.
-
-* units: px (pixels), pt (points), sp (scalable pixels), and dp (device-independent pixels).
-
-## Supported Features
-The following have been explicitly listed as being supported with NativeScript/tailwind. Anything not in this list is implicitly unsupported.
+### Supported Features
+NativeScript/tailwind has identified the following as being supported. Anything not in this list is implicitly unsupported.
 
 * pseudo selector: ::placeholder (converted to placeholder-color prop (only if color prop is available))
 * properties: 
@@ -115,5 +112,5 @@ The following have been explicitly listed as being supported with NativeScript/t
   * 'width': true,
   * 'z-index': true,
 
-## Further Reading
+### Further Reading
 * [GitHub: NativeScript/Tailwind removeUnsupported.js](https://github.com/NativeScript/tailwind/blob/master/src/removeUnsupported.js)

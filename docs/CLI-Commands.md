@@ -37,15 +37,8 @@ create-project will scaffold a new project for you, using one of the presets sel
 
 Usage
 ```
-$ npx rdvue create-project <options> <project name>
+$ npx rdvue create-project <project name>
 ```
-
-Options
-
-| **Option** | **Description**                                                 |
-| ---------- | :-------------------------------------------------------------- |
-| --mobile   | Uses the rdvue mobile template instead of the standard template |
-
 
 * * *
 
@@ -57,10 +50,10 @@ Usage
 $ npx rdvue add:<feature> <name>
 ```
 Features
-* [component](../Components.md)
-* [page](../Pages.md)
-* [service](../Services.md)
-* [store](../Stores.md)
+* [component](Features.md#components)
+* [page](Features.md#pages)
+* [service](Features.md#services)
+* [store](Features.md#stores)
 
 
 * * *
@@ -75,7 +68,7 @@ $ npx rdvue plugin:<library>
 
 Libraries
 * buefy
-* [localization](../Localization.md)
+* [localization](Features.md#localization)
 * vuetify
 
 
