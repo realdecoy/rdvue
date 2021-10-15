@@ -78,6 +78,9 @@ Options:
 &nbsp;
 &nbsp;
 
+
+
+
 ## About
 
 The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributions are welcome! You can help us by reporting or fixing bugs and giving us feedback on new/existing features.
@@ -108,3 +111,12 @@ npm run test
 - create a ```<module-name>.test.ts``` file in the ```/test``` folder
 - using ```chai``` assertion syntax, describe your unit test cases
 - visit the oclif [testing documentation](https://oclif.io/docs/testing) to see more details
+
+
+## Rd-Buefy plugin usage
+To use the rd-buefy plugin, create a .npmrc file in your project with the following content  
+`@realdecoy:registry=https://npm.pkg.github.com`  
+`//npm.pkg.github.com/:_authToken=<YOUR_GIT_TOKEN>`  
+  
+Your token should have the following scopes:  
+- read:packages
