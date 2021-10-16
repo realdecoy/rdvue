@@ -13,6 +13,7 @@ export default class Plugin extends Command {
     { name: 'localization', description: 'library for localizing content', hidden: false },
     { name: 'vuetify', description: 'material design framework for Vue.js', hidden: false },
     { name: 'storybook', description: '[coming soon] UI component explorer for frontend devs', hidden: true },
+    { name: 'rd-buefy', description: 'lightweigth UI components for Vuejs based on Buefy component library', hidden: false },
   ]
 
   showHelp(): void {

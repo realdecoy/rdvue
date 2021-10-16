@@ -45,6 +45,7 @@ export const DOCUMENTATION_LINKS = DOCUMENTATION_LINKS_ENUM;
 export const PLUGIN_PRESET_LIST = [
   'Buefy & Localization (recommended)',
   'Vuetify & Localization',
+  'Design System & rd-buefy',
   `${chalk.magenta('[Skip presets]')}`,
 ];
 
@@ -61,3 +62,10 @@ export const CLI_STATE = {
   Warning: `${chalk.yellow('[rdvue]')}`,
   Success: `${chalk.green('[rdvue]')}`,
 };
+
+export const COMMON_CUSTOM_ERROR_CODES = [
+  'project-invalid',
+  'missing-template-file',
+  'missing-template-folder',
+  'dependency-install-error',
+];
