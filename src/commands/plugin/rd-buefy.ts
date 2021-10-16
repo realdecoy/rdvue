@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import shell from 'shelljs';
 import cli from 'cli-ux';
 const util = require('util');
@@ -15,7 +16,7 @@ import { Route } from '../../modules/manifest';
 const TEMPLATE_FOLDERS = ['rd-buefy'];
 const TEMPLATE_MIN_VERSION_SUPPORTED = 2;
 const CUSTOM_ERROR_CODES = [
-	...COMMON_CUSTOM_ERROR_CODES
+	...COMMON_CUSTOM_ERROR_CODES,
 ];
 
 export default class RdBuefy extends Command {
@@ -91,7 +92,7 @@ export default class RdBuefy extends Command {
 			try {
 				// install dependencies
 				cli.action.start(`${CLI_STATE.Info} installing rd-buefy dependencies`);
-				await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true });
+				await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: false });
 				cli.action.stop();
 			} catch (error) {
 				throw new Error(
@@ -102,7 +103,8 @@ export default class RdBuefy extends Command {
 				);
 			}
 		} else {
-			cli.action.start(`${CLI_STATE.Info} adding buefy dependencies`);
+			// add dependencies
+			cli.action.start(`${CLI_STATE.Info} adding rd-buefy dependencies`);
 			await exec(`cd ${projectName} && npx add-dependencies ${dependencies}`, { silent: true });
 			cli.action.stop();
 		}

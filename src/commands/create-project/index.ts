@@ -2,6 +2,7 @@ import shell from 'shelljs';
 import chalk from 'chalk';
 import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
+import RdBuefy from '../plugin/rd-buefy';
 import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
 import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
@@ -30,6 +31,7 @@ export default class CreateProject extends Command {
     help: flags.help({ char: 'h' }),
     skipPresets: flags.boolean({ hidden: true }),
     withBuefy: flags.boolean({ hidden: true }),
+    withRdBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
     withVuetify: flags.boolean({ hidden: true }),
     withDesignSystem: flags.boolean({ hidden: true }),
@@ -73,6 +75,7 @@ export default class CreateProject extends Command {
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
     const skipPresetsStep = flags.skipPresets === true;
     const withBuefy = flags.withBuefy === true;
+    const withRdBuefy = flags.withRdBuefy === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
     const withDesignSystem = flags.withDesignSystem === true;
@@ -115,9 +118,10 @@ export default class CreateProject extends Command {
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
     const shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
+    const shouldInstallRdBuefy = presetIndex === 2 || withRdBuefy === true;
     const shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
     const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
-    const shouldInstallDesignSystem = withDesignSystem === true;
+    const shouldInstallDesignSystem = presetIndex === 2 || withDesignSystem === true;
 
     if (success === false) {
       throw new Error(
@@ -129,6 +133,9 @@ export default class CreateProject extends Command {
     } else {
       if (shouldInstallBuefy === true) { // buefy
         await Buefy.run(['--forceProject', projectName, '--skipInstall']);
+      }
+      if (shouldInstallRdBuefy === true) { // buefy
+        await RdBuefy.run(['--forceProject', projectName, '--skipInstall']);
       }
       if (shouldInstallVuetify) { // Vuetify
         await Vuetify.run(['--forceProject', projectName, '--skipInstall']);
