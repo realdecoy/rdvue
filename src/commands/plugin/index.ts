@@ -14,6 +14,7 @@ export default class Plugin extends Command {
     { name: 'vuetify', description: 'material design framework for Vue.js', hidden: false },
     { name: 'storybook', description: '[coming soon] UI component explorer for frontend devs', hidden: true },
     { name: 'rd-buefy', description: 'lightweigth UI components for Vuejs based on Buefy component library', hidden: false },
+    { name: 'design-system', description: 'design system modeled off buefy component libary', hidden: false },
   ]
 
   showHelp(): void {

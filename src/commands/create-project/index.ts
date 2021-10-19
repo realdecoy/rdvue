@@ -136,11 +136,6 @@ export default class CreateProject extends Command {
         }),
       );
     } else {
-      // add npm registry
-      cli.action.start(`${CLI_STATE.Info} adding realdecoy npm registry`);
-      await exec(`cd ${projectName} && echo "@realdecoy:registry=https://npm.pkg.github.com
-		  //npm.pkg.github.com/:_authToken=${GIT_ACCESS_TOKEN}" > .npmrc`, { silent: true });
-
       if (shouldInstallBuefy === true) { // buefy
         await Buefy.run(['--forceProject', projectName, '--skipInstall']);
       }
@@ -152,6 +147,12 @@ export default class CreateProject extends Command {
       }
       if (shouldInstallLocalization === true) { // localization
         await Localization.run(['--forceProject', projectName, '--skipInstall']);
+      }
+      if (shouldInstallDesignSystem === true) {
+        // add npm registry
+        cli.action.start(`${CLI_STATE.Info} adding realdecoy npm registry`);
+        await exec(`cd ${projectName} && echo "@realdecoy:registry=https://npm.pkg.github.com
+        //npm.pkg.github.com/:_authToken=${GIT_ACCESS_TOKEN}" > .npmrc`, { silent: true });
       }
     }
 

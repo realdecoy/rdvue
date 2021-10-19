@@ -26,6 +26,8 @@ enum CLI_COMMANDS_ENUM {
   AddStore = 'add:store',
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
+  PluginRdBuefy = 'plugin:rd-buefy',
+  PluginDesignSystem = 'plugin:design-system',
   PluginLocalization = 'plugin:localization',
   PluginVuetify = 'plugin:vuetify',
   PluginLibrary = 'plugin',
