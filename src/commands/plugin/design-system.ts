@@ -8,7 +8,7 @@ import path from 'path';
 import chalk from 'chalk';
 import { parseModuleConfig } from '../../lib/files';
 import { checkProjectValidity, isJsonString } from '../../lib/utilities';
-import { CLI_COMMANDS, CLI_STATE, COMMON_CUSTOM_ERROR_CODES } from '../../lib/constants';
+import { CLI_COMMANDS, CLI_STATE, COMMON_CUSTOM_ERROR_CODES, DESIGN_TEMPLATE_REPO, DESIGN_TEMPLATE_FOLDER, DESIGN_TEMPLATE_TAG } from '../../lib/constants';
 
 const TEMPLATE_FOLDERS = ['design-system'];
 const CUSTOM_ERROR_CODES = [
@@ -53,6 +53,9 @@ export default class DesignSystem extends Command {
 	async run(): Promise<void> {
 		const { flags } = this.parse(DesignSystem);
 		const projectName = flags.forceProject;
+		const designTemplate: string = DESIGN_TEMPLATE_REPO;
+		const designTemplateFolder: string = DESIGN_TEMPLATE_FOLDER;
+		const designSystemTag: string = DESIGN_TEMPLATE_TAG;
 		const skipInstallStep = flags.skipInstall === true;
 		const hasProjectName = projectName !== undefined;
 		const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : '';
@@ -103,6 +106,12 @@ export default class DesignSystem extends Command {
 			await exec(`cd ${projectName} && npx add-dependencies ${dependencies}`, { silent: true });
 			cli.action.stop();
 		}
+
+		// retrieve library files from template source
+		await shell.exec(`git clone ${designTemplate} --depth 1 --branch ${designSystemTag} ${projectName}/${designTemplateFolder}`, { silent: true });
+
+		// retrieve library files from template source
+		await shell.exec(`cd ${projectName}/${designTemplateFolder} && rimraf README.md && rimraf .git`, { silent: true });
 
 		if (skipInstallStep === false) {
 			this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`);
