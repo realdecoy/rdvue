@@ -20,6 +20,7 @@ enum CLI_COMMANDS_ENUM {
   CreateProject = 'create-project',
   Upgrade = 'upgrade',
   AddComponent = 'add:component',
+  AddLayout = 'add:layout',
   AddPage = 'add:page',
   AddService = 'add:service',
   AddStore = 'add:store',
@@ -36,6 +37,7 @@ enum DOCUMENTATION_LINKS_ENUM {
   Rdvue = 'https://realdecoy.github.io/rdvue/#/',
   Component = 'https://realdecoy.github.io/rdvue/#/Components',
   Page = 'https://realdecoy.github.io/rdvue/#/Pages',
+  Layout = 'https://realdecoy.github.io/rdvue/#/Layouts',
   Service = 'https://realdecoy.github.io/rdvue/#/Services',
   Store = 'https://realdecoy.github.io/rdvue/#/Stores',
 }
@@ -62,6 +64,11 @@ export const MOBILE_TEMPLATE_REPLACEMENT_FILES = [
 
 export const MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE = [
   'nativescript.config.ts',
+];
+
+export const MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE = [
+  'App_Resources/Android/src/main/res/values/strings.xml',
+  'App_Resources/Android/src/main/res/values-v21/strings.xml',
 ];
 
 export const CLI_STATE = {

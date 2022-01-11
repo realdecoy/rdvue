@@ -60,6 +60,18 @@ function toPascalCase(value: string): string {
 }
 
 /**
+ * Description: convert a string to english case (e.g. My Project Name)
+ * @param {string} value - a string value
+ * @returns {string} -
+ */
+function toEnglishCase(value: string): string {
+  return value
+    .split(/[-_ ]+/)
+    .join(' ')
+    .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase());
+}
+
+/**
  * Description: determine if string is valid project name
  * @param {string} value - a string value
  * @returns {any} -
@@ -189,6 +201,28 @@ function validateStoreModuleName(value: any) {
   }
 
   return isValidArgName ? true : resultMessage;
+}
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+async function parseLayoutName(args: Lookup): Promise<string> {
+  let argName = args.name;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: 'my-layout',
+      message: 'Enter a layout name: ',
+      type: 'input',
+      validate: validateComponentName,
+    }]);
+    argName = responses.name;
+  }
+
+  return argName;
 }
 
 /**
@@ -370,6 +404,8 @@ export {
   hasKebab,
   toKebabCase,
   toPascalCase,
+  toEnglishCase,
+  parseLayoutName,
   parseComponentName,
   parseProjectName,
   parseProjectPresets,

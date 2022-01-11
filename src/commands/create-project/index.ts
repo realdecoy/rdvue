@@ -4,7 +4,7 @@ import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
 import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
-import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase } from '../../lib/utilities';
+import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase, toEnglishCase } from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
@@ -16,6 +16,7 @@ import {
   MOBILE_TEMPLATE_REPLACEMENT_FILES,
   MOBILE_TEMPLATE_REPO,
   MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE,
+  MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE,
 } from '../../lib/constants';
 
 const CUSTOM_ERROR_CODES = [
@@ -77,7 +78,8 @@ export default class CreateProject extends Command {
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
 
     let filesToReplace = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES : TEMPLATE_REPLACEMENT_FILES;
-    let filesToReplacePascalCase = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE : [];
+    let mobileFilesToReplacePascalCase = MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE;
+    let mobileFilesToReplaceEnglishCase = MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE;
     let projectName: string;
     let presetName: string = '';
     const { isValid: isValidProject } = checkProjectValidity();
@@ -113,11 +115,16 @@ export default class CreateProject extends Command {
     // find and replace project name references
     let success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
 
-    // update files with pascalcase
     if (isMobile) {
+      // update files with pascalcase
       const projectNamePascalCase = toPascalCase(projectName);
-      filesToReplacePascalCase = filesToReplacePascalCase.map(p => `${projectName}/${p}`);
-      success = await replaceInFiles(filesToReplacePascalCase, replaceRegex, `${projectNamePascalCase}`);
+      mobileFilesToReplacePascalCase = mobileFilesToReplacePascalCase.map(p => `${projectName}/${p}`);
+      success = await replaceInFiles(mobileFilesToReplacePascalCase, replaceRegex, `${projectNamePascalCase}`);
+
+      // update files with englishcase
+      const projectNameEnglishCase = toEnglishCase(projectName);
+      mobileFilesToReplaceEnglishCase = mobileFilesToReplaceEnglishCase.map(p => `${projectName}/${p}`);
+      success = await replaceInFiles(mobileFilesToReplaceEnglishCase, replaceRegex, `${projectNameEnglishCase}`);
     }
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
