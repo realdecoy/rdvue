@@ -153,10 +153,12 @@ export default class CreateProject extends Command {
         cli.action.start(`${CLI_STATE.Info} adding realdecoy npm registry`);
         await exec(`cd ${projectName} && echo "@realdecoy:registry=https://npm.pkg.github.com
         //npm.pkg.github.com/:_authToken=${GIT_ACCESS_TOKEN}" > .npmrc`, { silent: true });
+        cli.action.stop();
       }
     }
 
     if (shouldInstallDesignSystem === true) {
+      // this.log('[X]', { designTemplate, tag, projectName, designTemplateFolder });
       // retrieve project files from template source
       await shell.exec(`git clone ${designTemplate} --depth 1 --branch ${tag} ${projectName}/${designTemplateFolder}`, { silent: true });
       // remove git folder reference to base project
