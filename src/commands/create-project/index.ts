@@ -1,19 +1,15 @@
 import shell from 'shelljs';
 import chalk from 'chalk';
-import cli from 'cli-ux';
-const util = require('util');
-const exec = util.promisify(shell.exec);
 import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
 import RdBuefy from '../plugin/rd-buefy';
 import Localization from '../plugin/localization';
+import DesignSystem from '../plugin/design-system';
 import Vuetify from '../plugin/vuetify';
 import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
-  DESIGN_TEMPLATE_REPO,
-  DESIGN_TEMPLATE_FOLDER,
   TEMPLATE_TAG,
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
@@ -71,11 +67,8 @@ export default class CreateProject extends Command {
   }
 
   async run(): Promise<void> {
-    const GIT_ACCESS_TOKEN = process.env.GIT_TOKEN;
     const { args, flags } = this.parse(CreateProject);
     const template: string = TEMPLATE_REPO;
-    const designTemplate: string = DESIGN_TEMPLATE_REPO;
-    const designTemplateFolder: string = DESIGN_TEMPLATE_FOLDER;
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
     const skipPresetsStep = flags.skipPresets === true;
@@ -150,19 +143,12 @@ export default class CreateProject extends Command {
       }
       if (shouldInstallDesignSystem === true) {
         // add npm registry
-        cli.action.start(`${CLI_STATE.Info} adding realdecoy npm registry`);
-        await exec(`cd ${projectName} && echo "@realdecoy:registry=https://npm.pkg.github.com
-        //npm.pkg.github.com/:_authToken=${GIT_ACCESS_TOKEN}" > .npmrc`, { silent: true });
-        cli.action.stop();
+        // cli.action.start(`${CLI_STATE.Info} adding realdecoy npm registry`);
+        // await exec(`cd ${projectName} && echo "@realdecoy:registry=https://npm.pkg.github.com
+        // //npm.pkg.github.com/:_authToken=${GIT_ACCESS_TOKEN}" > .npmrc`, { silent: true });
+        // cli.action.stop();
+        await DesignSystem.run(['--forceProject', projectName, '--skipInstall']);
       }
-    }
-
-    if (shouldInstallDesignSystem === true) {
-      // this.log('[X]', { designTemplate, tag, projectName, designTemplateFolder });
-      // retrieve project files from template source
-      await shell.exec(`git clone ${designTemplate} --depth 1 --branch ${tag} ${projectName}/${designTemplateFolder}`, { silent: true });
-      // remove git folder reference to base project
-      await shell.exec(`npx rimraf ${projectName}/${designTemplateFolder}/.git`);
     }
 
     // initialize git in the created project
