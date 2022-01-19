@@ -1,7 +1,8 @@
 /* eslint-disable max-lines */
 import * as inquirer from 'inquirer';
+import chalk from 'chalk';
 import { Lookup } from '../modules';
-import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
+import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST, PROJECT_TYPES } from './constants';
 import { getProjectRoot } from './files';
 
 /**
@@ -400,6 +401,50 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
   return results;
 }
 
+/**
+ * Return message to be used to display in creation process
+ * @param {string} cliState - Classification of cli message
+ * @param {string} projectName - Name of project
+ * @param {Record} type - Type of project being generated
+ * @param {boolean} isFinalMessage - Type of message being generated
+ * @returns {string} - Message being returned.
+ */
+function projectCreationMessageGenerator(cliState: string, projectName: string, type: Lookup, isFinalMessage = false): string {
+  let projectMonicor: string;
+  let message: string;
+  let finalMessage: string;
+  const typesArr = Object.keys(type);
+  const project = typesArr.filter(t => type[t] === true)[0];
+
+  switch (project) {
+    case PROJECT_TYPES.Nativescript:
+      projectMonicor = PROJECT_TYPES.Nativescript;
+      break;
+
+    default:
+      projectMonicor = PROJECT_TYPES.Vue;
+      break;
+  }
+
+  if (isFinalMessage) {
+    switch (project) {
+      case PROJECT_TYPES.Nativescript:
+        finalMessage = 'ns run android/ios';
+        break;
+
+      default:
+        finalMessage = 'npm run serve';
+        break;
+    }
+
+    message = `\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ${finalMessage}`;
+  } else {
+    message = `${cliState} creating ${projectMonicor} project ${chalk.whiteBright(projectName)}`;
+  }
+
+  return message;
+}
+
 export {
   hasKebab,
   toKebabCase,
@@ -415,4 +460,5 @@ export {
   parseStoreModuleName,
   isJsonString,
   checkProjectValidity,
+  projectCreationMessageGenerator,
 };

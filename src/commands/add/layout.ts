@@ -81,13 +81,14 @@ export default class Layout extends Command {
       replaceTargetFileNames(files, layoutNameKebab);
       sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory);
 
-      installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory, config.manifest.installWithinFolder ? layoutNameKebab : '');
+      const folderName = config.manifest.isNativescriptTemplate ? '' : layoutNameKebab;
+      installDirectory = path.join(projectRoot, 'src', config.manifest.installDirectory, folderName);
       // copy and update files for component being added
       await copyFiles(sourceDirectory, installDirectory, files);
       await readAndUpdateFeatureFiles(installDirectory, files, layoutNameKebab, layoutNamePascal);
     });
 
-    this.log(`${CLI_STATE.Success} component added: ${layoutNameKebab}`);
-    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Component)}\n`);
+    this.log(`${CLI_STATE.Success} layout added: ${layoutNameKebab}`);
+    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Layout)}\n`);
   }
 }
