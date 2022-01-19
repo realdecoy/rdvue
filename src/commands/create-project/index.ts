@@ -4,7 +4,16 @@ import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
 import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
-import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase, toEnglishCase } from '../../lib/utilities';
+import {
+  toKebabCase,
+  parseProjectName,
+  isJsonString,
+  checkProjectValidity,
+  parseProjectPresets,
+  toPascalCase,
+  toEnglishCase,
+  projectCreationMessageGenerator,
+} from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
@@ -13,10 +22,11 @@ import {
   TEMPLATE_REPLACEMENT_FILES,
   CLI_STATE,
   PLUGIN_PRESET_LIST,
-  MOBILE_TEMPLATE_REPLACEMENT_FILES,
-  MOBILE_TEMPLATE_REPO,
-  MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE,
-  MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE,
+  NATIVESCRIPT_TEMPLATE_REPLACEMENT_FILES,
+  NATIVESCRIPT_TEMPLATE_REPO,
+  NATIVESCRIPT_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE,
+  NATIVESCRIPT_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE,
+  PROJECT_TYPES,
 } from '../../lib/constants';
 
 const CUSTOM_ERROR_CODES = [
@@ -34,7 +44,7 @@ export default class CreateProject extends Command {
     withBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
     withVuetify: flags.boolean({ hidden: true }),
-    mobile: flags.boolean({ hidden: true }),
+    nativescript: flags.boolean({ hidden: true }),
   }
 
   static args = [
@@ -68,18 +78,16 @@ export default class CreateProject extends Command {
 
   async run(): Promise<void> {
     const { args, flags } = this.parse(CreateProject);
-    const isMobile = flags.mobile === true;
-    const skipPresetsStep = flags.skipPresets === true || isMobile;
+    const isNativescript = flags.nativescript === true;
+    const skipPresetsStep = flags.skipPresets === true || isNativescript;
     const withBuefy = flags.withBuefy === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
-    const template: string = isMobile ? MOBILE_TEMPLATE_REPO : TEMPLATE_REPO;
+    let template = TEMPLATE_REPO;
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
 
-    let filesToReplace = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES : TEMPLATE_REPLACEMENT_FILES;
-    let mobileFilesToReplacePascalCase = MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE;
-    let mobileFilesToReplaceEnglishCase = MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE;
+    let filesToReplace = TEMPLATE_REPLACEMENT_FILES;
     let projectName: string;
     let presetName: string = '';
     const { isValid: isValidProject } = checkProjectValidity();
@@ -91,6 +99,11 @@ export default class CreateProject extends Command {
           message: `you are already in an existing ${chalk.yellow('rdvue')} project`,
         }),
       );
+    }
+
+    if (isNativescript) {
+      template = NATIVESCRIPT_TEMPLATE_REPO;
+      filesToReplace = NATIVESCRIPT_TEMPLATE_REPLACEMENT_FILES;
     }
 
     // retrieve project name
@@ -106,7 +119,13 @@ export default class CreateProject extends Command {
     // update files to be replaced with project name reference
     filesToReplace = filesToReplace.map(p => `${projectName}/${p}`);
 
-    this.log(`${CLI_STATE.Info} creating ${isMobile ? 'mobile' : ''} project ${chalk.whiteBright(projectName)}`);
+    // Project flags
+    const PROJECT_FLAGS = {
+      [PROJECT_TYPES.Nativescript]: flags[PROJECT_TYPES.Nativescript],
+    };
+
+    const MESSAGE = projectCreationMessageGenerator(CLI_STATE.Info, projectName, PROJECT_FLAGS);
+    this.log(MESSAGE);
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, { silent: true });
@@ -115,7 +134,10 @@ export default class CreateProject extends Command {
     // find and replace project name references
     let success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
 
-    if (isMobile) {
+    if (isNativescript) {
+      let mobileFilesToReplacePascalCase = NATIVESCRIPT_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE;
+      let mobileFilesToReplaceEnglishCase = NATIVESCRIPT_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE;
+
       // update files with pascalcase
       const projectNamePascalCase = toPascalCase(projectName);
       mobileFilesToReplacePascalCase = mobileFilesToReplacePascalCase.map(p => `${projectName}/${p}`);
@@ -128,8 +150,8 @@ export default class CreateProject extends Command {
     }
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
-    const shouldInstallBuefy = !isMobile && (presetIndex === 0 || withBuefy === true);
-    const shouldInstallVuetify = !isMobile && (presetIndex === 1 || withVuetify === true);
+    const shouldInstallBuefy = !isNativescript && (presetIndex === 0 || withBuefy === true);
+    const shouldInstallVuetify = !isNativescript && (presetIndex === 1 || withVuetify === true);
     const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
 
     if (success === false) {
@@ -156,7 +178,8 @@ export default class CreateProject extends Command {
 
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`);
 
-    // Output final instructions to user
-    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ${isMobile ? 'ns run android/ios' : 'npm run serve'}`);
+    // Output next steps to user
+    const NEXT_STEPS = projectCreationMessageGenerator(CLI_STATE.Info, projectName, PROJECT_FLAGS, true);
+    this.log(NEXT_STEPS);
   }
 }

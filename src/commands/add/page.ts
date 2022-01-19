@@ -86,8 +86,8 @@ export default class Page extends Command {
       await copyFiles(sourceDirectory, installDirectory, files);
       await readAndUpdateFeatureFiles(installDirectory, files, pageNameKebab, pageNamePascal);
 
-      if (config.manifest.mobile) {
-        updateNativeRoutes(projectRoot, pageNamePascal, pageName, config.manifest.mobileRoutes);
+      if (config.manifest.isNativescriptTemplate) {
+        updateNativeRoutes(projectRoot, pageNamePascal, pageName, config.manifest.routes);
       }
     });
 
