@@ -178,8 +178,8 @@ export default class CreateProject extends Command {
 
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`);
 
-    // Output final instructions to user
-    const FINAL_INSTRUCTIONS = projectCreationMessageGenerator(CLI_STATE.Info, projectName, PROJECT_FLAGS, true);
-    this.log(FINAL_INSTRUCTIONS);
+    // Output next steps to user
+    const NEXT_STEPS = projectCreationMessageGenerator(CLI_STATE.Info, projectName, PROJECT_FLAGS, true);
+    this.log(NEXT_STEPS);
   }
 }

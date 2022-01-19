@@ -412,7 +412,6 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
 function projectCreationMessageGenerator(cliState: string, projectName: string, type: Lookup, isFinalMessage = false): string {
   let projectMonicor: string;
   let message: string;
-  let finalMessage: string;
   const typesArr = Object.keys(type);
   const project = typesArr.filter(t => type[t] === true)[0];
 
@@ -429,15 +428,13 @@ function projectCreationMessageGenerator(cliState: string, projectName: string, 
   if (isFinalMessage) {
     switch (project) {
       case PROJECT_TYPES.Nativescript:
-        finalMessage = 'ns run android/ios';
+        message = `\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ns run android OR ns run ios`;
         break;
 
       default:
-        finalMessage = 'npm run serve';
+        message = `\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} npm run serve`;
         break;
     }
-
-    message = `\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ${finalMessage}`;
   } else {
     message = `${cliState} creating ${projectMonicor} project ${chalk.whiteBright(projectName)}`;
   }

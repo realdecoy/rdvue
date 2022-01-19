@@ -4,7 +4,10 @@ import { CLI_COMMANDS } from '../../src/lib/constants';
 import { exec } from 'child_process';
 
 const testProjectName = 'rdv-hello-world';
+const testNativescriptProjectName = 'rdv-nativescript';
 const skipPresets = '--skipPresets';
+const nativescriptProject = '--nativescript';
+const nativescriptNextSteps = 'ns run android OR ns run ios';
 // const badProjectName = '$testProject@project';
 
 describe(CLI_COMMANDS.CreateProject, () => {
@@ -33,6 +36,24 @@ describe(CLI_COMMANDS.CreateProject, () => {
 
   after(() => {
     exec(`rm -r ${testProjectName}`, error => {
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.log(`error: ${error.message}`);
+      }
+    });
+  });
+});
+
+describe(`${CLI_COMMANDS.CreateProject}:nativescript`, () => {
+  test
+    .stdout()
+    .command([CLI_COMMANDS.CreateProject, testNativescriptProjectName, skipPresets, nativescriptProject])
+    .it(`runs ${CLI_COMMANDS.CreateProject} ${testNativescriptProjectName}`, ctx => {
+      expect(ctx.stdout).to.contain(nativescriptNextSteps);
+    });
+
+  after(() => {
+    exec(`rm -r ${testNativescriptProjectName}`, error => {
       if (error) {
         // eslint-disable-next-line no-console
         console.log(`error: ${error.message}`);

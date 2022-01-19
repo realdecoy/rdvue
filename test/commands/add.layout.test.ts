@@ -4,15 +4,15 @@ import { CLI_COMMANDS } from '../../src/lib/constants';
 import { exec } from 'child_process';
 
 const skipPresets = '--skipPresets';
-const testProjectName = 'rdv-hello-world-test';
+const testProjectName = 'rdv-layout-test';
 const testLayoutName = 'hello-world';
 // const badLayoutName = 'he%20-2world';
 
-describe(CLI_COMMANDS.AddPage, () => {
+describe(CLI_COMMANDS.AddLayout, () => {
   test
     .stdout()
-    .command([CLI_COMMANDS.AddPage])
-    .it(`runs rdvue ${CLI_COMMANDS.AddPage} ${testLayoutName} (outside project)`, ctx => {
+    .command([CLI_COMMANDS.AddLayout])
+    .it(`runs rdvue ${CLI_COMMANDS.AddLayout} ${testLayoutName} (outside project)`, ctx => {
       expect(ctx.stdout).to.contain(`[rdvue] ${CLI_COMMANDS.AddLayout} command must be run in an existing rdvue project`);
     });
 
@@ -23,7 +23,7 @@ describe(CLI_COMMANDS.AddPage, () => {
     .command([CLI_COMMANDS.AddLayout, testLayoutName])
     .do(() => process.chdir('../'))
     .it(`runs rdvue ${CLI_COMMANDS.AddLayout} ${testLayoutName}`, ctx => {
-      expect(ctx.stdout).to.contain(`[rdvue] page added: ${testLayoutName}`);
+      expect(ctx.stdout).to.contain(`[rdvue] layout added: ${testLayoutName}`);
     });
 
   // test
