@@ -535,6 +535,7 @@ export {
   readAndUpdateFeatureFiles,
   copyFiles,
   getProjectRoot,
+  readFile,
   fileExists,
   writeFile,
   inject,
