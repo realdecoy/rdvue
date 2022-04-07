@@ -50,6 +50,7 @@ export const PLUGIN_PRESET_LIST = [
 ];
 
 export const TEMPLATE_REPLACEMENT_FILES = [
+  'README.md',
   'package.json',
   '.rdvue/.rdvue',
   'public/index.html',
