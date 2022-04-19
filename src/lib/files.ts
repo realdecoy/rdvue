@@ -524,6 +524,23 @@ async function updateDynamicImportsAndExports(
   }
 }
 
+/**
+ * Description: Delete file at given path
+ * @param {string} filePath - path of file which will be created or modified to include given data
+ * @returns {boolean} -
+ */
+function deleteFile(filePath: string): boolean {
+  let success = true;
+  try {
+    fs.unlinkSync(filePath);
+  } catch (error) {
+    success = false;
+    throw new Error('failed to delete file');
+  }
+
+  return success;
+}
+
 export {
   updateDynamicImportsAndExports,
   parseDynamicObjects,
@@ -539,4 +556,5 @@ export {
   fileExists,
   writeFile,
   inject,
+  deleteFile,
 };
