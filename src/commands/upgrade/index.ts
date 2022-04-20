@@ -6,7 +6,7 @@ import { checkProjectValidity, isJsonString } from '../../lib/utilities';
 import { copyFiles, deleteFile, readFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS } from '../../lib/constants';
 import {  CHANGE_LOG, ChangelogConfigTypes } from '../../lib/changelog';
-import { ChangeLog, ChangelogResources, ChangelogResourcesContent } from '../../modules';
+import { ChangeLog, changeLogFile, ChangelogResources, ChangelogResourcesContent, Files } from '../../modules';
 
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
@@ -47,6 +47,66 @@ export default class Upgrade extends Command {
     return Promise.resolve();
   }
 
+  async createFiles (projectRoot: string, temporaryProjectFolder:string, resources: ChangelogResources[]): Promise<void> {
+
+    for (const resource of resources) {
+      
+      try {        
+        const src = resource.srcPath as string;
+        const dest = resource.destPath;
+        const file = [resource.file as changeLogFile] as Array<string | Files>;
+
+        const srcDir = path.join(temporaryProjectFolder, src)
+        const destDir = path.join(projectRoot, dest)
+
+        await copyFiles(srcDir, destDir, file);
+      } catch (error) {
+        this.log(`${CLI_STATE.Warning} could not create file at: ${chalk.yellow(file)}`);
+      }
+    }
+  }
+
+  /**
+   * @TODO complete process for updating package.json
+   */
+  async updateFiles (projectRoot: string, resources: ChangelogResources[]): Promise<void> {
+
+    for (const resource of resources) {
+
+      const src = resource.srcPath as string;
+      const dest = resource.destPath;
+      const name = resource.name;
+      const contents = resource.contents as ChangelogResourcesContent[];
+
+      if (name === 'package.json') {
+        const rawPackageConfig = await readFile(path.join(projectRoot, 'package.json'));
+        const packageConfig = JSON.parse(rawPackageConfig);
+        for (const content of contents) {
+          
+        }
+
+      }
+    }
+  }
+  
+  async removeFiles (projectRoot: string, resources: ChangelogResources[]): Promise<void> {
+
+    for (const resource of resources) {
+
+      const dest = resource.destPath;
+      const name = resource.name as string;
+
+      const destDir = path.join(projectRoot, dest);
+      const targetFile = path.join(destDir, name);
+
+      try {
+        deleteFile(targetFile);
+      } catch (error) {
+        this.log(`${CLI_STATE.Warning} could not find file at: ${chalk.yellow(targetFile)} to delete`);
+      }
+    }
+  }
+
   async run(): Promise<void> {
     const { isValid: isValidProject, projectRoot } = checkProjectValidity();
     // block command unless being run within an rdvue project
@@ -82,89 +142,12 @@ export default class Upgrade extends Command {
     // 8. include new project folders and files ( scripts/config, config/.env, config/.env.example, webpack.config.js )
     // 9. update existing project files ( main.ts, tsconfig.json, tailwind.config.js, src/pages/hello-world, readme )
     
-    async function createFiles (resources: ChangelogResources[]): Promise<void> {
-      for (const resource of resources) {
+    const changeLogData = CHANGE_LOG;
 
-        const src = resource.srcPath as string;
-        const dest = resource.destPath;
-        const name = resource.name;
-
-        if (!resource.destPath) {
-          await shell.exec(`mkdir ${resource.destPath}`);
-        }
-        const srcDir = path.join(temporaryProjectFolder, src)
-        const destDir = path.join(projectRoot, dest)
-        const srcFile = await readFile(path.join(srcDir, name));
-
-        copyFiles(srcDir, destDir, [srcFile]);
-      }
-    }
-
-    /**
-     * @TODO complete process for updating package.json
-     */
-    async function updateFiles (resources: ChangelogResources[]): Promise<void> {
-
-      for (const resource of resources) {
-
-        const src = resource.srcPath as string;
-        const dest = resource.destPath;
-        const name = resource.name;
-        const contents = resource.contents as ChangelogResourcesContent[];
-
-        if (name === 'package.json') {
-          const rawPackageConfig = await readFile(path.join(projectRoot, 'package.json'));
-          const packageConfig = JSON.parse(rawPackageConfig);
-          for (const content of contents) {
-            
-          }
-
-        }
-      }
-    }
-    
-    async function removeFiles (resources: ChangelogResources[]): Promise<void> {
-
-      for (const resource of resources) {
-
-        const dest = resource.destPath;
-        const name = resource.name;
-
-        const destDir = path.join(projectRoot, dest);
-        const targetFile = await readFile(path.join(destDir, name));
-
-        deleteFile(targetFile);
-      }
-    }
-
-    async function processChangeLog(changeLogData: ChangeLog) {
+    await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
+    await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
+    //await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
       
-      const changeLogKeys = Object.keys(changeLogData);
-  
-      for (const process of changeLogKeys) {
-        const resources = changeLogData[process as ChangelogConfigTypes].resources as ChangelogResources[];
-        switch (process) {
-          case ChangelogConfigTypes.CREATE:
-            await createFiles(resources)
-            break;
-  
-          case ChangelogConfigTypes.UPDATE:
-            updateFiles(resources)
-            break;
-  
-          case ChangelogConfigTypes.DELETE:
-            await removeFiles(resources)
-            break;
-      
-          default:
-            break;
-        }
-      };
-    }
-
-    await processChangeLog(CHANGE_LOG);
-
-
 
     // 10. create a module within this command that can carry out the above actions for a specified version
 

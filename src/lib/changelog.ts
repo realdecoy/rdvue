@@ -2,14 +2,15 @@ import { ChangeLog } from '../modules';
 
 export enum ChangelogMetaDataTypes {
   MIGRATION = 'migration',
-    PATCH = 'patch',
+  UPDATE = 'update',
+  PATCH = 'patch'
 }
 
 export enum ChangelogConfigTypes {
   META_DATA = 'metaData',
-    CREATE = 'create',
-    UPDATE = 'update',
-    DELETE = 'delete'
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete'
 }
 
 export const CHANGE_LOG: ChangeLog = {
@@ -21,56 +22,92 @@ export const CHANGE_LOG: ChangeLog = {
     resources: [
       {
         name: 'index.ts',
+        file: {
+          source: 'index.ts',
+          target: 'index.ts',
+        },
         destPath: 'scripts/config',
         srcPath: 'scripts/config',
         type: 'file',
       },
       {
         name: '.env',
-        destPath: 'scripts/config',
-        srcPath: 'scripts/config',
+        file: {
+          source: '.env',
+          target: '.env',
+        },
+        destPath: 'config',
+        srcPath: 'config',
         type: 'file',
       },
       {
         name: '.env.example',
-        destPath: 'scripts/config',
-        srcPath: 'scripts/config',
+        file: {
+          source: '.env.example',
+          target: '.env.example',
+        },
+        destPath: 'config',
+        srcPath: 'config',
         type: 'file',
       },
       {
         name: 'media-loader.ts',
+        file: {
+          source: 'media-loader.ts',
+          target: 'media-loader.ts',
+        },
         destPath: 'scripts/config',
         srcPath: 'scripts/config',
         type: 'file',
       },
       {
         name: 'sass-loader.ts',
+        file: {
+          source: 'sass-loader.ts',
+          target: 'sass-loader.ts',
+        },
         destPath: 'scripts/config',
         srcPath: 'scripts/config',
         type: 'file',
       },
       {
         name: 'ts-loader.ts',
+        file: {
+          source: 'ts-loader.ts',
+          target: 'ts-loader.ts',
+        },
         destPath: 'scripts/config',
         srcPath: 'scripts/config',
         type: 'file',
       },
       {
         name: 'vue-loader.ts',
+        file: {
+          source: 'vue-loader.ts',
+          target: 'vue-loader.ts',
+        },
         destPath: 'scripts/config',
         srcPath: 'scripts/config',
         type: 'file',
       },
       {
         name: 'font-loader.ts',
+        file: {
+          source: 'font-loader.ts',
+          target: 'font-loader.ts',
+        },
         destPath: 'scripts/config',
         srcPath: 'scripts/config',
         type: 'file',
       },
       {
         name: 'webpack.config.js',
-        destPath: './',
-        srcPath: './',
+        file: {
+          source: 'webpack.config.ts',
+          target: 'webpack.config.ts',
+        },
+        destPath: '',
+        srcPath: '',
         type: 'file',
       },
     ],
@@ -130,17 +167,12 @@ export const CHANGE_LOG: ChangeLog = {
     resources: [
       {
         name: 'vue.config.js',
-        destPath: './',
-        type: 'file',
-      },
-      {
-        name: '.env.example',
-        destPath: './',
+        destPath: '',
         type: 'file',
       },
       {
         name: '.package-lock.json',
-        destPath: './',
+        destPath: '',
         type: 'file',
       },
     ],

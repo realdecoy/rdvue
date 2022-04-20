@@ -6,8 +6,14 @@ export type ChangelogResourcesContent = {
     operation: string;
 }
 
+export type changeLogFile = {
+    source: string;
+    target: string;
+} 
+
 export type ChangelogResources = {
-    name: string;
+    name?: string;
+    file?: changeLogFile;
     destPath: string;
     srcPath?: string;
     type: string;
