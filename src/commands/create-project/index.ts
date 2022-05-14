@@ -2,20 +2,21 @@ import shell from 'shelljs';
 import chalk from 'chalk';
 import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
+import RdBuefy from '../plugin/rd-buefy';
 import Localization from '../plugin/localization';
+import DesignSystem from '../plugin/design-system';
 import Vuetify from '../plugin/vuetify';
 import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
-  DESIGN_TEMPLATE_REPO,
-  DESIGN_TEMPLATE_FOLDER,
   TEMPLATE_TAG,
   TEMPLATE_PROJECT_NAME_REGEX,
   TEMPLATE_REPLACEMENT_FILES,
   CLI_STATE,
   PLUGIN_PRESET_LIST,
 } from '../../lib/constants';
+require('dotenv').config();
 
 const CUSTOM_ERROR_CODES = [
   'existing-project',
@@ -30,6 +31,7 @@ export default class CreateProject extends Command {
     help: flags.help({ char: 'h' }),
     skipPresets: flags.boolean({ hidden: true }),
     withBuefy: flags.boolean({ hidden: true }),
+    withRdBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
     withVuetify: flags.boolean({ hidden: true }),
     withDesignSystem: flags.boolean({ hidden: true }),
@@ -67,12 +69,11 @@ export default class CreateProject extends Command {
   async run(): Promise<void> {
     const { args, flags } = this.parse(CreateProject);
     const template: string = TEMPLATE_REPO;
-    const designTemplate: string = DESIGN_TEMPLATE_REPO;
-    const designTemplateFolder: string = DESIGN_TEMPLATE_FOLDER;
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
     const skipPresetsStep = flags.skipPresets === true;
     const withBuefy = flags.withBuefy === true;
+    const withRdBuefy = flags.withRdBuefy === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
     const withDesignSystem = flags.withDesignSystem === true;
@@ -115,9 +116,10 @@ export default class CreateProject extends Command {
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
     const shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
+    const shouldInstallRdBuefy = presetIndex === 2 || withRdBuefy === true;
     const shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
     const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
-    const shouldInstallDesignSystem = withDesignSystem === true;
+    const shouldInstallDesignSystem = presetIndex === 2 || withDesignSystem === true;
 
     if (success === false) {
       throw new Error(
@@ -130,19 +132,23 @@ export default class CreateProject extends Command {
       if (shouldInstallBuefy === true) { // buefy
         await Buefy.run(['--forceProject', projectName, '--skipInstall']);
       }
+      if (shouldInstallRdBuefy === true) { // buefy
+        await RdBuefy.run(['--forceProject', projectName, '--skipInstall']);
+      }
       if (shouldInstallVuetify) { // Vuetify
         await Vuetify.run(['--forceProject', projectName, '--skipInstall']);
       }
       if (shouldInstallLocalization === true) { // localization
         await Localization.run(['--forceProject', projectName, '--skipInstall']);
       }
-    }
-
-    if (shouldInstallDesignSystem === true) {
-      // retrieve project files from template source
-      await shell.exec(`git clone ${designTemplate} --depth 1 --branch ${tag} ${projectName}/${designTemplateFolder}`, { silent: true });
-      // remove git folder reference to base project
-      await shell.exec(`npx rimraf ${projectName}/${designTemplateFolder}/.git`);
+      if (shouldInstallDesignSystem === true) {
+        // add npm registry
+        // cli.action.start(`${CLI_STATE.Info} adding realdecoy npm registry`);
+        // await exec(`cd ${projectName} && echo "@realdecoy:registry=https://npm.pkg.github.com
+        // //npm.pkg.github.com/:_authToken=${GIT_ACCESS_TOKEN}" > .npmrc`, { silent: true });
+        // cli.action.stop();
+        await DesignSystem.run(['--forceProject', projectName, '--skipInstall']);
+      }
     }
 
     // initialize git in the created project

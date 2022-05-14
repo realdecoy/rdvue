@@ -4,7 +4,8 @@ export const TEMPLATE_ROOT = '.rdvue/template';
 export const TEMPLATE_REPO = 'https://github.com/realdecoy/rdvue-template';
 export const DESIGN_TEMPLATE_REPO = 'https://github.com/realdecoy/design-system-components';
 export const TEMPLATE_TAG = 'main'; // replace this with the appropriate release tag in the template repo
-export const DESIGN_TEMPLATE_FOLDER = 'library';
+export const DESIGN_TEMPLATE_TAG = 'main'; // replace this with the appropriate release tag in the design system library repo
+export const DESIGN_TEMPLATE_FOLDER = '.library';
 export const TEMPLATE_PROJECT_NAME_REGEX = /__PROJECT_NAME__/g;
 export const TEMPLATE_VERSIONS_SUPPORTED = [2];
 export const TEMPLATE_CONFIG_FILENAME = 'manifest.json';
@@ -26,6 +27,8 @@ enum CLI_COMMANDS_ENUM {
   AddStore = 'add:store',
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
+  PluginRdBuefy = 'plugin:rd-buefy',
+  PluginDesignSystem = 'plugin:design-system',
   PluginLocalization = 'plugin:localization',
   PluginVuetify = 'plugin:vuetify',
   PluginLibrary = 'plugin',
@@ -45,6 +48,7 @@ export const DOCUMENTATION_LINKS = DOCUMENTATION_LINKS_ENUM;
 export const PLUGIN_PRESET_LIST = [
   'Buefy & Localization (recommended)',
   'Vuetify & Localization',
+  'Design System & rd-buefy',
   `${chalk.magenta('[Skip presets]')}`,
 ];
 
@@ -61,3 +65,10 @@ export const CLI_STATE = {
   Warning: `${chalk.yellow('[rdvue]')}`,
   Success: `${chalk.green('[rdvue]')}`,
 };
+
+export const COMMON_CUSTOM_ERROR_CODES = [
+  'project-invalid',
+  'missing-template-file',
+  'missing-template-folder',
+  'dependency-install-error',
+];
