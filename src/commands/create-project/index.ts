@@ -15,8 +15,6 @@ import {
   PLUGIN_PRESET_LIST,
   MOBILE_TEMPLATE_REPLACEMENT_FILES,
   MOBILE_TEMPLATE_REPO,
-  MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE,
-  MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE,
 } from '../../lib/constants';
 
 const CUSTOM_ERROR_CODES = [
@@ -78,8 +76,8 @@ export default class CreateProject extends Command {
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
 
     let filesToReplace = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES : TEMPLATE_REPLACEMENT_FILES;
-    let mobileFilesToReplacePascalCase = MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE;
-    let mobileFilesToReplaceEnglishCase = MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE;
+    // let mobileFilesToReplacePascalCase = MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE;
+
     let projectName: string;
     let presetName: string = '';
     const { isValid: isValidProject } = checkProjectValidity();
@@ -115,22 +113,11 @@ export default class CreateProject extends Command {
     // find and replace project name references
     let success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
 
-    if (isMobile) {
-      // update files with pascalcase
-      const projectNamePascalCase = toPascalCase(projectName);
-      mobileFilesToReplacePascalCase = mobileFilesToReplacePascalCase.map(p => `${projectName}/${p}`);
-      success = await replaceInFiles(mobileFilesToReplacePascalCase, replaceRegex, `${projectNamePascalCase}`);
-
-      // update files with englishcase
-      const projectNameEnglishCase = toEnglishCase(projectName);
-      mobileFilesToReplaceEnglishCase = mobileFilesToReplaceEnglishCase.map(p => `${projectName}/${p}`);
-      success = await replaceInFiles(mobileFilesToReplaceEnglishCase, replaceRegex, `${projectNameEnglishCase}`);
-    }
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
     const shouldInstallBuefy = !isMobile && (presetIndex === 0 || withBuefy === true);
     const shouldInstallVuetify = !isMobile && (presetIndex === 1 || withVuetify === true);
-    const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
+    const shouldInstallLocalization = !isMobile && presetIndex === 0 || presetIndex === 1 || withLocalization === true;
 
     if (success === false) {
       throw new Error(
@@ -157,6 +144,6 @@ export default class CreateProject extends Command {
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`);
 
     // Output final instructions to user
-    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ${isMobile ? 'ns run android/ios' : 'npm run serve'}`);
+    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ${isMobile ? 'npm run android | ios' : 'npm run serve'}`);
   }
 }

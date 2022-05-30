@@ -2,7 +2,8 @@ import chalk from 'chalk';
 
 export const TEMPLATE_ROOT = '.rdvue/template';
 export const TEMPLATE_REPO = 'https://github.com/realdecoy/rdvue-template';
-export const MOBILE_TEMPLATE_REPO = 'https://github.com/realdecoy/rdvue-mobile-template';
+export const MOBILE_TEMPLATE_REPO =
+  'https://github.com/realdecoy/rdvue-mobile-template';
 export const TEMPLATE_TAG = 'main'; // replace this with the appropriate release tag in the template repo
 export const TEMPLATE_PROJECT_NAME_REGEX = /__PROJECT_NAME__/g;
 export const TEMPLATE_VERSIONS_SUPPORTED = [2];
@@ -29,7 +30,7 @@ enum CLI_COMMANDS_ENUM {
   PluginLocalization = 'plugin:localization',
   PluginVuetify = 'plugin:vuetify',
   PluginLibrary = 'plugin',
-  PoorHelpCommand = 'add-help'
+  PoorHelpCommand = 'add-help',
 }
 export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 
@@ -60,16 +61,10 @@ export const MOBILE_TEMPLATE_REPLACEMENT_FILES = [
   'package.json',
   'package-lock.json',
   '.rdvue/.rdvue',
+  'app.json',
 ];
 
-export const MOBILE_TEMPLATE_REPLACEMENT_FILES_PASCAL_CASE = [
-  'nativescript.config.ts',
-];
 
-export const MOBILE_TEMPLATE_REPLACEMENT_FILES_ENGLISH_CASE = [
-  'App_Resources/Android/src/main/res/values/strings.xml',
-  'App_Resources/Android/src/main/res/values-v21/strings.xml',
-];
 
 export const CLI_STATE = {
   Info: `${chalk.blue('[rdvue]')}`,
