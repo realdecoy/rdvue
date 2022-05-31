@@ -1,8 +1,9 @@
 /* eslint-disable max-lines */
+import { AxiosRequestConfig, AxiosInstance } from 'axios';
 import * as inquirer from 'inquirer';
 import { Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
-import { getProjectRoot } from './files';
+import { getProjectRoot, readConfigFile } from './files';
 
 /**
  * Description: determine if string is valid JSON string
@@ -91,6 +92,29 @@ function validateProjectName(value: any) {
   }
 
   return isValidProjectName ? true : resultMessage;
+}
+
+
+/**
+ * Description: determine if string is valid project name
+ * @param {string} value - a string value
+ * @returns {any} -
+ */
+ function validateDomain(value: string) {
+  const isString = typeof value === 'string';
+  const isNull = value === null || value.length === 0;
+  // characters in value are limited to alphanumeric characters and hyphens or underscores
+  const charactersMatch = value.match(/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/) !== null;
+  const isValid = isString && charactersMatch;
+  let resultMessage;
+
+  if (isNull) {
+    resultMessage = `${CLI_STATE.Error} A bundleIdentifier is required`;
+  } else if (!charactersMatch) {
+    resultMessage = `${CLI_STATE.Error} bundleIdenifiter should be a valid domain. Normally this is the reverse of you website's domain (e.g. com.company.app)`;
+  }
+
+  return isValid ? true : resultMessage;
 }
 
 /**
@@ -379,6 +403,171 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
   return argName;
 }
 
+
+
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+ async function parseBundleIdentifier(args: Lookup): Promise<string> {
+  let argName = args.bundleIdenifier;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: '',
+      message: 'Enter app\'s Bundle Idenifier (eg. com.company.app): ',
+      type: 'input',
+      validate: validateDomain
+    }]);
+  console.log(responses);
+
+    argName = responses.name;
+  }
+  
+  return argName;
+}
+
+
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+ async function parseProjectScheme(args: Lookup): Promise<string> {
+  let argName = args.name;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: '',
+      message: 'Enter a name for the project scheme (eg. ProjectName): ',
+      type: 'input'
+    }]);
+    argName = responses.name;
+  }
+
+  return argName;
+}
+
+
+
+// /**
+//  * Description: parse project or prompt user to provide name for project
+//  * @param {Lookup} args - a string value
+//  * @returns {string} -
+//  */
+//  async function parseBitriseAuthorizationKey(args: Lookup): Promise<string> {
+//   let argName = args.name;
+//   // if no page name is provided in command then prompt user
+//   if (!argName) {
+//     const responses: any = await inquirer.prompt([{
+//       name: 'name',
+//       default: '',
+//       message: 'Enter your Bitrise Authorization Key: ',
+//       type: 'input'
+//     }]);
+//     argName = responses.name;
+//   }
+
+//   return argName;
+// }
+
+
+// /**
+//  * Description: parse project or prompt user to provide name for project
+//  * @param {Lookup} args - a string value
+//  * @returns {string} -
+//  */
+//  async function parseGitProviderUrl(args: Lookup): Promise<string> {
+//   let argName = args.name;
+//   // if no page name is provided in command then prompt user
+//   if (!argName) {
+//     const responses: any = await inquirer.prompt([{
+//       name: 'name',
+//       default: '',
+//       message: 'Enter SSH version of your repository URL (eg. git@github.com:demo_owner/example-repository.git"): ',
+//       type: 'input'
+//     }]);
+//     argName = responses.name;
+//   }
+
+//   return argName;
+// }
+
+
+// /**
+//  * Description: parse project or prompt user to provide name for project
+//  * @param {Lookup} args - a string value
+//  * @returns {string} -
+//  */
+//  async function parseRepoOwner(args: Lookup): Promise<string> {
+//   let argName = args.name;
+//   // if no page name is provided in command then prompt user
+//   if (!argName) {
+//     const responses: any = await inquirer.prompt([{
+//       name: 'name',
+//       default: '',
+//       message: 'Enter the owner of the repository (eg. demo_owner"): ',
+//       type: 'input'
+//     }]);
+//     argName = responses.name;
+//   }
+
+//   return argName;
+// }
+
+// /**
+//  * Description: parse project or prompt user to provide name for project
+//  * @param {Lookup} args - a string value
+//  * @returns {string} -
+//  */
+//  async function parseGitSlug(args: Lookup): Promise<string> {
+//   let argName = args.name;
+//   // if no page name is provided in command then prompt user
+//   if (!argName) {
+//     const responses: any = await inquirer.prompt([{
+//       name: 'name',
+//       default: '',
+//       message: 'Enter your repository slug (eg. example-repository.git"): ',
+//       type: 'input'
+//     }]);
+//     argName = responses.name;
+//   }
+
+//   return argName;
+// }
+
+
+// /**
+//  * Description: parse project or prompt user to provide name for project
+//  * @param {Lookup} args - a string value
+//  * @returns {string} -
+//  */
+//  async function parseGitProvider(args: Lookup): Promise<string> {
+//   let argName = args.name;
+//   // if no page name is provided in command then prompt user
+//   if (!argName) {
+//     const responses: any = await inquirer.prompt([{
+//       name: 'name',
+//       default: '',
+//       message: 'Enter GIT provider (eg. Github, bitbucket or Gitlab "): ',
+//       type: 'input'
+//     }]);
+//     argName = responses.name;
+//   }
+
+//   return argName;
+// }
+
+
+
+
+
+
 /**
  * Description: determine if command is ran within a valid rdvue project
  * @returns {any} -
@@ -400,6 +589,57 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
   return results;
 }
 
+interface ProjectConfig { 
+  projectRoot: string, 
+  isMobile: boolean,
+  cicd: string,
+}
+
+
+/**
+ * Description: determine if command is ran within a valid rdvue project
+ * @returns {any} -
+ */
+ function getProjectConfig(): ProjectConfig {
+  const projectRoot: string | null = getProjectRoot();
+  return readConfigFile(`${projectRoot}/.rdvue/.rdvue`);
+}
+
+
+// export enum RequestMethod {
+//   post,
+//   put,
+//   delete,
+//   get,
+//   patch,
+//   option,
+// }
+
+// async function sendRequest(type: RequestMethod, url: string, axiosInstance?: AxiosInstance, data: any = undefined, config?: AxiosRequestConfig) {
+//   let response = null;
+
+//   switch (type) {
+//     case RequestMethod.post:
+//       response = await axiosInstance?.post(url, data, config);
+//       break;
+//     case RequestMethod.put:
+//       response = await axiosInstance?.put(url, data, config);
+//       break;
+//     case RequestMethod.get:
+//       response = await axiosInstance?.get(url, config);
+//       break;
+//     case RequestMethod.delete:
+//       response = await axiosInstance?.delete(url, config);
+//       break;
+//     case RequestMethod.patch:
+//       response = await axiosInstance?.patch(url, data, config);
+//       break;
+//     default:
+//       throw new Error("Unknown request method");
+//   }
+//   return response;
+// };
+
 export {
   hasKebab,
   toKebabCase,
@@ -415,4 +655,13 @@ export {
   parseStoreModuleName,
   isJsonString,
   checkProjectValidity,
+  getProjectConfig,
+  parseProjectScheme,
+  parseBundleIdentifier,
+  // parseBitriseAuthorizationKey,
+  // parseGitProviderUrl,
+  // parseGitProvider,
+  // parseGitSlug,
+  // parseRepoOwner,
+  // sendRequest,
 };
