@@ -232,6 +232,220 @@ export const CHANGE_LOG: ChangeLog = {
             value: '^5.71.0',
             operation: 'add',
           },
+          {
+            key: 'devDependencies.@babel/register',
+            value: '^7.16.9',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/copy-webpack-plugin',
+            value: '^8.0.1',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/dotenv-webpack',
+            value: '^7.0.2',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/favicons',
+            value: '^5.5.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/marked',
+            value: '^2.0.3',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/mini-css-extract-plugin',
+            value: '^1.4.3',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/mocha',
+            value: '^5.2.7',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@vue/cli-plugin-babel',
+            value: '^3.4.0',
+            operation: 'remove',
+          },
+          {
+            key: 'devDependencies.@vue/cli-plugin-typescript',
+            value: '^3.4.0',
+            operation: 'remove',
+          },
+          {
+            key: 'devDependencies.@vue/cli-service',
+            value: '^4.3.1',
+            operation: 'remove',
+          },
+          {
+            key: 'devDependencies.@types/pretty',
+            value: '^2.0.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/speed-measure-webpack-plugin',
+            value: '^1.3.4',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/tailwindcss',
+            value: '^3.0.2',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/webpack-dev-server',
+            value: '^3.11.4',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.@types/webpack-env',
+            value: '^1.16.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.clean-webpack-plugin',
+            value: '^4.0.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.copy-webpack-plugin',
+            value: '^10.2.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.cross-env',
+            value: '^7.0.3',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.css-loader',
+            value: '^5.2.6',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.dotenv-webpack',
+            value: '^7.1.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.esbuild-loader',
+            value: '^2.18.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.favicons',
+            value: '^6.2.0',
+            operation: 'add',
+          },
+          { key: 'devDependencies.glob', value: '^7.2.0', operation: 'add' },
+          {
+            key: 'devDependencies.html-webpack-plugin',
+            value: '^5.5.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.js-beautify',
+            value: '^1.13.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.local-web-server',
+            value: '^5.1.1',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.log-symbols',
+            value: '^4.0.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.mini-css-extract-plugin',
+            value: '^2.5.2',
+            operation: 'add',
+          },
+          { key: 'devDependencies.postcss', value: '^8.4.5', operation: 'add' },
+          {
+            key: 'devDependencies.postcss-loader',
+            value: '^4.0.3',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.register-service-worker',
+            value: '^1.5.2',
+            operation: 'add',
+          },
+          { key: 'devDependencies.sass', value: '^1.45.1', operation: 'add' },
+          {
+            key: 'devDependencies.sass-loader',
+            value: '^10.2.1',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.speed-measure-webpack-plugin',
+            value: '^1.5.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.ts-node',
+            value: '^10.7.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.typescript-node',
+            value: '^0.1.3',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.typescript-require',
+            value: '^0.3.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.vue-loader',
+            value: '^15.9.8',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.webpack-bundle-analyzer',
+            value: '^3.7.0',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.webpack-cli',
+            value: '^4.9.2',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.webpack-dev-server',
+            value: '^3.11.3',
+            operation: 'add',
+          },
+          {
+            key: 'devDependencies.webpackbar',
+            value: '^5.0.2',
+            operation: 'add',
+          },
+          { key: 'devDependencies.ws', value: '^7.5.6', operation: 'add' },
+          {
+            key: 'devDependencies.node-sass',
+            value: '^4.9.0',
+            operation: 'remove',
+          },
+          {
+            key: 'devDependencies.sass-loader',
+            value: '^7.1.0',
+            operation: 'remove',
+          },
+          {
+            key: 'devDependencies.webpack-bundle-analyzer',
+            value: '^3.7.0',
+            operation: 'remove',
+          },
         ],
       },
       {
