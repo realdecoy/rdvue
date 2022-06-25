@@ -78,13 +78,28 @@ export default class Upgrade extends Command {
       const name = resource.name;
       const contents = resource.contents as ChangelogResourcesContent[];
 
-      if (name === 'package.json') {
-        const rawPackageConfig = await readFile(path.join(projectRoot, 'package.json'));
-        const packageConfig = JSON.parse(rawPackageConfig);
+      if (contents.length) {
+        const rawJsonData = await readFile(path.join(projectRoot, name as string));
+        const parsedJsonData = JSON.parse(rawJsonData);
         for (const content of contents) {
-          
+          const keys: string[] = content.key.split('.');
+          const recurse = (data: any) => {
+            if(!data){
+              return
+            }
+            const currentKey = keys.pop();
+            if(keys.length) {
+              recurse(data[currentKey as string])
+            } else {
+              if (content.operation === 'remove') {
+                delete data[currentKey as string];
+              } else if (content.operation === 'add') {
+                data[currentKey as string] = content.value;
+              }
+            }
+          }
+          recurse(parsedJsonData);
         }
-
       }
     }
   }
@@ -144,9 +159,9 @@ export default class Upgrade extends Command {
     
     const changeLogData = CHANGE_LOG;
 
-    await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
-    await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
-    //await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
+    //await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
+    //await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
+    await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
       
 
     // 10. create a module within this command that can carry out the above actions for a specified version

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ChangeLog } from '../modules';
 
 export enum ChangelogMetaDataTypes {
@@ -9,6 +10,13 @@ export enum ChangelogMetaDataTypes {
 export enum ChangelogConfigTypes {
   META_DATA = 'metaData',
   CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+}
+
+export enum ChangelogConfigTFileNames {
+  PACKAGE_JSON = 'package.json',
+  TS_CONFIG = 'create',
   UPDATE = 'update',
   DELETE = 'delete',
 }
@@ -101,13 +109,68 @@ export const CHANGE_LOG: ChangeLog = {
         type: 'file',
       },
       {
-        name: 'webpack.config.js',
+        name: 'webpack.config.ts',
         file: {
           source: 'webpack.config.ts',
           target: 'webpack.config.ts',
         },
         destPath: '',
         srcPath: '',
+        type: 'file',
+      },
+      {
+        name: ' main.ts',
+        file: {
+          source: 'main.ts',
+          target: 'main.update.ts',
+        },
+        srcPath: 'src',
+        destPath: 'src',
+        type: 'file',
+      },
+      {
+        name: 'tsconfig.json',
+        file: {
+          source: 'tsconfig.json',
+          target: 'tsconfig.update.json',
+        },
+        srcPath: '',
+        destPath: '',
+        type: 'file',
+      },
+      {
+        name: 'postcss.config.js',
+        file: {
+          source: 'postcss.config.js',
+          target: 'postcss.config.update.js',
+        },
+        srcPath: '',
+        destPath: '',
+        type: 'file',
+      },
+      {
+        name: 'tailwind.config.js',
+        file: {
+          source: 'tailwind.config.js',
+          target: 'tailwind.config.update.js',
+        },
+        srcPath: '',
+        destPath: '',
+        type: 'file',
+      },
+      {
+        name: 'pages/hello-world',
+        destPath: 'src/pages/hello-world',
+        type: 'file',
+      },
+      {
+        name: 'README',
+        file: {
+          source: 'README.md',
+          target: 'README.update.md',
+        },
+        srcPath: '',
+        destPath: '',
         type: 'file',
       },
     ],
@@ -447,36 +510,6 @@ export const CHANGE_LOG: ChangeLog = {
             operation: 'remove',
           },
         ],
-      },
-      {
-        name: ' main.ts',
-        destPath: 'src/main.ts',
-        type: 'file',
-      },
-      {
-        name: 'tsconfig.json',
-        destPath: 'tsconfig.json',
-        type: 'file',
-      },
-      {
-        name: 'postcss.config.js',
-        destPath: 'postcss.config.js',
-        type: 'file',
-      },
-      {
-        name: 'tailwind.config.js',
-        destPath: 'tailwind.config.js',
-        type: 'file',
-      },
-      {
-        name: 'pages/hello-world',
-        destPath: 'src/pages/hello-world',
-        type: 'file',
-      },
-      {
-        name: 'README',
-        destPath: 'README.md',
-        type: 'file',
       },
     ],
   },
