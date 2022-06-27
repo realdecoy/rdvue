@@ -14,16 +14,14 @@ export enum ChangelogConfigTypes {
   DELETE = 'delete',
 }
 
-export enum ChangelogConfigTFileNames {
-  PACKAGE_JSON = 'package.json',
-  TS_CONFIG = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
+export enum ChangelogContentOperations {
+  ADD = 'add',
+  REMOVE = 'remove'
 }
 
 export const CHANGE_LOG: ChangeLog = {
   [ChangelogConfigTypes.META_DATA]: {
-    version: '',
+    version: 'default',
     type: ChangelogMetaDataTypes.MIGRATION,
   },
   [ChangelogConfigTypes.CREATE]: {
