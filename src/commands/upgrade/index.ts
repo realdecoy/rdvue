@@ -3,10 +3,10 @@ import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
 import { checkProjectValidity, isJsonString } from '../../lib/utilities';
-import { copyFiles, deleteFile, readFile } from '../../lib/files';
+import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS } from '../../lib/constants';
-import {  CHANGE_LOG, ChangelogConfigTypes } from '../../lib/changelog';
-import { ChangeLog, changeLogFile, ChangelogResources, ChangelogResourcesContent, Files } from '../../modules';
+import {  CHANGE_LOG, ChangelogConfigTypes, ChangelogContentOperations } from '../../lib/changelog';
+import { changeLogFile, ChangelogResources, ChangelogResourcesContent, Files } from '../../modules';
 
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
@@ -73,33 +73,40 @@ export default class Upgrade extends Command {
 
     for (const resource of resources) {
 
-      const src = resource.srcPath as string;
       const dest = resource.destPath;
+      const destDir = path.join(projectRoot, dest)
       const name = resource.name;
       const contents = resource.contents as ChangelogResourcesContent[];
 
-      if (contents.length) {
+      if (contents && contents.length) {
         const rawJsonData = await readFile(path.join(projectRoot, name as string));
-        const parsedJsonData = JSON.parse(rawJsonData);
+        const parsedJsonData = {...JSON.parse(rawJsonData)};
+
         for (const content of contents) {
-          const keys: string[] = content.key.split('.');
-          const recurse = (data: any) => {
-            if(!data){
+          const searchAndUpdateProp = (data: any, keys: string[]) => {
+            if(!data || !keys.length){
               return
             }
-            const currentKey = keys.pop();
-            if(keys.length) {
-              recurse(data[currentKey as string])
-            } else {
-              if (content.operation === 'remove') {
+  
+            const currentKey = keys.shift();
+            if(!keys.length) {
+              if (content.operation === ChangelogContentOperations.REMOVE) {
                 delete data[currentKey as string];
-              } else if (content.operation === 'add') {
+              } else if (content.operation === ChangelogContentOperations.ADD) {
                 data[currentKey as string] = content.value;
               }
+              return
             }
+            searchAndUpdateProp(data[currentKey as string], keys)
           }
-          recurse(parsedJsonData);
+  
+          const keys: string[] = content.key.split('.');
+          searchAndUpdateProp(parsedJsonData, keys);
+          
         }
+ 
+        const regex = '.';
+        updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData))
       }
     }
   }
@@ -159,9 +166,9 @@ export default class Upgrade extends Command {
     
     const changeLogData = CHANGE_LOG;
 
-    //await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
-    //await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
-    await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
+    await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
+    await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
+    //await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
       
 
     // 10. create a module within this command that can carry out the above actions for a specified version
