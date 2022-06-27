@@ -557,4 +557,5 @@ export {
   writeFile,
   inject,
   deleteFile,
+  updateFile,
 };
