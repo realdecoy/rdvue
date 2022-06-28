@@ -80,7 +80,7 @@ export default class Upgrade extends Command {
 
       if (contents && contents.length) {
         const rawJsonData = await readFile(path.join(projectRoot, name as string));
-        const parsedJsonData = {...JSON.parse(rawJsonData)};
+        const parsedJsonData = JSON.parse(rawJsonData);
 
         for (const content of contents) {
           const searchAndUpdateProp = (data: any, keys: string[]) => {
@@ -104,8 +104,8 @@ export default class Upgrade extends Command {
           searchAndUpdateProp(parsedJsonData, keys);
           
         }
- 
-        const regex = '.';
+
+        const regex = /[^]*/;
         updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData))
       }
     }
@@ -166,9 +166,9 @@ export default class Upgrade extends Command {
     
     const changeLogData = CHANGE_LOG;
 
-    await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
-    await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
-    //await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
+    //await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
+    //await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
+    await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
       
 
     // 10. create a module within this command that can carry out the above actions for a specified version
