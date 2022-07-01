@@ -229,21 +229,20 @@ function copyFiles(
  * Description: Write changes to a file
  * @param {string} filePath - location of file to be updated
  * @param {string} content - existing file content
- * @param {string | RegExp} placeholder - regex pattern or placeholder to be replaced
+ * @param {string | RegExp} pattern - regex pattern or pattern to be replaced
  * @param {string} value - value to replace content in file
  * @returns {Promise<void>} -
  */
 async function updateFile(
   filePath: string,
   content: string,
-  placeholder: string | RegExp,
+  pattern: string | RegExp,
   value: string,
 ): Promise<void> {
-  const r = new RegExp(placeholder, 'g');
+  const regex = pattern instanceof RegExp ? pattern : new RegExp(pattern, 'g');
 
   if (value !== '') {
-    const newValue = content.replace(r, value);
-    console.log(newValue);
+    const newValue = content.replace(regex, value);
     await fs.writeFileSync(filePath, newValue, UTF8);
   }
 }
