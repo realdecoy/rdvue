@@ -1,4 +1,4 @@
-import { ChangelogConfigTypes, ChangelogMetaDataTypes } from "../lib/changelog";
+import { ChangelogConfigTypes, ChangelogMetaDataTypes } from '../lib/changelog';
 
 export type ChangelogResourcesContent = {
     key: string;
@@ -9,10 +9,10 @@ export type ChangelogResourcesContent = {
 export type changeLogFile = {
     source: string;
     target: string;
-} 
+}
 
-export type ChangelogResources = {
-    name?: string;
+export type ChangelogResource = {
+    name: string;
     file?: changeLogFile;
     destPath: string;
     srcPath?: string;
@@ -20,10 +20,19 @@ export type ChangelogResources = {
     contents?: ChangelogResourcesContent[]
 }
 
+export type ChangelogResources = {
+    resources: ChangelogResource[];
+}
+
+export type Metadata = {
+    version: string;
+    type?: ChangelogMetaDataTypes;
+    resources?: ChangelogResources[];
+};
+
 export type ChangeLog = {
-    [key in ChangelogConfigTypes]: {
-        version?: string;
-        type?: ChangelogMetaDataTypes;
-        resources?: ChangelogResources[];
-    };
+    metadata: Metadata;
+    create?: ChangelogResources;
+    update?: ChangelogResources;
+    delete?: ChangelogResources;
 }

@@ -8,7 +8,7 @@ export enum ChangelogMetaDataTypes {
 }
 
 export enum ChangelogConfigTypes {
-  META_DATA = 'metaData',
+  META_DATA = 'metadata',
   CREATE = 'create',
   UPDATE = 'update',
   DELETE = 'delete',
@@ -16,15 +16,16 @@ export enum ChangelogConfigTypes {
 
 export enum ChangelogContentOperations {
   ADD = 'add',
-  REMOVE = 'remove'
+  REMOVE = 'remove',
+  UPDATE = 'update',
 }
 
 export const CHANGE_LOG: ChangeLog = {
-  [ChangelogConfigTypes.META_DATA]: {
+  metadata: {
     version: 'default',
     type: ChangelogMetaDataTypes.MIGRATION,
   },
-  [ChangelogConfigTypes.CREATE]: {
+  create: {
     resources: [
       {
         name: 'index.ts',
@@ -173,7 +174,7 @@ export const CHANGE_LOG: ChangeLog = {
       },
     ],
   },
-  [ChangelogConfigTypes.UPDATE]: {
+  update: {
     resources: [
       {
         name: 'package.json',
@@ -511,7 +512,7 @@ export const CHANGE_LOG: ChangeLog = {
       },
     ],
   },
-  [ChangelogConfigTypes.DELETE]: {
+  delete: {
     resources: [
       {
         name: 'vue.config.js',
