@@ -2,7 +2,7 @@ import { ChangelogConfigTypes, ChangelogMetaDataTypes } from "../lib/changelog";
 
 export type ChangelogResourcesContent = {
     key: string;
-    value: string;
+    value: any;
     operation: string;
 }
 

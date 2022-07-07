@@ -66,9 +66,32 @@ export default class Upgrade extends Command {
     }
   }
 
-  /**
-   * @TODO complete process for updating package.json
-   */
+  handleArraysAndObjects(data: any, key: string, operation: ChangelogContentOperations, newValue: any):void {
+    const currentValue = data[key as string];
+    if (operation === ChangelogContentOperations.REMOVE) {
+      if (Array.isArray(newValue)) {
+        for(let item of newValue) {
+          const index = currentValue.indexOf(item);
+          delete currentValue[index];
+        }
+      } else {
+        delete data[key as string]
+      }
+    } else if (operation === ChangelogContentOperations.UPDATE) {
+      data[key as string] = Array.isArray(newValue) ? [...currentValue, ...newValue] : {...currentValue, ...newValue};
+    }  else if (operation === ChangelogContentOperations.ADD) {
+      data[key as string] = Array.isArray(newValue) ? [...newValue] : {...newValue};
+    }
+  }
+
+  handlePrimitives(data: any, key: string, operation: ChangelogContentOperations,  newValue: any):void {
+    if (operation === ChangelogContentOperations.REMOVE) {
+      delete data[key as string];
+    } else if (operation === ChangelogContentOperations.ADD) {
+      data[key as string] = newValue;
+    }
+  }
+
   async updateFiles (projectRoot: string, resources: ChangelogResources[]): Promise<void> {
 
     for (const resource of resources) {
@@ -90,11 +113,15 @@ export default class Upgrade extends Command {
   
             const currentKey = keys.shift();
             if(!keys.length) {
-              if (content.operation === ChangelogContentOperations.REMOVE) {
-                delete data[currentKey as string];
-              } else if (content.operation === ChangelogContentOperations.ADD) {
-                data[currentKey as string] = content.value;
+              const operation = content.operation as ChangelogContentOperations;
+              const newValue = content.value;
+
+              if (!Array.isArray(newValue) && !(newValue instanceof Object)) {
+                this.handlePrimitives(data, currentKey as string, operation, newValue)
+              } else {
+                this.handleArraysAndObjects(data, currentKey as string, operation, newValue)
               }
+
               return
             }
             searchAndUpdateProp(data[currentKey as string], keys)
@@ -153,28 +180,25 @@ export default class Upgrade extends Command {
     // copy template files to project local template storage
     await shell.exec(`cp -R ${templateSourcePath} ${templateDestinationPath}`);
 
-    // Steps
-    // 1. read package.json file form project root
-    // 2. compare packages in existing package.json with the updated package.json cloned in above
-    // 3. remove unused project dependencies and devDependencies
-    // 4. add missing packages to project dependencies and devDependencies
-    // 5. update existing packages to appropriate versions
-    // 6. write package.json file back to project root
-    // 7. remove unused files ( vue.config.js, .env, .env.example, .package-lock.json )
-    // 8. include new project folders and files ( scripts/config, config/.env, config/.env.example, webpack.config.js )
-    // 9. update existing project files ( main.ts, tsconfig.json, tailwind.config.js, src/pages/hello-world, readme )
-    
+    /**
+     * Steps for Executing changelog
+     * 1. read package.json file form project root
+     * 2. compare packages in existing package.json with the updated package.json cloned in above
+     * 3. remove unused project dependencies and devDependencies
+     * 4. add missing packages to project dependencies and devDependencies
+     * 5. update existing packages to appropriate versions
+     * 6. write package.json file back to project root
+     * 7. remove unused files ( vue.config.js, .env, .env.example, .package-lock.json )
+     * 8. include new project folders and files ( scripts/config, config/.env, config/.env.example, webpack.config.js )
+     * 9. update existing project files ( main.ts, tsconfig.json, tailwind.config.js, src/pages/hello-world, readme )
+     */
     const changeLogData = CHANGE_LOG;
 
-    //await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
-    //await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
+    await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
+    await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
     await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
-      
 
-    // 10. create a module within this command that can carry out the above actions for a specified version
-
-    // // remove temp folder from project
-    // await shell.exec(`rm -rf ${temporaryProjectFolder}`);
+    await shell.exec(`rm -rf ${temporaryProjectFolder}`);
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
 
