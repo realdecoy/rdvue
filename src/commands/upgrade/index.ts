@@ -6,7 +6,7 @@ import { checkProjectValidity, isJsonString } from '../../lib/utilities';
 import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS } from '../../lib/constants';
 import {  CHANGE_LOG, ChangelogConfigTypes, ChangelogContentOperations } from '../../lib/changelog';
-import { changeLogFile, ChangelogResources, ChangelogResourcesContent, Files } from '../../modules';
+import { changeLogFile, ChangelogResource, ChangelogResourcesContent, Files } from '../../modules';
 
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
@@ -47,7 +47,7 @@ export default class Upgrade extends Command {
     return Promise.resolve();
   }
 
-  async createFiles (projectRoot: string, temporaryProjectFolder:string, resources: ChangelogResources[]): Promise<void> {
+  async createFiles (projectRoot: string, temporaryProjectFolder:string, resources: ChangelogResource[]): Promise<void> {
 
     for (const resource of resources) {
       
@@ -92,7 +92,7 @@ export default class Upgrade extends Command {
     }
   }
 
-  async updateFiles (projectRoot: string, resources: ChangelogResources[]): Promise<void> {
+  async updateFiles (projectRoot: string, resources: ChangelogResource[]): Promise<void> {
 
     for (const resource of resources) {
 
@@ -129,7 +129,6 @@ export default class Upgrade extends Command {
   
           const keys: string[] = content.key.split('.');
           searchAndUpdateProp(parsedJsonData, keys);
-          
         }
 
         const regex = /[^]*/;
@@ -138,7 +137,7 @@ export default class Upgrade extends Command {
     }
   }
   
-  async removeFiles (projectRoot: string, resources: ChangelogResources[]): Promise<void> {
+  async removeFiles (projectRoot: string, resources: ChangelogResource[]): Promise<void> {
 
     for (const resource of resources) {
 
@@ -147,7 +146,11 @@ export default class Upgrade extends Command {
 
       const destDir = path.join(projectRoot, dest);
       const targetFile = path.join(destDir, name);
+      const rawData = await readFile(targetFile);
 
+      if (!rawData) {
+        return
+      }
       try {
         deleteFile(targetFile);
       } catch (error) {
@@ -194,9 +197,9 @@ export default class Upgrade extends Command {
      */
     const changeLogData = CHANGE_LOG;
 
-    await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE].resources as ChangelogResources[])
-    await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE].resources as ChangelogResources[])
-    await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE].resources as ChangelogResources[])
+    await this.removeFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE]?.resources as ChangelogResource[])
+    await this.createFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE]?.resources as ChangelogResource[])
+    await this.updateFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE]?.resources as ChangelogResource[])
 
     await shell.exec(`rm -rf ${temporaryProjectFolder}`);
 
