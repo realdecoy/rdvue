@@ -176,14 +176,14 @@ function replaceTargetFileNames(
   files: Array<string | Files>,
   featureName: string,
 ): void {
-  if (featureName !== '') {
+  if (featureName !== EMPTY_STRING) {
     files.forEach((file: string | Files) => {
       if (typeof file !== 'string') {
         if (file.target !== file.source) {
           file.target = replaceFileName(
             file.target,
             /(\${.*?\})/,
-            featureName ?? '',
+            featureName ?? EMPTY_STRING,
           );
         }
       }
@@ -205,13 +205,13 @@ function copyFiles(
 ): Promise<any> {
   return Promise.all(
     files.map((f: Files | string) => {
-      let source = '';
-      let dest = '';
+      let source = EMPTY_STRING;
+      let dest = EMPTY_STRING;
       // Get source and destination paths
       if (typeof f === 'string') {
         source = path.join(
           srcDir,
-          `${srcDir.includes('config') ? 'core' : ''}`,
+          `${srcDir.includes('config') ? 'core' : EMPTY_STRING}`,
           f,
         );
         dest = path.join(destDir, f);
@@ -245,7 +245,7 @@ async function updateFile(
 ): Promise<void> {
   const regex = pattern instanceof RegExp ? pattern : new RegExp(pattern, 'g');
 
-  if (value !== '') {
+  if (value !== EMPTY_STRING) {
     const newValue = content.replace(regex, value);
     await fs.writeFileSync(filePath, newValue, UTF8);
   }
@@ -267,7 +267,7 @@ async function readAndUpdateFeatureFiles(
   kebabName: string,
   pascalName: string,
 ): Promise<void> {
-  let filePath = '';
+  let filePath = EMPTY_STRING;
   const promisedUpdates = [];
 
   // [3] For each file in the list
@@ -327,7 +327,7 @@ function isRootDirectory(location: string | null = null): boolean {
 
     if (testLocation !== null) {
       paths = testLocation.split(path.sep);
-      if (paths.length > 0 && paths[1] === '') {
+      if (paths.length > 0 && paths[1] === EMPTY_STRING) {
         isRoot = true;
       }
     }
@@ -426,7 +426,7 @@ function parseDynamicObjects(
 ): void {
   let filePathOfObjectInsideProject;
   let objectInProject;
-  let objectStringToBeWritten = '';
+  let objectStringToBeWritten = EMPTY_STRING;
 
   // 1[b] Once inside of a project values are assigned to be used
   if (projectRoot !== null) {
@@ -441,7 +441,7 @@ function parseDynamicObjects(
     objectInProject = readFile(filePathOfObjectInsideProject);
 
     // Replace brackets & ("/`) quotations in string
-    let modifiedJSONData = jsonData.replace(/[[\]"`]+/g, '');
+    let modifiedJSONData = jsonData.replace(/[[\]"`]+/g, EMPTY_STRING);
 
     // Remove beginning and closing brackets if its an option to be modified
     if (hasBrackets) {
@@ -461,7 +461,7 @@ function parseDynamicObjects(
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
   if (
     filePathOfObjectInsideProject !== undefined &&
-    objectStringToBeWritten !== ''
+    objectStringToBeWritten !== EMPTY_STRING
   ) {
     writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
   }
