@@ -8,6 +8,7 @@ export const DESIGN_TEMPLATE_FOLDER = 'library';
 export const TEMPLATE_PROJECT_NAME_REGEX = /__PROJECT_NAME__/g;
 export const TEMPLATE_VERSIONS_SUPPORTED = [2];
 export const TEMPLATE_CONFIG_FILENAME = 'manifest.json';
+export const CHANGE_LOG_FOLDER = 'changelogs';
 
 enum DYNAMIC_OBJECTS_ENUM {
   Routes = 'routes',
