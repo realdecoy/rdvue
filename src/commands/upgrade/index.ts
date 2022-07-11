@@ -75,9 +75,9 @@ export default class Upgrade extends Command {
      * @Todo create method to generate changelog dynamically from git diff.
      * add changelog to project temp directory and read based on release version number
      */
-    const rawGeneratedChangelog = await readFile(path.join(templateDestinationPath, CHANGE_LOG_FOLDER as string, versionName));
-    const parsedGeneratedChangelog = rawGeneratedChangelog ? JSON.parse(rawGeneratedChangelog) : null; 
-    const changeLogData = parsedGeneratedChangelog as ChangeLog ?? DEFAULT_CHANGE_LOG as ChangeLog;
+    const rawGeneratedChangelog = await readFile(path.join(templateDestinationPath, CHANGE_LOG_FOLDER, versionName));
+    const parsedGeneratedChangelog:ChangeLog | null = rawGeneratedChangelog.length ? JSON.parse(rawGeneratedChangelog) : null; 
+    const changeLogData = parsedGeneratedChangelog ?? DEFAULT_CHANGE_LOG;
 
     /**
      * Steps for Executing changelog

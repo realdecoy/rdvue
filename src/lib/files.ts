@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import { Files, InjectOptions } from '../modules';
 const replace = require('replace-in-file');
 import { hasKebab } from './utilities';
-import { DYNAMIC_OBJECTS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
+import { DYNAMIC_OBJECTS, EMPTY_STRING, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
 import { log } from '../lib/stdout';
 
 const UTF8 = 'utf-8';
@@ -22,7 +22,11 @@ const getDirName = path.dirname;
  * @returns {string} -
  */
 function readFile(filePath: string): string {
-  return fs.readFileSync(filePath, UTF8);
+  try {
+    return fs.readFileSync(filePath, UTF8);
+  } catch (error) {
+    return EMPTY_STRING;
+  }
 }
 
 /**
