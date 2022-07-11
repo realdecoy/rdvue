@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 export enum ChangelogMetaDataTypes {
   MIGRATION = 'migration',
     UPDATE = 'update',
