@@ -27,11 +27,11 @@ enum CLI_COMMANDS_ENUM {
   AddPage = 'add:page',
   AddService = 'add:service',
   AddStore = 'add:store',
-  // AddCICD= 'add:cicd',
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
   PluginVuetify = 'plugin:vuetify',
+  PluginBitrise= 'plugin:bitrise',
   PluginLibrary = 'plugin',
   PoorHelpCommand = 'add-help',
 }
@@ -81,8 +81,8 @@ export const CLI_STATE = {
 };
 
 
-// export const BITRISE_CONFIGS = {
-//   baseURL: "https://api.bitrise.io/v0.1",
-// }
+export const BITRISE_CONFIGS = {
+  baseURL: "https://api.bitrise.io/v0.1",
+}
 
-// export const REQUEST_TIMEOUT_MILLISECONDS = 3600
+export const REQUEST_TIMEOUT_MILLISECONDS = 3600

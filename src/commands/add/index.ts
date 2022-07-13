@@ -14,6 +14,7 @@ export default class Add extends Command {
     { name: 'service', description: 'service module', hidden: false },
     { name: 'store', description: 'store module', hidden: false },
     { name: 'layout', description: 'layout module', hidden: false },
+    { name: 'cicd', description: 'CI/CD module', hidden: false },
   ]
 
   showHelp(): void {

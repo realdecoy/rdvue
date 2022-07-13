@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { AxiosRequestConfig, AxiosInstance } from 'axios';
 import * as inquirer from 'inquirer';
 import { Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
@@ -421,7 +422,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
       type: 'input',
       validate: validateDomain
     }]);
-  console.log(responses);
+    console.log(responses);
 
     argName = responses.name;
   }
@@ -451,6 +452,121 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
 
   return argName;
 }
+
+
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+ async function parseBitriseAuthorizationKey(args: Lookup): Promise<string> {
+  let argName = args.name;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: '',
+      message: 'Enter your Bitrise Authorization Key: ',
+      type: 'input'
+    }]);
+    argName = responses.name;
+  }
+
+  return argName;
+}
+
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+ async function parseGitProviderUrl(args: Lookup): Promise<string> {
+  let argName = args.name;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: '',
+      message: 'Enter SSH version of your repository URL (eg. git@github.com:demo_owner/example-repository.git"): ',
+      type: 'input'
+    }]);
+    argName = responses.name;
+  }
+
+  return argName;
+}
+
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+ async function parseRepoOwner(args: Lookup): Promise<string> {
+  let argName = args.name;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: '',
+      message: 'Enter the owner of the repository (eg. demo_owner"): ',
+      type: 'input'
+    }]);
+    argName = responses.name;
+  }
+
+  return argName;
+}
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+ async function parseGitSlug(args: Lookup): Promise<string> {
+  let argName = args.name;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: '',
+      message: 'Enter your repository slug (eg. example-repository.git"): ',
+      type: 'input'
+    }]);
+    argName = responses.name;
+  }
+
+  return argName;
+}
+
+
+/**
+ * Description: parse project or prompt user to provide name for project
+ * @param {Lookup} args - a string value
+ * @returns {string} -
+ */
+ async function parseGitProvider(args: Lookup): Promise<string> {
+  let argName = args.name;
+  // if no page name is provided in command then prompt user
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: '',
+      message: 'Enter GIT provider (eg. Github, bitbucket or Gitlab "): ',
+      type: 'input'
+    }]);
+    argName = responses.name;
+  }
+
+  return argName;
+}
+
+
+
+
+
 
 /**
  * Description: determine if command is ran within a valid rdvue project
@@ -489,6 +605,41 @@ interface ProjectConfig {
   return readConfigFile(`${projectRoot}/.rdvue/.rdvue`);
 }
 
+
+export enum RequestMethod {
+  post,
+  put,
+  delete,
+  get,
+  patch,
+  option,
+}
+
+async function sendRequest(type: RequestMethod, url: string, axiosInstance?: AxiosInstance, data: any = undefined, config?: AxiosRequestConfig) {
+  let response = null;
+
+  switch (type) {
+    case RequestMethod.post:
+      response = await axiosInstance?.post(url, data, config);
+      break;
+    case RequestMethod.put:
+      response = await axiosInstance?.put(url, data, config);
+      break;
+    case RequestMethod.get:
+      response = await axiosInstance?.get(url, config);
+      break;
+    case RequestMethod.delete:
+      response = await axiosInstance?.delete(url, config);
+      break;
+    case RequestMethod.patch:
+      response = await axiosInstance?.patch(url, data, config);
+      break;
+    default:
+      throw new Error("Unknown request method");
+  }
+  return response;
+};
+
 export {
   hasKebab,
   toKebabCase,
@@ -504,6 +655,12 @@ export {
   parseStoreModuleName,
   isJsonString,
   checkProjectValidity,
+  parseBitriseAuthorizationKey,
+  parseGitProviderUrl,
+  parseGitProvider,
+  parseGitSlug,
+  parseRepoOwner,
+  sendRequest,
   getProjectConfig,
   parseProjectScheme,
   parseBundleIdentifier,
