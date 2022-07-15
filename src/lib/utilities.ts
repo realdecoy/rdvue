@@ -2,7 +2,7 @@
 import * as inquirer from 'inquirer';
 import { Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
-import { getProjectRoot } from './files';
+import { getProjectRoot, writeFile } from './files';
 
 /**
  * Description: determine if string is valid JSON string
@@ -366,6 +366,20 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
   return results;
 }
 
+function createChangelogReadme(changelogPath: string): void {
+  const projectRoot: string | null = getProjectRoot();
+  if (!projectRoot) {
+    return;
+  }
+  const readmeContent = `# Changelog
+
+## v${TEMPLATE_TAG}
+
+- Initial release
+`;
+  writeFile(changelogPath, readmeContent);
+}
+
 export {
   hasKebab,
   toKebabCase,
@@ -379,4 +393,5 @@ export {
   parseStoreModuleName,
   isJsonString,
   checkProjectValidity,
+  createChangelogReadme,
 };
