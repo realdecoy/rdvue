@@ -10,6 +10,8 @@ import { injectImportsIntoMain } from '../../lib/plugins';
 import { Axios } from 'axios';
 import CICD, { MOBILE_TEMPLATE_CONFIG_REPLACEMENT_FILES } from '../add/cicd';
 
+const readline = require('readline');
+const GitUrlParse = require("git-url-parse");
 const TEMPLATE_FOLDERS = ['bitrise'];
 const TEMPLATE_MIN_VERSION_SUPPORTED = 2;
 const CUSTOM_ERROR_CODES = [
@@ -18,6 +20,9 @@ const CUSTOM_ERROR_CODES = [
   'missing-template-folder',
   'dependency-install-error',
 ];
+
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const prompt = (query: any) => new Promise((resolve) => rl.question(query, resolve));
 
 export default class Bitrise extends Command {
   static description = 'CI/CD integration for mobile projects'
@@ -65,11 +70,12 @@ export default class Bitrise extends Command {
       throw new Error(
         JSON.stringify({
           code: 'project-invalid',
-          message: `${CLI_COMMANDS.AddComponent} command must be run in an existing ${chalk.yellow('rdvue')} mobile project`,
+          message: `${CLI_COMMANDS.PluginBitrise} command must be run in an existing ${chalk.yellow('rdvue')} mobile project`,
         }),
       );
-    }
+    }  
 
+    
     const { args } = this.parse(CICD);
     const folderList = TEMPLATE_FOLDERS;
     let sourceDirectory: string;
@@ -89,11 +95,21 @@ export default class Bitrise extends Command {
     // 3. upload SSH 
     // 4. Finish registration
 
-    const authKey = await parseBitriseAuthorizationKey(args);
-    const gitProviderUrl = await parseGitProviderUrl(args);
+    // Step 1
+    const bitriseApiKey = await prompt('Enter your Bitrise API key: ');
+    const gitProvider = await prompt('Enter the git provider: ');
+    const repoUrl = await prompt('Enter the repository URL: ');
+    const repoName = await prompt('Enter the repository name: ');
+    const repoOwner = await prompt('Enter the repository\'s owner: ');
+    const repoAccessToken = await prompt('Enter the repository\'s access token: ');
+    const isRepoPublic: any = await prompt('Is the repository public? Yes (y) or No (n): ');
 
+    let repoPublic = false
+    if (isRepoPublic.charAt(0).toLowerCase() === 'y') {
+      repoPublic = true
+    }
 
-    if (typeof gitProviderUrl !== 'string') {
+    if (typeof repoUrl !== 'string') {
       throw new Error(
         JSON.stringify({
           code: 'invalid-git-url',
@@ -102,16 +118,12 @@ export default class Bitrise extends Command {
       );
     }
 
-    const parsedGitURL = GitUrlParse(gitProviderUrl);
-    const owner = parsedGitURL.owner;
-    const repoSlug = `${parsedGitURL.name}.git`;
-    const provider = parsedGitURL.source.replace(".com", "");
-
+    // Step 2
     const axiosInstance = Axios.create({
       timeout: REQUEST_TIMEOUT_MILLISECONDS,
       headers: {
         "Content-Type": "application/json",
-        Authorization: authKey,
+        Authorization: repoAccessToken,
       },
       baseURL: BITRISE_CONFIGS.baseURL,
     });
@@ -119,19 +131,19 @@ export default class Bitrise extends Command {
 
     // Sending Request to resiter app in bitrise
     const dataRegisterData = {
-      git_owner: owner,
-      git_repo_slug: repoSlug,
-      is_public: false,
-      provider: provider,
-      repo_url: gitProviderUrl,
+      git_owner: repoOwner,
+      git_repo_slug: repoName,
+      is_public: repoPublic,
+      provider: gitProvider,
+      repo_url: repoUrl,
       type: "git"
     }
     
     let returnedSlug = "";
 
     try {
-      const reisgterAppResponse = await sendRequest(RequestMethod.post, '/apps/register', axiosInstance, dataRegisterData);
-      returnedSlug = reisgterAppResponse?.data.slug;
+      const registerAppResponse = await sendRequest(RequestMethod.post, '/apps/register', axiosInstance, dataRegisterData);
+      returnedSlug = registerAppResponse?.data.slug;
     } catch (error) {
       throw new Error(
         JSON.stringify({
@@ -155,28 +167,28 @@ export default class Bitrise extends Command {
     // COPY AND PASTE
     
     // Upload Bitrise.yml File
-    try {
-      const uploadResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/bitrise.yml`, axiosInstance);
-    } catch (error) {
-      throw new Error(
-        JSON.stringify({
-          code: 'bitrise-yml-upload-failed',
-          message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
-        }),
-      );
-    }
+    // try {
+    //   const uploadResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/bitrise.yml`, axiosInstance);
+    // } catch (error) {
+    //   throw new Error(
+    //     JSON.stringify({
+    //       code: 'bitrise-yml-upload-failed',
+    //       message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
+    //     }),
+    //   );
+    // }
 
       // Upload Bitrise.yml File
-      try {
-        const finishRegisterResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/finish`, axiosInstance, data);
-      } catch (error) {
-        throw new Error(
-          JSON.stringify({
-            code: 'bitrise-yml-upload-failed',
-            message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
-          }),
-        );
-      }
+      // try {
+      //   const finishRegisterResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/finish`, axiosInstance, data);
+      // } catch (error) {
+      //   throw new Error(
+      //     JSON.stringify({
+      //       code: 'bitrise-yml-upload-failed',
+      //       message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
+      //     }),
+      //   );
+      // }
       
 
 

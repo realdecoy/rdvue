@@ -31,9 +31,10 @@ enum CLI_COMMANDS_ENUM {
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
   PluginVuetify = 'plugin:vuetify',
-  PluginBitrise= 'plugin:bitrise',
+  PluginBitrise = 'plugin:bitrise',
   PluginLibrary = 'plugin',
   PoorHelpCommand = 'add-help',
+  AddCICD = "AddCICD"
 }
 export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 
@@ -50,6 +51,7 @@ export const DOCUMENTATION_LINKS = DOCUMENTATION_LINKS_ENUM;
 export const PLUGIN_PRESET_LIST = [
   'Buefy & Localization (recommended)',
   'Vuetify & Localization',
+  'Bitrise',
   `${chalk.magenta('[Skip presets]')}`,
 ];
 

@@ -2,6 +2,7 @@ import shell from 'shelljs';
 import chalk from 'chalk';
 import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
+import Bitrise from '../plugin/bitrise';
 import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
 import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase, toEnglishCase, parseBundleIdentifier } from '../../lib/utilities';
@@ -33,6 +34,7 @@ export default class CreateProject extends Command {
     withBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
     withVuetify: flags.boolean({ hidden: true }),
+    withBitrise: flags.boolean({ hidden: true}),
     mobile: flags.boolean({ hidden: true }),
   }
 
@@ -71,6 +73,7 @@ export default class CreateProject extends Command {
     const isMobile = flags.mobile === true;
     const skipPresetsStep = flags.skipPresets === true || isMobile;
     const withBuefy = flags.withBuefy === true;
+    const withBitrise = flags.withBitrise === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
     const template: string = isMobile ? MOBILE_TEMPLATE_REPO : TEMPLATE_REPO;
