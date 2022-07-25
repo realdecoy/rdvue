@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import * as inquirer from 'inquirer';
-import { Lookup } from '../modules';
+import { ChangeLog, ChangelogConfigTypes, Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
 import { getProjectRoot, writeFile } from './files';
 
@@ -366,16 +366,49 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
   return results;
 }
 
-function createChangelogReadme(changelogPath: string): void {
+function createChangelogReadme(
+  versionName: string,
+  changelogPath: string,
+  changeLogData: ChangeLog,
+): void {
+  const createdChangeLogResources = changeLogData[ChangelogConfigTypes.CREATE]?.resources ?? [];
+  const deletedChangeLogResources = changeLogData[ChangelogConfigTypes.DELETE]?.resources ?? [];
+  const updatedChangeLogResources = changeLogData[ChangelogConfigTypes.UPDATE]?.resources ?? [];
+
   const projectRoot: string | null = getProjectRoot();
   if (!projectRoot) {
     return;
   }
-  const readmeContent = `# Changelog
 
-## v${TEMPLATE_TAG}
+  const createdFiles: string[] = createdChangeLogResources.map(resource => {
+    if (resource.srcPath) {
+      return `${resource.srcPath}/${resource.file?.target}`;
+    }
 
-- Initial release
+    return `${resource.file?.target}`;
+  });
+
+  const deletedFiles: string[] = deletedChangeLogResources.map(resource => {
+    if (resource.destPath) {
+      return `${resource.destPath}/${resource.name}`;
+    }
+
+    return `${resource.name}`;
+  });
+
+  const updatedFiles: string[] = updatedChangeLogResources.map(resource => (resource.destPath));
+
+  const readmeContent = `# Changelog - ${versionName}
+The ${'`upgrade`'} command is used to upgrarde a project to the latest version of the template, or to a speciied version.
+
+During the course of the upgrade files may be added, deleted or updated. When it comes to updating, .json files are updated inline. For changes to all other file types, your existing project file will not be touched, but a file will be created at the same path containing the new changes to the template's base file, in the form of ${'`<existing_filename>.update.<extension>`'}
+
+## Added Files
+${createdFiles.map(file => `- ${file}`).join('\n')}
+## Deleted Files
+${deletedFiles.map(file => `- ${file}`).join('\n')}
+## Updated Files
+${updatedFiles.map(file => `- ${file}`).join('\n')}
 `;
   writeFile(changelogPath, readmeContent);
 }
