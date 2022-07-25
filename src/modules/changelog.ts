@@ -223,11 +223,6 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
       type: 'file',
     },
     {
-      name: 'pages/hello-world',
-      destPath: 'src/pages/hello-world',
-      type: 'file',
-    },
-    {
       name: 'README',
       file: {
         source: 'README.md',
