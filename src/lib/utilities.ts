@@ -405,8 +405,10 @@ During the course of the upgrade files may be added, deleted or updated. When it
 
 ## Added Files
 ${createdFiles.map(file => `- ${file}`).join('\n')}
+
 ## Deleted Files
 ${deletedFiles.map(file => `- ${file}`).join('\n')}
+
 ## Updated Files
 ${updatedFiles.map(file => `- ${file}`).join('\n')}
 `;
