@@ -365,7 +365,14 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
 
   return results;
 }
-
+/**
+ * Description: generates a changelog.md file from the resource groups
+ * in the changeLogData object.
+ * @param {string} versionName - the version name to use in the changelog.md file
+ * @param {string} changelogPath - the path where the changelog.md file will be generated
+ * @param {ChangeLog} changeLogData - the data to use in the changelog.md file
+ * @returns {void}
+ */
 function createChangelogReadme(
   versionName: string,
   changelogPath: string,
