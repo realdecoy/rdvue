@@ -24,7 +24,7 @@ enum CLI_COMMANDS_ENUM {
   Upgrade = 'upgrade',
   AddComponent = 'add:component',
   AddLayout = 'add:layout',
-  AddPage = 'add:page',
+  AddScreen = 'add:screen',
   AddService = 'add:service',
   AddStore = 'add:store',
   AddModule = 'add',
@@ -40,7 +40,7 @@ export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 enum DOCUMENTATION_LINKS_ENUM {
   Rdvue = 'https://realdecoy.github.io/rdvue/#/',
   Component = 'https://realdecoy.github.io/rdvue/#/Components',
-  Page = 'https://realdecoy.github.io/rdvue/#/Pages',
+  Screen = 'https://realdecoy.github.io/rdvue/#/Pages',
   Layout = 'https://realdecoy.github.io/rdvue/#/Layouts',
   Service = 'https://realdecoy.github.io/rdvue/#/Services',
   Store = 'https://realdecoy.github.io/rdvue/#/Stores',

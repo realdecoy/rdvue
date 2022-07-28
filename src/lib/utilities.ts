@@ -342,7 +342,7 @@ async function parseProjectPresets(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
-async function parsePageName(args: Lookup): Promise<string> {
+async function parseScreenName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -650,7 +650,7 @@ export {
   parseProjectName,
   parseProjectPresets,
   parseVersionName,
-  parsePageName,
+  parseScreenName,
   parseServiceName,
   parseStoreModuleName,
   isJsonString,
