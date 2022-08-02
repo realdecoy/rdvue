@@ -130,7 +130,7 @@ export default class Bitrise extends Command {
     let returnedSlug = "";
 
     try {
-      const reisgterAppResponse = await sendRequest(RequestMethod.post, '/apps/register', axiosInstance, dataRegisterData);
+      const reisgterAppResponse = await sendRequest(RequestMethod.Post, '/apps/register', axiosInstance, dataRegisterData);
       returnedSlug = reisgterAppResponse?.data.slug;
     } catch (error) {
       throw new Error(
@@ -156,7 +156,7 @@ export default class Bitrise extends Command {
     
     // Upload Bitrise.yml File
     try {
-      const uploadResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/bitrise.yml`, axiosInstance);
+      const uploadResponse = await sendRequest(RequestMethod.Post, `/apps/${returnedSlug}/bitrise.yml`, axiosInstance);
     } catch (error) {
       throw new Error(
         JSON.stringify({
@@ -168,7 +168,7 @@ export default class Bitrise extends Command {
 
       // Upload Bitrise.yml File
       try {
-        const finishRegisterResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/finish`, axiosInstance, data);
+        const finishRegisterResponse = await sendRequest(RequestMethod.Post, `/apps/${returnedSlug}/finish`, axiosInstance, data);
       } catch (error) {
         throw new Error(
           JSON.stringify({
