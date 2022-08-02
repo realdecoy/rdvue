@@ -1,23 +1,8 @@
-<div align="left">
-  <br/>
-  <a href="https://www.realdecoy.com/jamaica/" title="REALDECOY">
-    <img width=400px src="https://www.realdecoy.com/wp-content/uploads/2019/02/Realdecoy-logo-transparent.png" alt="rd logo">
-  </a>
-  <br/>
-</div>
-
-# RDVue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
+# Getting Started
 
 [RDVue](https://github.com/realdecoy/rdvue) is an opinionated CLI for generating Vue.js projects. We do so by adopting
 a development style guide which enforces strong typing with TypeScript, standardized Component, Layout and Page models,
 and a data-layer design promoting unified consumption through Stores and Services.
-
-## Table of Contents
-
-- [Usage](#usage)
-- [Options](#options)
-- [Documentation](#documentation)
-
 
 ## Usage
 
@@ -96,4 +81,20 @@ npm run serve
 
 The project will be served at [http://localhost:8080/](http://localhost:8080/) by default. This information will also be printed out in your terminal. Visiting the link the app is served on will display a default page which was created on project creation.
 
-[Continue - Folder Structure](Notable-Files.md#Notable-Files-&-Directories)
+## Next Steps
+
+### Generating a Page
+
+```
+rdvue generate page <page_name>
+rdvue g page <page_name>
+```
+
+Each generated Page gets its own dedicated folder. The folder will be given the name of the page. This folder is located at /src/pages/<page\_name> .
+
+### Generating a Component
+
+```
+rdvue generate component <component_name>
+rdvue g component <component _name>
+```

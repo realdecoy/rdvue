@@ -21,7 +21,7 @@
     "mkdirp": "^1.0.4",
     "path": "^0.12.7",
     "replace-in-file": "^6.2.0",
-    "shelljs": "^0.8.4",
+    "shelljs": "^0.8.5",
     "tslib": "^1.14.1",
     "util": "^0.12.4"
   },
@@ -80,6 +80,7 @@
     "url": "git+https://github.com/realdecoy/rdvue.git"
   },
   "scripts": {
+    "audit": "npm audit --production",
     "postpack": "rimraf oclif.manifest.json",
     "posttest": "npm run lint",
     "prepack": "rimraf lib && rimraf oclif.manifest.json && rimraf tsconfig.tsbuildinfo && tsc -b && oclif-dev manifest",

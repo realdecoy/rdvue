@@ -1,9 +1,8 @@
 # CLI Commands
 --------------
-
 The Rdvue command line tool (CLI) is the main entry point for getting up and running with the Vue application. Similar documentation is available in the rdvue-cli _README._
 
-### How to use rdvue-cli
+## How to use rdvue-cli
 
 All commands will follow the basic structure:
 
@@ -11,82 +10,74 @@ All commands will follow the basic structure:
 npx rdvue [command]
 ```
 
-### CLI Options
+## CLI Options
 
 Run the cli option below for a list of commands and options
 
-|     |     |
-| --- | --- |
-| **Option** | **Description** |
+| **Option**   | **Description**         |
+| ------------ | :---------------------- |
 | \--h, --help | Displays the help menu. |
 
-### CLI Commands
+## CLI Commands
 
-Click on each feature name for further details on it.
+RDVue includes the following sub-commands:
 
-#### _project_
+| **Command**                       | **Description**                                  |
+| --------------------------------- | :----------------------------------------------- |
+| [create-project](#create-project) | Scaffold a new rdvue project                     |
+| [add](#add)                       | Add a feature to a project                       |
+| [plugin](#plugin)                 | Inject a utility to extend project functionality |
+| [upgrade](#upgrade)               | Specify the rdvue template version for a project |
 
- Usage
+* * *
 
+### _create-project_
+
+create-project will scaffold a new project for you, using one of the presets selected from its interactive shell.
+
+Usage
 ```
-$ npx rdvue g project <project name>
-```
-
-The CLI will run an interactive shell asking for these options before creating a Project for you:
-
-```
-Pick a preset (Use arrow keys)
-> Recommend (Buefy, Localization, FontAwesome)
-  Vuetify (Vuetify, Localization, FontAwesome)
-  Custom
-```
-
- _The commands below must be run within a valid vue project._
-
-#### _component_
-
- Usage - [Further Details](Components.md)
-
-```
-$ npx rdvue g component <component name>
+$ npx rdvue create-project <project name>
 ```
 
-_model_
+* * *
 
- Usage
+### _add_
+Adds a feature to the project.
 
+Usage
 ```
-$ npx rdvue g component <model name>
+$ npx rdvue add:<feature> <name>
 ```
+Features
+* [component](Features.md#components)
+* [page](Features.md#pages)
+* [service](Features.md#services)
+* [store](Features.md#stores)
 
-#### _service_
 
-Usage - [Further Details](Services.md)
+* * *
 
+### _plugin_
+Injects a utility to extend the project's functionality
+
+Usage
 ```
-$ npx rdvue g service <service name>
-```
-
-#### _page_
-
-Usage - [Further Details](Pages.md)
-
-```
-$ npx rdvue g page <page name>
-```
-
-#### _sm - store module_ 
-
-Usage - [Further Details](Stores.md)
-
-```
-$ npx rdvue g sm <sm name>
+$ npx rdvue plugin:<library>
 ```
 
-#### _layout_
+Libraries
+* buefy
+* [localization](Features.md#localization)
+* vuetify
 
-Usage - [Further Details](Layouts.md)
 
+* * *
+
+### _upgrade_
+Attempts to upgrade the project's rdvue template to the specified version
+
+Usage
 ```
-$ npx rdvue g sm <sm name>
+$ npx rdvue upgrade <version>
 ```
