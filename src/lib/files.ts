@@ -572,5 +572,5 @@ export {
   writeFile,
   inject,
   updateNativeRoutes,
-  readConfigFile
+  readConfigFile,
 };
