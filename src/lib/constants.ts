@@ -24,14 +24,14 @@ enum CLI_COMMANDS_ENUM {
   Upgrade = 'upgrade',
   AddComponent = 'add:component',
   AddLayout = 'add:layout',
-  AddPage = 'add:page',
+  AddScreen = 'add:screen',
   AddService = 'add:service',
   AddStore = 'add:store',
-  // AddCICD= 'add:cicd',
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
   PluginVuetify = 'plugin:vuetify',
+  PluginBitrise= 'plugin:bitrise',
   PluginLibrary = 'plugin',
   PoorHelpCommand = 'add-help',
 }
@@ -40,7 +40,7 @@ export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 enum DOCUMENTATION_LINKS_ENUM {
   Rdvue = 'https://realdecoy.github.io/rdvue/#/',
   Component = 'https://realdecoy.github.io/rdvue/#/Components',
-  Page = 'https://realdecoy.github.io/rdvue/#/Pages',
+  Screen = 'https://realdecoy.github.io/rdvue/#/Pages',
   Layout = 'https://realdecoy.github.io/rdvue/#/Layouts',
   Service = 'https://realdecoy.github.io/rdvue/#/Services',
   Store = 'https://realdecoy.github.io/rdvue/#/Stores',
@@ -81,8 +81,8 @@ export const CLI_STATE = {
 };
 
 
-// export const BITRISE_CONFIGS = {
-//   baseURL: "https://api.bitrise.io/v0.1",
-// }
+export const BITRISE_CONFIGS = {
+  baseURL: "https://api.bitrise.io/v0.1",
+}
 
-// export const REQUEST_TIMEOUT_MILLISECONDS = 3600
+export const REQUEST_TIMEOUT_MILLISECONDS = 3600
