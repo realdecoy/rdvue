@@ -4,7 +4,9 @@ export const TEMPLATE_ROOT = '.rdvue/template';
 export const TEMPLATE_REPO = 'https://github.com/realdecoy/rdvue-template';
 export const MOBILE_TEMPLATE_REPO =
   'https://github.com/realdecoy/rdvue-mobile-template';
-export const TEMPLATE_TAG = 'react-native-integration'; // replace this with the appropriate release tag in the template repo
+export const DESIGN_TEMPLATE_REPO = 'https://github.com/realdecoy/design-system-components';
+export const TEMPLATE_TAG = 'main'; // replace this with the appropriate release tag in the template repo
+export const DESIGN_TEMPLATE_FOLDER = 'library';
 export const TEMPLATE_PROJECT_NAME_REGEX = /__PROJECT_NAME__/g;
 export const TEMPLATE_MOBILE_PROJECT_SCEHEM_REGEX = /__PROJECT_SCHEME__/g;
 export const TEMPLATE_MOBILE_PROJECT_BUNLDE_IDNEITIFIER_REGEX = /__BUNDLE_IDENTIFIER__/g;
@@ -24,7 +26,7 @@ enum CLI_COMMANDS_ENUM {
   Upgrade = 'upgrade',
   AddComponent = 'add:component',
   AddLayout = 'add:layout',
-  AddPage = 'add:page',
+  AddScreen = 'add:screen',
   AddService = 'add:service',
   AddStore = 'add:store',
   AddModule = 'add',
@@ -41,7 +43,7 @@ export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 enum DOCUMENTATION_LINKS_ENUM {
   Rdvue = 'https://realdecoy.github.io/rdvue/#/',
   Component = 'https://realdecoy.github.io/rdvue/#/Components',
-  Page = 'https://realdecoy.github.io/rdvue/#/Pages',
+  Screen = 'https://realdecoy.github.io/rdvue/#/Pages',
   Layout = 'https://realdecoy.github.io/rdvue/#/Layouts',
   Service = 'https://realdecoy.github.io/rdvue/#/Services',
   Store = 'https://realdecoy.github.io/rdvue/#/Stores',

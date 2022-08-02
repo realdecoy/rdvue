@@ -3,10 +3,11 @@ import path from 'path';
 import chalk from 'chalk';
 import { Files } from '../../modules';
 import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from '../../lib/files';
-import { checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, isJsonString } from '../../lib/utilities';
+import { checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, isJsonString, getProjectConfig } from '../../lib/utilities';
 import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 
-const TEMPLATE_FOLDERS = ['store'];
+const projectConfig = getProjectConfig();
+const TEMPLATE_FOLDERS = !projectConfig.isMobile ? ['store'] : ['context'];
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
   'failed-match-and-replace',

@@ -119,6 +119,11 @@ export default class Bitrise extends Command {
     }
 
     // Step 2
+    const parsedGitURL = GitUrlParse(gitProviderUrl);
+    const owner = parsedGitURL.owner;
+    const repoSlug = `${parsedGitURL.name}.git`;
+    const provider = parsedGitURL.source.replace(".com", "");
+
     const axiosInstance = Axios.create({
       timeout: REQUEST_TIMEOUT_MILLISECONDS,
       headers: {
@@ -142,8 +147,8 @@ export default class Bitrise extends Command {
     let returnedSlug = "";
 
     try {
-      const registerAppResponse = await sendRequest(RequestMethod.post, '/apps/register', axiosInstance, dataRegisterData);
-      returnedSlug = registerAppResponse?.data.slug;
+      const reisgterAppResponse = await sendRequest(RequestMethod.Post, '/apps/register', axiosInstance, dataRegisterData);
+      returnedSlug = reisgterAppResponse?.data.slug;
     } catch (error) {
       throw new Error(
         JSON.stringify({
@@ -167,28 +172,28 @@ export default class Bitrise extends Command {
     // COPY AND PASTE
     
     // Upload Bitrise.yml File
-    // try {
-    //   const uploadResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/bitrise.yml`, axiosInstance);
-    // } catch (error) {
-    //   throw new Error(
-    //     JSON.stringify({
-    //       code: 'bitrise-yml-upload-failed',
-    //       message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
-    //     }),
-    //   );
-    // }
+    try {
+      const uploadResponse = await sendRequest(RequestMethod.Post, `/apps/${returnedSlug}/bitrise.yml`, axiosInstance);
+    } catch (error) {
+      throw new Error(
+        JSON.stringify({
+          code: 'bitrise-yml-upload-failed',
+          message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
+        }),
+      );
+    }
 
       // Upload Bitrise.yml File
-      // try {
-      //   const finishRegisterResponse = await sendRequest(RequestMethod.post, `/apps/${returnedSlug}/finish`, axiosInstance, data);
-      // } catch (error) {
-      //   throw new Error(
-      //     JSON.stringify({
-      //       code: 'bitrise-yml-upload-failed',
-      //       message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
-      //     }),
-      //   );
-      // }
+      try {
+        const finishRegisterResponse = await sendRequest(RequestMethod.Post, `/apps/${returnedSlug}/finish`, axiosInstance, data);
+      } catch (error) {
+        throw new Error(
+          JSON.stringify({
+            code: 'bitrise-yml-upload-failed',
+            message: `An error occured when we attempted to upload the bitrise.yml file during the ${CLI_COMMANDS.AddCICD} command.`,
+          }),
+        );
+      }
       
 
 

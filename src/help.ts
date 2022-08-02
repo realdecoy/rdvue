@@ -1,4 +1,4 @@
-import Help from '@oclif/plugin-help';
+import { Help } from '@oclif/plugin-help';
 import { Command, Topic } from '@oclif/config';
 import chalk from 'chalk';
 import { log } from './lib/stdout';
@@ -28,8 +28,8 @@ export default class MyHelpClass extends Help {
     const name = topic.name;
     const depth = name.split(':').length;
 
-    const subTopics = this.sortedTopics.filter(t => t.name.startsWith(`${name}:`) && t.name.split(':').length === depth + 1);
-    const commands = this.sortedCommands.filter(c => c.id.startsWith(`${name}:`) && c.id.split(':').length === depth + 1);
+    const subTopics = this.sortedTopics.filter((t: any) => t.name.startsWith(`${name}:`) && t.name.split(':').length === depth + 1);
+    const commands = this.sortedCommands.filter((c: any) => c.id.startsWith(`${name}:`) && c.id.split(':').length === depth + 1);
 
     log(this.formatTopic(topic));
 

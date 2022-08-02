@@ -342,7 +342,7 @@ async function parseProjectPresets(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
-async function parsePageName(args: Lookup): Promise<string> {
+async function parseScreenName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -607,31 +607,31 @@ interface ProjectConfig {
 
 
 export enum RequestMethod {
-  post,
-  put,
-  delete,
-  get,
-  patch,
-  option,
+  Post,
+  Put,
+  Delete,
+  Get,
+  Patch,
+  Option,
 }
 
 async function sendRequest(type: RequestMethod, url: string, axiosInstance?: AxiosInstance, data: any = undefined, config?: AxiosRequestConfig) {
   let response = null;
 
   switch (type) {
-    case RequestMethod.post:
+    case RequestMethod.Post:
       response = await axiosInstance?.post(url, data, config);
       break;
-    case RequestMethod.put:
+    case RequestMethod.Put:
       response = await axiosInstance?.put(url, data, config);
       break;
-    case RequestMethod.get:
+    case RequestMethod.Get:
       response = await axiosInstance?.get(url, config);
       break;
-    case RequestMethod.delete:
+    case RequestMethod.Delete:
       response = await axiosInstance?.delete(url, config);
       break;
-    case RequestMethod.patch:
+    case RequestMethod.Patch:
       response = await axiosInstance?.patch(url, data, config);
       break;
     default:
@@ -650,7 +650,7 @@ export {
   parseProjectName,
   parseProjectPresets,
   parseVersionName,
-  parsePageName,
+  parseScreenName,
   parseServiceName,
   parseStoreModuleName,
   isJsonString,
