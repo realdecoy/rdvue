@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
-import { AxiosRequestConfig, AxiosInstance } from "axios";
-import * as inquirer from "inquirer";
-import { Lookup } from "../modules";
-import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from "./constants";
-import { getProjectRoot, readConfigFile } from "./files";
+import { AxiosRequestConfig, AxiosInstance } from 'axios';
+import * as inquirer from 'inquirer';
+import { Lookup } from '../modules';
+import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
+import { getProjectRoot, readConfigFile } from './files';
 
 /**
  * Description: determine if string is valid JSON string
@@ -25,7 +25,7 @@ function isJsonString(value: string): boolean {
  * @param {string} value - a string value
  * @returns {boolean} -
  */
-function hasKebab(value = ""): boolean {
+function hasKebab(value = ''): boolean {
   let result = false;
   if (value.match(/kebab/gi) !== null) {
     result = true;
@@ -45,10 +45,10 @@ function toKebabCase(value: string): string {
     (
       value.match(
         /[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g
-      ) ?? [""]
+      ) ?? ['']
     )
       .map((x) => x.toLowerCase())
-      .join("-")
+      .join('-')
   );
 }
 
@@ -60,13 +60,13 @@ function toKebabCase(value: string): string {
 function toPascalCase(value: string): string {
   return value
     .split(/[-_ ]+/)
-    .join(" ")
+    .join(' ')
     .replace(
       /\w\S*/g,
       (m) => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
     )
-    .split(" ")
-    .join("");
+    .split(' ')
+    .join('');
 }
 
 /**
@@ -77,7 +77,7 @@ function toPascalCase(value: string): string {
 function toEnglishCase(value: string): string {
   return value
     .split(/[-_ ]+/)
-    .join(" ")
+    .join(' ')
     .replace(
       /\w\S*/g,
       (m) => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
@@ -90,7 +90,7 @@ function toEnglishCase(value: string): string {
  * @returns {any} -
  */
 function validateProjectName(value: any) {
-  const isString = typeof value === "string";
+  const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
@@ -112,7 +112,7 @@ function validateProjectName(value: any) {
  * @returns {any} -
  */
 function validateDomain(value: string) {
-  const isString = typeof value === "string";
+  const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch =
@@ -137,7 +137,7 @@ function validateDomain(value: string) {
  * @returns {any} -
  */
 function validateComponentName(value: any) {
-  const isString = typeof value === "string";
+  const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
@@ -159,7 +159,7 @@ function validateComponentName(value: any) {
  * @returns {any} -
  */
 function validateVersionName(value: any) {
-  const isString = typeof value === "string";
+  const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
@@ -181,7 +181,7 @@ function validateVersionName(value: any) {
  * @returns {any} -
  */
 function validatePageName(value: any) {
-  const isString = typeof value === "string";
+  const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
@@ -203,7 +203,7 @@ function validatePageName(value: any) {
  * @returns {any} -
  */
 function validateServiceName(value: any) {
-  const isString = typeof value === "string";
+  const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
@@ -225,7 +225,7 @@ function validateServiceName(value: any) {
  * @returns {any} -
  */
 function validateStoreModuleName(value: any) {
-  const isString = typeof value === "string";
+  const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
@@ -252,10 +252,10 @@ async function parseLayoutName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "my-layout",
-        message: "Enter a layout name: ",
-        type: "input",
+        name: 'name',
+        default: 'my-layout',
+        message: 'Enter a layout name: ',
+        type: 'input',
         validate: validateComponentName,
       },
     ]);
@@ -276,10 +276,10 @@ async function parseComponentName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "my-component",
-        message: "Enter a component name: ",
-        type: "input",
+        name: 'name',
+        default: 'my-component',
+        message: 'Enter a component name: ',
+        type: 'input',
         validate: validateComponentName,
       },
     ]);
@@ -300,10 +300,10 @@ async function parseProjectName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "my-rdvue-project",
-        message: "Enter a project name: ",
-        type: "input",
+        name: 'name',
+        default: 'my-rdvue-project',
+        message: 'Enter a project name: ',
+        type: 'input',
         validate: validateProjectName,
       },
     ]);
@@ -324,10 +324,10 @@ async function parseVersionName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
+        name: 'name',
         default: TEMPLATE_TAG,
-        message: "Enter a version: ",
-        type: "input",
+        message: 'Enter a version: ',
+        type: 'input',
         validate: validateVersionName,
       },
     ]);
@@ -348,10 +348,10 @@ async function parseProjectPresets(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "preset",
+        name: 'preset',
         default: 0,
-        message: "Pick a preset: ",
-        type: "list",
+        message: 'Pick a preset: ',
+        type: 'list',
         choices: PLUGIN_PRESET_LIST,
       },
     ]);
@@ -372,10 +372,10 @@ async function parseScreenName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "hello-world",
-        message: "Enter a page name: ",
-        type: "input",
+        name: 'name',
+        default: 'hello-world',
+        message: 'Enter a page name: ',
+        type: 'input',
         validate: validatePageName,
       },
     ]);
@@ -396,10 +396,10 @@ async function parseServiceName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "auth-service",
-        message: "Enter a service name: ",
-        type: "input",
+        name: 'name',
+        default: 'auth-service',
+        message: 'Enter a service name: ',
+        type: 'input',
         validate: validateServiceName,
       },
     ]);
@@ -420,10 +420,10 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "auth-store",
-        message: "Enter a store module name: ",
-        type: "input",
+        name: 'name',
+        default: 'auth-store',
+        message: 'Enter a store module name: ',
+        type: 'input',
         validate: validateStoreModuleName,
       },
     ]);
@@ -444,10 +444,10 @@ async function parseBundleIdentifier(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "",
-        message: "Enter app's Bundle Idenifier (eg. com.company.app): ",
-        type: "input",
+        name: 'name',
+        default: '',
+        message: 'Enter app\'s Bundle Idenifier (eg. com.company.app): ',
+        type: 'input',
         validate: validateDomain,
       },
     ]);
@@ -469,10 +469,10 @@ async function parseProjectScheme(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "",
-        message: "Enter a name for the project scheme (eg. ProjectName): ",
-        type: "input",
+        name: 'name',
+        default: '',
+        message: 'Enter a name for the project scheme (eg. ProjectName): ',
+        type: 'input',
       },
     ]);
     argName = responses.name;
@@ -492,10 +492,10 @@ async function parseBitriseAuthorizationKey(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "",
-        message: "Enter your Bitrise Authorization Key: ",
-        type: "input",
+        name: 'name',
+        default: '',
+        message: 'Enter your Bitrise Authorization Key: ',
+        type: 'input',
       },
     ]);
     argName = responses.name;
@@ -515,11 +515,11 @@ async function parseGitProviderUrl(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "",
+        name: 'name',
+        default: '',
         message:
-          'Enter SSH version of your repository URL (eg. git@github.com:demo_owner/example-repository.git"): ',
-        type: "input",
+          'Enter SSH version of your repository URL (eg. git@github.com:demo_owner/example-repository.git): ',
+        type: 'input',
       },
     ]);
     argName = responses.name;
@@ -539,10 +539,10 @@ async function parseRepoOwner(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "",
-        message: 'Enter the owner of the repository (eg. demo_owner"): ',
-        type: "input",
+        name: 'name',
+        default: '',
+        message: 'Enter the owner of the repository (eg. demo_owner): ',
+        type: 'input',
       },
     ]);
     argName = responses.name;
@@ -562,10 +562,10 @@ async function parseGitSlug(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "",
-        message: 'Enter your repository slug (eg. example-repository.git"): ',
-        type: "input",
+        name: 'name',
+        default: '',
+        message: 'Enter your repository slug (eg. example-repository.git): ',
+        type: 'input',
       },
     ]);
     argName = responses.name;
@@ -585,10 +585,10 @@ async function parseGitProvider(args: Lookup): Promise<string> {
   if (!argName) {
     const responses: any = await inquirer.prompt([
       {
-        name: "name",
-        default: "",
-        message: 'Enter GIT provider (eg. Github, bitbucket or Gitlab "): ',
-        type: "input",
+        name: 'name',
+        default: '',
+        message: 'Enter GIT provider (eg. Github, bitbucket or Gitlab): ',
+        type: 'input',
       },
     ]);
     argName = responses.name;
@@ -604,11 +604,11 @@ async function parseGitProvider(args: Lookup): Promise<string> {
 function checkProjectValidity(): { isValid: boolean; projectRoot: string } {
   const results = {
     isValid: false,
-    projectRoot: "",
+    projectRoot: '',
   };
 
   const projectRoot: string | null = getProjectRoot();
-  if (projectRoot !== null && projectRoot !== "") {
+  if (projectRoot !== null && projectRoot !== '') {
     results.isValid = true;
     results.projectRoot = projectRoot;
   } else {
@@ -668,7 +668,7 @@ async function sendRequest(
       response = await axiosInstance?.patch(url, data, config);
       break;
     default:
-      throw new Error("Unknown request method");
+      throw new Error('Unknown request method');
   }
   return response;
 }
