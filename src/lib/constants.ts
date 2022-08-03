@@ -74,7 +74,6 @@ export const MOBILE_TEMPLATE_CI_CD_REPLACEMENT_FILES = [
   'app.json',
 ];
 
-
 export const CLI_STATE = {
   Info: `${chalk.blue('[rdvue]')}`,
   Error: `${chalk.red('[rdvue]')}`,
@@ -82,9 +81,8 @@ export const CLI_STATE = {
   Success: `${chalk.green('[rdvue]')}`,
 };
 
-
 export const BITRISE_CONFIGS = {
   baseURL: "https://api.bitrise.io/v0.1",
-}
+};
 
-export const REQUEST_TIMEOUT_MILLISECONDS = 3600
+export const REQUEST_TIMEOUT_MILLISECONDS = 3600;

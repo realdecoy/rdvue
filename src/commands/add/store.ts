@@ -7,7 +7,7 @@ import { checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, 
 import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 
 const projectConfig = getProjectConfig();
-const TEMPLATE_FOLDERS = !projectConfig.isMobile ? ['store'] : ['context'];
+const TEMPLATE_FOLDERS = projectConfig.isMobile ?  ['context'] : ['store'];
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
   'failed-match-and-replace',
