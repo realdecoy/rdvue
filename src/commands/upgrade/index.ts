@@ -2,9 +2,9 @@ import shell from 'shelljs';
 import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
-import { checkProjectValidity, isJsonString } from '../../lib/utilities';
+import { checkProjectValidity, createChangelogReadme, isJsonString } from '../../lib/utilities';
 import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
-import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER } from '../../lib/constants';
+import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME } from '../../lib/constants';
 import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, Files, ChangelogContentOperations, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
 import {copy, emptyDir, remove} from 'fs-extra'
 const CUSTOM_ERROR_CODES = [
@@ -65,6 +65,7 @@ export default class Upgrade extends Command {
     const temporaryProjectFolder = path.join(projectRoot, 'node_modules', '_temp');
     const templateSourcePath = path.join(temporaryProjectFolder, TEMPLATE_ROOT);
     const templateDestinationPath = path.join(projectRoot, '.rdvue');
+    const changelogPath = path.join(projectRoot, CHANGE_LOG_FILENAME);
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${versionName} ${temporaryProjectFolder}`, { silent: true });
@@ -91,6 +92,7 @@ export default class Upgrade extends Command {
     const parsedGeneratedChangelog:ChangeLog | null = rawGeneratedChangelog.length ? JSON.parse(rawGeneratedChangelog) : null; 
     const changeLogData = parsedGeneratedChangelog ?? DEFAULT_CHANGE_LOG;
 
+    createChangelogReadme(versionName, changelogPath, changeLogData);
     /**
      * Steps for Executing changelog
      * 1. read package.json file form project root
@@ -139,6 +141,7 @@ export default class Upgrade extends Command {
     )
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
+    this.log(`${CLI_STATE.Success} CHANGELOG.md generated at : ${chalk.green(changelogPath)}`);
 
     this.log(`\n  ${chalk.yellow('rdvue')} has been updated to use the esbuild bundler!\n  Learn more here: ${chalk.yellow(DOCUMENTATION_LINKS.EsBuild)}\n`);
   }
