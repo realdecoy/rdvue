@@ -199,7 +199,7 @@ export default class Upgrade extends Command {
         }
 
         const regex = /[^]*/;
-        updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData))
+        updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData, null, 2));
       }
     }
   }
