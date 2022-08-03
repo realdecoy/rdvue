@@ -6,7 +6,7 @@ import { checkProjectValidity, isJsonString } from '../../lib/utilities';
 import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER } from '../../lib/constants';
 import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, Files, ChangelogContentOperations, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
-
+import {copy, emptyDir, readdirSync} from 'fs-extra'
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
 ];
@@ -68,8 +68,22 @@ export default class Upgrade extends Command {
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${versionName} ${temporaryProjectFolder}`, { silent: true });
+
     // copy template files to project local template storage
-    await shell.exec(`cp -R ${templateSourcePath} ${templateDestinationPath}`);
+    console.log(`${CLI_STATE.Info} copying template files to project local template storage`);
+    console.log(readdirSync(templateDestinationPath));
+    try {
+      console.log(`${CLI_STATE.Info} removing existing template files`);
+      await emptyDir(templateDestinationPath);
+      await copy(templateSourcePath, templateDestinationPath).then(() => {
+        console.log(`${CLI_STATE.Info} template files copied to project local template storage`);
+        // console.log(readdirSync(templateDestinationPath));
+      });
+    }
+    catch (error) {
+      this.log(`${CLI_STATE.Error} could not copy template files to project local template storage`);
+      console.error(error);
+    }
 
     /**
      * @Todo create method to generate changelog dynamically from git diff.
