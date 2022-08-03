@@ -82,7 +82,7 @@ export const CLI_STATE = {
 };
 
 export const BITRISE_CONFIGS = {
-  baseURL: "https://api.bitrise.io/v0.1",
+  baseURL: 'https://api.bitrise.io/v0.1',
 };
 
 export const REQUEST_TIMEOUT_MILLISECONDS = 3600;

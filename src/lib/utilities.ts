@@ -63,7 +63,7 @@ function toPascalCase(value: string): string {
     .join(' ')
     .replace(
       /\w\S*/g,
-      (m) => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
+      m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
     )
     .split(' ')
     .join('');
@@ -630,6 +630,7 @@ interface ProjectConfig {
  */
 function getProjectConfig(): ProjectConfig {
   const projectRoot: string | null = getProjectRoot();
+
   return readConfigFile(`${projectRoot}/.rdvue/.rdvue`);
 }
 
@@ -639,7 +640,7 @@ export enum RequestMethod {
   Delete,
   Get,
   Patch,
-  Option,
+  Option
 }
 
 async function sendRequest(
@@ -670,6 +671,7 @@ async function sendRequest(
     default:
       throw new Error('Unknown request method');
   }
+  
   return response;
 }
 
