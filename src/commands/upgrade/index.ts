@@ -6,7 +6,7 @@ import { checkProjectValidity, isJsonString } from '../../lib/utilities';
 import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER } from '../../lib/constants';
 import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, Files, ChangelogContentOperations, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
-import {copy, emptyDir, readdirSync} from 'fs-extra'
+import {copy, emptyDir, remove} from 'fs-extra'
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
 ];
@@ -70,19 +70,17 @@ export default class Upgrade extends Command {
     await shell.exec(`git clone ${template} --depth 1 --branch ${versionName} ${temporaryProjectFolder}`, { silent: true });
 
     // copy template files to project local template storage
-    console.log(`${CLI_STATE.Info} copying template files to project local template storage`);
-    console.log(readdirSync(templateDestinationPath));
+    this.log(`${CLI_STATE.Info} copying template files to project local template storage`);
     try {
-      console.log(`${CLI_STATE.Info} removing existing template files`);
+      this.log(`${CLI_STATE.Info} removing existing template files`);
       await emptyDir(templateDestinationPath);
       await copy(templateSourcePath, templateDestinationPath).then(() => {
-        console.log(`${CLI_STATE.Info} template files copied to project local template storage`);
-        // console.log(readdirSync(templateDestinationPath));
+        this.log(`${CLI_STATE.Info} template files copied to project local template storage`);
+        // this.log(readdirSync(templateDestinationPath));
       });
     }
     catch (error) {
       this.log(`${CLI_STATE.Error} could not copy template files to project local template storage`);
-      console.error(error);
     }
 
     /**
@@ -105,11 +103,40 @@ export default class Upgrade extends Command {
      * 8. include new project folders and files ( scripts/config, config/.env, config/.env.example, webpack.config.js )
      * 9. update existing project files ( main.ts, tsconfig.json, tailwind.config.js, src/pages/hello-world, readme )
      */
-    await this.createProjectFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE]?.resources as ChangelogResource[]);
-    await this.updateProjectFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE]?.resources as ChangelogResource[]);
-    await this.deleteProjectFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE]?.resources as ChangelogResource[]);
 
-    await shell.exec(`rm -rf ${temporaryProjectFolder}`);
+    this.log(`${CLI_STATE.Info} creating project files`);
+    await this.createProjectFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE]?.resources as ChangelogResource[]).then(() => {
+      this.log(`${CLI_STATE.Info} project files created`);
+    }
+    ).catch(error => {
+      this.error(error);
+    })
+
+    this.log(`${CLI_STATE.Info} updating project files`);
+    await this.updateProjectFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE]?.resources as ChangelogResource[]).then(() => {
+      this.log(`${CLI_STATE.Info} project files updated`);
+    }
+    ).catch(error => {
+      this.error(error);
+    })  
+
+    this.log(`${CLI_STATE.Info} removing unused files`);
+    await this.deleteProjectFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE]?.resources as ChangelogResource[]).then(() => {
+      this.log(`${CLI_STATE.Info} unused files removed`);
+    }
+    ).catch(error => {
+      this.error(error);
+    }
+    )
+
+
+    await remove(temporaryProjectFolder).then(() => {
+      this.log(`${CLI_STATE.Info} temporary project folder removed`);
+    }
+    ).catch(error => {
+      this.error(error);
+    }
+    )
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
 
@@ -118,16 +145,13 @@ export default class Upgrade extends Command {
 
   async createProjectFiles (projectRoot: string, temporaryProjectFolder:string, resources: ChangelogResource[]): Promise<void> {
 
-    for (const resource of resources) {
-      
+    for (const resource of resources) {      
+      const src = resource.srcPath as string;
+      const dest = resource.destPath;
+      const file = [resource.file as changeLogFile] as Array<string | Files>;
       try {        
-        const src = resource.srcPath as string;
-        const dest = resource.destPath;
-        const file = [resource.file as changeLogFile] as Array<string | Files>;
-
         const srcDir = path.join(temporaryProjectFolder, src)
         const destDir = path.join(projectRoot, dest)
-
         await copyFiles(srcDir, destDir, file);
       } catch (error) {
         this.log(`${CLI_STATE.Warning} could not create file at: ${chalk.yellow(file)}`);
