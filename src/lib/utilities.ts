@@ -40,10 +40,16 @@ function hasKebab(value = ''): boolean {
  * @returns {string} - string value
  */
 function toKebabCase(value: string): string {
-  return value &&
-    (value.match(/[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g) ?? [''])
-      .map(x => x.toLowerCase())
-      .join('-');
+  return (
+    value &&
+    (
+      value.match(
+        /[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g
+      ) ?? ['']
+    )
+      .map((x) => x.toLowerCase())
+      .join('-')
+  );
 }
 
 /**
@@ -55,7 +61,10 @@ function toPascalCase(value: string): string {
   return value
     .split(/[-_ ]+/)
     .join(' ')
-    .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase())
+    .replace(
+      /\w\S*/g,
+      (m) => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
+    )
     .split(' ')
     .join('');
 }
@@ -69,7 +78,10 @@ function toEnglishCase(value: string): string {
   return value
     .split(/[-_ ]+/)
     .join(' ')
-    .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase());
+    .replace(
+      /\w\S*/g,
+      (m) => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
+    );
 }
 
 /**
@@ -94,7 +106,6 @@ function validateProjectName(value: any) {
   return isValidProjectName ? true : resultMessage;
 }
 
-
 /**
  * Description: determine if string is valid project name
  * @param {string} value - a string value
@@ -104,7 +115,10 @@ function validateDomain(value: string) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/) !== null;
+  const charactersMatch =
+    value.match(
+      /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
+    ) !== null;
   const isValid = isString && charactersMatch;
   let resultMessage;
 
@@ -236,13 +250,15 @@ async function parseLayoutName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: 'my-layout',
-      message: 'Enter a layout name: ',
-      type: 'input',
-      validate: validateComponentName,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: 'my-layout',
+        message: 'Enter a layout name: ',
+        type: 'input',
+        validate: validateComponentName,
+      },
+    ]);
     argName = responses.name;
   }
 
@@ -258,13 +274,15 @@ async function parseComponentName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: 'my-component',
-      message: 'Enter a component name: ',
-      type: 'input',
-      validate: validateComponentName,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: 'my-component',
+        message: 'Enter a component name: ',
+        type: 'input',
+        validate: validateComponentName,
+      },
+    ]);
     argName = responses.name;
   }
 
@@ -280,13 +298,15 @@ async function parseProjectName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no project name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: 'my-rdvue-project',
-      message: 'Enter a project name: ',
-      type: 'input',
-      validate: validateProjectName,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: 'my-rdvue-project',
+        message: 'Enter a project name: ',
+        type: 'input',
+        validate: validateProjectName,
+      },
+    ]);
     argName = responses.name;
   }
 
@@ -302,13 +322,15 @@ async function parseVersionName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: TEMPLATE_TAG,
-      message: 'Enter a version: ',
-      type: 'input',
-      validate: validateVersionName,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: TEMPLATE_TAG,
+        message: 'Enter a version: ',
+        type: 'input',
+        validate: validateVersionName,
+      },
+    ]);
     argName = responses.name;
   }
 
@@ -324,13 +346,15 @@ async function parseProjectPresets(args: Lookup): Promise<string> {
   let argName = args.preset;
   // if no project name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'preset',
-      default: 0,
-      message: 'Pick a preset: ',
-      type: 'list',
-      choices: PLUGIN_PRESET_LIST,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'preset',
+        default: 0,
+        message: 'Pick a preset: ',
+        type: 'list',
+        choices: PLUGIN_PRESET_LIST,
+      },
+    ]);
     argName = responses.preset;
   }
 
@@ -346,13 +370,15 @@ async function parseScreenName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: 'hello-world',
-      message: 'Enter a page name: ',
-      type: 'input',
-      validate: validatePageName,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: 'hello-world',
+        message: 'Enter a page name: ',
+        type: 'input',
+        validate: validatePageName,
+      },
+    ]);
     argName = responses.name;
   }
 
@@ -368,13 +394,15 @@ async function parseServiceName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: 'auth-service',
-      message: 'Enter a service name: ',
-      type: 'input',
-      validate: validateServiceName,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: 'auth-service',
+        message: 'Enter a service name: ',
+        type: 'input',
+        validate: validateServiceName,
+      },
+    ]);
     argName = responses.name;
   }
 
@@ -390,21 +418,20 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: 'auth-store',
-      message: 'Enter a store module name: ',
-      type: 'input',
-      validate: validateStoreModuleName,
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: 'auth-store',
+        message: 'Enter a store module name: ',
+        type: 'input',
+        validate: validateStoreModuleName,
+      },
+    ]);
     argName = responses.name;
   }
 
   return argName;
 }
-
-
-
 
 /**
  * Description: parse project or prompt user to provide name for project
@@ -415,22 +442,21 @@ async function parseBundleIdentifier(args: Lookup): Promise<string> {
   let argName = args.bundleIdenifier;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: '',
-      message: 'Enter app\'s Bundle Idenifier (eg. com.company.app): ',
-      type: 'input',
-      validate: validateDomain
-    }]);
-    console.log(responses);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: '',
+        message: 'Enter app\'s Bundle Idenifier (eg. com.company.app): ',
+        type: 'input',
+        validate: validateDomain,
+      },
+    ]);
 
     argName = responses.name;
   }
 
   return argName;
 }
-
-
 
 /**
  * Description: parse project or prompt user to provide name for project
@@ -441,19 +467,19 @@ async function parseProjectScheme(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: '',
-      message: 'Enter a name for the project scheme (eg. ProjectName): ',
-      type: 'input'
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: '',
+        message: 'Enter a name for the project scheme (eg. ProjectName): ',
+        type: 'input',
+      },
+    ]);
     argName = responses.name;
   }
 
   return argName;
 }
-
-
 
 /**
  * Description: parse project or prompt user to provide name for project
@@ -464,18 +490,19 @@ async function parseBitriseAuthorizationKey(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: '',
-      message: 'Enter your Bitrise Authorization Key: ',
-      type: 'input'
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: '',
+        message: 'Enter your Bitrise Authorization Key: ',
+        type: 'input',
+      },
+    ]);
     argName = responses.name;
   }
 
   return argName;
 }
-
 
 /**
  * Description: parse project or prompt user to provide name for project
@@ -486,18 +513,20 @@ async function parseGitProviderUrl(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: '',
-      message: 'Enter SSH version of your repository URL (eg. git@github.com:demo_owner/example-repository.git"): ',
-      type: 'input'
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: '',
+        message:
+          'Enter SSH version of your repository URL (eg. git@github.com:demo_owner/example-repository.git): ',
+        type: 'input',
+      },
+    ]);
     argName = responses.name;
   }
 
   return argName;
 }
-
 
 /**
  * Description: parse project or prompt user to provide name for project
@@ -508,12 +537,14 @@ async function parseRepoOwner(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: '',
-      message: 'Enter the owner of the repository (eg. demo_owner"): ',
-      type: 'input'
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: '',
+        message: 'Enter the owner of the repository (eg. demo_owner): ',
+        type: 'input',
+      },
+    ]);
     argName = responses.name;
   }
 
@@ -529,18 +560,19 @@ async function parseGitSlug(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: '',
-      message: 'Enter your repository slug (eg. example-repository.git"): ',
-      type: 'input'
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: '',
+        message: 'Enter your repository slug (eg. example-repository.git): ',
+        type: 'input',
+      },
+    ]);
     argName = responses.name;
   }
 
   return argName;
 }
-
 
 /**
  * Description: parse project or prompt user to provide name for project
@@ -551,28 +583,25 @@ async function parseGitProvider(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: '',
-      message: 'Enter GIT provider (eg. Github, bitbucket or Gitlab "): ',
-      type: 'input'
-    }]);
+    const responses: any = await inquirer.prompt([
+      {
+        name: 'name',
+        default: '',
+        message: 'Enter GIT provider (eg. Github, bitbucket or Gitlab): ',
+        type: 'input',
+      },
+    ]);
     argName = responses.name;
   }
 
   return argName;
 }
 
-
-
-
-
-
 /**
  * Description: determine if command is ran within a valid rdvue project
  * @returns {any} -
  */
-function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
+function checkProjectValidity(): { isValid: boolean; projectRoot: string } {
   const results = {
     isValid: false,
     projectRoot: '',
@@ -590,11 +619,10 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
 }
 
 interface ProjectConfig {
-  projectRoot: string,
-  isMobile: boolean,
-  cicd: string,
+  projectRoot: string;
+  isMobile: boolean;
+  cicd: string;
 }
-
 
 /**
  * Description: determine if command is ran within a valid rdvue project
@@ -605,7 +633,6 @@ function getProjectConfig(): ProjectConfig {
   return readConfigFile(`${projectRoot}/.rdvue/.rdvue`);
 }
 
-
 export enum RequestMethod {
   Post,
   Put,
@@ -615,7 +642,13 @@ export enum RequestMethod {
   Option,
 }
 
-async function sendRequest(type: RequestMethod, url: string, axiosInstance?: AxiosInstance, data: any = undefined, config?: AxiosRequestConfig) {
+async function sendRequest(
+  type: RequestMethod,
+  url: string,
+  axiosInstance?: AxiosInstance,
+  data: any = undefined,
+  config?: AxiosRequestConfig
+) {
   let response = null;
 
   switch (type) {
@@ -635,10 +668,10 @@ async function sendRequest(type: RequestMethod, url: string, axiosInstance?: Axi
       response = await axiosInstance?.patch(url, data, config);
       break;
     default:
-      throw new Error("Unknown request method");
+      throw new Error('Unknown request method');
   }
   return response;
-};
+}
 
 export {
   hasKebab,
