@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { AxiosRequestConfig, AxiosInstance } from 'axios';
 import * as inquirer from 'inquirer';
 import { Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
