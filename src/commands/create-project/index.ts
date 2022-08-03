@@ -127,7 +127,7 @@ export default class CreateProject extends Command {
     const success = await replaceInFiles(filesToReplace, replaceRegex, `${kebabProjectName}`);
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
-    const shouldInstallDesignSystem = withDesignSystem === true;  
+    const shouldInstallDesignSystem = withDesignSystem === true; 
     let shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
     let shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
     let shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
