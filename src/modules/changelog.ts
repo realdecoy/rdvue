@@ -231,6 +231,16 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
       srcPath: '',
       destPath: '',
       type: 'file',
+    },
+    {
+      name: 'CHANGELOG.md',
+      file: {
+        source: 'CHANGELOG.md',
+        target: 'CHANGELOG.md',
+      },
+      srcPath: '',
+      destPath: '',
+      type: 'file',
     }],
   },
   update: {
