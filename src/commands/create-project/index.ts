@@ -126,6 +126,12 @@ export default class CreateProject extends Command {
     // find and replace project name references
     const success = await replaceInFiles(filesToReplace, replaceRegex, `${kebabProjectName}`);
 
+    const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
+    const shouldInstallDesignSystem = withDesignSystem === true;    
+    let shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
+    let shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
+    let shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
+
     if (isMobile) {
       MOBILE_TEMPLATE_CI_CD_REPLACEMENT_FILES
         .map(file => `${kebabProjectName}/${file}`)
@@ -133,13 +139,11 @@ export default class CreateProject extends Command {
           await replaceInFiles(file, /__PROJECT_SCHEME__/g, toPascalCase(projectName));
           await replaceInFiles(file, /__BUNDLE_IDENTIFIER__/g, bundleIdenifier.toLowerCase());
         });
-    }
 
-    const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
-    const shouldInstallBuefy = !isMobile && (presetIndex === 0 || withBuefy === true);
-    const shouldInstallVuetify = !isMobile && (presetIndex === 1 || withVuetify === true);
-    const shouldInstallLocalization = !isMobile && (presetIndex === 0 || presetIndex === 1 || withLocalization === true);
-    const shouldInstallDesignSystem = withDesignSystem === true;
+      shouldInstallBuefy = false;
+      shouldInstallVuetify = false;
+      shouldInstallLocalization = false;
+    }
 
     if (success === false) {
       throw new Error(

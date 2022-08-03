@@ -44,7 +44,7 @@ function toKebabCase(value: string): string {
     value &&
     (
       value.match(
-        /[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g
+        /[A-Z]{2,}(?=[A-Z][a-z]+\d*|\b)|[A-Z]?[a-z]+\d*|[A-Z]|\d+/g,
       ) ?? ['']
     )
       .map(x => x.toLowerCase())
@@ -63,7 +63,7 @@ function toPascalCase(value: string): string {
     .join(' ')
     .replace(
       /\w\S*/g,
-      m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
+      m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase(),
     )
     .split(' ')
     .join('');
@@ -80,7 +80,7 @@ function toEnglishCase(value: string): string {
     .join(' ')
     .replace(
       /\w\S*/g,
-      (m) => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
+      m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase(),
     );
 }
 
@@ -117,7 +117,7 @@ function validateDomain(value: string) {
   // characters in value are limited to alphanumeric characters and hyphens or underscores
   const charactersMatch =
     value.match(
-      /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
+      /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/,
     ) !== null;
   const isValid = isString && charactersMatch;
   let resultMessage;
@@ -634,47 +634,6 @@ function getProjectConfig(): ProjectConfig {
   return readConfigFile(`${projectRoot}/.rdvue/.rdvue`);
 }
 
-export enum RequestMethod {
-  Post,
-  Put,
-  Delete,
-  Get,
-  Patch,
-  Option
-}
-
-async function sendRequest(
-  type: RequestMethod,
-  url: string,
-  axiosInstance?: AxiosInstance,
-  data: any = undefined,
-  config?: AxiosRequestConfig
-) {
-  let response = null;
-
-  switch (type) {
-    case RequestMethod.Post:
-      response = await axiosInstance?.post(url, data, config);
-      break;
-    case RequestMethod.Put:
-      response = await axiosInstance?.put(url, data, config);
-      break;
-    case RequestMethod.Get:
-      response = await axiosInstance?.get(url, config);
-      break;
-    case RequestMethod.Delete:
-      response = await axiosInstance?.delete(url, config);
-      break;
-    case RequestMethod.Patch:
-      response = await axiosInstance?.patch(url, data, config);
-      break;
-    default:
-      throw new Error('Unknown request method');
-  }
-  
-  return response;
-}
-
 export {
   hasKebab,
   toKebabCase,
@@ -695,7 +654,6 @@ export {
   parseGitProvider,
   parseGitSlug,
   parseRepoOwner,
-  sendRequest,
   getProjectConfig,
   parseProjectScheme,
   parseBundleIdentifier,
