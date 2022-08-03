@@ -41,18 +41,11 @@ export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 
 enum DOCUMENTATION_LINKS_ENUM {
   Rdvue = 'https://realdecoy.github.io/rdvue/#/',
-<<<<<<< HEAD
-  Component = 'https://realdecoy.github.io/rdvue/#/Components',
-  Screen = 'https://realdecoy.github.io/rdvue/#/Pages',
-  Layout = 'https://realdecoy.github.io/rdvue/#/Layouts',
-  Service = 'https://realdecoy.github.io/rdvue/#/Services',
-  Store = 'https://realdecoy.github.io/rdvue/#/Stores',
-=======
   Component = 'https://realdecoy.github.io/rdvue/#/Features?id=components',
   Page = 'https://realdecoy.github.io/rdvue/#/Features?id=pages',
+  Layout = 'https://realdecoy.github.io/rdvue/#/Features?id=layouts',
   Service = 'https://realdecoy.github.io/rdvue/#/Features?id=services',
   Store = 'https://realdecoy.github.io/rdvue/#/Features?id=stores',
->>>>>>> main
 }
 export const DOCUMENTATION_LINKS = DOCUMENTATION_LINKS_ENUM;
 

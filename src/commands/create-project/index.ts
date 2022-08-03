@@ -4,7 +4,7 @@ import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
 import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
-import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase, toEnglishCase, parseBundleIdentifier } from '../../lib/utilities';
+import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase, parseBundleIdentifier } from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
@@ -85,7 +85,7 @@ export default class CreateProject extends Command {
 
     let filesToReplace = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES : TEMPLATE_REPLACEMENT_FILES;
 
-    let projectName: string;
+    let projectName: string = '';
     let bundleIdenifier: string;
     let presetName: string = '';
     const { isValid: isValidProject } = checkProjectValidity();
@@ -124,7 +124,7 @@ export default class CreateProject extends Command {
     // remove git folder reference to base project
     await shell.exec(`npx rimraf ${kebabProjectName}/.git`);
     // find and replace project name references
-    let success = await replaceInFiles(filesToReplace, replaceRegex, `${kebabProjectName}`);
+    const success = await replaceInFiles(filesToReplace, replaceRegex, `${kebabProjectName}`);
 
     if (isMobile) {
       MOBILE_TEMPLATE_CI_CD_REPLACEMENT_FILES
@@ -132,13 +132,13 @@ export default class CreateProject extends Command {
         .forEach(async file => {
           await replaceInFiles(file, /__PROJECT_SCHEME__/g, toPascalCase(projectName));
           await replaceInFiles(file, /__BUNDLE_IDENTIFIER__/g, bundleIdenifier.toLowerCase());
-        })
+        });
     }
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
     const shouldInstallBuefy = !isMobile && (presetIndex === 0 || withBuefy === true);
     const shouldInstallVuetify = !isMobile && (presetIndex === 1 || withVuetify === true);
-    const shouldInstallLocalization = !isMobile && presetIndex === 0 || presetIndex === 1 || withLocalization === true;
+    const shouldInstallLocalization = !isMobile && (presetIndex === 0 || presetIndex === 1 || withLocalization === true);
     const shouldInstallDesignSystem = withDesignSystem === true;
 
     if (success === false) {

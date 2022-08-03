@@ -47,7 +47,7 @@ function toKebabCase(value: string): string {
 }
 
 /**
- * Description: convert a string to kebab case (e.g. my-project-name)
+ * Description: convert a string to kebab case e.g. my-project-name
  * @param {string} value - a string value
  * @returns {string} -
  */
@@ -61,9 +61,9 @@ function toPascalCase(value: string): string {
 }
 
 /**
- * Description: convert a string to english case (e.g. My Project Name)
+ * Description: convert a string to english case e.g. My Project Name
  * @param {string} value - a string value
- * @returns {string} -
+ * @returns {string} - a string value
  */
 function toEnglishCase(value: string): string {
   return value
@@ -100,7 +100,7 @@ function validateProjectName(value: any) {
  * @param {string} value - a string value
  * @returns {any} -
  */
- function validateDomain(value: string) {
+function validateDomain(value: string) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
   // characters in value are limited to alphanumeric characters and hyphens or underscores
@@ -121,7 +121,7 @@ function validateProjectName(value: any) {
  * Description: determine if string is valid component name
  * @param {string} value - a string value
  * @returns {any} -
- */
+*/
 function validateComponentName(value: any) {
   const isString = typeof value === 'string';
   const isNull = value === null || value.length === 0;
@@ -411,7 +411,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
- async function parseBundleIdentifier(args: Lookup): Promise<string> {
+async function parseBundleIdentifier(args: Lookup): Promise<string> {
   let argName = args.bundleIdenifier;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -426,7 +426,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
 
     argName = responses.name;
   }
-  
+
   return argName;
 }
 
@@ -437,7 +437,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
- async function parseProjectScheme(args: Lookup): Promise<string> {
+async function parseProjectScheme(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -460,7 +460,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
- async function parseBitriseAuthorizationKey(args: Lookup): Promise<string> {
+async function parseBitriseAuthorizationKey(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -482,7 +482,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
- async function parseGitProviderUrl(args: Lookup): Promise<string> {
+async function parseGitProviderUrl(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -504,7 +504,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
- async function parseRepoOwner(args: Lookup): Promise<string> {
+async function parseRepoOwner(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -525,7 +525,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
- async function parseGitSlug(args: Lookup): Promise<string> {
+async function parseGitSlug(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -547,7 +547,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
  * @param {Lookup} args - a string value
  * @returns {string} -
  */
- async function parseGitProvider(args: Lookup): Promise<string> {
+async function parseGitProvider(args: Lookup): Promise<string> {
   let argName = args.name;
   // if no page name is provided in command then prompt user
   if (!argName) {
@@ -589,8 +589,8 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
   return results;
 }
 
-interface ProjectConfig { 
-  projectRoot: string, 
+interface ProjectConfig {
+  projectRoot: string,
   isMobile: boolean,
   cicd: string,
 }
@@ -600,7 +600,7 @@ interface ProjectConfig {
  * Description: determine if command is ran within a valid rdvue project
  * @returns {any} -
  */
- function getProjectConfig(): ProjectConfig {
+function getProjectConfig(): ProjectConfig {
   const projectRoot: string | null = getProjectRoot();
   return readConfigFile(`${projectRoot}/.rdvue/.rdvue`);
 }
