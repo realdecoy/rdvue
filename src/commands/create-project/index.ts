@@ -4,7 +4,7 @@ import { Command, flags } from '@oclif/command';
 import Buefy from '../plugin/buefy';
 import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
-import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
+import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets, toPascalCase, parseBundleIdentifier } from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
   TEMPLATE_REPO,
@@ -15,6 +15,9 @@ import {
   TEMPLATE_REPLACEMENT_FILES,
   CLI_STATE,
   PLUGIN_PRESET_LIST,
+  MOBILE_TEMPLATE_REPLACEMENT_FILES,
+  MOBILE_TEMPLATE_REPO,
+  MOBILE_TEMPLATE_CI_CD_REPLACEMENT_FILES,
 } from '../../lib/constants';
 
 const CUSTOM_ERROR_CODES = [
@@ -32,12 +35,14 @@ export default class CreateProject extends Command {
     withBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
     withVuetify: flags.boolean({ hidden: true }),
+    mobile: flags.boolean({ hidden: true }),
     withDesignSystem: flags.boolean({ hidden: true }),
   }
 
   static args = [
     { name: 'name', description: 'name of created project' },
     { name: 'preset', description: 'name of plugin preset' },
+    { name: 'bundleIdenifier', description: 'The name of the unique identifier that will used for deployment to the App & Google play Store (eg. com.company.app)' },
   ]
 
   // override Command class error handler
@@ -66,19 +71,22 @@ export default class CreateProject extends Command {
 
   async run(): Promise<void> {
     const { args, flags } = this.parse(CreateProject);
-    const template: string = TEMPLATE_REPO;
+    const isMobile = flags.mobile === true;
+    const template: string = isMobile ? MOBILE_TEMPLATE_REPO : TEMPLATE_REPO;
     const designTemplate: string = DESIGN_TEMPLATE_REPO;
     const designTemplateFolder: string = DESIGN_TEMPLATE_FOLDER;
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
-    const skipPresetsStep = flags.skipPresets === true;
+    const skipPresetsStep = flags.skipPresets === true || isMobile;
     const withBuefy = flags.withBuefy === true;
     const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
     const withDesignSystem = flags.withDesignSystem === true;
 
-    let filesToReplace = TEMPLATE_REPLACEMENT_FILES;
-    let projectName: string;
+    let filesToReplace = isMobile ? MOBILE_TEMPLATE_REPLACEMENT_FILES : TEMPLATE_REPLACEMENT_FILES;
+
+    let projectName: string = '';
+    let bundleIdenifier: string;
     let presetName: string = '';
     const { isValid: isValidProject } = checkProjectValidity();
     // block command if being run within an rdvue project
@@ -93,31 +101,49 @@ export default class CreateProject extends Command {
 
     // retrieve project name
     projectName = await parseProjectName(args);
+
+    if (isMobile) {
+      bundleIdenifier = await parseBundleIdentifier(args);
+    }
+
     // retrieve project preset
     // on skip preset flag set presetName to skip presets
     presetName = skipPresetsStep ? PLUGIN_PRESET_LIST[2] : await parseProjectPresets(args);
     // convert project name to kebab case
-    projectName = toKebabCase(projectName);
+    const kebabProjectName = toKebabCase(projectName);
     // verify that project folder doesnt already exist
-    checkIfFolderExists(projectName);
+    checkIfFolderExists(kebabProjectName);
 
     // update files to be replaced with project name reference
-    filesToReplace = filesToReplace.map(p => `${projectName}/${p}`);
+    filesToReplace = filesToReplace.map(p => `${kebabProjectName}/${p}`);
 
-    this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`);
+    this.log(`${CLI_STATE.Info} creating ${isMobile ? 'mobile' : ''} project ${chalk.whiteBright(kebabProjectName)}`);
 
     // retrieve project files from template source
-    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, { silent: true });
+    await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${kebabProjectName}`, { silent: true });
     // remove git folder reference to base project
-    await shell.exec(`npx rimraf ${projectName}/.git`);
+    await shell.exec(`npx rimraf ${kebabProjectName}/.git`);
     // find and replace project name references
-    const success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
+    const success = await replaceInFiles(filesToReplace, replaceRegex, `${kebabProjectName}`);
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
-    const shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
-    const shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
-    const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
     const shouldInstallDesignSystem = withDesignSystem === true;
+    let shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
+    let shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
+    let shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
+
+    if (isMobile) {
+      MOBILE_TEMPLATE_CI_CD_REPLACEMENT_FILES
+        .map(file => `${kebabProjectName}/${file}`)
+        .forEach(async file => {
+          await replaceInFiles(file, /__PROJECT_SCHEME__/g, toPascalCase(projectName));
+          await replaceInFiles(file, /__BUNDLE_IDENTIFIER__/g, bundleIdenifier.toLowerCase());
+        });
+
+      shouldInstallBuefy = false;
+      shouldInstallVuetify = false;
+      shouldInstallLocalization = false;
+    }
 
     if (success === false) {
       throw new Error(
@@ -128,13 +154,13 @@ export default class CreateProject extends Command {
       );
     } else {
       if (shouldInstallBuefy === true) { // buefy
-        await Buefy.run(['--forceProject', projectName, '--skipInstall']);
+        await Buefy.run(['--forceProject', kebabProjectName, '--skipInstall']);
       }
       if (shouldInstallVuetify) { // Vuetify
-        await Vuetify.run(['--forceProject', projectName, '--skipInstall']);
+        await Vuetify.run(['--forceProject', kebabProjectName, '--skipInstall']);
       }
       if (shouldInstallLocalization === true) { // localization
-        await Localization.run(['--forceProject', projectName, '--skipInstall']);
+        await Localization.run(['--forceProject', kebabProjectName, '--skipInstall']);
       }
     }
 
@@ -146,11 +172,11 @@ export default class CreateProject extends Command {
     }
 
     // initialize git in the created project
-    await shell.exec(`cd ${projectName} && git init && git add . && git commit -m "Setup: first commit" && git branch -M main`, { silent: true });
+    await shell.exec(`cd ${kebabProjectName} && git init && git add . && git commit -m "Setup: first commit" && git branch -M main`, { silent: true });
 
-    this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`);
+    this.log(`${CLI_STATE.Success} ${chalk.whiteBright(kebabProjectName)} is ready!`);
 
     // Output final instructions to user
-    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(projectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} npm run serve`);
+    this.log(`\nNext Steps:\n${chalk.magenta('-')} cd ${chalk.whiteBright(kebabProjectName)}\n${chalk.magenta('-')} npm install\n${chalk.magenta('-')} ${isMobile ? 'npm run android | ios' : 'npm run serve'}`);
   }
 }

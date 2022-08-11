@@ -524,6 +524,39 @@ async function updateDynamicImportsAndExports(
   }
 }
 
+/**
+ * Injects New page route data into RDVue Mobile routes array
+ * @param {string} projectRoot - Root of project
+ * @param {string} pageNamePascal - Pascale case version of page name
+ * @param {string} pageName - Page name
+ * @param {string[]} lines - Lines being inserted into route array
+ */
+function updateNativeRoutes(
+  projectRoot: string,
+  pageNamePascal: string,
+  pageName: string,
+  lines: string[],
+): void {
+  const routePath = path.join(projectRoot, 'src', 'config', 'route.ts');
+  const newLines: string[] = [];
+  const nameRegEx = new RegExp('__NAME__', 'g');
+  const pathRegEx = new RegExp('__PATH__', 'g');
+
+  // Read file and Locate the end of array containing the routes
+  const encoding = 'utf-8';
+  const routes = fs.readFileSync(routePath, { encoding });
+  const index = routes.split(/\r?\n/g).findIndex(line => line.trimStart().startsWith('];'));
+
+  // Update generic lines with page values
+  lines.forEach((line, i) => {
+    newLines[i] = line.replace(nameRegEx, pageNamePascal).replace(pathRegEx, pageName);
+  });
+
+  // Join contents with a new line and inject into file
+  const contents = newLines.join('/\n');
+  inject(routePath, contents, { index });
+}
+
 export {
   updateDynamicImportsAndExports,
   parseDynamicObjects,
@@ -538,4 +571,6 @@ export {
   fileExists,
   writeFile,
   inject,
+  updateNativeRoutes,
+  readConfigFile,
 };
