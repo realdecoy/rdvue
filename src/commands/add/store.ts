@@ -6,8 +6,6 @@ import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetF
 import { checkProjectValidity, parseStoreModuleName, toKebabCase, toPascalCase, isJsonString, getProjectConfig } from '../../lib/utilities';
 import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 
-const projectConfig = getProjectConfig();
-const TEMPLATE_FOLDERS = projectConfig.isMobile ?  ['context'] : ['store'];
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
   'failed-match-and-replace',
@@ -64,6 +62,8 @@ export default class StoreModule extends Command {
     }
 
     const { args } = this.parse(StoreModule);
+    const projectConfig = getProjectConfig();
+    const TEMPLATE_FOLDERS = projectConfig.isMobile ?  ['context'] : ['store'];
     const folderList = TEMPLATE_FOLDERS;
     let sourceDirectory: string;
     let installDirectory: string;
