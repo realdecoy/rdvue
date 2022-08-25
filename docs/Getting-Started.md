@@ -15,6 +15,10 @@ The help menu can be accessed with the command:
 ```bash
 rdvue --help
 ```
+OR
+```bash
+rdvue -h
+```
 
 ## Options
 
