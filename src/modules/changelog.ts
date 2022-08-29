@@ -1,21 +1,21 @@
 /* eslint-disable max-lines */
 export enum ChangelogMetaDataTypes {
   MIGRATION = 'migration',
-    UPDATE = 'update',
-    PATCH = 'patch',
+  UPDATE = 'update',
+  PATCH = 'patch',
 }
 
 export enum ChangelogConfigTypes {
   META_DATA = 'metadata',
-    CREATE = 'create',
-    UPDATE = 'update',
-    DELETE = 'delete',
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
 }
 
 export enum ChangelogContentOperations {
   ADD = 'add',
-    REMOVE = 'remove',
-    UPDATE = 'update',
+  REMOVE = 'remove',
+  UPDATE = 'update',
 }
 
 export type ChangelogResourcesContent = {
@@ -55,7 +55,7 @@ export type ChangeLog = {
   delete ? : ChangelogResources;
 }
 
-export function handleArraysAndObjects(data: any, key: string, operation: ChangelogContentOperations, newValue: any): void {
+export function handleArraysAndObjects(data: any, key: string, operation: string, newValue: any): void {
   const currentValue = data[key];
   if (operation === ChangelogContentOperations.REMOVE) {
     if (Array.isArray(newValue)) {
@@ -78,7 +78,7 @@ export function handleArraysAndObjects(data: any, key: string, operation: Change
   }
 }
 
-export function handlePrimitives(data: any, key: string, operation: ChangelogContentOperations, newValue: any): void {
+export function handlePrimitives(data: any, key: string, operation: string, newValue: any): void {
   if (operation === ChangelogContentOperations.REMOVE) {
     delete data[key];
   } else if (operation === ChangelogContentOperations.ADD) {
@@ -183,7 +183,7 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
       type: 'file',
     },
     {
-      name: ' main.ts',
+      name: 'main.ts',
       file: {
         source: 'main.ts',
         target: 'main.update.ts',

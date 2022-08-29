@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import shell from 'shelljs';
 import { Command, flags } from '@oclif/command';
 import path from 'path';
@@ -6,7 +7,7 @@ import { checkProjectValidity, createChangelogReadme, isJsonString } from '../..
 import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME } from '../../lib/constants';
 import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, Files, ChangelogContentOperations, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
-import {copy, emptyDir, remove} from 'fs-extra'
+import { copy, emptyDir, remove } from 'fs-extra'
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
 ];
@@ -35,7 +36,6 @@ export default class Upgrade extends Command {
       // throw cli errors to be handled globally
       throw errorMessage;
     }
-
     // handle errors thrown with known error codes
     if (CUSTOM_ERROR_CODES.includes(customErrorCode)) {
       this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
@@ -45,7 +45,6 @@ export default class Upgrade extends Command {
 
     return Promise.resolve();
   }
-
 
   async run(): Promise<void> {
     const { isValid: isValidProject, projectRoot } = checkProjectValidity();
@@ -88,11 +87,10 @@ export default class Upgrade extends Command {
      * @Todo create method to generate changelog dynamically from git diff.
      * add changelog to project temp directory and read based on release version number
      */
-    const rawGeneratedChangelog = await readFile(path.join(templateDestinationPath, CHANGE_LOG_FOLDER, versionName));
-    const parsedGeneratedChangelog:ChangeLog | null = rawGeneratedChangelog.length ? JSON.parse(rawGeneratedChangelog) : null; 
+    const rawGeneratedChangelog = readFile(path.join(templateDestinationPath, CHANGE_LOG_FOLDER, versionName));
+    const parsedGeneratedChangelog: ChangeLog | null = rawGeneratedChangelog.length > 0 ? JSON.parse(rawGeneratedChangelog) : null;
     const changeLogData = parsedGeneratedChangelog ?? DEFAULT_CHANGE_LOG;
 
-    createChangelogReadme(versionName, changelogPath, changeLogData);
     /**
      * Steps for Executing changelog
      * 1. read package.json file form project root
@@ -105,32 +103,18 @@ export default class Upgrade extends Command {
      * 8. include new project folders and files ( scripts/config, config/.env, config/.env.example, webpack.config.js )
      * 9. update existing project files ( main.ts, tsconfig.json, tailwind.config.js, src/pages/hello-world, readme )
      */
-
-    this.log(`${CLI_STATE.Info} creating project files`);
-    await this.createProjectFiles(projectRoot, temporaryProjectFolder, changeLogData[ChangelogConfigTypes.CREATE]?.resources as ChangelogResource[]).then(() => {
-      this.log(`${CLI_STATE.Info} project files created`);
+    const resourcesToCreate = changeLogData[ChangelogConfigTypes.CREATE]?.resources;
+    const resourcesToUpdate = changeLogData[ChangelogConfigTypes.UPDATE]?.resources;
+    const resourcesToDelete = changeLogData[ChangelogConfigTypes.DELETE]?.resources;
+    if (resourcesToCreate) {
+      await this.createProjectFiles(projectRoot, temporaryProjectFolder, resourcesToCreate);
     }
-    ).catch(error => {
-      this.error(error);
-    })
-
-    this.log(`${CLI_STATE.Info} updating project files`);
-    await this.updateProjectFiles(projectRoot, changeLogData[ChangelogConfigTypes.UPDATE]?.resources as ChangelogResource[]).then(() => {
-      this.log(`${CLI_STATE.Info} project files updated`);
+    if (resourcesToUpdate) {
+      await this.updateProjectFiles(projectRoot, resourcesToUpdate);
     }
-    ).catch(error => {
-      this.error(error);
-    })  
-
-    this.log(`${CLI_STATE.Info} removing unused files`);
-    await this.deleteProjectFiles(projectRoot, changeLogData[ChangelogConfigTypes.DELETE]?.resources as ChangelogResource[]).then(() => {
-      this.log(`${CLI_STATE.Info} unused files removed`);
+    if (resourcesToDelete) {
+      this.deleteProjectFiles(projectRoot, resourcesToDelete);
     }
-    ).catch(error => {
-      this.error(error);
-    }
-    )
-
 
     await remove(temporaryProjectFolder).then(() => {
       this.log(`${CLI_STATE.Info} temporary project folder removed`);
@@ -141,91 +125,104 @@ export default class Upgrade extends Command {
     )
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
+
+    createChangelogReadme(versionName, changelogPath, changeLogData);
     this.log(`${CLI_STATE.Success} CHANGELOG.md generated at : ${chalk.green(changelogPath)}`);
 
     this.log(`\n  ${chalk.yellow('rdvue')} has been updated to use the esbuild bundler!\n  Learn more here: ${chalk.yellow(DOCUMENTATION_LINKS.EsBuild)}\n`);
   }
 
-  async createProjectFiles (projectRoot: string, temporaryProjectFolder:string, resources: ChangelogResource[]): Promise<void> {
+  async createProjectFiles(projectRoot: string, temporaryProjectFolder: string, resources: ChangelogResource[]): Promise<void> {
+    for await (const resource of resources) {
+      try {
+        const name = resource.name;
+        const src = resource.srcPath;
+        const dest = resource.destPath;
+        const resourceFile = resource.file;
 
-    for (const resource of resources) {      
-      const src = resource.srcPath as string;
-      const dest = resource.destPath;
-      const file = [resource.file as changeLogFile] as Array<string | Files>;
-      try {        
-        const srcDir = path.join(temporaryProjectFolder, src)
-        const destDir = path.join(projectRoot, dest)
-        await copyFiles(srcDir, destDir, file);
+        if (src !== undefined && dest !== undefined && resourceFile) {
+          const srcDir = path.join(temporaryProjectFolder, src.trim());
+          const destDir = path.join(projectRoot, dest.trim());
+
+          const existingFile = readFile(path.join(destDir, name));
+          if (existingFile && !resourceFile.target.includes(ChangelogConfigTypes.UPDATE)) {
+            const current = resourceFile.target.split(CHAR_PERIOD);
+            current.splice(current.length - 1, 0, ChangelogConfigTypes.UPDATE);
+            resourceFile.target = current.join(CHAR_PERIOD);
+          }
+
+          const files: changeLogFile[] = [resourceFile];
+          await copyFiles(srcDir, destDir, files, false);
+        } else {
+          throw this.error;
+        }
       } catch (error) {
-        this.log(`${CLI_STATE.Warning} could not create file at: ${chalk.yellow(file)}`);
+        this.log(`${CLI_STATE.Warning} could not create file at: ${chalk.yellow(error)}`);
       }
     }
   }
 
-  async updateProjectFiles (projectRoot: string, resources: ChangelogResource[]): Promise<void> {
-
-    for (const resource of resources) {
-
-      const dest = resource.destPath;
-      const destDir = path.join(projectRoot, dest)
+  async updateProjectFiles(projectRoot: string, resources: ChangelogResource[]): Promise<void> {
+    for await (const resource of resources) {
+      const destPath = resource.destPath;
+      const destDir = path.join(projectRoot, destPath);
       const name = resource.name;
-      const contents = resource.contents as ChangelogResourcesContent[];
+      const contents: ChangelogResourcesContent[] | undefined = resource.contents;
 
-      if (contents && contents.length) {
-        const rawJsonData = await readFile(path.join(projectRoot, name as string));
+      if (contents && contents.length > 0) {
+        const rawJsonData = readFile(path.join(projectRoot, name));
         const parsedJsonData = JSON.parse(rawJsonData);
 
         for (const content of contents) {
-          const searchAndUpdateProp = (data: any, keys: string[]) => {
-            if(!data || !keys.length){
-              return
-            }
-  
-            const currentKey = keys.shift();
-            if(!keys.length) {
-              const operation = content.operation as ChangelogContentOperations;
-              const newValue = content.value;
-
-              if (!Array.isArray(newValue) && !(newValue instanceof Object)) {
-                handlePrimitives(data, currentKey as string, operation, newValue)
-              } else {
-                handleArraysAndObjects(data, currentKey as string, operation, newValue)
-              }
-
-              return
-            }
-            searchAndUpdateProp(data[currentKey as string], keys)
-          }
-  
           const keys: string[] = content.key.split('.');
-          searchAndUpdateProp(parsedJsonData, keys);
+          this.parseAndUpdateJson(parsedJsonData, keys, content);
         }
 
         const regex = /[^]*/;
-        updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData, null, 2));
+        await updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData, null, 2));
       }
     }
   }
-  
-  async deleteProjectFiles (projectRoot: string, resources: ChangelogResource[]): Promise<void> {
 
+  deleteProjectFiles(projectRoot: string, resources: ChangelogResource[]): void {
     for (const resource of resources) {
+      const destPath = resource.destPath;
+      const name = resource.name;
 
-      const dest = resource.destPath;
-      const name = resource.name as string;
-
-      const destDir = path.join(projectRoot, dest);
+      const destDir = path.join(projectRoot, destPath);
       const targetFile = path.join(destDir, name);
-      const rawData = await readFile(targetFile);
+      const rawData = readFile(targetFile);
 
       if (!rawData) {
-        return
+        return;
       }
       try {
         deleteFile(targetFile);
       } catch (error) {
         this.log(`${CLI_STATE.Warning} could not find file at: ${chalk.yellow(targetFile)} to delete`);
       }
+    }
+  }
+
+  parseAndUpdateJson(data: any, keys: string[], content: ChangelogResourcesContent): void {
+    if (!data || keys.length <= 0) {
+      return;
+    }
+    const currentKey = keys.shift();
+    if (currentKey) {
+      if (keys.length <= 0) {
+        const operation = content.operation;
+        const newValue = content.value;
+
+        if (!Array.isArray(newValue) && !(newValue instanceof Object)) {
+          handlePrimitives(data, currentKey, operation, newValue);
+        } else {
+          handleArraysAndObjects(data, currentKey, operation, newValue);
+        }
+
+        return;
+      }
+      this.parseAndUpdateJson(data[currentKey], keys, content);
     }
   }
 }
