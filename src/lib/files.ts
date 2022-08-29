@@ -196,12 +196,14 @@ function replaceTargetFileNames(
  * @param {string} srcDir - directory from which files will be copied
  * @param {string} destDir - directory to which files will be copied
  * @param {Array<string|Files>} files - files to be copied
+ * @param {Boolean} isCorePath - flag to optionally auto set core path if config path is included, true by default.
  * @returns {Promise<any>} -
  */
 function copyFiles(
   srcDir: string,
   destDir: string,
   files: Array<string | Files>,
+  isCorePath = true,
 ): Promise<any> {
   return Promise.all(
     files.map((f: Files | string) => {
@@ -211,7 +213,7 @@ function copyFiles(
       if (typeof f === 'string') {
         source = path.join(
           srcDir,
-          `${srcDir.includes('config') ? 'core' : EMPTY_STRING}`,
+          `${srcDir.includes('config') && isCorePath ? 'core' : EMPTY_STRING}`,
           f,
         );
         dest = path.join(destDir, f);

@@ -124,7 +124,7 @@ export default class Upgrade extends Command {
           const srcDir = path.join(temporaryProjectFolder, src);
           const destDir = path.join(projectRoot, dest);
 
-          await copyFiles(srcDir, destDir, files);
+          await copyFiles(srcDir, destDir, files, false);
         } else {
           throw this.error;
         }
@@ -151,7 +151,7 @@ export default class Upgrade extends Command {
         }
 
         const regex = /[^]*/;
-        await updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData));
+        await updateFile(destDir, rawJsonData, regex, JSON.stringify(parsedJsonData, null, 2));
       }
     }
   }
