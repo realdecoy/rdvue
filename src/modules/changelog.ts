@@ -13,7 +13,7 @@ export enum ChangelogConfigTypes {
 }
 
 export enum ChangelogContentOperations {
-  ADD = 'add',
+    ADD = 'add',
     REMOVE = 'remove',
     UPDATE = 'update',
 }
@@ -55,7 +55,7 @@ export type ChangeLog = {
   delete ? : ChangelogResources;
 }
 
-export function handleArraysAndObjects(data: any, key: string, operation: ChangelogContentOperations, newValue: any): void {
+export function handleArraysAndObjects(data: any, key: string, operation: string, newValue: any): void {
   const currentValue = data[key];
   if (operation === ChangelogContentOperations.REMOVE) {
     if (Array.isArray(newValue)) {
@@ -78,7 +78,7 @@ export function handleArraysAndObjects(data: any, key: string, operation: Change
   }
 }
 
-export function handlePrimitives(data: any, key: string, operation: ChangelogContentOperations, newValue: any): void {
+export function handlePrimitives(data: any, key: string, operation: string, newValue: any): void {
   if (operation === ChangelogContentOperations.REMOVE) {
     delete data[key];
   } else if (operation === ChangelogContentOperations.ADD) {
