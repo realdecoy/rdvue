@@ -4,10 +4,10 @@ import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
 import { checkProjectValidity, createChangelogReadme, isJsonString } from '../../lib/utilities';
-import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
-import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME } from '../../lib/constants';
-import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, Files, ChangelogContentOperations, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
-import { copy, emptyDir, remove } from 'fs-extra'
+import { copyDirectoryRecursive, copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
+import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME, CHAR_PERIOD } from '../../lib/constants';
+import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
+import { readJSONSync, remove } from 'fs-extra'
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
 ];
@@ -63,6 +63,7 @@ export default class Upgrade extends Command {
     const versionName = args.name ?? TEMPLATE_TAG;
     const temporaryProjectFolder = path.join(projectRoot, 'node_modules', '_temp');
     const templateSourcePath = path.join(temporaryProjectFolder, TEMPLATE_ROOT);
+
     const templateDestinationPath = path.join(projectRoot, '.rdvue');
     const changelogPath = path.join(projectRoot, CHANGE_LOG_FILENAME);
 
@@ -71,17 +72,7 @@ export default class Upgrade extends Command {
 
     // copy template files to project local template storage
     this.log(`${CLI_STATE.Info} copying template files to project local template storage`);
-    try {
-      this.log(`${CLI_STATE.Info} removing existing template files`);
-      await emptyDir(templateDestinationPath);
-      await copy(templateSourcePath, templateDestinationPath).then(() => {
-        this.log(`${CLI_STATE.Info} template files copied to project local template storage`);
-        // this.log(readdirSync(templateDestinationPath));
-      });
-    }
-    catch (error) {
-      this.log(`${CLI_STATE.Error} could not copy template files to project local template storage`);
-    }
+    copyDirectoryRecursive(templateSourcePath, templateDestinationPath);
 
     /**
      * @Todo create method to generate changelog dynamically from git diff.
@@ -118,11 +109,9 @@ export default class Upgrade extends Command {
 
     await remove(temporaryProjectFolder).then(() => {
       this.log(`${CLI_STATE.Info} temporary project folder removed`);
-    }
-    ).catch(error => {
+    }).catch(error => {
       this.error(error);
-    }
-    )
+    })
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
 
@@ -170,8 +159,9 @@ export default class Upgrade extends Command {
       const contents: ChangelogResourcesContent[] | undefined = resource.contents;
 
       if (contents && contents.length > 0) {
-        const rawJsonData = readFile(path.join(projectRoot, name));
-        const parsedJsonData = JSON.parse(rawJsonData);
+        const filePath = path.join(projectRoot, name)
+        const rawJsonData = readFile(filePath);
+        const parsedJsonData = readJSONSync(filePath);
 
         for (const content of contents) {
           const keys: string[] = content.key.split('.');

@@ -8,8 +8,9 @@ import chalk from 'chalk';
 import { Files, InjectOptions } from '../modules';
 const replace = require('replace-in-file');
 import { hasKebab } from './utilities';
-import { DYNAMIC_OBJECTS, EMPTY_STRING, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
+import { DYNAMIC_OBJECTS, EMPTY_STRING, RDVUE_DIRECTORY, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
 import { log } from '../lib/stdout';
+import { copySync, emptyDirSync } from 'fs-extra';
 
 const UTF8 = 'utf-8';
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -192,6 +193,29 @@ function replaceTargetFileNames(
 }
 
 /**
+ * 
+ * @param source 
+ * @param target 
+ * @returns {boolean} - Returns true if copy was successful
+ */
+function copyDirectoryRecursive(source: string, target: string) {
+
+  if (!directoryExists(target)) {
+    console.log(`Creating directory ${target}`);
+    fs.mkdirSync(target);
+  }
+  else {
+    emptyDirSync(target);
+  }
+  try {
+    copySync(source, target, { overwrite: true });
+  }
+  catch (error) {
+    return false;
+  }
+}
+
+/**
  * Description: Copy files from a source directory to a destination directory
  * @param {string} srcDir - directory from which files will be copied
  * @param {string} destDir - directory to which files will be copied
@@ -345,33 +369,38 @@ function isRootDirectory(location: string | null = null): boolean {
  * @returns {string | null} -
  */
 function getProjectRoot(): string | null {
-  const configFolderName = '.rdvue';
-  const maxTraverse = 20;
-
-  let currentPath = process.cwd();
-  let currentTraverse = 0;
-  let projectRoot = null;
-  let back = './';
-
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    currentPath = path.join(process.cwd(), back);
-    back = path.join(back, '../');
-    currentTraverse += 1;
-
-    if (directoryExists(path.join(currentPath, configFolderName))) {
-      projectRoot = currentPath;
-      break;
-    } else if (isRootDirectory(currentPath)) {
-      projectRoot = null;
-      break;
-    } else if (currentTraverse > maxTraverse) {
-      projectRoot = null;
-      break;
-    }
+  const configFolderName = RDVUE_DIRECTORY;
+  const currentConfigFolder = path.join(process.cwd(), configFolderName)
+  // Check if the current directory is the root of the project for older versions of rdvue
+  if (fileExists(currentConfigFolder)) {
+    deleteFile(currentConfigFolder);
+    return process.cwd();
   }
-
-  return projectRoot;
+  else {
+    const maxTraverse = 20;
+    let currentPath = process.cwd();
+    let currentTraverse = 0;
+    let projectRoot = null;
+    let back = './';
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      currentPath = path.join(process.cwd(), back);
+      back = path.join(back, '../');
+      currentTraverse += 1;
+      if (directoryExists(path.join(currentPath, configFolderName))) {
+        projectRoot = currentPath;
+        break;
+      } else if (isRootDirectory(currentPath)) {
+        projectRoot = null;
+        break;
+      } else if (currentTraverse > maxTraverse) {
+        projectRoot = null;
+        break;
+      }
+    }
+    console.log(`project root is ${projectRoot}`);
+    return projectRoot;
+  }
 }
 
 /**
@@ -557,6 +586,7 @@ export {
   replaceTargetFileNames,
   readAndUpdateFeatureFiles,
   copyFiles,
+  copyDirectoryRecursive,
   getProjectRoot,
   readFile,
   fileExists,
