@@ -1,11 +1,12 @@
+/* eslint-disable max-lines */
 import shell from 'shelljs';
 import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
 import { checkProjectValidity, createChangelogReadme, isJsonString } from '../../lib/utilities';
 import { copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
-import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME } from '../../lib/constants';
-import { DEFAULT_CHANGE_LOG, ChangelogResource, ChangelogResourcesContent, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
+import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME, CHAR_PERIOD } from '../../lib/constants';
+import { DEFAULT_CHANGE_LOG, ChangelogResource, ChangelogResourcesContent, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects, changeLogFile } from '../../modules';
 
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
@@ -114,16 +115,23 @@ export default class Upgrade extends Command {
   async createProjectFiles(projectRoot: string, temporaryProjectFolder:string, resources: ChangelogResource[]): Promise<void> {
     for await (const resource of resources) {
       try {
+        const name = resource.name;
         const src = resource.srcPath;
         const dest = resource.destPath;
-        const resourceFile = resource.file?.source;
+        const resourceFile = resource.file;
 
-        if (src && dest && resourceFile) {
-          const files: string[] = [resourceFile];
+        if (src !== undefined && dest !== undefined && resourceFile) {
+          const srcDir = path.join(temporaryProjectFolder, src.trim());
+          const destDir = path.join(projectRoot, dest.trim());
 
-          const srcDir = path.join(temporaryProjectFolder, src);
-          const destDir = path.join(projectRoot, dest);
+          const existingFile = readFile(path.join(destDir, name));
+          if (existingFile && !resourceFile.target.includes(ChangelogConfigTypes.UPDATE)) {
+            const current = resourceFile.target.split(CHAR_PERIOD);
+            current.splice(current.length - 1, 0, ChangelogConfigTypes.UPDATE);
+            resourceFile.target = current.join(CHAR_PERIOD);
+          }
 
+          const files: changeLogFile[] = [resourceFile];
           await copyFiles(srcDir, destDir, files, false);
         } else {
           throw this.error;
