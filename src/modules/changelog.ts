@@ -1,21 +1,21 @@
 /* eslint-disable max-lines */
 export enum ChangelogMetaDataTypes {
   MIGRATION = 'migration',
-    UPDATE = 'update',
-    PATCH = 'patch',
+  UPDATE = 'update',
+  PATCH = 'patch',
 }
 
 export enum ChangelogConfigTypes {
   META_DATA = 'metadata',
-    CREATE = 'create',
-    UPDATE = 'update',
-    DELETE = 'delete',
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
 }
 
 export enum ChangelogContentOperations {
-    ADD = 'add',
-    REMOVE = 'remove',
-    UPDATE = 'update',
+  ADD = 'add',
+  REMOVE = 'remove',
+  UPDATE = 'update',
 }
 
 export type ChangelogResourcesContent = {
@@ -183,7 +183,7 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
       type: 'file',
     },
     {
-      name: ' main.ts',
+      name: 'main.ts',
       file: {
         source: 'main.ts',
         target: 'main.update.ts',
