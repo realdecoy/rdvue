@@ -201,7 +201,6 @@ function replaceTargetFileNames(
 function copyDirectoryRecursive(source: string, target: string) {
 
   if (!directoryExists(target)) {
-    console.log(`Creating directory ${target}`);
     fs.mkdirSync(target);
   }
   else {
