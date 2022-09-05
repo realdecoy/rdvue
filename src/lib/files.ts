@@ -140,7 +140,6 @@ async function replaceInFiles(files: string | string[], from: RegExp, to: string
     throw new Error(
       JSON.stringify({
         code: 'file-not-changed',
-        message: error.message,
       }),
     );
   }

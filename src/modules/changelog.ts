@@ -96,11 +96,15 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
   },
   reccomendations: `For this release, we recommend the following:
     - Update node to version **16.x**
-    - Delete existing node_modules and run \`npm install\` to update your dependencies to the latest version
     - Compare the changes to the files with a **.update** file extension and its original file
+    - Optionally, you can run \`npm run upgrade\` to automatically update your project files
+    - Delete existing node_modules and run \`npm install\` to update your dependencies to the latest version
     - Run \`npm run serve\` to launch webpack-dev-server
 
-    For more information, see the [release notes](https://github.com/realdecoy/rdvue-template/tree/es-build-update)
+    For any issues regarding the recent tailwind upgrade, please refer to the following links:
+    - https://tailwindcss.com/docs/upgrading-to-v2
+    - https://tailwindcss.com/docs/upgrade-guide
+
     `,
   create: {
     resources: [{

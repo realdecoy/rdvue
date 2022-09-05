@@ -113,7 +113,7 @@ export default class Upgrade extends Command {
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
 
-    createChangelogReadme(versionName, changelogPath, changeLogData, projectRoot);
+    createChangelogReadme(versionName, changelogPath, changeLogData);
     this.log(`${CLI_STATE.Success} CHANGELOG.md generated at : ${chalk.green(changelogPath)}`);
 
     this.log(`\n  ${chalk.yellow('rdvue')} has been updated to use the esbuild bundler!\n  Learn more here: ${chalk.yellow(DOCUMENTATION_LINKS.EsBuild)}\n`);
