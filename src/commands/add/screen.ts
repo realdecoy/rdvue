@@ -50,7 +50,7 @@ export default class Screen extends Command {
   }
 
   async run(): Promise<void> {
-    this.log(`\n  Test:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Screen)}\n`);
+    this.log(`\n  Test:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Page)}\n`);
     const { isValid: isValidProject, projectRoot } = checkProjectValidity();
     // block command unless being run within an rdvue project
     if (isValidProject === false) {
@@ -88,6 +88,6 @@ export default class Screen extends Command {
     });
 
     this.log(`${CLI_STATE.Success} screen added: ${screenNameKebab}`);
-    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Screen)}\n`);
+    this.log(`\n  Visit the documentation page for more info:\n  ${chalk.yellow(DOCUMENTATION_LINKS.Page)}\n`);
   }
 }
