@@ -192,25 +192,26 @@ function replaceTargetFileNames(
 }
 
 /**
- * 
- * @param source 
- * @param target 
+ * Description: Copy files from source directory to target directory
+ * @param {string} source - source directory
+ * @param {string} target - target directory
  * @returns {boolean} - Returns true if copy was successful
  */
-function copyDirectoryRecursive(source: string, target: string) {
-
-  if (!directoryExists(target)) {
-    fs.mkdirSync(target);
-  }
-  else {
+function copyDirectoryRecursive(source: string, target: string): boolean {
+  let success = false;
+  if (directoryExists(target)) {
     emptyDirSync(target);
+  } else {
+    fs.mkdirSync(target);
   }
   try {
     copySync(source, target, { overwrite: true });
+    success = true;
+  } catch (error) {
+    success = false;
   }
-  catch (error) {
-    return false;
-  }
+
+  return success;
 }
 
 /**
@@ -368,37 +369,36 @@ function isRootDirectory(location: string | null = null): boolean {
  */
 function getProjectRoot(): string | null {
   const configFolderName = RDVUE_DIRECTORY;
-  const currentConfigFolder = path.join(process.cwd(), configFolderName)
+  const currentConfigFolder = path.join(process.cwd(), configFolderName);
   // Check if the current directory is the root of the project for older versions of rdvue
   if (fileExists(currentConfigFolder)) {
     deleteFile(currentConfigFolder);
+
     return process.cwd();
   }
-  else {
-    const maxTraverse = 20;
-    let currentPath = process.cwd();
-    let currentTraverse = 0;
-    let projectRoot = null;
-    let back = './';
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      currentPath = path.join(process.cwd(), back);
-      back = path.join(back, '../');
-      currentTraverse += 1;
-      if (directoryExists(path.join(currentPath, configFolderName))) {
-        projectRoot = currentPath;
-        break;
-      } else if (isRootDirectory(currentPath)) {
-        projectRoot = null;
-        break;
-      } else if (currentTraverse > maxTraverse) {
-        projectRoot = null;
-        break;
-      }
+  const maxTraverse = 20;
+  let currentPath = process.cwd();
+  let currentTraverse = 0;
+  let projectRoot = null;
+  let back = './';
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    currentPath = path.join(process.cwd(), back);
+    back = path.join(back, '../');
+    currentTraverse += 1;
+    if (directoryExists(path.join(currentPath, configFolderName))) {
+      projectRoot = currentPath;
+      break;
+    } else if (isRootDirectory(currentPath)) {
+      projectRoot = null;
+      break;
+    } else if (currentTraverse > maxTraverse) {
+      projectRoot = null;
+      break;
     }
-    console.log(`project root is ${projectRoot}`);
-    return projectRoot;
   }
+
+  return projectRoot;
 }
 
 /**

@@ -380,7 +380,6 @@ function createChangelogReadme(
   changelogPath: string,
   changeLogData: ChangeLog,
 ): void {
-
   const createdChangeLogResources = changeLogData[ChangelogConfigTypes.CREATE]?.resources ?? [];
   const deletedChangeLogResources = changeLogData[ChangelogConfigTypes.DELETE]?.resources ?? [];
   const updatedChangeLogResources = changeLogData[ChangelogConfigTypes.UPDATE]?.resources ?? [];
@@ -421,9 +420,8 @@ ${updatedFiles.map(file => `- ${file}`).join('\n')}
 ${changeLogData.reccomendations || 'No notes on the upgrade'}
 `;
   writeFile(changelogPath, readmeContent);
-  log(chalk(readmeContent))
+  log(chalk(readmeContent));
 }
-
 
 export {
   hasKebab,

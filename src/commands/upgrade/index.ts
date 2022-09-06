@@ -7,7 +7,7 @@ import { checkProjectValidity, createChangelogReadme, isJsonString } from '../..
 import { copyDirectoryRecursive, copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME, CHAR_PERIOD } from '../../lib/constants';
 import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
-import { readJSONSync, remove } from 'fs-extra'
+import { readJSONSync, remove } from 'fs-extra';
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
 ];
@@ -83,7 +83,7 @@ export default class Upgrade extends Command {
 
     /**
      * Steps for Executing changelog
-     * 1. read package.json file form project root
+     * 1. read package.json file from project root
      * 2. compare packages in existing package.json with the updated package.json cloned in above
      * 3. remove unused project dependencies and devDependencies
      * 4. add missing packages to project dependencies and devDependencies
@@ -106,10 +106,7 @@ export default class Upgrade extends Command {
       this.deleteProjectFiles(projectRoot, resourcesToDelete);
     }
 
-    await remove(temporaryProjectFolder).then(() => {
-    }).catch(error => {
-      this.log(error);
-    })
+    await remove(temporaryProjectFolder);
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
 
@@ -158,7 +155,7 @@ export default class Upgrade extends Command {
       const contents: ChangelogResourcesContent[] | undefined = resource.contents;
 
       if (contents && contents.length > 0) {
-        const filePath = path.join(projectRoot, name)
+        const filePath = path.join(projectRoot, name);
         const rawJsonData = readFile(filePath);
         const parsedJsonData = readJSONSync(filePath);
 

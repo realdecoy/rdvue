@@ -1,5 +1,3 @@
-import chalk from "chalk";
-
 /* eslint-disable max-lines */
 export enum ChangelogMetaDataTypes {
   MIGRATION = 'migration',
