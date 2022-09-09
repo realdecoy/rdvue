@@ -8,8 +8,9 @@ import chalk from 'chalk';
 import { Files, InjectOptions } from '../modules';
 const replace = require('replace-in-file');
 import { hasKebab } from './utilities';
-import { DYNAMIC_OBJECTS, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
+import { DYNAMIC_OBJECTS, EMPTY_STRING, RDVUE_DIRECTORY, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
 import { log } from '../lib/stdout';
+import { copySync, emptyDirSync } from 'fs-extra';
 
 const UTF8 = 'utf-8';
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -22,7 +23,11 @@ const getDirName = path.dirname;
  * @returns {string} -
  */
 function readFile(filePath: string): string {
-  return fs.readFileSync(filePath, UTF8);
+  try {
+    return fs.readFileSync(filePath, UTF8);
+  } catch (error) {
+    return EMPTY_STRING;
+  }
 }
 
 /**
@@ -135,7 +140,6 @@ async function replaceInFiles(files: string | string[], from: RegExp, to: string
     throw new Error(
       JSON.stringify({
         code: 'file-not-changed',
-        message: error.message,
       }),
     );
   }
@@ -172,14 +176,14 @@ function replaceTargetFileNames(
   files: Array<string | Files>,
   featureName: string,
 ): void {
-  if (featureName !== '') {
+  if (featureName !== EMPTY_STRING) {
     files.forEach((file: string | Files) => {
       if (typeof file !== 'string') {
         if (file.target !== file.source) {
           file.target = replaceFileName(
             file.target,
             /(\${.*?\})/,
-            featureName ?? '',
+            featureName ?? EMPTY_STRING,
           );
         }
       }
@@ -188,26 +192,51 @@ function replaceTargetFileNames(
 }
 
 /**
+ * Description: Copy files from source directory to target directory
+ * @param {string} source - source directory
+ * @param {string} target - target directory
+ * @returns {boolean} - Returns true if copy was successful
+ */
+function copyDirectoryRecursive(source: string, target: string): boolean {
+  let success = false;
+  if (directoryExists(target)) {
+    emptyDirSync(target);
+  } else {
+    fs.mkdirSync(target);
+  }
+  try {
+    copySync(source, target, { overwrite: true });
+    success = true;
+  } catch (error) {
+    success = false;
+  }
+
+  return success;
+}
+
+/**
  * Description: Copy files from a source directory to a destination directory
  * @param {string} srcDir - directory from which files will be copied
  * @param {string} destDir - directory to which files will be copied
  * @param {Array<string|Files>} files - files to be copied
+ * @param {Boolean} isCorePath - flag to optionally auto set core path if config path is included, true by default.
  * @returns {Promise<any>} -
  */
 function copyFiles(
   srcDir: string,
   destDir: string,
   files: Array<string | Files>,
+  isCorePath = true,
 ): Promise<any> {
   return Promise.all(
     files.map((f: Files | string) => {
-      let source = '';
-      let dest = '';
+      let source = EMPTY_STRING;
+      let dest = EMPTY_STRING;
       // Get source and destination paths
       if (typeof f === 'string') {
         source = path.join(
           srcDir,
-          `${srcDir.includes('config') ? 'core' : ''}`,
+          `${srcDir.includes('config') && isCorePath ? 'core' : EMPTY_STRING}`,
           f,
         );
         dest = path.join(destDir, f);
@@ -228,21 +257,21 @@ function copyFiles(
 /**
  * Description: Write changes to a file
  * @param {string} filePath - location of file to be updated
- * @param {string} file - existing file content
- * @param {string} placeholder - placeholder to be replaced
+ * @param {string} content - existing file content
+ * @param {string | RegExp} pattern - regex pattern or pattern to be replaced
  * @param {string} value - value to replace content in file
  * @returns {Promise<void>} -
  */
 async function updateFile(
   filePath: string,
-  file: string,
-  placeholder: string,
+  content: string,
+  pattern: string | RegExp,
   value: string,
 ): Promise<void> {
-  const r = new RegExp(placeholder, 'g');
+  const regex = pattern instanceof RegExp ? pattern : new RegExp(pattern, 'g');
 
-  if (value !== '') {
-    const newValue = file.replace(r, value);
+  if (value !== EMPTY_STRING) {
+    const newValue = content.replace(regex, value);
     await fs.writeFileSync(filePath, newValue, UTF8);
   }
 }
@@ -263,7 +292,7 @@ async function readAndUpdateFeatureFiles(
   kebabName: string,
   pascalName: string,
 ): Promise<void> {
-  let filePath = '';
+  let filePath = EMPTY_STRING;
   const promisedUpdates = [];
 
   // [3] For each file in the list
@@ -323,7 +352,7 @@ function isRootDirectory(location: string | null = null): boolean {
 
     if (testLocation !== null) {
       paths = testLocation.split(path.sep);
-      if (paths.length > 0 && paths[1] === '') {
+      if (paths.length > 0 && paths[1] === EMPTY_STRING) {
         isRoot = true;
       }
     }
@@ -339,20 +368,24 @@ function isRootDirectory(location: string | null = null): boolean {
  * @returns {string | null} -
  */
 function getProjectRoot(): string | null {
-  const configFolderName = '.rdvue';
-  const maxTraverse = 20;
+  const configFolderName = RDVUE_DIRECTORY;
+  const currentConfigFolder = path.join(process.cwd(), configFolderName);
+  // Check if the current directory is the root of the project for older versions of rdvue
+  if (fileExists(currentConfigFolder)) {
+    deleteFile(currentConfigFolder);
 
+    return process.cwd();
+  }
+  const maxTraverse = 20;
   let currentPath = process.cwd();
   let currentTraverse = 0;
   let projectRoot = null;
   let back = './';
-
   // eslint-disable-next-line no-constant-condition
   while (true) {
     currentPath = path.join(process.cwd(), back);
     back = path.join(back, '../');
     currentTraverse += 1;
-
     if (directoryExists(path.join(currentPath, configFolderName))) {
       projectRoot = currentPath;
       break;
@@ -422,7 +455,7 @@ function parseDynamicObjects(
 ): void {
   let filePathOfObjectInsideProject;
   let objectInProject;
-  let objectStringToBeWritten = '';
+  let objectStringToBeWritten = EMPTY_STRING;
 
   // 1[b] Once inside of a project values are assigned to be used
   if (projectRoot !== null) {
@@ -437,7 +470,7 @@ function parseDynamicObjects(
     objectInProject = readFile(filePathOfObjectInsideProject);
 
     // Replace brackets & ("/`) quotations in string
-    let modifiedJSONData = jsonData.replace(/[[\]"`]+/g, '');
+    let modifiedJSONData = jsonData.replace(/[[\]"`]+/g, EMPTY_STRING);
 
     // Remove beginning and closing brackets if its an option to be modified
     if (hasBrackets) {
@@ -457,7 +490,7 @@ function parseDynamicObjects(
   // 1[c] Once everything is clear write the updated file into the ./rdvue foldler
   if (
     filePathOfObjectInsideProject !== undefined &&
-    objectStringToBeWritten !== ''
+    objectStringToBeWritten !== EMPTY_STRING
   ) {
     writeFile(filePathOfObjectInsideProject, objectStringToBeWritten);
   }
@@ -524,6 +557,23 @@ async function updateDynamicImportsAndExports(
   }
 }
 
+/**
+ * Description: Delete file at given path
+ * @param {string} filePath - path of file which will be created or modified to include given data
+ * @returns {boolean} -
+ */
+function deleteFile(filePath: string): boolean {
+  let success = true;
+  try {
+    fs.unlinkSync(filePath);
+  } catch (error) {
+    success = false;
+    throw new Error('failed to delete file');
+  }
+
+  return success;
+}
+
 export {
   updateDynamicImportsAndExports,
   parseDynamicObjects,
@@ -534,8 +584,12 @@ export {
   replaceTargetFileNames,
   readAndUpdateFeatureFiles,
   copyFiles,
+  copyDirectoryRecursive,
   getProjectRoot,
+  readFile,
   fileExists,
   writeFile,
   inject,
+  deleteFile,
+  updateFile,
 };

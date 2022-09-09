@@ -26,6 +26,8 @@ Actions:
   add           -  Add a Plugin to a project.
   add-group     -  Add a Plugin to a project by selecting
                    from preset groups.
+  upgrade       -  Upgrade a project to the latest version of the template or to a
+                   specified version.
 
 
 Features:       -  Utilities to create repeatable project elements.

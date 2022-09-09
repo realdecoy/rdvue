@@ -1,8 +1,10 @@
 /* eslint-disable max-lines */
+import chalk from 'chalk';
+import { log } from 'console';
 import * as inquirer from 'inquirer';
-import { Lookup } from '../modules';
+import { ChangeLog, ChangelogConfigTypes, Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
-import { getProjectRoot } from './files';
+import { getProjectRoot, writeFile } from './files';
 
 /**
  * Description: determine if string is valid JSON string
@@ -365,6 +367,61 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
 
   return results;
 }
+/**
+ * Description: generates a changelog.md file from the resource groups
+ * in the changeLogData object.
+ * @param {string} versionName - the version name to use in the changelog.md file
+ * @param {string} changelogPath - the path where the changelog.md file will be generated
+ * @param {ChangeLog} changeLogData - the data to use in the changelog.md file
+ * @returns {void}
+ */
+function createChangelogReadme(
+  versionName: string,
+  changelogPath: string,
+  changeLogData: ChangeLog,
+): void {
+  const createdChangeLogResources = changeLogData[ChangelogConfigTypes.CREATE]?.resources ?? [];
+  const deletedChangeLogResources = changeLogData[ChangelogConfigTypes.DELETE]?.resources ?? [];
+  const updatedChangeLogResources = changeLogData[ChangelogConfigTypes.UPDATE]?.resources ?? [];
+  const createdFiles: string[] = createdChangeLogResources.map(resource => {
+    if (resource.srcPath) {
+      return `${resource.srcPath}/${resource.file?.target}`;
+    }
+
+    return `${resource.file?.target}`;
+  });
+
+  const deletedFiles: string[] = deletedChangeLogResources.map(resource => {
+    if (resource.destPath) {
+      return `${resource.destPath}/${resource.name}`;
+    }
+
+    return `${resource.name}`;
+  });
+
+  const updatedFiles: string[] = updatedChangeLogResources.map(resource => (resource.destPath));
+
+  const readmeContent =
+    `
+# Changelog - ${versionName}
+The \`upgrade\` command is used to upgrade a project to the latest version of the template, or to a specified version.
+During the course of the upgrade files may be added, deleted or updated. When it comes to updating, .json files are updated inline. For changes to all other file types, your existing project file will not be touched, but a file will be created at the same path containing the new changes to the template's base file, in the form of ${'`<existing_filename>.update.<extension>`'}
+  
+## Added Files
+${createdFiles.map(file => `- ${file}`).join('\n')}
+ 
+## Deleted Files
+${deletedFiles.map(file => `- ${file}`).join('\n')}
+  
+## Updated Files
+${updatedFiles.map(file => `- ${file}`).join('\n')}
+  
+## Notes on the Upgrade
+${changeLogData.reccomendations || 'No notes on the upgrade'}
+`;
+  writeFile(changelogPath, readmeContent);
+  log(chalk(readmeContent));
+}
 
 export {
   hasKebab,
@@ -379,4 +436,5 @@ export {
   parseStoreModuleName,
   isJsonString,
   checkProjectValidity,
+  createChangelogReadme,
 };
