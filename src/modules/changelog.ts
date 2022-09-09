@@ -577,6 +577,27 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
         key: 'devDependencies.webpack-bundle-analyzer',
         value: '^3.7.0',
         operation: 'remove',
+      },
+
+      {
+        key: 'scripts.lint',
+        value: 'tslint -p .',
+        operation: 'add',
+      },
+      {
+        key: 'scripts.lint:fix',
+        value: 'tslint --fix -p .',
+        operation: 'add',
+      },
+      {
+        key: 'devDependencies.typescript',
+        value: '^3.9.10',
+        operation: 'add',
+      },
+      {
+        key: 'devDependencies.tslint',
+        value: '^6.1.3',
+        operation: 'add',
       }],
     }],
   },
