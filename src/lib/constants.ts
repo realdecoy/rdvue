@@ -12,6 +12,8 @@ export const CHANGE_LOG_FOLDER = 'changelogs';
 export const CHANGE_LOG_FILENAME = 'CHANGELOG.md';
 export const EMPTY_STRING = '';
 export const CHAR_PERIOD = '.';
+export const RDVUE_DIRECTORY = '.rdvue';
+export const RDVUE_COPY = '.rdvue-copy';
 
 enum DYNAMIC_OBJECTS_ENUM {
   Routes = 'routes',

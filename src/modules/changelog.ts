@@ -31,11 +31,11 @@ export type changeLogFile = {
 
 export type ChangelogResource = {
   name: string;
-  file ? : changeLogFile;
+  file?: changeLogFile;
   destPath: string;
-  srcPath ? : string;
+  srcPath?: string;
   type: string;
-  contents ? : ChangelogResourcesContent[]
+  contents?: ChangelogResourcesContent[]
 }
 
 export type ChangelogResources = {
@@ -44,15 +44,16 @@ export type ChangelogResources = {
 
 export type Metadata = {
   version: string;
-  type ? : ChangelogMetaDataTypes;
-  resources ? : ChangelogResources[];
+  type?: ChangelogMetaDataTypes;
+  resources?: ChangelogResources[];
 };
 
 export type ChangeLog = {
   metadata: Metadata;
-  create ? : ChangelogResources;
-  update ? : ChangelogResources;
-  delete ? : ChangelogResources;
+  reccomendations: string;
+  create?: ChangelogResources;
+  update?: ChangelogResources;
+  delete?: ChangelogResources;
 }
 
 export function handleArraysAndObjects(data: any, key: string, operation: string, newValue: any): void {
@@ -91,6 +92,18 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
     version: 'default',
     type: ChangelogMetaDataTypes.MIGRATION,
   },
+  reccomendations: `For this release, we recommend the following:
+    - Update node to version **16.x**
+    - Compare the changes to the files with a **.update** file extension and its original file
+    - Optionally, you can run \`npm run upgrade\` to automatically update your project files
+    - Delete existing node_modules and run \`npm install\` to update your dependencies to the latest version
+    - Run \`npm run serve\` to launch webpack-dev-server
+
+    For any issues regarding the recent tailwind upgrade, please refer to the following links:
+    - https://tailwindcss.com/docs/upgrading-to-v2
+    - https://tailwindcss.com/docs/upgrade-guide
+
+    `,
   create: {
     resources: [{
       name: 'index.ts',
