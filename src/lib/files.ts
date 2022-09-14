@@ -371,7 +371,7 @@ function getProjectRoot(): string | null {
   const configFolderName = RDVUE_DIRECTORY;
   const currentConfigFolder = path.join(process.cwd(), configFolderName);
   // Check if the current directory is the root of the project for older versions of rdvue
-  if (fileExists(currentConfigFolder)) {
+  if (fileExists(currentConfigFolder) && !fs.lstatSync(currentConfigFolder).isDirectory()) {
     deleteFile(currentConfigFolder);
 
     return process.cwd();
