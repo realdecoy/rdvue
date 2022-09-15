@@ -7,7 +7,7 @@ The Rdvue command line tool (CLI) is the main entry point for getting up and run
 All commands will follow the basic structure:
 
 ```
-npx rdvue [command]
+npx rdvue <action>
 ```
 
 ## CLI Options

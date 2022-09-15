@@ -4,57 +4,35 @@
 a development style guide which enforces strong typing with TypeScript, standardized Component, Layout and Page models,
 and a data-layer design promoting unified consumption through Stores and Services.
 
+
 ## Usage
 
 ```bash
-npx rdvue [command]
+npx rdvue <action>
 ```
 
-The help menu can be accessed with the command:
+Global installation (this allows you to exclude the <code>npx</code> part of the command):
 
 ```bash
-rdvue --help
+npm install rdvue -g
+rdvue <action>
 ```
-OR
-```bash
-rdvue -h
-```
+
 
 ## Options
 
 ```txt
-npx rdvue <action> [<feature>|<plugin>|<plugin group>] [<project-name>|<feature-name>]
+npx rdvue <action>:<feature>
 
 Actions:
-  generate | g  -  Creates new Feature.
-  add           -  Add a Plugin to a project.
-  add-group     -  Add a Plugin to a project by selecting
-                   from preset groups.
-  upgrade       -  Upgrade a project to the latest version of the template or to a
-                   specified version.
-
-
-Features:       -  Utilities to create repeatable project elements.
-  project       -  Scaffold a new RDVue project.
-  component     -  Generate a new Component module.
-  page          -  Generate a new Page module.
-  service       -  Generate a new Service module.layer
-  layout        -  Generate a new Page Layout.
-
-Plugin Groups:  -  Choose a plugin from preset groupings.
-  auth          -  Provides plugins which generate pages, components 
-                   and data models to support common authentication 
-                   scenarios.
-
-  ui            -  Provides plugins which add UI libraries or 
-                   functionalities.
-Plugins:
-  buefy         -  Add Buefy support to an existing project.
-  vuetify       -  Add Vuetify support to an existing project.
-  localization  -  Add i18n localization support to an existing project.
-
+  create-project   -  Scaffold a new rdvue project
+  add              -  Add a feature to a project
+  plugin           -  Inject a utility to extend project functionality
+  upgrade          -  Specify the rdvue template version for a project
+    
 Options:
-  --help | -h   -  Show help information.
+  --help | -h      -  Show help information
+
 ```
 
 
@@ -65,17 +43,17 @@ We can confirm the successful installation of RDvue in three simple steps:
 ### Step 1: Create a project
 
 ```
-npx rdvue create-project <project_name>
+npx rdvue create-project <project-name>
 ```
 
-Replace `<project_name>` with the actual name of your project.
+Replace `<project-name>` with the actual name of your project.
 
 Generated folders are named in kebab-case.
 
 ### Step 2: Install project dependencies
 
 ```
-cd <project_name>
+cd <project-name>
 npm install
 ```
 
@@ -87,20 +65,20 @@ npm run serve
 
 The project will be served at [http://localhost:8080/](http://localhost:8080/) by default. This information will also be printed out in your terminal. Visiting the link the app is served on will display a default page which was created on project creation.
 
+
 ## Next Steps
 
 ### Generating a Page
 
 ```
-rdvue generate page <page_name>
-rdvue g page <page_name>
+rdvue add:page <page-name>
 ```
 
-Each generated Page gets its own dedicated folder. The folder will be given the name of the page. This folder is located at /src/pages/<page\_name> .
+Each generated Page gets its own dedicated folder. The folder will be given the name of the page. This folder is located at /src/pages/<page\-name> .
 
 ### Generating a Component
 
 ```
-rdvue generate component <component_name>
-rdvue g component <component _name>
+rdvue generate component <component-name>
+rdvue g component <component-name>
 ```
