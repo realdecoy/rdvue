@@ -15,6 +15,10 @@ The help menu can be accessed with the command:
 ```bash
 rdvue --help
 ```
+OR
+```bash
+rdvue -h
+```
 
 ## Options
 
@@ -61,7 +65,7 @@ We can confirm the successful installation of RDvue in three simple steps:
 ### Step 1: Create a project
 
 ```
-npx rdvue generate project <project_name>
+npx rdvue create-project <project_name>
 ```
 
 Replace `<project_name>` with the actual name of your project.
