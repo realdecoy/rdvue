@@ -64,7 +64,7 @@ export default class Upgrade extends Command {
     const temporaryProjectFolder = path.join(projectRoot, 'node_modules', '_temp');
     const templateSourcePath = path.join(temporaryProjectFolder, TEMPLATE_ROOT);
 
-    const templateDestinationPath = path.join(projectRoot, '.rdvue');
+    const templateDestinationPath = path.join(projectRoot, TEMPLATE_ROOT);
     const changelogPath = path.join(projectRoot, CHANGE_LOG_FILENAME);
 
     // retrieve project files from template source
