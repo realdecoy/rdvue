@@ -257,11 +257,6 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
         operation: 'add',
       },
       {
-        key: 'scripts.postinstall',
-        value: 'run-s upgrade-rdvue',
-        operation: 'remove',
-      },
-      {
         key: 'scripts.serve',
         value: 'vue-cli-service serve',
         operation: 'remove',
@@ -283,7 +278,7 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
       },
       {
         key: 'scripts.preinstall',
-        value: 'run-s upgrade-rdvue',
+        value: 'npx rdvue@latest upgrade',
         operation: 'add',
       },
       {
@@ -324,6 +319,11 @@ export const DEFAULT_CHANGE_LOG: ChangeLog = {
       {
         key: 'serve:design-system',
         value: 'run-s setup-ds-webpack launch-design-system',
+        operation: 'remove',
+      },
+      {
+        key: 'scripts.upgrade-rdvue',
+        value: 'npx rdvue@latest upgrade',
         operation: 'remove',
       },
       {

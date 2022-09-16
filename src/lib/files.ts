@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import fileSystem from 'fs';
+const fs_sync = require('fs');
 import bluebirdPromise from 'bluebird';
 import path from 'path';
 import mkdirp from 'mkdirp';
@@ -10,7 +11,7 @@ const replace = require('replace-in-file');
 import { hasKebab } from './utilities';
 import { DYNAMIC_OBJECTS, EMPTY_STRING, RDVUE_DIRECTORY, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
 import { log } from '../lib/stdout';
-import { copySync, emptyDirSync } from 'fs-extra';
+const ncp = require('ncp').ncp;
 
 const UTF8 = 'utf-8';
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -197,15 +198,16 @@ function replaceTargetFileNames(
  * @param {string} target - target directory
  * @returns {boolean} - Returns true if copy was successful
  */
-function copyDirectoryRecursive(source: string, target: string): boolean {
+async function copyDirectoryRecursive(source: string, target: string): Promise<boolean> {
   let success = false;
   if (directoryExists(target)) {
-    emptyDirSync(target);
+    fs_sync.rmdirSync(target, { recursive: true });
+    fs_sync.mkdirSync(target);
   } else {
-    fs.mkdirSync(target);
+    fs_sync.mkdirSync(target);
   }
   try {
-    copySync(source, target, { overwrite: true });
+    await ncp(source, target);
     success = true;
   } catch (error) {
     success = false;

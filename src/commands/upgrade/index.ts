@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+const fs = require('fs');
 import shell from 'shelljs';
 import { Command, flags } from '@oclif/command';
 import path from 'path';
@@ -7,7 +8,6 @@ import { checkProjectValidity, createChangelogReadme, isJsonString } from '../..
 import { copyDirectoryRecursive, copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME, CHAR_PERIOD } from '../../lib/constants';
 import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
-import { readJSONSync, remove } from 'fs-extra';
 const CUSTOM_ERROR_CODES = [
   'project-invalid',
 ];
@@ -71,8 +71,7 @@ export default class Upgrade extends Command {
     await shell.exec(`git clone ${template} --depth 1 --branch ${versionName} ${temporaryProjectFolder}`, { silent: true });
 
     // copy template files to project local template storage
-    copyDirectoryRecursive(templateSourcePath, templateDestinationPath);
-
+    const result = await copyDirectoryRecursive(templateSourcePath, templateDestinationPath);
     /**
      * @Todo create method to generate changelog dynamically from git diff.
      * add changelog to project temp directory and read based on release version number
@@ -106,7 +105,7 @@ export default class Upgrade extends Command {
       this.deleteProjectFiles(projectRoot, resourcesToDelete);
     }
 
-    await remove(temporaryProjectFolder);
+    fs.rmdirSync(temporaryProjectFolder, { recursive: true });
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
 
@@ -157,7 +156,7 @@ export default class Upgrade extends Command {
       if (contents && contents.length > 0) {
         const filePath = path.join(projectRoot, name);
         const rawJsonData = readFile(filePath);
-        const parsedJsonData = readJSONSync(filePath);
+        const parsedJsonData = this.jsonReader(filePath);
 
         for (const content of contents) {
           const keys: string[] = content.key.split('.');
@@ -210,5 +209,10 @@ export default class Upgrade extends Command {
       }
       this.parseAndUpdateJson(data[currentKey], keys, content);
     }
+  }
+
+  jsonReader(filePath: string): any {
+    const text = fs.readFileSync(filePath);
+    return JSON.parse(text);
   }
 }
