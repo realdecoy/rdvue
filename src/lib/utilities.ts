@@ -62,145 +62,38 @@ function toPascalCase(value: string): string {
 }
 
 /**
- * Description: determine if string is valid project name
- * @param {string} value - a string value
- * @returns {any} -
- */
-function validateProjectName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidProjectName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A project name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for project names (e.g. my-project-name)`;
-  }
-
-  return isValidProjectName ? true : resultMessage;
-}
-
-/**
  * Description: determine if string is valid component name
  * @param {string} value - a string value
  * @returns {any} -
  */
-function validateComponentName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidComponentName = isString && charactersMatch;
-  let resultMessage;
+function validateEnteredName(elementName: string, exampleName = '') {
+  return (value: any) => {
+    const isString = typeof value === 'string';
+    const isNull = value === null || value.length === 0;
+    // characters in value are limited to alphanumeric characters and hyphens or underscores
+    const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
+    const isValidName = isString && charactersMatch;
+    let resultMessage;
 
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A component name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for component names (e.g. my-component-name)`;
+    if (isNull) {
+      resultMessage = `${CLI_STATE.Error} A ${elementName} name is required`;
+    } else if (!charactersMatch) {
+      resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for ${elementName} names (e.g. ${exampleName ? exampleName : 'my-' + elementName + '-name'})`;
+    }
+
+    return isValidName ? true : resultMessage;
   }
-
-  return isValidComponentName ? true : resultMessage;
 }
 
 /**
- * Description: determine if string is valid version name
- * @param {string} value - a string value
- * @returns {any} -
- */
-function validateVersionName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidVersionName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A version name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for version names (e.g. my-version-name)`;
-  }
-
-  return isValidVersionName ? true : resultMessage;
-}
-
-/**
- * Description: determine if string is valid page name
- * @param {string} value - a string value
- * @returns {any} -
- */
-function validatePageName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidArgName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A page name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for page names (e.g. page-name)`;
-  }
-
-  return isValidArgName ? true : resultMessage;
-}
-
-/**
- * Description: determine if string is valid service name
- * @param {string} value - a string value
- * @returns {any} -
- */
-function validateServiceName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidArgName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A service name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for service names (e.g. service-name)`;
-  }
-
-  return isValidArgName ? true : resultMessage;
-}
-
-/**
- * Description: determine if string is valid store module name
- * @param {string | null} value - a string value
- * @returns {any} -
- */
-function validateStoreModuleName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidArgName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A store module name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for store module names (e.g. auth-store)`;
-  }
-
-  return isValidArgName ? true : resultMessage;
-}
-
-/**
- * Description: parse project or prompt user to provide name for project
- * @param {Lookup} args - a string value
- * @returns {string} -
+ * Description: parse component or prompt user to provide name for component
+ * @param {string} args - a string value
+ * @returns {Lookup} -
  */
 async function parseComponentName(args: Lookup): Promise<string> {
   let argName = args.name;
-  // if no page name is provided in command then prompt user
+  const validateComponentName = validateEnteredName('component');
+  // if no component name is provided in command then prompt user
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -222,6 +115,7 @@ async function parseComponentName(args: Lookup): Promise<string> {
  */
 async function parseProjectName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateProjectName = validateEnteredName('project');
   // if no project name is provided in command then prompt user
   if (!argName) {
     const responses: any = await inquirer.prompt([{
@@ -244,6 +138,7 @@ async function parseProjectName(args: Lookup): Promise<string> {
  */
 async function parseVersionName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateVersionName = validateEnteredName('version');
   // if no page name is provided in command then prompt user
   if (!argName) {
     const responses: any = await inquirer.prompt([{
@@ -288,6 +183,7 @@ async function parseProjectPresets(args: Lookup): Promise<string> {
  */
 async function parsePageName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validatePageName = validateEnteredName('page');
   // if no page name is provided in command then prompt user
   if (!argName) {
     const responses: any = await inquirer.prompt([{
@@ -310,6 +206,7 @@ async function parsePageName(args: Lookup): Promise<string> {
  */
 async function parseServiceName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateServiceName = validateEnteredName('service');
   // if no page name is provided in command then prompt user
   if (!argName) {
     const responses: any = await inquirer.prompt([{
@@ -332,6 +229,7 @@ async function parseServiceName(args: Lookup): Promise<string> {
  */
 async function parseStoreModuleName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateStoreModuleName = validateEnteredName('store', 'auth-store');
   // if no page name is provided in command then prompt user
   if (!argName) {
     const responses: any = await inquirer.prompt([{
