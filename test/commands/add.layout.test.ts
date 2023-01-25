@@ -28,9 +28,9 @@ describe(CLI_COMMANDS.AddLayout, () => {
   after(() => {
     exec(`rm -r ${testProjectName}`, error => {
       if (error) {
+        // eslint-disable-next-line no-console
         console.log(`error: ${error.message}`);
       }
     });
   });
-
 });

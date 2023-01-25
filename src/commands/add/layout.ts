@@ -1,10 +1,10 @@
-import Command, { flags } from "@oclif/command";
+import Command, { flags } from '@oclif/command';
 import path from 'path';
-import { checkProjectValidity, isJsonString, parseLayoutName, parsePageName, toKebabCase, toPascalCase } from "../../lib/utilities";
-import chalk from "chalk";
-import { CLI_STATE, CLI_COMMANDS, DOCUMENTATION_LINKS } from "../../lib/constants";
-import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from "../../lib/files";
-import { Files } from "../../modules";
+import { checkProjectValidity, isJsonString, parseLayoutName, toKebabCase, toPascalCase } from '../../lib/utilities';
+import chalk from 'chalk';
+import { CLI_STATE, CLI_COMMANDS, DOCUMENTATION_LINKS } from '../../lib/constants';
+import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from '../../lib/files';
+import { Files } from '../../modules';
 
 const TEMPLATE_FOLDERS = ['layout'];
 const CUSTOM_ERROR_MESSAGES = [

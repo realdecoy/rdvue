@@ -63,10 +63,11 @@ function toPascalCase(value: string): string {
 
 /**
  * Description: determine if string is valid component name
- * @param {string} value - a string value
+ * @param {string} featureName - the name of the feature whose name is being validated
+ * @param {string} exampleName - an example of a valid name
  * @returns {any} -
  */
-function validateEnteredName(elementName: string, exampleName = '') {
+function validateEnteredName(featureName: string, exampleName = '') {
   return (value: any) => {
     const isString = typeof value === 'string';
     const isNull = value === null || value.length === 0;
@@ -76,13 +77,13 @@ function validateEnteredName(elementName: string, exampleName = '') {
     let resultMessage;
 
     if (isNull) {
-      resultMessage = `${CLI_STATE.Error} A ${elementName} name is required`;
+      resultMessage = `${CLI_STATE.Error} A ${featureName} name is required`;
     } else if (!charactersMatch) {
-      resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for ${elementName} names (e.g. ${exampleName ? exampleName : 'my-' + elementName + '-name'})`;
+      resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for ${featureName} names (e.g. ${exampleName ? exampleName : `my-${featureName}-name`})`;
     }
 
     return isValidName ? true : resultMessage;
-  }
+  };
 }
 
 /**

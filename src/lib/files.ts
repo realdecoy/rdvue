@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import fileSystem from 'fs';
-const fs_sync = require('fs');
+const fsSync = require('fs');
 import bluebirdPromise from 'bluebird';
 import path from 'path';
 import mkdirp from 'mkdirp';
@@ -201,10 +201,10 @@ function replaceTargetFileNames(
 async function copyDirectoryRecursive(source: string, target: string): Promise<boolean> {
   let success = false;
   if (directoryExists(target)) {
-    fs_sync.rmdirSync(target, { recursive: true });
-    fs_sync.mkdirSync(target);
+    fsSync.rmdirSync(target, { recursive: true });
+    fsSync.mkdirSync(target);
   } else {
-    fs_sync.mkdirSync(target);
+    fsSync.mkdirSync(target);
   }
   try {
     await ncp(source, target);
