@@ -30,6 +30,7 @@ enum CLI_COMMANDS_ENUM {
   AddPage = 'add:page',
   AddService = 'add:service',
   AddStore = 'add:store',
+  AddLayout = "add:layout",
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
@@ -42,6 +43,7 @@ export const CLI_COMMANDS = CLI_COMMANDS_ENUM;
 enum DOCUMENTATION_LINKS_ENUM {
   Rdvue = 'https://realdecoy.github.io/rdvue/#/',
   Component = 'https://realdecoy.github.io/rdvue/#/Features?id=components',
+  Layout = 'https://realdecoy.github.io/rdvue/#/Features?id=layouts',
   Page = 'https://realdecoy.github.io/rdvue/#/Features?id=pages',
   Service = 'https://realdecoy.github.io/rdvue/#/Features?id=services',
   Store = 'https://realdecoy.github.io/rdvue/#/Features?id=stores',
