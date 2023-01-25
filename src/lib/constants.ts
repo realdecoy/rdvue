@@ -30,7 +30,7 @@ enum CLI_COMMANDS_ENUM {
   AddPage = 'add:page',
   AddService = 'add:service',
   AddStore = 'add:store',
-  AddLayout = "add:layout",
+  AddLayout = 'add:layout',
   AddModule = 'add',
   PluginBuefy = 'plugin:buefy',
   PluginLocalization = 'plugin:localization',
