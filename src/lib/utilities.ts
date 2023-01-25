@@ -196,29 +196,6 @@ async function parseLayoutName(args: Lookup): Promise<string> {
 }
 
 /**
- * Description: parse layout or prompt user to provide name for layout
- * @param {string} args  - a string value
- * @returns {Lookup} -
- */
-async function parseLayoutName(args: Lookup): Promise<string> {
-  let argName = args.name;
-  const validateLayoutName = validateEnteredName('layout');
-  // if no layout name is provided in command then prompt user
-  if (!argName) {
-    const responses: any = await inquirer.prompt([{
-      name: 'name',
-      default: 'my-layout',
-      message: 'Enter a layout name: ',
-      type: 'input',
-      validate: validateLayoutName,
-    }]);
-    argName = responses.name;
-  }
-
-  return argName;
-}
-
-/**
  * Description: parse project or prompt user to provide name for template version
  * @param {Lookup} args - a string value
  * @returns {string} -
