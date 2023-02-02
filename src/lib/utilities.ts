@@ -62,6 +62,29 @@ function toPascalCase(value: string): string {
 }
 
 /**
+ * Description: remove the prefix '[rdvue]' from a string
+ * @param value - a string value
+ * @returns {string} - a string with the prefix '[rdvue]' removed
+ */
+function stripRdvuePrefix(value: string): string {
+  return value.replace('[rdvue]', '');
+}
+
+/**
+ * Description: Throwsan error with the provided message
+ * @param errorMessage - error message to be thrown
+ * @throws {Error} 
+ */
+function throwNameError(errorMessage: string): void {
+  throw new Error(
+    JSON.stringify({
+      code: 'name-invalid',
+      message: stripRdvuePrefix(errorMessage),
+    }),
+  );
+}
+
+/**
  * Description: determine if string is valid component name
  * @param {string} featureName - the name of the feature whose name is being validated
  * @param {string} exampleName - an example of a valid name
@@ -75,7 +98,6 @@ function validateEnteredName(featureName: string, exampleName = '') {
     const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
     const isValidName = isString && charactersMatch;
     let resultMessage;
-
     if (isNull) {
       resultMessage = `${CLI_STATE.Error} A ${featureName} name is required`;
     } else if (!charactersMatch) {
@@ -104,6 +126,11 @@ async function parseComponentName(args: Lookup): Promise<string> {
       validate: validateComponentName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateComponentName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -127,6 +154,11 @@ async function parseProjectName(args: Lookup): Promise<string> {
       validate: validateProjectName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateProjectName(argName);
+    if (result && result != true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -150,6 +182,11 @@ async function parseLayoutName(args: Lookup): Promise<string> {
       validate: validateLayoutName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateLayoutName(argName);
+    if (result && result != true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -173,6 +210,11 @@ async function parseVersionName(args: Lookup): Promise<string> {
       validate: validateVersionName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateVersionName(argName);
+    if (result && result != true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -218,6 +260,11 @@ async function parsePageName(args: Lookup): Promise<string> {
       validate: validatePageName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validatePageName(argName);
+    if (result && result != true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -241,6 +288,11 @@ async function parseServiceName(args: Lookup): Promise<string> {
       validate: validateServiceName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateServiceName(argName);
+    if (result && result != true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -264,6 +316,11 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
       validate: validateStoreModuleName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateStoreModuleName(argName);
+    if (result && result != true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
