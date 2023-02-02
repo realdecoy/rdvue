@@ -63,7 +63,7 @@ function toPascalCase(value: string): string {
 
 /**
  * Description: remove the prefix '[rdvue]' from a string
- * @param value - a string value
+ * @param {string} value - a string value
  * @returns {string} - a string with the prefix '[rdvue]' removed
  */
 function stripRdvuePrefix(value: string): string {
@@ -72,8 +72,8 @@ function stripRdvuePrefix(value: string): string {
 
 /**
  * Description: Throwsan error with the provided message
- * @param errorMessage - error message to be thrown
- * @throws {Error} 
+ * @param {string} errorMessage - error message to be thrown
+ * @throws {Error}
  */
 function throwNameError(errorMessage: string): void {
   throw new Error(
@@ -117,6 +117,7 @@ async function parseComponentName(args: Lookup): Promise<string> {
   let argName = args.name;
   const validateComponentName = validateEnteredName('component');
   // if no component name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -145,6 +146,7 @@ async function parseProjectName(args: Lookup): Promise<string> {
   let argName = args.name;
   const validateProjectName = validateEnteredName('project');
   // if no project name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -156,7 +158,7 @@ async function parseProjectName(args: Lookup): Promise<string> {
     argName = responses.name;
   } else {
     const result = validateProjectName(argName);
-    if (result && result != true) {
+    if (result && result !== true) {
       throwNameError(result);
     }
   }
@@ -173,6 +175,7 @@ async function parseLayoutName(args: Lookup): Promise<string> {
   let argName = args.name;
   const validateLayoutName = validateEnteredName('layout');
   // if no layout name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -184,7 +187,7 @@ async function parseLayoutName(args: Lookup): Promise<string> {
     argName = responses.name;
   } else {
     const result = validateLayoutName(argName);
-    if (result && result != true) {
+    if (result && result !== true) {
       throwNameError(result);
     }
   }
@@ -201,6 +204,7 @@ async function parseVersionName(args: Lookup): Promise<string> {
   let argName = args.name;
   const validateVersionName = validateEnteredName('version');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -212,7 +216,7 @@ async function parseVersionName(args: Lookup): Promise<string> {
     argName = responses.name;
   } else {
     const result = validateVersionName(argName);
-    if (result && result != true) {
+    if (result && result !== true) {
       throwNameError(result);
     }
   }
@@ -228,6 +232,7 @@ async function parseVersionName(args: Lookup): Promise<string> {
 async function parseProjectPresets(args: Lookup): Promise<string> {
   let argName = args.preset;
   // if no project name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'preset',
@@ -251,6 +256,7 @@ async function parsePageName(args: Lookup): Promise<string> {
   let argName = args.name;
   const validatePageName = validateEnteredName('page');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -262,7 +268,7 @@ async function parsePageName(args: Lookup): Promise<string> {
     argName = responses.name;
   } else {
     const result = validatePageName(argName);
-    if (result && result != true) {
+    if (result && result !== true) {
       throwNameError(result);
     }
   }
@@ -279,6 +285,7 @@ async function parseServiceName(args: Lookup): Promise<string> {
   let argName = args.name;
   const validateServiceName = validateEnteredName('service');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -290,7 +297,7 @@ async function parseServiceName(args: Lookup): Promise<string> {
     argName = responses.name;
   } else {
     const result = validateServiceName(argName);
-    if (result && result != true) {
+    if (result && result !== true) {
       throwNameError(result);
     }
   }
@@ -307,6 +314,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
   let argName = args.name;
   const validateStoreModuleName = validateEnteredName('store', 'auth-store');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -318,7 +326,7 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
     argName = responses.name;
   } else {
     const result = validateStoreModuleName(argName);
-    if (result && result != true) {
+    if (result && result !== true) {
       throwNameError(result);
     }
   }
