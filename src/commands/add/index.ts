@@ -13,6 +13,7 @@ export default class Add extends Command {
     { name: 'page', description: 'page module', hidden: false },
     { name: 'service', description: 'service module', hidden: false },
     { name: 'store', description: 'store module', hidden: false },
+    { name: 'layout', description: 'layout module', hidden: false },
   ]
 
   showHelp(): void {
