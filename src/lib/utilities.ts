@@ -71,7 +71,7 @@ function stripRdvuePrefix(value: string): string {
 }
 
 /**
- * Description: Throwsan error with the provided message
+ * Description: Throws an error with the provided message
  * @param {string} errorMessage - error message to be thrown
  * @throws {Error}
  */
