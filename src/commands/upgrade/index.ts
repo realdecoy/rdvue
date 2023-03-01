@@ -71,7 +71,7 @@ export default class Upgrade extends Command {
     await shell.exec(`git clone ${template} --depth 1 --branch ${versionName} ${temporaryProjectFolder}`, { silent: true });
 
     // copy template files to project local template storage
-    const result = await copyDirectoryRecursive(templateSourcePath, templateDestinationPath);
+    await copyDirectoryRecursive(templateSourcePath, templateDestinationPath);
     /**
      * @Todo create method to generate changelog dynamically from git diff.
      * add changelog to project temp directory and read based on release version number
@@ -213,6 +213,7 @@ export default class Upgrade extends Command {
 
   jsonReader(filePath: string): any {
     const text = fs.readFileSync(filePath);
+
     return JSON.parse(text);
   }
 }

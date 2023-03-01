@@ -62,145 +62,62 @@ function toPascalCase(value: string): string {
 }
 
 /**
- * Description: determine if string is valid project name
+ * Description: remove the prefix '[rdvue]' from a string
  * @param {string} value - a string value
- * @returns {any} -
+ * @returns {string} - a string with the prefix '[rdvue]' removed
  */
-function validateProjectName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidProjectName = isString && charactersMatch;
-  let resultMessage;
+function stripRdvuePrefix(value: string): string {
+  return value.replace('[rdvue]', '');
+}
 
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A project name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for project names (e.g. my-project-name)`;
-  }
-
-  return isValidProjectName ? true : resultMessage;
+/**
+ * Description: Throws an error with the provided message
+ * @param {string} errorMessage - error message to be thrown
+ * @throws {Error}
+ */
+function throwNameError(errorMessage: string): void {
+  throw new Error(
+    JSON.stringify({
+      code: 'name-invalid',
+      message: stripRdvuePrefix(errorMessage),
+    }),
+  );
 }
 
 /**
  * Description: determine if string is valid component name
- * @param {string} value - a string value
+ * @param {string} featureName - the name of the feature whose name is being validated
+ * @param {string} exampleName - an example of a valid name
  * @returns {any} -
  */
-function validateComponentName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidComponentName = isString && charactersMatch;
-  let resultMessage;
+function validateEnteredName(featureName: string, exampleName = '') {
+  return (value: any) => {
+    const isString = typeof value === 'string';
+    const isNull = value === null || value.length === 0;
+    // characters in value are limited to alphanumeric characters and hyphens or underscores
+    const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
+    const isValidName = isString && charactersMatch;
+    let resultMessage;
+    if (isNull) {
+      resultMessage = `${CLI_STATE.Error} A ${featureName} name is required`;
+    } else if (!charactersMatch) {
+      resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for ${featureName} names (e.g. ${exampleName ? exampleName : `my-${featureName}-name`})`;
+    }
 
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A component name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for component names (e.g. my-component-name)`;
-  }
-
-  return isValidComponentName ? true : resultMessage;
+    return isValidName ? true : resultMessage;
+  };
 }
 
 /**
- * Description: determine if string is valid version name
- * @param {string} value - a string value
- * @returns {any} -
- */
-function validateVersionName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidVersionName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A version name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for version names (e.g. my-version-name)`;
-  }
-
-  return isValidVersionName ? true : resultMessage;
-}
-
-/**
- * Description: determine if string is valid page name
- * @param {string} value - a string value
- * @returns {any} -
- */
-function validatePageName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidArgName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A page name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for page names (e.g. page-name)`;
-  }
-
-  return isValidArgName ? true : resultMessage;
-}
-
-/**
- * Description: determine if string is valid service name
- * @param {string} value - a string value
- * @returns {any} -
- */
-function validateServiceName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidArgName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A service name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for service names (e.g. service-name)`;
-  }
-
-  return isValidArgName ? true : resultMessage;
-}
-
-/**
- * Description: determine if string is valid store module name
- * @param {string | null} value - a string value
- * @returns {any} -
- */
-function validateStoreModuleName(value: any) {
-  const isString = typeof value === 'string';
-  const isNull = value === null || value.length === 0;
-  // characters in value are limited to alphanumeric characters and hyphens or underscores
-  const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
-  const isValidArgName = isString && charactersMatch;
-  let resultMessage;
-
-  if (isNull) {
-    resultMessage = `${CLI_STATE.Error} A store module name is required`;
-  } else if (!charactersMatch) {
-    resultMessage = `${CLI_STATE.Error} Use letters, numbers and '-' for store module names (e.g. auth-store)`;
-  }
-
-  return isValidArgName ? true : resultMessage;
-}
-
-/**
- * Description: parse project or prompt user to provide name for project
- * @param {Lookup} args - a string value
- * @returns {string} -
+ * Description: parse component or prompt user to provide name for component
+ * @param {string} args - a string value
+ * @returns {Lookup} -
  */
 async function parseComponentName(args: Lookup): Promise<string> {
   let argName = args.name;
-  // if no page name is provided in command then prompt user
+  const validateComponentName = validateEnteredName('component');
+  // if no component name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -210,6 +127,11 @@ async function parseComponentName(args: Lookup): Promise<string> {
       validate: validateComponentName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateComponentName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -222,7 +144,9 @@ async function parseComponentName(args: Lookup): Promise<string> {
  */
 async function parseProjectName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateProjectName = validateEnteredName('project');
   // if no project name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -232,6 +156,40 @@ async function parseProjectName(args: Lookup): Promise<string> {
       validate: validateProjectName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateProjectName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
+  }
+
+  return argName;
+}
+
+/**
+ * Description: parse layout or prompt user to provide name for layout
+ * @param {string} args  - a string value
+ * @returns {Lookup} -
+ */
+async function parseLayoutName(args: Lookup): Promise<string> {
+  let argName = args.name;
+  const validateLayoutName = validateEnteredName('layout');
+  // if no layout name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
+  if (!argName) {
+    const responses: any = await inquirer.prompt([{
+      name: 'name',
+      default: 'my-layout',
+      message: 'Enter a layout name: ',
+      type: 'input',
+      validate: validateLayoutName,
+    }]);
+    argName = responses.name;
+  } else {
+    const result = validateLayoutName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -244,7 +202,9 @@ async function parseProjectName(args: Lookup): Promise<string> {
  */
 async function parseVersionName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateVersionName = validateEnteredName('version');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -254,6 +214,11 @@ async function parseVersionName(args: Lookup): Promise<string> {
       validate: validateVersionName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateVersionName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -267,6 +232,7 @@ async function parseVersionName(args: Lookup): Promise<string> {
 async function parseProjectPresets(args: Lookup): Promise<string> {
   let argName = args.preset;
   // if no project name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'preset',
@@ -288,7 +254,9 @@ async function parseProjectPresets(args: Lookup): Promise<string> {
  */
 async function parsePageName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validatePageName = validateEnteredName('page');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -298,6 +266,11 @@ async function parsePageName(args: Lookup): Promise<string> {
       validate: validatePageName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validatePageName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -310,7 +283,9 @@ async function parsePageName(args: Lookup): Promise<string> {
  */
 async function parseServiceName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateServiceName = validateEnteredName('service');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -320,6 +295,11 @@ async function parseServiceName(args: Lookup): Promise<string> {
       validate: validateServiceName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateServiceName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -332,7 +312,9 @@ async function parseServiceName(args: Lookup): Promise<string> {
  */
 async function parseStoreModuleName(args: Lookup): Promise<string> {
   let argName = args.name;
+  const validateStoreModuleName = validateEnteredName('store', 'auth-store');
   // if no page name is provided in command then prompt user
+  // eslint-disable-next-line no-negated-condition
   if (!argName) {
     const responses: any = await inquirer.prompt([{
       name: 'name',
@@ -342,6 +324,11 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
       validate: validateStoreModuleName,
     }]);
     argName = responses.name;
+  } else {
+    const result = validateStoreModuleName(argName);
+    if (result && result !== true) {
+      throwNameError(result);
+    }
   }
 
   return argName;
@@ -428,6 +415,7 @@ export {
   toKebabCase,
   toPascalCase,
   parseComponentName,
+  parseLayoutName,
   parseProjectName,
   parseProjectPresets,
   parseVersionName,
