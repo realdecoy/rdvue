@@ -14,7 +14,7 @@ Services are focused classed designed to interact with web API endpoints. As a g
 
 *   only interact with a single domain
     
-*   only provide features from the domain which are relevant to the theme of the service. Eg. A user service should be focused on methods support such; adding order related data would make for poor encapsulation.
+*   only provide features from the domain which are relevant to the theme of the service. Eg. A user service should be focused on methods that support such; adding order related data would make for poor encapsulation.
     
 
 ### Technical
