@@ -6,8 +6,8 @@ import { Command, flags } from '@oclif/command';
 import path from 'path';
 import chalk from 'chalk';
 import { Files } from '../../modules';
-import { copyFiles, parseModuleConfig, updateDynamicImportsAndExports } from '../../lib/files';
-import { checkProjectValidity, isJsonString } from '../../lib/utilities';
+import { copyFiles, parseModuleConfig, updateDynamicImportsAndExports, readConfigFile, writeFile } from '../../lib/files';
+import { checkProjectValidity, isJsonString, parseAuthorizationToken, parseOrganization } from '../../lib/utilities';
 import { CLI_COMMANDS, CLI_STATE } from '../../lib/constants';
 
 const TEMPLATE_FOLDERS = ['sentry'];
@@ -27,7 +27,11 @@ export default class Sentry extends Command {
     skipInstall: flags.boolean({ hidden: true }),
   }
 
-  static args = []
+  static args = [
+    { name: 'organization', description: 'organization of the project' },
+    { name: 'project', description: 'project name of of the project' },
+    { name: 'authorization token', description: 'Unique identifier that will used for connection to the sentry API' },
+  ]
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
@@ -54,15 +58,20 @@ export default class Sentry extends Command {
   }
 
   async run(): Promise<void> {
-    const { flags } = this.parse(Sentry);
-    const projectName = flags.forceProject;
+    const { flags, args } = this.parse(Sentry);
+    let projectName = flags.forceProject;
     const skipInstallStep = flags.skipInstall === true;
     const hasProjectName = projectName !== undefined;
     const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : '';
 
     const projectValidity = checkProjectValidity();
     const { isValid: isValidProject } = projectValidity;
-    let { projectRoot } = projectValidity;
+    const projectRoot = path.join(process.cwd()).trim();
+
+    if (!projectName) {
+      const rootArray = projectRoot.split('\\');
+      projectName = rootArray[rootArray.length - 1];
+    }
 
     // block command unless being run within an rdvue project
     if (isValidProject === false && !hasProjectName) {
@@ -72,12 +81,11 @@ export default class Sentry extends Command {
           message: `${CLI_COMMANDS.PluginSentry} command must be run in an existing ${chalk.yellow('rdvue')} project`,
         }),
       );
-    } else if (hasProjectName) {
-      const dir = path.join(process.cwd(), projectName ?? '');
-      projectRoot = dir.trim();
     }
 
     const folderList = TEMPLATE_FOLDERS;
+    const organization = await parseOrganization(args);
+    const authToken = await parseAuthorizationToken(args);
 
     // parse config files required for scaffolding this module
     const configs = parseModuleConfig(folderList, projectRoot);
@@ -115,6 +123,40 @@ export default class Sentry extends Command {
 
     // update imports
     updateDynamicImportsAndExports(projectRoot, `core/${config.manifest.installDirectory}`, config.manifest.moduleImports, 'index.ts');
+
+    // update app.json file
+    const appConfigurationLocation = path.join(projectRoot, 'app.json');
+    const appConfiguration = readConfigFile(appConfigurationLocation, 'app.json file is not found.');
+
+    if (appConfiguration.expo.plugins !== undefined && typeof appConfiguration.expo.plugins === 'object')  {
+      appConfiguration.expo.plugins.push('sentry-expo');
+    } else {
+      appConfiguration.expo.plugins = ['sentry-expo'];
+    }
+
+    const expoPostPublishConfiguration = {
+      file: 'sentry-expo/upload-sourcemaps',
+      config: {
+        project: projectName,
+        organization,
+        authToken,
+      },
+    };
+
+    if (appConfiguration.expo.hooks !== undefined && appConfiguration.expo.hooks !== null) {
+      if (appConfiguration.expo.hooks.postPublish !== undefined && typeof appConfiguration.expo.hooks.postPublish === 'object') {
+        appConfiguration.expo.hooks.postPublish.push(expoPostPublishConfiguration);
+      } else {
+        appConfiguration.expo.hooks.postPublish = [expoPostPublishConfiguration];
+      }
+    } else {
+      appConfiguration.expo.hooks = {
+        postPublish: [expoPostPublishConfiguration],
+      };
+    }
+
+    // write config file
+    await writeFile(appConfigurationLocation, JSON.stringify(appConfiguration));
 
     if (skipInstallStep === false) {
       this.log(`${CLI_STATE.Success} plugin added: ${this.id?.split(':')[1]}`);

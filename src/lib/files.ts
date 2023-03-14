@@ -55,15 +55,19 @@ function fileExists(filePath: string): boolean {
 /**
  * Description: Read main config file to determine options the tool can take
  * @param {string} filePath -
+ * @param {string} message - error message to be displayed
  * @returns {any} -
  */
-function readConfigFile(filePath: string): any {
+function readConfigFile<T = any>(
+  filePath: string,
+  message = `template file not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
+): T {
   const isExistingFile = fileExists(filePath);
   if (isExistingFile === false) {
     throw new Error(
       JSON.stringify({
-        code: 'missing-template-file',
-        message: `template file not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
+        code: 'missing-file',
+        message: message,
       }),
     );
   }
