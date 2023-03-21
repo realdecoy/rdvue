@@ -1,86 +1,78 @@
-import { Help } from '@oclif/plugin-help';
-import { Command, Topic } from '@oclif/config';
+import { Help } from '@oclif/core';
+import { Topic } from '@oclif/core/lib/interfaces';
 import chalk from 'chalk';
 import { log } from './lib/stdout';
 
 export default class MyHelpClass extends Help {
-  // acts as a 'router'
-  // and based on the args it receives
-  // calls one of showRootHelp, showTopicHelp,
-  // or showCommandHelp
-  showRootHelp(): void {
-    log(`
-        npx ${chalk.blue('rdvue')} <action>
-
-        Actions:
-            create-project   -  Scaffold a new rdvue project
-            add              -  Add a feature to a project
-            plugin           -  Inject a utility to extend project functionality
-            upgrade          -  Specify the rdvue template version for a project
-            
-        Options:
-            --help | -h      -  Show help information
-        `,
-    );
-  }
-
-  showTopicHelp(topic: Topic): void {
-    const name = topic.name;
-    const depth = name.split(':').length;
-
-    const subTopics = this.sortedTopics.filter((t: any) => t.name.startsWith(`${name}:`) && t.name.split(':').length === depth + 1);
-    const commands = this.sortedCommands.filter((c: any) => c.id.startsWith(`${name}:`) && c.id.split(':').length === depth + 1);
-
-    log(this.formatTopic(topic));
-
-    if (subTopics.length > 0) {
-      log(this.formatTopics(subTopics));
-      log('');
-    }
-
-    if (commands.length > 0) {
-      log(this.formatCommands(commands));
-      log('');
-    }
-  }
-
   // display help for a command
-  showCommandHelp(command: Command): void {
+  // eslint-disable-next-line require-await, @typescript-eslint/explicit-module-boundary-types
+  async showCommandHelp(command: any): Promise<void> {
+    // console.log(command);
     const commandId = command.id;
-    const commandArgs = command.args;
+    const commandArgs = Object.values(command.args);
     const commandFlags = Object.values(command.flags);
-
-    // parse argument names
-    const argNames = commandArgs
-      .filter(arg => !arg.hidden)
-      .map(arg => `<${arg.name}>`);
 
     // parse argument config list
     const argsList = commandArgs
-      .filter(arg => !arg.hidden)
-      .map(arg => {
+      .filter((arg: any) => !arg.hidden)
+      .map((arg: any) => {
         const maxSpaces = 15;
         const numOfSpaces = maxSpaces - arg.name.length;
 
-        return `\n\t    ${arg.name}${new Array(numOfSpaces + 1).join(' ')}- ${arg.description}`;
+        return `\n\t    ${arg.name}${Array.from({ length: numOfSpaces + 1 }).join(' ')}- ${arg.description}`;
       });
 
     // parse option config list
     const optionList = commandFlags
-      .filter(flag => !flag.hidden)
-      .map(flag => {
+      .filter((flag: any) => !flag.hidden)
+      .map((flag: any) => {
         const maxSpaces = 8;
         const numOfSpaces = maxSpaces - flag.name.length;
 
-        return `\n\t    --${flag.name} | -${flag.char}${new Array(numOfSpaces + 1).join(' ')}- ${flag.description}`;
+        return `\n\t    --${flag.name} | -${flag.char}${Array.from({ length: numOfSpaces + 1 }).join(' ')}- ${flag.description}`;
       });
 
     log(`
-        Usage:
-            npx ${chalk.blue('rdvue')} ${commandId} ${argNames}
+        Command:
+            npx ${chalk.blue('rdvue')} ${commandId} <feature>
 
-        Arguments:${argsList}    
-        
+        Features:${argsList}
+
         Options:${optionList}`);
+  }
+
+  formatRoot(): string {
+    return `
+        Usage:
+            npx ${chalk.blue('rdvue')} <action>`;
+  }
+
+  // the formatting for a list of topics
+  protected formatTopics(_topics: Topic[]): string {
+    return '\t----------------------------------------------------';
+  }
+
+  // the formatting for a list of commands
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  formatCommands(commands: any): string {
+    // parse argument config list
+    const argsList = commands
+      .filter((arg: any) => !arg.hidden)
+      .map((arg: any) => {
+        const maxSpaces = 15;
+        const numOfSpaces = maxSpaces - arg.id.length;
+
+        return `\n\t    ${arg.id}${Array.from({ length: numOfSpaces + 1 }).join(' ')}- ${arg.description}`;
+      });
+
+    return `\tActions:${argsList}
+
+    \tOptions:
+    \t    --help | -h ${Array.from({ length: 9 }).join(' ')}`;
+  }
+
+  // the formatting for an individual command
+  formatCommand(): string {
+    return '';
   }
 }
