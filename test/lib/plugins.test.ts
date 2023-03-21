@@ -1,6 +1,6 @@
 /* global beforeEach, afterEach */
 import sinon from 'sinon';
-import fs from 'fs';
+import fs from 'node:fs';
 import { injectImportsIntoMain, injectModulesIntoMain } from '../../src/lib/plugins';
 import { expect } from 'chai';
 
@@ -15,7 +15,7 @@ describe('lib/plugins.injectImportsIntoMain', () => {
   let writeFileSyncStub: sinon.SinonStub;
 
   beforeEach(() => {
-    readFileSyncStub  = sinon.stub(fs, 'readFileSync').returns(dummyText);
+    readFileSyncStub = sinon.stub(fs, 'readFileSync').returns(dummyText);
     writeFileSyncStub = sinon.stub(fs, 'writeFileSync');
   });
 
@@ -46,7 +46,7 @@ describe('lib/plugins.injectImportsIntoMain', () => {
     const line3 = 'let b = a + 1;';
 
     readFileSyncStub.restore();
-    readFileSyncStub  = sinon.stub(fs, 'readFileSync').returns(`${line1}\n${line2}\n${line3}`);
+    readFileSyncStub = sinon.stub(fs, 'readFileSync').returns(`${line1}\n${line2}\n${line3}`);
     const expectedOutput = `${content.join('')}\n${line1}\n${line2}\n${line3}`;
     injectImportsIntoMain(targetPath, content);
     expect(writeFileSyncStub.getCall(0).args[1]).equals(expectedOutput);
@@ -69,7 +69,7 @@ describe('lib/plugins.injectModulesIntoMain', () => {
   let writeFileSyncStub: sinon.SinonStub;
 
   beforeEach(() => {
-    readFileSyncStub  = sinon.stub(fs, 'readFileSync').returns(dummyText);
+    readFileSyncStub = sinon.stub(fs, 'readFileSync').returns(dummyText);
     writeFileSyncStub = sinon.stub(fs, 'writeFileSync');
   });
 
@@ -98,7 +98,7 @@ describe('lib/plugins.injectModulesIntoMain', () => {
     const line2 = 'let a = 1;';
     const line3 = 'let b = a + 1;';
     readFileSyncStub.restore();
-    readFileSyncStub  = sinon.stub(fs, 'readFileSync').returns(`${line1}\n${line2}\n${line3}`);
+    readFileSyncStub = sinon.stub(fs, 'readFileSync').returns(`${line1}\n${line2}\n${line3}`);
     expect(() => injectModulesIntoMain(targetPath, content)).to.throw();
   });
 

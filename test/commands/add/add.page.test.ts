@@ -1,9 +1,10 @@
 /* global after */
 import { expect, test } from '@oclif/test';
-import { CLI_COMMANDS } from '../../src/lib/constants';
-import { exec } from 'child_process';
+import { CLI_COMMANDS } from '../../../src/lib/constants';
+import { exec } from 'node:child_process';
 
 const skipPresets = '--skipPresets';
+const isTest = '--isTest';
 const testProjectName = 'rdv-hello-world-test';
 const testPageName = 'hello-world';
 // const badPageName = 'he%20-2world';
@@ -18,7 +19,7 @@ describe(CLI_COMMANDS.AddPage, () => {
 
   test
     .stdout()
-    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets])
+    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets, isTest])
     .do(() => process.chdir(testProjectName))
     .command([CLI_COMMANDS.AddPage, testPageName])
     .do(() => process.chdir('../'))
@@ -29,13 +30,13 @@ describe(CLI_COMMANDS.AddPage, () => {
   // test
   //   .stdout()
   //   .do(() => process.chdir(testProjectName))
-  //   .command([CLI_COMMANDS.AddPage, badPageName, skipPresets])
+  //   .command([CLI_COMMANDS.AddPage, badPageName, skipPresets, isTest])
   //   .it('tries to run create page with a poorly formatted command', ctx => {
   //     expect(ctx.stdout).to.contain(`Error: command ${CLI_COMMANDS.AddPage} not found`);
   //   });
 
   after(() => {
-    exec(`rm -r ${testProjectName}`, error => {
+    exec(`shx rm -rf ${testProjectName}`, error => {
       if (error) {
         // eslint-disable-next-line no-console
         console.log(`error: ${error.message}`);
