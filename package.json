@@ -29,6 +29,7 @@
     "util": "^0.12.5",
     "vuetify": "^3.1.11"
   },
+  "description": "A Vue.js scaffolding tool.",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@oclif/test": "^2.3.10",
@@ -70,7 +71,11 @@
   ],
   "homepage": "https://realdecoy.github.io/rdvue/#/",
   "keywords": [
-    "oclif"
+    "oclif",
+    "vue",
+    "typescript",
+    "mocha",
+    "eslint"
   ],
   "license": "ISC",
   "main": "dist/index.js",

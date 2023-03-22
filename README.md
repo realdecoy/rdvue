@@ -3,7 +3,6 @@
   <a href="https://www.realdecoy.com/jamaica/" title="REALDECOY">
     <img width=400px src="https://www.realdecoy.com/wp-content/uploads/2019/02/Realdecoy-logo-transparent.png" alt="rd logo">
   </a>
-  <p align="left">A Vue.js scaffolding tool.</p>
 </p>
 
 # RDVue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
