@@ -1,12 +1,10 @@
-import chalk from 'chalk';
-
+/* eslint-disable no-unused-vars */
 export const TEMPLATE_ROOT = '.rdvue/template';
 export const TEMPLATE_REPO = 'https://github.com/realdecoy/rdvue-template';
 export const DESIGN_TEMPLATE_REPO = 'https://github.com/realdecoy/design-system-components';
 export const TEMPLATE_TAG = 'v2.2.3'; // replace this with the appropriate release tag in the template repo
 export const DESIGN_TEMPLATE_FOLDER = 'library';
 export const TEMPLATE_PROJECT_NAME_REGEX = /__PROJECT_NAME__/g;
-export const TEMPLATE_VERSIONS_SUPPORTED = [2];
 export const TEMPLATE_CONFIG_FILENAME = 'manifest.json';
 export const CHANGE_LOG_FOLDER = 'changelogs';
 export const CHANGE_LOG_FILENAME = 'CHANGELOG.md';
@@ -26,15 +24,15 @@ export const DYNAMIC_OBJECTS = DYNAMIC_OBJECTS_ENUM;
 enum CLI_COMMANDS_ENUM {
   CreateProject = 'create-project',
   Upgrade = 'upgrade',
-  AddComponent = 'add:component',
-  AddPage = 'add:page',
-  AddService = 'add:service',
-  AddStore = 'add:store',
-  AddLayout = 'add:layout',
+  AddComponent = 'add component',
+  AddPage = 'add page',
+  AddService = 'add service',
+  AddStore = 'add store',
+  AddLayout = 'add layout',
   AddModule = 'add',
-  PluginBuefy = 'plugin:buefy',
-  PluginLocalization = 'plugin:localization',
-  PluginVuetify = 'plugin:vuetify',
+  PluginBuefy = 'plugin buefy',
+  PluginLocalization = 'plugin localization',
+  PluginVuetify = 'plugin vuetify',
   PluginLibrary = 'plugin',
   PoorHelpCommand = 'add-help'
 }
@@ -54,7 +52,7 @@ export const DOCUMENTATION_LINKS = DOCUMENTATION_LINKS_ENUM;
 export const PLUGIN_PRESET_LIST = [
   'Buefy & Localization (recommended)',
   'Vuetify & Localization',
-  `${chalk.magenta('[Skip presets]')}`,
+  '[Skip presets]',
 ];
 
 export const TEMPLATE_REPLACEMENT_FILES = [
@@ -66,8 +64,8 @@ export const TEMPLATE_REPLACEMENT_FILES = [
 ];
 
 export const CLI_STATE = {
-  Info: `${chalk.blue('[rdvue]')}`,
-  Error: `${chalk.red('[rdvue]')}`,
-  Warning: `${chalk.yellow('[rdvue]')}`,
-  Success: `${chalk.green('[rdvue]')}`,
+  Info: '[rdvue]',
+  Error: '[rdvue]',
+  Warning: '[rdvue]',
+  Success: '[rdvue]',
 };

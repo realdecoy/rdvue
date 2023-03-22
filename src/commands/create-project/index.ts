@@ -1,11 +1,13 @@
-import shell from 'shelljs';
-import chalk from 'chalk';
-import { Command, flags } from '@oclif/command';
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+// eslint-disable-next-line unicorn/prefer-module
+const shell = require('shelljs');
+import { Args, Command, Flags, ux } from '@oclif/core';
 import Buefy from '../plugin/buefy';
-import Localization from '../plugin/localization';
 import Vuetify from '../plugin/vuetify';
-import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
+import Localization from '../plugin/localization';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
+import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
 import {
   TEMPLATE_REPO,
   DESIGN_TEMPLATE_REPO,
@@ -17,28 +19,29 @@ import {
   PLUGIN_PRESET_LIST,
 } from '../../lib/constants';
 
-const CUSTOM_ERROR_CODES = [
+const CUSTOM_ERROR_CODES = new Set([
   'existing-project',
   'existing-folder',
   'file-not-changed',
-];
+]);
 
 export default class CreateProject extends Command {
   static description = 'create a new rdvue project'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
-    skipPresets: flags.boolean({ hidden: true }),
-    withBuefy: flags.boolean({ hidden: true }),
-    withLocalization: flags.boolean({ hidden: true }),
-    withVuetify: flags.boolean({ hidden: true }),
-    withDesignSystem: flags.boolean({ hidden: true }),
+    help: Flags.help({ char: 'h' }),
+    isTest: Flags.boolean({ hidden: true }),
+    skipPresets: Flags.boolean({ hidden: true }),
+    withBuefy: Flags.boolean({ hidden: true }),
+    withLocalization: Flags.boolean({ hidden: true }),
+    withVuetify: Flags.boolean({ hidden: true }),
+    withDesignSystem: Flags.boolean({ hidden: true }),
   }
 
-  static args = [
-    { name: 'name', description: 'name of created project' },
-    { name: 'preset', description: 'name of plugin preset' },
-  ]
+  static args = {
+    name: Args.string({ name: 'name', description: 'name of project to create' }),
+    preset: Args.string({ name: 'preset', description: 'name of plugin preset', hidden: true }),
+  }
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
@@ -55,7 +58,7 @@ export default class CreateProject extends Command {
     }
 
     // handle errors thrown with known error codes
-    if (CUSTOM_ERROR_CODES.includes(customErrorCode)) {
+    if (CUSTOM_ERROR_CODES.has(customErrorCode)) {
       this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
     } else {
       throw new Error(customErrorMessage);
@@ -65,12 +68,13 @@ export default class CreateProject extends Command {
   }
 
   async run(): Promise<void> {
-    const { args, flags } = this.parse(CreateProject);
+    const { flags, args } = await this.parse(CreateProject);
     const template: string = TEMPLATE_REPO;
     const designTemplate: string = DESIGN_TEMPLATE_REPO;
     const designTemplateFolder: string = DESIGN_TEMPLATE_FOLDER;
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
+    const isTest = flags.isTest === true;
     const skipPresetsStep = flags.skipPresets === true;
     const withBuefy = flags.withBuefy === true;
     const withVuetify = flags.withVuetify === true;
@@ -79,7 +83,7 @@ export default class CreateProject extends Command {
 
     let filesToReplace = TEMPLATE_REPLACEMENT_FILES;
     let projectName: string;
-    let presetName: string = '';
+    let presetName = '';
     const { isValid: isValidProject } = checkProjectValidity();
     // block command if being run within an rdvue project
     if (isValidProject) {
@@ -104,7 +108,10 @@ export default class CreateProject extends Command {
     // update files to be replaced with project name reference
     filesToReplace = filesToReplace.map(p => `${projectName}/${p}`);
 
-    this.log(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`);
+    ux.action.type = 'spinner';
+    if (isTest !== true) {
+      ux.action.start(`${CLI_STATE.Info} creating project ${chalk.whiteBright(projectName)}`);
+    }
 
     // retrieve project files from template source
     await shell.exec(`git clone ${template} --depth 1 --branch ${tag} ${projectName}`, { silent: true });
@@ -130,9 +137,11 @@ export default class CreateProject extends Command {
       if (shouldInstallBuefy === true) { // buefy
         await Buefy.run(['--forceProject', projectName, '--skipInstall']);
       }
+
       if (shouldInstallVuetify) { // Vuetify
         await Vuetify.run(['--forceProject', projectName, '--skipInstall']);
       }
+
       if (shouldInstallLocalization === true) { // localization
         await Localization.run(['--forceProject', projectName, '--skipInstall']);
       }
@@ -147,6 +156,10 @@ export default class CreateProject extends Command {
 
     // initialize git in the created project
     await shell.exec(`cd ${projectName} && git init && git add . && git commit -m "Setup: first commit" && git branch -M main`, { silent: true });
+
+    if (isTest !== true) {
+      ux.action.stop();
+    }
 
     this.log(`${CLI_STATE.Success} ${chalk.whiteBright(projectName)} is ready!`);
 

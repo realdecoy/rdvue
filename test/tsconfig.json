@@ -1,0 +1,14 @@
+{
+  "declaration": false,
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "noEmit": true,
+    "sourceMap": true,
+    "types": [
+      "mocha",
+    ]
+  },
+  "references": [
+    {"path": ".."}
+  ],
+}

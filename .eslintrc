@@ -9,13 +9,13 @@
     "node": true,
     "mocha": true
   },
-  "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module"
   },
   "plugins": [
     "@typescript-eslint"
   ],
+  "ignorePatterns": ["dist/*", "test/*"],
   "rules": {
     "no-console": 1,
     "no-extra-semi": 2,

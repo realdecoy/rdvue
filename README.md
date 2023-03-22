@@ -1,10 +1,9 @@
-<div align="left">
+<p align="left">
   <br/>
   <a href="https://www.realdecoy.com/jamaica/" title="REALDECOY">
     <img width=400px src="https://www.realdecoy.com/wp-content/uploads/2019/02/Realdecoy-logo-transparent.png" alt="rd logo">
   </a>
-  <br/>
-</div>
+</p>
 
 # RDVue [![npm version](https://badge.fury.io/js/rdvue.svg)](https://badge.fury.io/js/rdvue)
 
@@ -88,9 +87,26 @@ The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributio
 
 ## Development
 
+### Install Dependencies
 ```bash
 npm install
-npm link
+```
+or
+```bash
+yarn install
+```
+
+### Execute commands
+```bash
+./bin/dev <command>
+```
+e.g.
+```bash
+$ ./bin/dev create-project my-new-project
+? Pick a preset:  » - Use arrow-keys. Return to submit.
+>   Buefy & Localization (recommended)
+    Vuetify & Localization
+    [Skip presets]
 ```
 
 &nbsp;
@@ -102,6 +118,10 @@ npm link
 ### Run Unit Test Suite
 ```bash
 npm run test
+```
+or
+```bash
+yarn run test
 ```
 
 ### Creating Tests

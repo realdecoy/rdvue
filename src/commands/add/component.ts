@@ -1,29 +1,30 @@
-import { Command, flags } from '@oclif/command';
-import path from 'path';
-import chalk from 'chalk';
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+import path from 'node:path';
+import { Args, Command, Flags } from '@oclif/core';
 import { Files } from '../../modules';
+import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from '../../lib/files';
 import { checkProjectValidity, parseComponentName, toKebabCase, toPascalCase, isJsonString } from '../../lib/utilities';
-import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 
 const TEMPLATE_FOLDERS = ['component'];
-const CUSTOM_ERROR_CODES = [
+const CUSTOM_ERROR_CODES = new Set([
   'project-invalid',
   'failed-match-and-replace',
   'missing-template-file',
   'missing-template-folder',
-];
+]);
 
 export default class Component extends Command {
   static description = 'add a new Component module.'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: Flags.help({ char: 'h' }),
   }
 
-  static args = [
-    { name: 'name', description: 'name of new component' },
-  ]
+  static args = {
+    name: Args.string({ name: 'name', description: 'name of new component' }),
+  }
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
@@ -40,7 +41,7 @@ export default class Component extends Command {
     }
 
     // handle errors thrown with known error codes
-    if (CUSTOM_ERROR_CODES.includes(customErrorCode)) {
+    if (CUSTOM_ERROR_CODES.has(customErrorCode)) {
       this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
     } else {
       throw new Error(customErrorMessage);
@@ -61,7 +62,7 @@ export default class Component extends Command {
       );
     }
 
-    const { args } = this.parse(Component);
+    const { args } = await this.parse(Component);
     const folderList = TEMPLATE_FOLDERS;
     let sourceDirectory: string;
     let installDirectory: string;
@@ -75,6 +76,7 @@ export default class Component extends Command {
     const componentNameKebab = toKebabCase(componentName);
     const componentNamePascal = toPascalCase(componentName);
 
+    // eslint-disable-next-line unicorn/no-array-for-each
     configs.forEach(async config => {
       const files: Array<string | Files> = config.manifest.files;
       // replace file names in config with kebab case equivalent

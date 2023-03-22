@@ -1,29 +1,30 @@
-import Command, { flags } from '@oclif/command';
-import path from 'path';
-import { checkProjectValidity, isJsonString, parseLayoutName, toKebabCase, toPascalCase } from '../../lib/utilities';
-import chalk from 'chalk';
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+import path from 'node:path';
+import { Args, Command, Flags } from '@oclif/core';
+import { Files } from '../../modules';
 import { CLI_STATE, CLI_COMMANDS, DOCUMENTATION_LINKS } from '../../lib/constants';
 import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from '../../lib/files';
-import { Files } from '../../modules';
+import { checkProjectValidity, isJsonString, parseLayoutName, toKebabCase, toPascalCase } from '../../lib/utilities';
 
 const TEMPLATE_FOLDERS = ['layout'];
-const CUSTOM_ERROR_MESSAGES = [
+const CUSTOM_ERROR_MESSAGES = new Set([
   'project-invalid',
   'failed-match-and-replace',
   'missing-template-file',
   'missing-template-folder',
-];
+]);
 
 export default class Layout extends Command {
   static description = 'add a new Layout module.'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: Flags.help({ char: 'h' }),
   }
 
-  static args = [
-    { name: 'name', description: 'name of new layout' },
-  ]
+  static args = {
+    name: Args.string({ name: 'name', description: 'name of new layout' }),
+  }
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
@@ -40,7 +41,7 @@ export default class Layout extends Command {
     }
 
     // handle errors thrown with known error codes
-    if (CUSTOM_ERROR_MESSAGES.includes(customErrorCode)) {
+    if (CUSTOM_ERROR_MESSAGES.has(customErrorCode)) {
       this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
     } else {
       throw new Error(customErrorMessage);
@@ -61,7 +62,7 @@ export default class Layout extends Command {
       );
     }
 
-    const { args } = this.parse(Layout);
+    const { args } = await this.parse(Layout);
     const folderList = TEMPLATE_FOLDERS;
     let sourceDirectory: string;
     let installDirectory: string;
@@ -74,6 +75,7 @@ export default class Layout extends Command {
     const layoutNameKebab = toKebabCase(layoutName);
     const layoutNamePascal = toPascalCase(layoutName);
 
+    // eslint-disable-next-line unicorn/no-array-for-each
     configs.forEach(async config => {
       const files: Array<string | Files> = config.manifest.files;
       // replace file names in config with kebab case equivalent

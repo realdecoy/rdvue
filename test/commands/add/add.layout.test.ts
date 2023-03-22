@@ -1,10 +1,12 @@
 /* global after */
 import { expect, test } from '@oclif/test';
-import { CLI_COMMANDS } from '../../src/lib/constants';
-import { exec } from 'child_process';
+import { CLI_COMMANDS } from '../../../src/lib/constants';
+import { exec } from 'node:child_process';
 
 const skipPresets = '--skipPresets';
-const testProjectName = 'rdv-component-test';
+const isTest = '--isTest';
+const testProjectName = 'rdv-layout-test';
+const testProjectName2 = 'rdv-layout-test2';
 const testLayoutName = 'hello-world';
 
 describe(CLI_COMMANDS.AddLayout, () => {
@@ -17,8 +19,8 @@ describe(CLI_COMMANDS.AddLayout, () => {
 
   test
     .stdout()
-    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets])
-    .do(() => process.chdir(testProjectName))
+    .command([CLI_COMMANDS.CreateProject, testProjectName2, skipPresets, isTest])
+    .do(() => process.chdir(testProjectName2))
     .command([CLI_COMMANDS.AddLayout, testLayoutName])
     .do(() => process.chdir('../'))
     .it(`runs rdvue ${CLI_COMMANDS.AddLayout} ${testLayoutName}`, ctx => {
@@ -26,7 +28,13 @@ describe(CLI_COMMANDS.AddLayout, () => {
     });
 
   after(() => {
-    exec(`rm -r ${testProjectName}`, error => {
+    exec(`shx rm -rf ${testProjectName}`, error => {
+      if (error) {
+        // eslint-disable-next-line no-console
+        console.log(`error: ${error.message}`);
+      }
+    });
+    exec(`shx rm -rf ${testProjectName2}`, error => {
       if (error) {
         // eslint-disable-next-line no-console
         console.log(`error: ${error.message}`);

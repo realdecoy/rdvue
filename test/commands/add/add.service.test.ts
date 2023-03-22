@@ -1,9 +1,10 @@
 /* global after */
 import { expect, test } from '@oclif/test';
-import { CLI_COMMANDS } from '../../src/lib/constants';
-import { exec } from 'child_process';
+import { CLI_COMMANDS } from '../../../src/lib/constants';
+import { exec } from 'node:child_process';
 
 const skipPresets = '--skipPresets';
+const isTest = '--isTest';
 const testProjectName = 'rdv-auth-service-test';
 const testServiceName = 'auth-service';
 // const badServiceName = 'auth%20-2service';
@@ -18,7 +19,7 @@ describe(CLI_COMMANDS.AddService, () => {
 
   test
     .stdout()
-    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets])
+    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets, isTest])
     .do(() => process.chdir(testProjectName))
     .command([CLI_COMMANDS.AddService, testServiceName])
     .do(() => process.chdir('../'))
@@ -35,7 +36,7 @@ describe(CLI_COMMANDS.AddService, () => {
   //   });
 
   after(() => {
-    exec(`rm -r ${testProjectName}`, error => {
+    exec(`shx rm -rf ${testProjectName}`, error => {
       if (error) {
         // eslint-disable-next-line no-console
         console.log(`error: ${error.message}`);

@@ -10,8 +10,10 @@ export interface Files {
 }
 
 export type InjectOptions = {
+  // eslint-disable-next-line no-unused-vars
   index?: number | ((lines: string[], filePath: string) => number);
-  encoding?: string;
+  // eslint-disable-next-line no-undef
+  encoding?: BufferEncoding;
 }
 
 export type ModuleConfig = {

@@ -1,10 +1,12 @@
-import shell from 'shelljs';
-import cli from 'cli-ux';
+// eslint-disable-next-line unicorn/import-style, unicorn/prefer-module
 const util = require('util');
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+// eslint-disable-next-line unicorn/prefer-module
+const shell = require('shelljs');
 const exec = util.promisify(shell.exec);
-import { Command, flags } from '@oclif/command';
-import path from 'path';
-import chalk from 'chalk';
+import path from 'node:path';
+import { Command, Flags, ux } from '@oclif/core';
 import { Files } from '../../modules';
 import { copyFiles, parseDynamicObjects, parseModuleConfig } from '../../lib/files';
 import { checkProjectValidity, isJsonString } from '../../lib/utilities';
@@ -13,23 +15,24 @@ import { injectImportsIntoMain, injectModulesIntoMain } from '../../lib/plugins'
 
 const TEMPLATE_FOLDERS = ['vuetify'];
 const TEMPLATE_MIN_VERSION_SUPPORTED = 2;
-const CUSTOM_ERROR_CODES = [
+const CUSTOM_ERROR_CODES = new Set([
   'project-invalid',
   'missing-template-file',
   'missing-template-folder',
   'dependency-install-error',
-];
+]);
 
 export default class Vuetify extends Command {
   static description = 'lightweigth UI components for Vuejs'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
-    forceProject: flags.string({ hidden: true }),
-    skipInstall: flags.boolean({ hidden: true }),
+    help: Flags.help({ char: 'h' }),
+    isTest: Flags.boolean({ hidden: true }),
+    forceProject: Flags.string({ hidden: true }),
+    skipInstall: Flags.boolean({ hidden: true }),
   }
 
-  static args = []
+  static args = {}
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
@@ -46,7 +49,7 @@ export default class Vuetify extends Command {
     }
 
     // handle errors thrown with known error codes
-    if (CUSTOM_ERROR_CODES.includes(customErrorCode)) {
+    if (CUSTOM_ERROR_CODES.has(customErrorCode)) {
       this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
     } else {
       throw new Error(customErrorMessage);
@@ -56,8 +59,9 @@ export default class Vuetify extends Command {
   }
 
   async run(): Promise<void> {
-    const { flags } = this.parse(Vuetify);
+    const { flags } = await this.parse(Vuetify);
     const projectName = flags.forceProject;
+    const isTest = flags.isTest === true;
     const skipInstallStep = flags.skipInstall === true;
     const hasProjectName = projectName !== undefined;
     const preInstallCommand = hasProjectName ? `cd ${projectName} &&` : '';
@@ -79,8 +83,8 @@ export default class Vuetify extends Command {
     }
 
     const folderList = TEMPLATE_FOLDERS;
-    let sourceDirectory: string = '';
-    let installDirectory: string = '';
+    let sourceDirectory = '';
+    let installDirectory = '';
 
     // parse config files required for scaffolding this module
     const configs = parseModuleConfig(folderList, projectRoot);
@@ -95,16 +99,28 @@ export default class Vuetify extends Command {
 
     if (skipInstallStep === false) {
       try {
-        // // install dev dependencies
-        cli.action.start(`${CLI_STATE.Info} installing vuetify dev dependencies`);
-        await exec(`${preInstallCommand} npm install --save-dev ${devDependencies}`, { silent: true });
-        cli.action.stop();
+        // install dev dependencies
+        if (isTest !== true) {
+          ux.action.start(`${CLI_STATE.Info} installing vuetify dev dependencies`);
+        }
 
-        // // install dependencies
-        cli.action.start(`${CLI_STATE.Info} installing vuetify dependencies`);
-        await exec(`${preInstallCommand} npm install --save ${dependencies}`, { silent: true });
-        cli.action.stop();
-      } catch (error) {
+        await exec(`${preInstallCommand} npm install --save-dev --legacy-peer-deps ${devDependencies}`, { silent: true });
+
+        if (isTest !== true) {
+          ux.action.stop();
+        }
+
+        // install dependencies
+        if (isTest !== true) {
+          ux.action.start(`${CLI_STATE.Info} installing vuetify dependencies`);
+        }
+
+        await exec(`${preInstallCommand} npm install --save --legacy-peer-deps ${dependencies}`, { silent: true });
+
+        if (isTest !== true) {
+          ux.action.stop();
+        }
+      } catch {
         throw new Error(
           JSON.stringify({
             code: 'dependency-install-error',
@@ -113,10 +129,16 @@ export default class Vuetify extends Command {
         );
       }
     } else {
-      cli.action.start(`${CLI_STATE.Info} adding vuetify dependencies`);
+      if (isTest !== true) {
+        ux.action.start(`${CLI_STATE.Info} adding vuetify dependencies`);
+      }
+
       await exec(`cd ${projectName} && npx add-dependencies ${devDependencies} --save-dev`, { silent: true });
       await exec(`cd ${projectName} && npx add-dependencies ${dependencies}`, { silent: true });
-      cli.action.stop();
+
+      if (isTest !== true) {
+        ux.action.stop();
+      }
     }
 
     sourceDirectory = path.join(config.moduleTemplatePath, config.manifest.sourceDirectory);
@@ -132,8 +154,13 @@ export default class Vuetify extends Command {
       injectImportsIntoMain(projectRoot, mainImports);
       try {
         injectModulesIntoMain(projectRoot, mainModules);
-      } catch (error) {
-        this.error(error);
+      } catch {
+        this.error(
+          JSON.stringify({
+            code: 'import-injection-error',
+            message: `${this.id?.split(':')[1]} failed to inject import statements`,
+          }),
+        );
       }
     } else {
       // FP-414: backwards compatibility

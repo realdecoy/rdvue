@@ -1,28 +1,29 @@
-import { Command, flags } from '@oclif/command';
-import path from 'path';
-import chalk from 'chalk';
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+import path from 'node:path';
+import { Args, Command, Flags } from '@oclif/core';
 import { Files } from '../../modules';
+import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 import { copyFiles, parseModuleConfig, readAndUpdateFeatureFiles, replaceTargetFileNames } from '../../lib/files';
 import { checkProjectValidity, parseServiceName, toKebabCase, toPascalCase, isJsonString } from '../../lib/utilities';
-import { CLI_COMMANDS, CLI_STATE, DOCUMENTATION_LINKS } from '../../lib/constants';
 
 const TEMPLATE_FOLDERS = ['service'];
-const CUSTOM_ERROR_CODES = [
+const CUSTOM_ERROR_CODES = new Set([
   'project-invalid',
   'failed-match-and-replace',
   'missing-template-file',
-];
+]);
 
 export default class Service extends Command {
   static description = 'add a new Service module.'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: Flags.help({ char: 'h' }),
   }
 
-  static args = [
-    { name: 'name', description: 'name of new service' },
-  ]
+  static args = {
+    name: Args.string({ name: 'name', description: 'name of new service' }),
+  }
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
@@ -39,7 +40,7 @@ export default class Service extends Command {
     }
 
     // handle errors thrown with known error codes
-    if (CUSTOM_ERROR_CODES.includes(customErrorCode)) {
+    if (CUSTOM_ERROR_CODES.has(customErrorCode)) {
       this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
     } else {
       throw new Error(customErrorMessage);
@@ -60,7 +61,7 @@ export default class Service extends Command {
       );
     }
 
-    const { args } = this.parse(Service);
+    const { args } = await this.parse(Service);
     const folderList = TEMPLATE_FOLDERS;
     let sourceDirectory: string;
     let installDirectory: string;
@@ -74,6 +75,7 @@ export default class Service extends Command {
     const serviceNameKebab = toKebabCase(serviceName);
     const serviceNamePascal = toPascalCase(serviceName);
 
+    // eslint-disable-next-line unicorn/no-array-for-each
     configs.forEach(async config => {
       const files: Array<string | Files> = config.manifest.files;
       // replace file names in config with kebab case equivalent

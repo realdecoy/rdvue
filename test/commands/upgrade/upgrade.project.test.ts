@@ -1,33 +1,33 @@
 /* global after */
 import { expect, test } from '@oclif/test';
-import { CLI_COMMANDS } from '../../src/lib/constants';
-import { exec } from 'child_process';
+import { CLI_COMMANDS } from '../../../src/lib/constants';
+import { exec } from 'node:child_process';
 
 const skipPresets = '--skipPresets';
-const testProjectName = 'rdv-component-test';
-const testComponentName = 'hello-world';
+const isTest = '--isTest';
+const testProjectName = 'rdv-upgrade-test';
 const { log } = console;
 
 describe(CLI_COMMANDS.Upgrade, () => {
   test
     .stdout()
     .command([CLI_COMMANDS.Upgrade])
-    .it(`runs rdvue ${CLI_COMMANDS.Upgrade} ${testComponentName} (outside project)`, ctx => {
+    .it(`runs rdvue ${CLI_COMMANDS.Upgrade} (outside project)`, ctx => {
       expect(ctx.stdout).to.contain(`[rdvue] ${CLI_COMMANDS.Upgrade} command must be run in an existing rdvue project`);
     });
 
   test
     .stdout()
-    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets])
+    .command([CLI_COMMANDS.CreateProject, testProjectName, skipPresets, isTest])
     .do(() => process.chdir(testProjectName))
-    .command([CLI_COMMANDS.Upgrade])
+    .command([CLI_COMMANDS.Upgrade, isTest])
     .do(() => process.chdir('../'))
     .it(`runs rdvue ${CLI_COMMANDS.Upgrade}`, ctx => {
-      expect(ctx.stdout).to.contain(`[rdvue] component added: ${testComponentName}`);
+      expect(ctx.stdout).to.contain(`rdvue updated to version:`);
     });
 
   after(() => {
-    exec(`rm -r ${testProjectName}`, error => {
+    exec(`shx rm -rf ${testProjectName}`, error => {
       if (error) {
         log(`error: ${error.message}`);
       }

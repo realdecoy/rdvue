@@ -1,7 +1,7 @@
 import sinon, { SinonStub } from 'sinon';
 import { expect } from 'chai';
 
-import { format } from 'util';
+import { format } from 'node:util';
 import { log } from '../../src/lib/stdout';
 
 const { stdout } = process;

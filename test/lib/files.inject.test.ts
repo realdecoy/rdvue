@@ -1,6 +1,6 @@
 /* global beforeEach, afterEach */
 import sinon from 'sinon';
-import fs from 'fs';
+import fs from 'node:fs';
 import { inject } from '../../src/lib/files';
 import { expect } from 'chai';
 
@@ -13,7 +13,7 @@ describe('lib/files.inject', () => {
   let writeFileSyncStub: sinon.SinonStub;
 
   beforeEach(() => {
-    readFileSyncStub  = sinon.stub(fs, 'readFileSync').returns(dummyText);
+    readFileSyncStub = sinon.stub(fs, 'readFileSync').returns(dummyText);
     writeFileSyncStub = sinon.stub(fs, 'writeFileSync');
   });
 
@@ -26,7 +26,8 @@ describe('lib/files.inject', () => {
   });
 
   it('options - alternative encoding', () => {
-    const options = {
+    // eslint-disable-next-line no-undef
+    const options: { encoding: BufferEncoding } = {
       encoding: 'hex',
     };
 

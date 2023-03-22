@@ -1,8 +1,8 @@
 /* global beforeEach, afterEach */
 import sinon from 'sinon';
-import fs from 'fs';
+import fs from 'node:fs';
 import { expect } from 'chai';
-import { Files } from '../../src/modules';
+import { Files } from '../../dist/modules';
 import { readAndUpdateFeatureFiles } from '../../src/lib/files';
 
 describe('lib/files.readAndUpdateFeatureFiles', () => {
@@ -57,18 +57,18 @@ describe('lib/files.readAndUpdateFeatureFiles', () => {
     ];
 
     await readAndUpdateFeatureFiles(destDir, files, kebabName, templateVariableName);
-    expect(writeFileSyncStub.calledWith(...[
+    expect(writeFileSyncStub.calledWith(
       `${destDir}${files[0].target}`,
       `line 1\n${kebabName}\nline 3\n`,
-    ])).to.equal(true);
-    expect(writeFileSyncStub.calledWith(...[
+    )).to.equal(true);
+    expect(writeFileSyncStub.calledWith(
       `${destDir}${files[1].target}`,
       `${templateVariableName}\nline 2\nline 3\n`,
-    ])).to.equal(true);
-    expect(writeFileSyncStub.calledWith(...[
+    )).to.equal(true);
+    expect(writeFileSyncStub.calledWith(
       `${destDir}${files[2].target}`,
       `line 1\nline 2\n${pascalName}\n`,
-    ])).to.equal(true);
+    )).to.equal(true);
   });
 
   it('copies files?', async () => {
