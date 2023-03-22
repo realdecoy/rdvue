@@ -1,23 +1,24 @@
-import { Command, flags } from '@oclif/command';
-import chalk from 'chalk';
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+import { Args, Command, Flags } from '@oclif/core';
 
 export default class Plugin extends Command {
-  static description = 'add a new module'
+  static description = 'install a plugin'
 
   static flags = {
-    help: flags.help({ name: 'help', char: 'h', hidden: false }),
+    help: Flags.help({ name: 'help', char: 'h', hidden: false }),
   }
 
-  static args = [
-    { name: 'buefy', description: 'lightweigth UI components for Vue.js', hidden: false },
-    { name: 'localization', description: 'library for localizing content', hidden: false },
-    { name: 'vuetify', description: 'material design framework for Vue.js', hidden: false },
-    { name: 'storybook', description: '[coming soon] UI component explorer for frontend devs', hidden: true },
-  ]
+  static args = {
+    buefy: Args.string({ name: 'buefy', description: 'lightweigth UI components for Vue.js', hidden: false }),
+    localization: Args.string({ name: 'localization', description: 'library for localizing content', hidden: false }),
+    vuetify: Args.string({ name: 'vuetify', description: 'material design framework for Vue.js', hidden: false }),
+    storybook: Args.string({ name: 'storybook', description: '[coming soon] UI component explorer for frontend devs', hidden: true }),
+  }
 
   showHelp(): void {
     const commandId = Plugin.id;
-    const commandArgs = Plugin.args;
+    const commandArgs = Object.values(Plugin.args);
     const commandFlags = Object.values(Plugin.flags);
 
     // parse argument config list
@@ -27,11 +28,8 @@ export default class Plugin extends Command {
         const maxSpaces = 15;
         const numOfSpaces = maxSpaces - arg.name.length;
 
-        return `\n\t    ${arg.name}${new Array(numOfSpaces + 1).join(' ')}- ${arg.description}`;
-      })
-      .toString()
-      .split(',')
-      .join('');
+        return `\n\t    ${arg.name}${Array.from({ length: numOfSpaces + 1 }).join(' ')}- ${arg.description}`;
+      });
 
     // parse option config list
     const optionList = commandFlags
@@ -40,24 +38,26 @@ export default class Plugin extends Command {
         const maxSpaces = 8;
         const numOfSpaces = maxSpaces - flag.name.length;
 
-        return `\n\t    --${flag.name} | -${flag.char}${new Array(numOfSpaces + 1).join(' ')}- ${flag.description}`;
-      })
-      .toString()
-      .split(',')
-      .join('');
+        return `\n\t    --${flag.name} | -${flag.char}${Array.from({ length: numOfSpaces + 1 }).join(' ')}- ${flag.description}`;
+      });
 
     this.log(`
         Usage:
-            npx ${chalk.blue('rdvue')} ${commandId}:<library>
+            npx ${chalk.blue('rdvue')} ${commandId} <feature>
 
-        Libraries: \t - Utilities to extend project functionality${argsList}    
-        
+        Features: \t - Utilities to create repeatable project elements${argsList}
+
         Options:${optionList}
     `);
   }
 
-  run(): Promise<void> {
-    this.showHelp();
+  async run(): Promise<void> {
+    const { args } = await this.parse(Plugin);
+    const commandArgs = Object.values(args);
+
+    if (commandArgs.length === 0) {
+      this.showHelp();
+    }
 
     return Promise.resolve();
   }

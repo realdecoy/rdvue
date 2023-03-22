@@ -1,5 +1,5 @@
+import path from 'node:path';
 import { inject } from './files';
-import path from 'path';
 
 /**
  * Private helper method for finding index of last import statement.
@@ -7,8 +7,8 @@ import path from 'path';
  * @returns {number} the index of the last import statement.
  *   Returns 0 if no imports were found.
  */
-function findIndexOfLastImportStatement(lines: string []): number {
-  const index = lines.slice()
+function findIndexOfLastImportStatement(lines: string[]): number {
+  const index = [...lines]
     .reverse()
     .findIndex(line => line.trimStart().startsWith('import'));
 
@@ -45,10 +45,11 @@ function getMainPath(projectRoot: string): string {
  * helper method for injecting modules into main.
  * @param {string} projectRoot the root path of the project
  * @param {string | string[]} lines the lines to inject
+ * @returns {void}
  */
 function injectImportsIntoMain(projectRoot: string, lines: string | string[]): void {
   const mainPath = getMainPath(projectRoot);
-  const contents = Array.isArray(lines) ? lines.join('') : lines.slice();
+  const contents = Array.isArray(lines) ? lines.join('') : lines;
   inject(mainPath, contents, {
     index: findIndexOfLastImportStatement,
   });
@@ -58,10 +59,11 @@ function injectImportsIntoMain(projectRoot: string, lines: string | string[]): v
  * Helper method for injecting modules into the Vue constructor
  * @param {string} projectRoot  the root path of the project
  * @param {strings} lines the lines to inject
+ * @returns {void}
  */
 function injectModulesIntoMain(projectRoot: string, lines: string | string[]): void {
   const mainPath = getMainPath(projectRoot);
-  const contents = `${Array.isArray(lines) ? lines.join(',\n') : lines.slice()},`;
+  const contents = `${Array.isArray(lines) ? lines.join(',\n') : [...lines]},`;
   inject(mainPath, contents, {
     index: findIndexOfVueConstructor,
   });

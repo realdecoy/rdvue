@@ -1,10 +1,12 @@
+/* eslint-disable no-process-exit */
+/* eslint-disable unicorn/no-process-exit */
 /* eslint-disable max-lines */
-import chalk from 'chalk';
-import { log } from 'console';
-import * as inquirer from 'inquirer';
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+import prompts from 'prompts';
+import { getProjectRoot, writeFile } from './files';
 import { ChangeLog, ChangelogConfigTypes, Lookup } from '../modules';
 import { CLI_STATE, TEMPLATE_TAG, PLUGIN_PRESET_LIST } from './constants';
-import { getProjectRoot, writeFile } from './files';
 
 /**
  * Description: determine if string is valid JSON string
@@ -14,7 +16,7 @@ import { getProjectRoot, writeFile } from './files';
 function isJsonString(value: string): boolean {
   try {
     JSON.parse(value);
-  } catch (error) {
+  } catch {
     return false;
   }
 
@@ -54,9 +56,9 @@ function toKebabCase(value: string): string {
  */
 function toPascalCase(value: string): string {
   return value
-    .split(/[-_ ]+/)
+    .split(/[ _-]+/)
     .join(' ')
-    .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase())
+    .replace(/\w\S*/g, m => m.charAt(0).toUpperCase() + m.slice(1).toLowerCase())
     .split(' ')
     .join('');
 }
@@ -70,6 +72,7 @@ function stripRdvuePrefix(value: string): string {
   return value.replace('[rdvue]', '');
 }
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Description: Throws an error with the provided message
  * @param {string} errorMessage - error message to be thrown
@@ -95,9 +98,9 @@ function validateEnteredName(featureName: string, exampleName = '') {
     const isString = typeof value === 'string';
     const isNull = value === null || value.length === 0;
     // characters in value are limited to alphanumeric characters and hyphens or underscores
-    const charactersMatch = value.match(/^[a-zA-Z0-9.\-_]+$/i) !== null;
+    const charactersMatch = value.match(/^[\w.-]+$/i) !== null;
     const isValidName = isString && charactersMatch;
-    let resultMessage;
+    let resultMessage = '';
     if (isNull) {
       resultMessage = `${CLI_STATE.Error} A ${featureName} name is required`;
     } else if (!charactersMatch) {
@@ -119,13 +122,24 @@ async function parseComponentName(args: Lookup): Promise<string> {
   // if no component name is provided in command then prompt user
   // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'name',
-      default: 'my-component',
+      initial: 'my-component',
       message: 'Enter a component name: ',
-      type: 'input',
+      type: 'text',
       validate: validateComponentName,
-    }]);
+    }], {
+      onCancel() {
+        // eslint-disable-next-line no-console
+        console.log(`${chalk.red('rdvue')} add component canceled`);
+
+        return false;
+      },
+    });
+    if (responses.name === undefined) {
+      process.exit(1);
+    }
+
     argName = responses.name;
   } else {
     const result = validateComponentName(argName);
@@ -148,13 +162,24 @@ async function parseProjectName(args: Lookup): Promise<string> {
   // if no project name is provided in command then prompt user
   // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'name',
-      default: 'my-rdvue-project',
+      initial: 'my-rdvue-project',
       message: 'Enter a project name: ',
-      type: 'input',
+      type: 'text',
       validate: validateProjectName,
-    }]);
+    }], {
+      onCancel() {
+        // eslint-disable-next-line no-console
+        console.log(`${chalk.red('rdvue')} create-project canceled`);
+
+        return false;
+      },
+    });
+    if (responses.name === undefined) {
+      process.exit(1);
+    }
+
     argName = responses.name;
   } else {
     const result = validateProjectName(argName);
@@ -177,13 +202,24 @@ async function parseLayoutName(args: Lookup): Promise<string> {
   // if no layout name is provided in command then prompt user
   // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'name',
-      default: 'my-layout',
+      initial: 'my-layout',
       message: 'Enter a layout name: ',
-      type: 'input',
+      type: 'text',
       validate: validateLayoutName,
-    }]);
+    }], {
+      onCancel() {
+        // eslint-disable-next-line no-console
+        console.log(`${chalk.red('rdvue')} add layout canceled`);
+
+        return false;
+      },
+    });
+    if (responses.name === undefined) {
+      process.exit(1);
+    }
+
     argName = responses.name;
   } else {
     const result = validateLayoutName(argName);
@@ -206,11 +242,11 @@ async function parseVersionName(args: Lookup): Promise<string> {
   // if no page name is provided in command then prompt user
   // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'name',
-      default: TEMPLATE_TAG,
+      initial: TEMPLATE_TAG,
       message: 'Enter a version: ',
-      type: 'input',
+      type: 'text',
       validate: validateVersionName,
     }]);
     argName = responses.name;
@@ -232,15 +268,29 @@ async function parseVersionName(args: Lookup): Promise<string> {
 async function parseProjectPresets(args: Lookup): Promise<string> {
   let argName = args.preset;
   // if no project name is provided in command then prompt user
-  // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'preset',
-      default: 0,
+      initial: 0,
       message: 'Pick a preset: ',
-      type: 'list',
-      choices: PLUGIN_PRESET_LIST,
-    }]);
+      type: 'select',
+      choices: PLUGIN_PRESET_LIST.map((item: string) => {
+        return {
+          title: item,
+        };
+      }),
+    }], {
+      onCancel() {
+        // eslint-disable-next-line no-console
+        console.log(`${chalk.red('rdvue')} create-project canceled`);
+
+        return false;
+      },
+    });
+    if (responses.preset === undefined) {
+      process.exit(1);
+    }
+
     argName = responses.preset;
   }
 
@@ -258,13 +308,24 @@ async function parsePageName(args: Lookup): Promise<string> {
   // if no page name is provided in command then prompt user
   // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'name',
-      default: 'hello-world',
+      initial: 'hello-world',
       message: 'Enter a page name: ',
-      type: 'input',
+      type: 'text',
       validate: validatePageName,
-    }]);
+    }], {
+      onCancel() {
+        // eslint-disable-next-line no-console
+        console.log(`${chalk.red('rdvue')} add page canceled`);
+
+        return false;
+      },
+    });
+    if (responses.name === undefined) {
+      process.exit(1);
+    }
+
     argName = responses.name;
   } else {
     const result = validatePageName(argName);
@@ -287,13 +348,24 @@ async function parseServiceName(args: Lookup): Promise<string> {
   // if no page name is provided in command then prompt user
   // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'name',
-      default: 'auth-service',
+      initial: 'auth-service',
       message: 'Enter a service name: ',
-      type: 'input',
+      type: 'text',
       validate: validateServiceName,
-    }]);
+    }], {
+      onCancel() {
+        // eslint-disable-next-line no-console
+        console.log(`${chalk.red('rdvue')} add service canceled`);
+
+        return false;
+      },
+    });
+    if (responses.name === undefined) {
+      process.exit(1);
+    }
+
     argName = responses.name;
   } else {
     const result = validateServiceName(argName);
@@ -316,13 +388,24 @@ async function parseStoreModuleName(args: Lookup): Promise<string> {
   // if no page name is provided in command then prompt user
   // eslint-disable-next-line no-negated-condition
   if (!argName) {
-    const responses: any = await inquirer.prompt([{
+    const responses: any = await prompts([{
       name: 'name',
-      default: 'auth-store',
+      initial: 'auth-store',
       message: 'Enter a store module name: ',
-      type: 'input',
+      type: 'text',
       validate: validateStoreModuleName,
-    }]);
+    }], {
+      onCancel() {
+        // eslint-disable-next-line no-console
+        console.log(`${chalk.red('rdvue')} add store canceled`);
+
+        return false;
+      },
+    });
+    if (responses.name === undefined) {
+      process.exit(1);
+    }
+
     argName = responses.name;
   } else {
     const result = validateStoreModuleName(argName);
@@ -362,6 +445,7 @@ function checkProjectValidity(): { isValid: boolean, projectRoot: string } {
  * @param {ChangeLog} changeLogData - the data to use in the changelog.md file
  * @returns {void}
  */
+
 function createChangelogReadme(
   versionName: string,
   changelogPath: string,
@@ -407,7 +491,8 @@ ${updatedFiles.map(file => `- ${file}`).join('\n')}
 ${changeLogData.reccomendations || 'No notes on the upgrade'}
 `;
   writeFile(changelogPath, readmeContent);
-  log(chalk(readmeContent));
+  // eslint-disable-next-line no-console
+  console.log(readmeContent);
 }
 
 export {

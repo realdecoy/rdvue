@@ -1,27 +1,31 @@
 /* eslint-disable max-lines */
+// eslint-disable-next-line unicorn/prefer-module
 const fs = require('fs');
-import shell from 'shelljs';
-import { Command, flags } from '@oclif/command';
-import path from 'path';
-import chalk from 'chalk';
+// eslint-disable-next-line unicorn/prefer-module
+const shell = require('shelljs');
+// eslint-disable-next-line unicorn/prefer-module
+const chalk = require('chalk');
+import path from 'node:path';
+import { Args, Command, Flags } from '@oclif/core';
 import { checkProjectValidity, createChangelogReadme, isJsonString } from '../../lib/utilities';
 import { copyDirectoryRecursive, copyFiles, deleteFile, readFile, updateFile } from '../../lib/files';
 import { CLI_COMMANDS, CLI_STATE, TEMPLATE_REPO, TEMPLATE_ROOT, TEMPLATE_TAG, DOCUMENTATION_LINKS, CHANGE_LOG_FOLDER, CHANGE_LOG_FILENAME, CHAR_PERIOD } from '../../lib/constants';
 import { DEFAULT_CHANGE_LOG, changeLogFile, ChangelogResource, ChangelogResourcesContent, ChangeLog, ChangelogConfigTypes, handlePrimitives, handleArraysAndObjects } from '../../modules';
-const CUSTOM_ERROR_CODES = [
+const CUSTOM_ERROR_CODES = new Set([
   'project-invalid',
-];
+]);
 
 export default class Upgrade extends Command {
   static description = 'Specify the rdvue template version for a project'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: Flags.help({ char: 'h' }),
+    isTest: Flags.boolean({ hidden: true }),
   }
 
-  static args = [
-    { name: 'name', description: 'rdvue version' },
-  ]
+  static args = {
+    name: Args.string({ name: 'name', description: 'rdvue version' }),
+  }
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
@@ -36,8 +40,9 @@ export default class Upgrade extends Command {
       // throw cli errors to be handled globally
       throw errorMessage;
     }
+
     // handle errors thrown with known error codes
-    if (CUSTOM_ERROR_CODES.includes(customErrorCode)) {
+    if (CUSTOM_ERROR_CODES.has(customErrorCode)) {
       this.log(`${CLI_STATE.Error} ${customErrorMessage}`);
     } else {
       throw new Error(customErrorMessage);
@@ -58,7 +63,7 @@ export default class Upgrade extends Command {
       );
     }
 
-    const { args } = this.parse(Upgrade);
+    const { args } = await this.parse(Upgrade);
     const template: string = TEMPLATE_REPO;
     const versionName = args.name ?? TEMPLATE_TAG;
     const temporaryProjectFolder = path.join(projectRoot, 'node_modules', '_temp');
@@ -98,14 +103,16 @@ export default class Upgrade extends Command {
     if (resourcesToCreate) {
       await this.createProjectFiles(projectRoot, temporaryProjectFolder, resourcesToCreate);
     }
+
     if (resourcesToUpdate) {
       await this.updateProjectFiles(projectRoot, resourcesToUpdate);
     }
+
     if (resourcesToDelete) {
       this.deleteProjectFiles(projectRoot, resourcesToDelete);
     }
 
-    fs.rmdirSync(temporaryProjectFolder, { recursive: true });
+    fs.rmSync(temporaryProjectFolder, { recursive: true });
 
     this.log(`${CLI_STATE.Success} rdvue updated to version: ${chalk.green(versionName)}`);
 
@@ -131,7 +138,7 @@ export default class Upgrade extends Command {
           const existingFile = readFile(path.join(destDir, name));
           if (existingFile && !resourceFile.target.includes(ChangelogConfigTypes.UPDATE)) {
             const current = resourceFile.target.split(CHAR_PERIOD);
-            current.splice(current.length - 1, 0, ChangelogConfigTypes.UPDATE);
+            current.splice(-1, 0, ChangelogConfigTypes.UPDATE);
             resourceFile.target = current.join(CHAR_PERIOD);
           }
 
@@ -181,18 +188,21 @@ export default class Upgrade extends Command {
       if (!rawData) {
         return;
       }
+
       try {
         deleteFile(targetFile);
-      } catch (error) {
+      } catch {
         this.log(`${CLI_STATE.Warning} could not find file at: ${chalk.yellow(targetFile)} to delete`);
       }
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   parseAndUpdateJson(data: any, keys: string[], content: ChangelogResourcesContent): void {
     if (!data || keys.length <= 0) {
       return;
     }
+
     const currentKey = keys.shift();
     if (currentKey) {
       if (keys.length <= 0) {
@@ -207,6 +217,7 @@ export default class Upgrade extends Command {
 
         return;
       }
+
       this.parseAndUpdateJson(data[currentKey], keys, content);
     }
   }

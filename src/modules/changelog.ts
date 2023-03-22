@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
 export enum ChangelogMetaDataTypes {
   MIGRATION = 'migration',
@@ -56,29 +57,44 @@ export type ChangeLog = {
   delete?: ChangelogResources;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function handleArraysAndObjects(data: any, key: string, operation: string, newValue: any): void {
   const currentValue = data[key];
-  if (operation === ChangelogContentOperations.REMOVE) {
-    if (Array.isArray(newValue)) {
-      for (const item of newValue) {
-        const index = currentValue.indexOf(item);
-        delete currentValue[index];
+  switch (operation) {
+    case ChangelogContentOperations.REMOVE: {
+      if (Array.isArray(newValue)) {
+        for (const item of newValue) {
+          const index = currentValue.indexOf(item);
+          delete currentValue[index];
+        }
+      } else {
+        delete data[key];
       }
-    } else {
-      delete data[key];
+
+      break;
     }
-  } else if (operation === ChangelogContentOperations.UPDATE) {
-    data[key] = Array.isArray(newValue) ? [...currentValue, ...newValue] : {
-      ...currentValue,
-      ...newValue,
-    };
-  } else if (operation === ChangelogContentOperations.ADD) {
-    data[key] = Array.isArray(newValue) ? [...newValue] : {
-      ...newValue,
-    };
+
+    case ChangelogContentOperations.UPDATE: {
+      data[key] = Array.isArray(newValue) ? [...currentValue, ...newValue] : {
+        ...currentValue,
+        ...newValue,
+      };
+
+      break;
+    }
+
+    case ChangelogContentOperations.ADD: {
+      data[key] = Array.isArray(newValue) ? [...newValue] : {
+        ...newValue,
+      };
+
+      break;
+    }
+    // No default
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function handlePrimitives(data: any, key: string, operation: string, newValue: any): void {
   if (operation === ChangelogContentOperations.REMOVE) {
     delete data[key];

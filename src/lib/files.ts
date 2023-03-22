@@ -1,17 +1,21 @@
 /* eslint-disable max-lines */
-import fileSystem from 'fs';
-const fsSync = require('fs');
-import bluebirdPromise from 'bluebird';
-import path from 'path';
-import mkdirp from 'mkdirp';
-const util = require('util');
-import chalk from 'chalk';
-import { Files, InjectOptions } from '../modules';
-const replace = require('replace-in-file');
-import { hasKebab } from './utilities';
-import { DYNAMIC_OBJECTS, EMPTY_STRING, RDVUE_DIRECTORY, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
-import { log } from '../lib/stdout';
+// eslint-disable-next-line unicorn/prefer-module
 const ncp = require('ncp').ncp;
+// eslint-disable-next-line unicorn/prefer-module
+const fsSync = require('fs');
+// eslint-disable-next-line unicorn/prefer-module
+const mkdirp = require('mkdirp');
+// eslint-disable-next-line unicorn/prefer-module
+const replace = require('replace-in-file');
+// eslint-disable-next-line unicorn/import-style, unicorn/prefer-module
+const util = require('util');
+import path from 'node:path';
+import { log } from './stdout';
+import fileSystem from 'node:fs';
+import bluebirdPromise from 'bluebird';
+import { hasKebab } from './utilities';
+import { Files, InjectOptions } from '../modules';
+import { DYNAMIC_OBJECTS, EMPTY_STRING, RDVUE_DIRECTORY, TEMPLATE_CONFIG_FILENAME, TEMPLATE_ROOT } from './constants';
 
 const UTF8 = 'utf-8';
 const fs = bluebirdPromise.promisifyAll(fileSystem);
@@ -26,7 +30,7 @@ const getDirName = path.dirname;
 function readFile(filePath: string): string {
   try {
     return fs.readFileSync(filePath, UTF8);
-  } catch (error) {
+  } catch {
     return EMPTY_STRING;
   }
 }
@@ -40,7 +44,7 @@ function readFile(filePath: string): string {
 function directoryExists(filePath: string): boolean {
   try {
     return fs.statSync(filePath).isDirectory();
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -53,7 +57,7 @@ function directoryExists(filePath: string): boolean {
 function fileExists(filePath: string): boolean {
   try {
     return fs.existsSync(filePath);
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -69,7 +73,7 @@ function readConfigFile(filePath: string): any {
     throw new Error(
       JSON.stringify({
         code: 'missing-template-file',
-        message: `template file not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
+        message: 'template file not found, run rdvue upgrade to continue',
       }),
     );
   }
@@ -106,7 +110,7 @@ function writeFile(filePath: string, data: string): boolean {
   let success = true;
   try {
     fs.writeFileSync(filePath, data);
-  } catch (error) {
+  } catch {
     success = false;
     throw new Error('failed to write to file');
   }
@@ -137,7 +141,7 @@ async function replaceInFiles(files: string | string[], from: RegExp, to: string
       .filter((result: { file: string; hasChanged: boolean }) => !result.hasChanged)
       .map((result: { file: string; hasChanged: boolean }) => result.file);
     result = failedFiles.length === 0;
-  } catch (error) {
+  } catch {
     throw new Error(
       JSON.stringify({
         code: 'file-not-changed',
@@ -178,15 +182,14 @@ function replaceTargetFileNames(
   featureName: string,
 ): void {
   if (featureName !== EMPTY_STRING) {
+    // eslint-disable-next-line unicorn/no-array-for-each
     files.forEach((file: string | Files) => {
-      if (typeof file !== 'string') {
-        if (file.target !== file.source) {
-          file.target = replaceFileName(
-            file.target,
-            /(\${.*?\})/,
-            featureName ?? EMPTY_STRING,
-          );
-        }
+      if (typeof file !== 'string' && file.target !== file.source) {
+        file.target = replaceFileName(
+          file.target,
+          /(\${.*?})/,
+          featureName ?? EMPTY_STRING,
+        );
       }
     });
   }
@@ -206,10 +209,11 @@ async function copyDirectoryRecursive(source: string, target: string): Promise<b
   } else {
     fsSync.mkdirSync(target);
   }
+
   try {
     await ncp(source, target);
     success = true;
-  } catch (error) {
+  } catch {
     success = false;
   }
 
@@ -295,7 +299,7 @@ async function readAndUpdateFeatureFiles(
   pascalName: string,
 ): Promise<void> {
   let filePath = EMPTY_STRING;
-  const promisedUpdates = [];
+  const promisedUpdates: any = [];
 
   // [3] For each file in the list
   for (const file of files) {
@@ -320,9 +324,9 @@ async function readAndUpdateFeatureFiles(
             contentBlock.matchRegex,
             hasKebab(contentBlock.replace) === true ?
               kebabName :
-              contentBlock.replace.includes('${') ?
+              (contentBlock.replace.includes('${') ?
                 pascalName :
-                contentBlock.replace,
+                contentBlock.replace),
           ));
         }
       }
@@ -335,6 +339,7 @@ async function readAndUpdateFeatureFiles(
       );
     }
   }
+
   await Promise.all(promisedUpdates);
 }
 
@@ -346,7 +351,7 @@ async function readAndUpdateFeatureFiles(
 function isRootDirectory(location: string | null = null): boolean {
   let isRoot = false;
   try {
-    let paths = [];
+    let paths: string[] = [];
     let testLocation = location;
     if (location === null) {
       testLocation = process.cwd();
@@ -358,7 +363,7 @@ function isRootDirectory(location: string | null = null): boolean {
         isRoot = true;
       }
     }
-  } catch (error) {
+  } catch {
     throw new Error('Error checking root directory');
   }
 
@@ -378,10 +383,11 @@ function getProjectRoot(): string | null {
 
     return process.cwd();
   }
+
   const maxTraverse = 20;
   let currentPath = process.cwd();
   let currentTraverse = 0;
-  let projectRoot = null;
+  let projectRoot: string | null = null;
   let back = './';
   // eslint-disable-next-line no-constant-condition
   while (true) {
@@ -416,7 +422,7 @@ function checkIfFolderExists(folderPath: string): void {
     throw new Error(
       JSON.stringify({
         code: 'existing-folder',
-        message: `folder named ${chalk.whiteBright(folderPath)} already exists`,
+        message: `folder named ${folderPath} already exists`,
       }),
     );
   }
@@ -435,7 +441,7 @@ function verifyTemplateFolderExists(folderPath: string): void {
     throw new Error(
       JSON.stringify({
         code: 'missing-template-folder',
-        message: `template folder not found, run ${chalk.whiteBright('rdvue upgrade')} to continue`,
+        message: 'template folder not found, run rdvue upgrade to continue',
       }),
     );
   }
@@ -472,13 +478,13 @@ function parseDynamicObjects(
     objectInProject = readFile(filePathOfObjectInsideProject);
 
     // Replace brackets & ("/`) quotations in string
-    let modifiedJSONData = jsonData.replace(/[[\]"`]+/g, EMPTY_STRING);
+    let modifiedJSONData = jsonData.replace(/["[\]`]+/g, EMPTY_STRING);
 
     // Remove beginning and closing brackets if its an option to be modified
     if (hasBrackets) {
-      modifiedJSONData = modifiedJSONData.substring(
+      modifiedJSONData = modifiedJSONData.slice(
         1,
-        modifiedJSONData.length - 1,
+        -1,
       );
     }
 
@@ -498,6 +504,7 @@ function parseDynamicObjects(
   }
 }
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Injects the content into the targetted file. You can control where the
  * the content is injected by specifying the index in the options argument.
@@ -516,7 +523,7 @@ function inject(targetPath: string, content: string, options?: InjectOptions): v
   const lines = targetContent.split(/\r?\n/g);
 
   if (typeof index === 'function') {
-    index = index(lines.slice(), targetPath);
+    index = index([...lines], targetPath);
   }
 
   lines.splice(index, 0, content);
@@ -549,9 +556,9 @@ async function updateDynamicImportsAndExports(
       if (typeof featuredata === 'string') {
         await fs.appendFileSync(fileLocation, featuredata);
       } else {
-        featuredata.forEach(data => {
+        for (const data of featuredata) {
           fs.appendFileSync(fileLocation, data);
-        });
+        }
       }
     } else {
       log(`${fileLocation} - Does not exist`);
@@ -568,7 +575,7 @@ function deleteFile(filePath: string): boolean {
   let success = true;
   try {
     fs.unlinkSync(filePath);
-  } catch (error) {
+  } catch {
     success = false;
     throw new Error('failed to delete file');
   }
