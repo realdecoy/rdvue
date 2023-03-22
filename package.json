@@ -1,6 +1,6 @@
 {
   "name": "rdvue",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "author": "realdecoy",
   "bin": {
     "rdvue": "./bin/run"
