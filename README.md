@@ -88,9 +88,26 @@ The RDVue CLI is the product of RealDecoy's Frontend Practice group. Contributio
 
 ## Development
 
+### Install Dependencies
 ```bash
 npm install
-npm link
+```
+or
+```bash
+yarn install
+```
+
+### Execute commands
+```bash
+./bin/dev <command>
+```
+e.g.
+```bash
+$ ./bin/dev create-project my-new-project
+? Pick a preset:  » - Use arrow-keys. Return to submit.
+>   Buefy & Localization (recommended)
+    Vuetify & Localization
+    [Skip presets]
 ```
 
 &nbsp;
@@ -102,6 +119,10 @@ npm link
 ### Run Unit Test Suite
 ```bash
 npm run test
+```
+or
+```bash
+yarn run test
 ```
 
 ### Creating Tests
