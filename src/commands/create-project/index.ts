@@ -1,9 +1,7 @@
 import shell from 'shelljs';
 import chalk from 'chalk';
 import { Command, flags } from '@oclif/command';
-import Buefy from '../plugin/buefy';
 import Localization from '../plugin/localization';
-import Vuetify from '../plugin/vuetify';
 import { toKebabCase, parseProjectName, isJsonString, checkProjectValidity, parseProjectPresets } from '../../lib/utilities';
 import { replaceInFiles, checkIfFolderExists } from '../../lib/files';
 import {
@@ -29,9 +27,7 @@ export default class CreateProject extends Command {
   static flags = {
     help: flags.help({ char: 'h' }),
     skipPresets: flags.boolean({ hidden: true }),
-    withBuefy: flags.boolean({ hidden: true }),
     withLocalization: flags.boolean({ hidden: true }),
-    withVuetify: flags.boolean({ hidden: true }),
     withDesignSystem: flags.boolean({ hidden: true }),
   }
 
@@ -42,6 +38,7 @@ export default class CreateProject extends Command {
 
   // override Command class error handler
   catch(error: Error): Promise<any> {
+    console.log(error);
     const errorMessage = error.message;
     const isValidJSON = isJsonString(errorMessage);
     const parsedError = isValidJSON ? JSON.parse(errorMessage) : {};
@@ -72,8 +69,6 @@ export default class CreateProject extends Command {
     const tag: string = TEMPLATE_TAG;
     const replaceRegex = TEMPLATE_PROJECT_NAME_REGEX;
     const skipPresetsStep = flags.skipPresets === true;
-    const withBuefy = flags.withBuefy === true;
-    const withVuetify = flags.withVuetify === true;
     const withLocalization = flags.withLocalization === true;
     const withDesignSystem = flags.withDesignSystem === true;
 
@@ -114,8 +109,6 @@ export default class CreateProject extends Command {
     const success = await replaceInFiles(filesToReplace, replaceRegex, `${projectName}`);
 
     const presetIndex = PLUGIN_PRESET_LIST.indexOf(presetName);
-    const shouldInstallBuefy = presetIndex === 0 || withBuefy === true;
-    const shouldInstallVuetify = presetIndex === 1 || withVuetify === true;
     const shouldInstallLocalization = presetIndex === 0 || presetIndex === 1 || withLocalization === true;
     const shouldInstallDesignSystem = withDesignSystem === true;
 
@@ -126,16 +119,8 @@ export default class CreateProject extends Command {
           message: 'updating your project failed',
         }),
       );
-    } else {
-      if (shouldInstallBuefy === true) { // buefy
-        await Buefy.run(['--forceProject', projectName, '--skipInstall']);
-      }
-      if (shouldInstallVuetify) { // Vuetify
-        await Vuetify.run(['--forceProject', projectName, '--skipInstall']);
-      }
-      if (shouldInstallLocalization === true) { // localization
-        await Localization.run(['--forceProject', projectName, '--skipInstall']);
-      }
+    } else if (shouldInstallLocalization === true) { // localization
+      await Localization.run(['--forceProject', projectName, '--skipInstall']);
     }
 
     if (shouldInstallDesignSystem === true) {
